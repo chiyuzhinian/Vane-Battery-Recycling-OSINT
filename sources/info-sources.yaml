@@ -1,0 +1,313 @@
+# ============================================================
+# 行业信息源注册表（咨询机构 + 协会组织）
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 【为什么单独成文件？】
+# 你给的名单里，这三类东西的**用法完全不同**，混在一起会污染企业库：
+#   · 咨询机构 → 是"信息源"（产出行业数据、价格、研究报告），应对应 03 篇的
+#                「行业权威数据源」「参考性数据源」两层，而不是"采集对象"
+#   · 协会组织 → 是"信息源"（产出标准、白皮书、行业运行数据、政策建议稿）
+#   · 同行企业 → 才是"采集对象"，已单独放入 sources/companies.yaml
+#
+# 【homepage 为空的原因】
+# 未经核实的 URL 一律不写死，避免采集时打到仿冒站/过期域名。
+# 这些源先以 `discover_via` 查询串进入"新源发现"流程：
+#   1) 用查询串检索 → 2) 人工确认官网 → 3) 回填 homepage/domain → 4) 转 verified
+# 对应 04 篇 §3.2 规律发现引擎的 P1（新兴高效源）机制。
+# ============================================================
+
+version: 1
+updated_at: 2026-09-10
+meta:
+  advisory_count: 13        # 咨询机构（原始 13 项）
+  association_count: 17     # 协会组织（原始 15 项，CABIA 重复去掉 1 项 → 14；
+                            #   其中"中国物资再生协会"拆出 4 个子机构、"中国工业节能与清洁生产协会"
+                            #   拆出 1 个专委会，故实际登记 17 条）
+  total: 30
+
+defaults:
+  source_type: industry_db
+  enabled: true
+  verified: false           # 全部先置 false，人工确认官网后再改
+  connector: null
+  fallback: vane_search
+  check_frequency: weekly
+  vane_mode: balanced
+
+# ============================================================
+# 一、咨询机构（13 家）—— 行业数据 / 价格 / 研究报告来源
+# ============================================================
+advisory:
+
+  - source_id: adv_ggii
+    name: 高工锂电 / 高工产业研究院（GGII）
+    confidence: high
+    homepage: "https://www.gg-lb.com/"          # 待确认
+    discover_via: "高工锂电 GGII 官网"
+    value: 动力电池装机量、回收产能与产量统计、行业排名（常被媒体引用，可作交叉验证锚点）
+    dimensions: [operation, feedstock]
+
+  - source_id: adv_dianchi_cn
+    name: 电池中国
+    confidence: medium
+    homepage: null
+    discover_via: "电池中国网 官网"
+    value: 电池产业链新闻与专题，回收板块报道密度高
+    dimensions: [strategy]
+
+  - source_id: adv_dianchiwang
+    name: 电池网
+    confidence: medium
+    homepage: null
+    discover_via: "电池网 锂电 官网"
+    value: 产业链资讯、企业动态
+    dimensions: [strategy]
+
+  - source_id: adv_qidian
+    name: 起点锂电
+    confidence: low
+    homepage: null
+    discover_via: "起点锂电 起点研究 官网"
+    value: 锂电产业链数据与研究
+    dimensions: [operation]
+
+  - source_id: adv_xinluo
+    name: 鑫椤锂电（鑫椤资讯）
+    confidence: low
+    homepage: null
+    discover_via: "鑫椤锂电 鑫椤资讯 官网"
+    value: 锂电材料价格与产能数据
+    dimensions: [operation, feedstock]
+
+  - source_id: adv_smm
+    name: SMM 新能源（上海有色网旗下）
+    confidence: high
+    homepage: "https://new-energy.smm.cn/"     # 待确认
+    discover_via: "SMM 新能源 上海有色网"
+    value: 锂/镍/钴现货价格与新能源产业链数据，价格类交叉验证的权威锚点
+    dimensions: [operation, feedstock, technology]
+
+  - source_id: adv_smm_root
+    name: 上海有色网（SMM）
+    confidence: high
+    homepage: "https://www.smm.cn/"            # 待确认
+    discover_via: "上海有色网 SMM 官网"
+    value: 有色金属价格、库存、产业链数据
+    dimensions: [operation]
+
+  - source_id: adv_ofweek
+    name: OFweek 锂电网
+    confidence: medium
+    homepage: "https://libattery.ofweek.com/"  # 待确认
+    discover_via: "OFweek 锂电网"
+    value: 行业新闻、企业采访、技术专题
+    dimensions: [technology, strategy]
+
+  - source_id: adv_xinchan
+    name: 新产业智库
+    confidence: low
+    homepage: null
+    discover_via: "新产业智库 锂电 研究"
+    value: 产业研究与企业调研
+    dimensions: [operation, strategy]
+
+  - source_id: adv_evtank
+    name: EVTank（伊维经济研究院）
+    confidence: low
+    homepage: null
+    discover_via: "EVTank 伊维经济研究院 电池"
+    value: 电池产业出货量与市场规模研究
+    dimensions: [operation]
+
+  - source_id: adv_zhenli
+    name: 真锂研究
+    confidence: low
+    homepage: null
+    discover_via: "真锂研究 锂电数据"
+    value: 锂电产业数据与研究
+    dimensions: [operation]
+
+  - source_id: adv_fubao
+    name: 富宝（富宝资讯）
+    confidence: medium
+    homepage: null
+    discover_via: "富宝资讯 锂电 回收 价格"
+    value: 再生资源与废料报价（含废旧电池回收报价），对"废料量及来源"维度价值高
+    dimensions: [feedstock, operation]
+
+  - source_id: adv_dianchizhijia
+    name: 电池之家
+    confidence: low
+    homepage: null
+    discover_via: "电池之家 锂电 资讯"
+    value: 行业资讯与供需信息
+    dimensions: [strategy]
+
+# ============================================================
+# 二、协会组织（14 家）—— 标准 / 白皮书 / 行业运行数据 / 政策建议稿
+# ============================================================
+associations:
+
+  - source_id: asso_cabia
+    name: 中国汽车动力电池产业创新联盟（CABIA）
+    confidence: high
+    homepage: null
+    discover_via: "中国汽车动力电池产业创新联盟 CABIA 官网"
+    value: 月度动力电池装机量数据（行业公认口径）、回收利用专题报告；**政策建议稿可提前反映监管方向**
+    dimensions: [operation, regulation]
+    priority: 1
+
+  - source_id: asso_cias_battery
+    name: 中国化学与物理电源行业协会 - 电池应用分会
+    confidence: medium
+    homepage: null
+    discover_via: "中国化学与物理电源行业协会 电池应用分会"
+    value: 电池应用侧统计与标准动态
+    dimensions: [standard, operation]
+
+  - source_id: asso_cbia
+    name: 中国电池工业协会
+    confidence: medium
+    homepage: null
+    discover_via: "中国电池工业协会 官网"
+    value: 电池行业运行数据、标准制定参与
+    dimensions: [standard, operation]
+
+  - source_id: asso_cace
+    name: 中国循环经济协会
+    confidence: medium
+    homepage: null
+    discover_via: "中国循环经济协会 官网"
+    value: 循环经济政策研究与试点申报信息
+    dimensions: [regulation, standard]
+
+  - source_id: asso_cmra
+    name: 中国物资再生协会
+    confidence: medium
+    homepage: null
+    discover_via: "中国物资再生协会 官网"
+    value: 再生资源行业统计与政策建议
+    dimensions: [regulation, feedstock]
+
+  - source_id: asso_cmra_alliance
+    name: 资源强制回收产业联盟（中国物资再生协会下属）
+    confidence: medium
+    homepage: null
+    discover_via: "资源强制回收产业联盟"
+    value: 生产者责任延伸（EPR）落地进展、强制回收目录研究
+    dimensions: [regulation]
+
+  - source_id: asso_cmra_battery
+    name: 废旧电池回收利用分会（中国物资再生协会下属）
+    confidence: medium
+    homepage: null
+    discover_via: "废旧电池回收利用分会 中国物资再生协会"
+    value: 回收企业名录、白名单申报、行业自律标准
+    dimensions: [regulation, feedstock]
+
+  - source_id: asso_cmra_elv
+    name: 报废汽车专业委员会（中国物资再生协会下属）
+    confidence: low
+    homepage: null
+    discover_via: "报废汽车专业委员会 中国物资再生协会"
+    value: 报废车与退役电池来源端的交叉信息（废料来源渠道）
+    dimensions: [feedstock]
+
+  - source_id: asso_bj_alliance
+    name: 北京资源强制回收产业联盟
+    confidence: low
+    homepage: null
+    discover_via: "北京资源强制回收产业联盟"
+    value: 地方级强制回收试点与标准
+    dimensions: [regulation]
+
+  - source_id: asso_bjaepi
+    name: 废电池回收利用专业委员会
+    confidence: low
+    homepage: null
+    discover_via: "废电池回收利用专业委员会"
+    value: 回收技术规范与行业自律（需确认挂靠单位）
+    dimensions: [standard, regulation]
+    verify_note: 需确认挂靠的上级协会，避免与 asso_cmra_battery 重复
+
+  - source_id: asso_emf
+    name: 麦克阿瑟基金会（Ellen MacArthur Foundation）
+    confidence: high
+    homepage: "https://www.ellenmacarthurfoundation.org/"   # 待确认
+    discover_via: "Ellen MacArthur Foundation battery circular economy"
+    value: 全球循环经济框架、电池循环白皮书；**海外政策与行业话术的源头之一**
+    dimensions: [regulation, standard]
+    region: GLOBAL
+
+  - source_id: asso_ciecpi
+    name: 中国工业节能与清洁生产协会 - 新能源电池回收利用专业委员会
+    confidence: medium
+    homepage: null
+    discover_via: "新能源电池回收利用专业委员会 中国工业节能与清洁生产协会"
+    value: 回收利用技术规范、白名单与培训
+    dimensions: [standard]
+
+  - source_id: asso_caam
+    name: 中国汽车工业协会（CAAM）
+    confidence: high
+    homepage: null
+    discover_via: "中国汽车工业协会 CAAM 官网"
+    value: 汽车产销数据（退役电池量的上游先行指标）
+    dimensions: [operation, feedstock]
+
+  - source_id: asso_ceesta
+    name: 中国电子节能技术协会
+    confidence: low
+    homepage: null
+    discover_via: "中国电子节能技术协会 电池"
+    value: 电子与电池能效、绿色标准
+    dimensions: [standard]
+
+  - source_id: asso_crra
+    name: 中国再生资源回收利用协会
+    confidence: medium
+    homepage: null
+    discover_via: "中国再生资源回收利用协会 官网"
+    value: 再生资源回收体系数据与政策建议
+    dimensions: [regulation, feedstock]
+
+  - source_id: asso_cnia
+    name: 中国有色金属工业协会
+    confidence: medium
+    homepage: null
+    discover_via: "中国有色金属工业协会 官网"
+    value: 有色冶炼产能与回收金属统计（镍钴锂二次资源）
+    dimensions: [feedstock, operation]
+
+  - source_id: asso_battery_100
+    name: 电池百人会
+    confidence: low
+    homepage: null
+    discover_via: "电池百人会 论坛"
+    value: 行业闭门会议与高层观点（战略性信息）
+    dimensions: [strategy]
+
+# ============================================================
+# 三、启用流程（每个源走完这 4 步才进入正式采集）
+# ============================================================
+activation_workflow:
+  - step: 1
+    action: 用 discover_via 查询串做一次检索
+    tool: "Vane /api/search"
+  - step: 2
+    action: 人工确认官网域名（防仿冒站）
+    owner: chiyuzhinian
+  - step: 3
+    action: 回填 homepage/domain，并把 verified 改为 true
+  - step: 4
+    action: 探测可达性与更新频率，决定 connector / RSS / 搜索兜底
+
+# ---------- 与 03 篇可信度分层的对应关系 ----------
+credibility_mapping:
+  协会组织_国家级: { tier: industry, base_credibility: 88 }
+  协会组织_专业委员会: { tier: industry, base_credibility: 82 }
+  咨询机构_头部: { tier: industry, base_credibility: 80 }   # 高工/SMM 等
+  咨询机构_其他: { tier: reference, base_credibility: 70 }
+  麦克阿瑟基金会: { tier: industry, base_credibility: 85, region: GLOBAL }

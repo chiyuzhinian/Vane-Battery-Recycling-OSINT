@@ -1,0 +1,138 @@
+# ============================================================
+# 电池回收 OSINT —— 数据源主配置（总入口）
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 引用：03_数据源管理和验证体系.md §1.2
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 加载顺序：本文件 → includes 中的分册 → 各分册的 sources
+# 任何分册的 source 都会继承本文件的 defaults 与 global_rules
+# ============================================================
+
+version: 1
+project: Vane-Battery-Recycling-OSINT
+owner: chiyuzhinian
+updated_at: 2026-09-10
+
+# ---------- 分册清单 ----------
+includes:
+  - file: sources/policy-cn.yaml          # 中国政策源（你已有，待回填本仓）
+  - file: sources/policy-eu.yaml          # 欧盟政策源（本次新增）
+  - file: sources/policy-us.yaml          # 美国政策源（本次新增）
+  - file: sources/companies.yaml          # 目标企业注册表（26 家）
+  - file: sources/info-sources.yaml       # 行业信息源（咨询机构 13 + 协会 17）
+
+# ---------- 全局默认 ----------
+defaults:
+  enabled: true
+  check_frequency: weekly
+  connector: null
+  fallback: vane_search               # 无 connector 时一律走 Vane 定向搜索
+  vane_mode: balanced
+  region: CN
+  language: zh
+
+# ---------- 你的 5 大研究维度 ←→ 数据源映射 ----------
+dimension_source_map:
+  hr:
+    name: 人力资源
+    primary:   [companies.cninfo, companies.eia]        # 公告（任免）+ 环评（项目负责人）
+    secondary: [policy-cn, info-sources]
+    note: 上市公司走公告；非上市走新闻与专利发明人
+  feedstock:
+    name: 废料量及来源
+    primary:   [companies.eia, companies.cninfo, info-sources.asso_cmra_battery]
+    secondary: [policy-cn, policy-eu]
+    note: 环评公示的"处理规模"字段是最可靠的废料量来源；协会名录补充渠道信息
+  operation:
+    name: 经营现状
+    primary:   [companies.cninfo, info-sources.adv_ggii, info-sources.adv_smm]
+    secondary: [info-sources.asso_cabia, info-sources.adv_fubao]
+    note: 财报（官方）+ 行业统计（交叉验证），二者数值差异本身即情报
+  strategy:
+    name: 战略规划
+    primary:   [companies.cninfo, companies.bidding]
+    secondary: [policy-cn, policy-eu, policy-us, info-sources]
+    note: 公告与招投标最及时；海外布局需叠加 EU/US 政策源
+  technology:
+    name: 工艺技术
+    primary:   [companies.patent]
+    secondary: [companies.eia, info-sources.adv_ofweek, info-sources.asso_ciecpi]
+    note: 专利是技术路线最硬的证据；环评含工艺路线描述
+
+# ---------- 可信度基线（与 03 篇金字塔一致）----------
+credibility_tiers:
+  official:   { range: [95, 100], weight: 1.5, quality_bonus: 30 }
+  industry:   { range: [80, 94],  weight: 1.2, quality_bonus: 20 }
+  reference:  { range: [70, 79],  weight: 1.0, quality_bonus: 10 }
+  low:        { range: [0, 69],   weight: 0.8, quality_bonus: 0  }
+
+# ---------- 全局采集规则 ----------
+global_rules:
+  # 验证（不可绕过，与 04 篇 quality_gate.py 一致）
+  validation:
+    cross_source_min: 2               # 至少 2 个独立域名确认
+    similarity_filter: 0.5            # 语义相似度低于 0.5 丢弃
+    semantic_dedup: 0.92              # 向量余弦 ≥ 0.92 视为同一证据簇
+    verified_threshold: 80
+    review_threshold: 60
+    hard_rules:
+      - no_source_url → 永不 verified
+      - data_conflict → 永不 verified
+      - single_source_and_non_official → 永不 verified
+
+  # 采集礼仪（避免被封）
+  politeness:
+    user_agent: "BatteryRecyclingOSINT/1.0 (research; contact: chiyuzhinian)"
+    respect_robots_txt: true
+    request_interval_sec: { official: 3, industry: 2, reference: 1 }
+    max_concurrency_per_domain: 2
+    night_window_only: false
+
+  # 时效
+  freshness:
+    news: 90
+    announcement: 365
+    regulation: 3650                  # 法规长期有效
+    report: 730
+    patent: 3650
+
+  # 翻译
+  translation:
+    enabled: true
+    target: zh
+    keep_original: true
+
+  # 快照（可溯源底线）
+  snapshot:
+    enabled: true
+    store: object_storage
+    path_template: "snapshots/{yyyy}/{mm}/{dd}/{evidence_id}.txt"
+    retention_days: 0                 # 0 = 永久保留
+
+# ---------- 源健康度监控（对应 04 篇 6.3）----------
+health_checks:
+  liveness:
+    interval: daily
+    fail_threshold: 5                 # 连续 5 次失败 → degraded + 钉钉告警
+  score_recalc:
+    interval: daily
+    window_days: 90
+  pattern_mining:
+    interval: weekly
+    notify: dingtalk
+
+# ---------- 当前缺口（缺口清单，按优先级）----------
+gaps:
+  - id: policy-cn
+    status: 待你提供
+    detail: 中国政策源你已有，需把站点与栏目 URL 回填到 sources/policy-cn.yaml
+  - id: companies-verify
+    status: 待你确认
+    detail: companies.yaml 中 18 家为 pending，主体全称/上市状态需核实（见该文件末尾清单）
+  - id: info-sources-domain
+    status: 待人工确认官网
+    detail: info-sources.yaml 中 27 个源的域名需确认后回填（防仿冒站）
+  - id: us-congress-api
+    status: 待申请
+    detail: api.congress.gov 需免费 API Key，填入 .env 的 CONGRESS_API_KEY

@@ -1,0 +1,258 @@
+# ============================================================
+# 欧盟（EU）动力电池回收政策数据源
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 维护：chiyuzhinian
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 字段说明见 03_数据源管理和验证体系.md §1.2
+#   verified: true  → URL 与结构已人工确认
+#   verified: false → 结构待确认（上线前由 connector 健康检查自动核实）
+#   blocked: true   → 站点有反爬（403/JS 挑战），需 Playwright 或人工
+# ============================================================
+
+region: EU
+enabled: true
+language_policy:
+  fetch: [en]                 # 一律抓英文原文
+  store: [en, zh]             # 英文原文 + 中文摘要双写（见 08 篇翻译流程）
+  translator: claude
+
+# 采集周期：每周一 09:00（与 04 篇 celery_app.py 的 policy-eu-us-weekly 对应）
+schedule: { day_of_week: 1, hour: 9, minute: 0 }
+
+# 主题关键词（中英对照，供搜索与相关性过滤）
+topics:
+  - { id: regulation,        zh: 法规,           en: ["battery regulation", "waste batteries", "Regulation (EU) 2023/1542"] }
+  - { id: recycling_efficiency, zh: 回收效率,     en: ["recycling efficiency", "material recovery rate", "recycled content"] }
+  - { id: due_diligence,     zh: 尽职调查,        en: ["battery due diligence", "supply chain due diligence"] }
+  - { id: carbon_footprint,  zh: 碳足迹,          en: ["battery carbon footprint", "declaration carbon footprint"] }
+  - { id: battery_passport,  zh: 电池护照,        en: ["battery passport", "digital product passport"] }
+  - { id: crm,               zh: 关键原材料,      en: ["critical raw materials act", "strategic raw materials"] }
+  - { id: collection_target, zh: 回收率目标,      en: ["collection target", "collection rate", "producer responsibility"] }
+  - { id: transport_waste,   zh: 危废运输,        en: ["waste shipment regulation", "transboundary waste"] }
+  - { id: standardization,   zh: 标准,            en: ["EN standard", "harmonised standard", "CEN CENELEC"] }
+
+sources:
+
+  # ---------- 一级：欧盟立法权威源 ----------
+  - source_id: eu_eurlex_battery_reg
+    name: EUR-Lex 电池与废电池法规 (EU) 2023/1542
+    domain: eur-lex.europa.eu
+    entry: https://eur-lex.europa.eu/eli/reg/2023/1542/oj
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    verified: true
+    connector: eur_lex
+    params:
+      eli: "reg/2023/1542"
+      celex: ["32023R1542"]
+      track_amendments: true          # 跟踪修订与合并版本
+    dimensions: [regulation, standard, recycling_efficiency, due_diligence, battery_passport]
+    check_frequency: weekly
+    note: 欧盟电池法主干；2023-08-17 生效，分阶段适用（2025 起回收效率核算规则）
+
+  - source_id: eu_eurlex_oj_l
+    name: 欧盟官方公报 L 系列（法规动态）
+    domain: eur-lex.europa.eu
+    entry: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202500606
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    verified: true
+    connector: eur_lex
+    params:
+      oj_series: L
+      since_days: 90
+    dimensions: [regulation, standard]
+    check_frequency: weekly
+
+  - source_id: eu_dg_env_batteries
+    name: 欧盟委员会环境总司 - 电池专题页
+    domain: environment.ec.europa.eu
+    entry: https://environment.ec.europa.eu/topics/waste-and-recycling/batteries_en
+    source_type: announcement
+    tier: official
+    base_credibility: 100
+    priority: 1
+    verified: true
+    connector: null
+    params:
+      watch_sections: ["Law", "Implementation", "Timeline", "Related"]
+      diff_mode: true               # 页面变化即视为事件（衍生法/授权法发布）
+    dimensions: [regulation, recycling_efficiency, collection_target]
+    check_frequency: weekly
+    note: 2025-07-04 发布废电池回收效率核算与验证新规；此处是立法进展最权威入口
+
+  - source_id: eu_dg_env_news
+    name: 欧盟委员会环境总司 - 新闻
+    domain: environment.ec.europa.eu
+    entry: https://environment.ec.europa.eu/news_en
+    source_type: news
+    tier: official
+    base_credibility: 95
+    priority: 2
+    verified: true
+    connector: null
+    params: { rss: null, fallback: "vane_search" }   # 无稳定 RSS，走搜索兜底
+    dimensions: [regulation, recycling_efficiency]
+    check_frequency: weekly
+
+  - source_id: eu_presscorner
+    name: 欧盟委员会新闻中心（Press Corner）
+    domain: ec.europa.eu
+    entry: https://ec.europa.eu/commission/presscorner/home/en
+    source_type: news
+    tier: official
+    base_credibility: 95
+    priority: 2
+    verified: true
+    connector: null
+    params:
+      search_terms: ["batteries", "battery recycling", "critical raw materials", "circular economy"]
+      ip_filter: ["IP/", "MEX/", "SPEECH/"]
+    dimensions: [regulation, crm]
+    check_frequency: weekly
+
+  - source_id: eu_echa
+    name: 欧洲化学品管理局（ECHA）电池相关
+    domain: echa.europa.eu
+    entry: https://echa.europa.eu/regulations/batteries-regulation
+    source_type: announcement
+    tier: official
+    base_credibility: 95
+    priority: 3
+    verified: false
+    blocked: true                   # ⚠️ 实测 403 Forbidden，属反爬
+    connector: null
+    params:
+      fallback: "vane_search"       # 降级：用 site:echa.europa.eu 定向搜索
+      site_query: "site:echa.europa.eu batteries regulation"
+      note: "如需直采需 Playwright 渲染 + 请求头伪装，第一阶段不做"
+    dimensions: [regulation, standard]
+    check_frequency: weekly
+
+  - source_id: eu_eurostat_batteries
+    name: 欧盟统计局（Eurostat）电池与蓄电池废弃物统计
+    domain: ec.europa.eu
+    entry: https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Waste_statistics_-_recycling_of_batteries_and_accumulators
+    source_type: industry_db
+    tier: official
+    base_credibility: 95
+    priority: 3
+    verified: true
+    connector: null
+    params: { dataset_hint: "env_wasbat" }
+    dimensions: [recycling_efficiency, collection_target]
+    check_frequency: monthly       # 统计数据更新频率低，月度足够
+    note: 可用于交叉验证"欧盟回收率/收集率"类数据
+
+  # ---------- 二级：行业权威源 ----------
+  - source_id: eu_eba250
+    name: 欧洲电池联盟（European Battery Alliance / EBA250）
+    domain: eba250.eu
+    entry: https://www.eba250.eu/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 88
+    priority: 4
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [strategy, regulation]
+    check_frequency: weekly
+
+  - source_id: eu_recharge
+    name: RECHARGE（欧洲电池回收行业协会，AISBL）
+    domain: rechargebatteries.org
+    entry: https://www.rechargebatteries.org/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 85
+    priority: 4
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [recycling_efficiency, collection_target]
+    check_frequency: weekly
+
+  - source_id: eu_eurobat
+    name: EUROBAT（欧洲汽车与工业电池制造商协会）
+    domain: eurobat.org
+    entry: https://www.eurobat.org/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 85
+    priority: 4
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [regulation, recycling_efficiency]
+    check_frequency: weekly
+
+  - source_id: eu_tande
+    name: Transport & Environment（欧洲交通环境智库）
+    domain: transportenvironment.org
+    entry: https://www.transportenvironment.org/topics/batteries/
+    source_type: research
+    tier: industry
+    base_credibility: 82
+    priority: 5
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [recycling_efficiency, carbon_footprint]
+    check_frequency: monthly
+
+  # ---------- 三级：成员国层（先德法，按需扩展）----------
+  - source_id: eu_de_uba
+    name: 德国联邦环境署（Umweltbundesamt）
+    domain: umweltbundesamt.de
+    entry: https://www.umweltbundesamt.de/en/topics/waste-resources
+    source_type: announcement
+    tier: official
+    base_credibility: 92
+    priority: 6
+    verified: false
+    connector: null
+    params: { fallback: "vane_search", lang: de }
+    dimensions: [regulation, collection_target]
+    check_frequency: monthly
+    note: 德国是欧盟电池回收落地最严成员国，法规执行细节常早于欧盟层面
+
+  - source_id: eu_fr_ademe
+    name: 法国环境与能源管理署（ADEME）
+    domain: ademe.fr
+    entry: https://www.ademe.fr/
+    source_type: announcement
+    tier: official
+    base_credibility: 92
+    priority: 6
+    verified: false
+    connector: null
+    params: { fallback: "vane_search", lang: fr }
+    dimensions: [regulation, collection_target]
+    check_frequency: monthly
+
+# ---------- 采集规则 ----------
+collection_rules:
+  dedup: true
+  cross_validate: true              # 至少 2 个独立源确认才可 verified（与 03 篇一致）
+  translate_to_zh: true
+  min_quality_to_ingest: 60
+  vane_mode: quality                # 政策类用质量模式，宁慢勿漏
+  vane_sources: [web, academic]
+
+# ---------- 政策变更事件类型 ----------
+event_types:
+  - { id: adopted,        zh: 正式通过 }
+  - { id: in_force,       zh: 生效 }
+  - { id: delegated_act,  zh: 授权法案/实施细则 }
+  - { id: implementing_act, zh: 实施法案 }
+  - { id: consultation,   zh: 公众咨询 }
+  - { id: guidance,       zh: 指引/指南 }
+  - { id: infringement,   zh: 违规处理 }
+  - { id: repeal,         zh: 废止 }

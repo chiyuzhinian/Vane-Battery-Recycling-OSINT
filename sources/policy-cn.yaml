@@ -1,0 +1,77 @@
+# ============================================================
+# 中国（CN）动力电池回收政策数据源
+# ------------------------------------------------------------
+# 状态：⏳ 待你提供具体站点与栏目 URL 后回填
+#       你已说明"中国政策已经有了"，本文件先建好结构，
+#       拿到 URL 后逐条填入即可，字段与 EU/US 分册完全一致。
+# ============================================================
+
+region: CN
+enabled: true
+status: pending_user_input
+language_policy:
+  fetch: [zh]
+  store: [zh]
+
+schedule: { day_of_week: 1, hour: 8, minute: 0 }   # 每周一 08:00
+
+topics:
+  - { id: national_policy,  zh: 国家层面政策,   keywords: [回收利用管理办法, 综合利用行业规范条件, 白名单, 试点] }
+  - { id: subsidy,          zh: 补贴与激励,     keywords: [补贴, 税收优惠, 专项资金, 以旧换新] }
+  - { id: standard,         zh: 标准与认证,     keywords: [GB, YS, 团体标准, 梯次利用, 溯源管理] }
+  - { id: epr,              zh: 生产者责任延伸, keywords: [EPR, 生产者责任, 强制回收] }
+  - { id: local_policy,     zh: 地方政策,       keywords: [省, 市, 产业园, 地方补贴] }
+  - { id: supervision,      zh: 监管与执法,     keywords: [环保督察, 整治, 违规] }
+
+# ---------- 待回填：请按下面模板补充你的实际数据源 ----------
+# 建议优先覆盖（仅供参考，按你的实际来源替换）：
+#   部委层面：工业和信息化部、国家发展改革委、生态环境部、财政部、商务部、国家能源局
+#   标准层面：全国标准信息公共服务平台（GB/YS）、中国汽车动力电池产业创新联盟标准
+#   地方层面：你重点关注省份的工信厅 / 生态环境厅
+#   监管层面：国家企业信用信息公示系统、各省环评公示平台
+sources:
+  # - source_id: cn_miit
+  #   name: 工业和信息化部
+  #   domain: miit.gov.cn
+  #   entry: https://www.miit.gov.cn/          # ← 请填你实际使用的栏目 URL
+  #   source_type: regulation
+  #   tier: official
+  #   base_credibility: 100
+  #   priority: 1
+  #   verified: false
+  #   connector: null                          # 政府站点建议先用搜索兜底，稳定后再写 connector
+  #   params: { fallback: vane_search, site_query: "site:miit.gov.cn 动力电池 回收" }
+  #   dimensions: [national_policy, standard]
+  #   check_frequency: weekly
+
+  # - source_id: cn_ndrc
+  #   name: 国家发展改革委
+  #   ...
+
+  # - source_id: cn_mee
+  #   name: 生态环境部
+  #   ...
+
+collection_rules:
+  dedup: true
+  cross_validate: true
+  translate_to_zh: false          # 中文源无需翻译
+  min_quality_to_ingest: 60
+  vane_mode: quality
+  vane_sources: [web]
+
+event_types:
+  - { id: opinion_draft,  zh: 征求意见稿 }        # ← 征求意见稿阶段最具预警价值
+  - { id: issued,         zh: 正式印发 }
+  - { id: interpreted,    zh: 政策解读 }
+  - { id: whitelist,      zh: 白名单/规范条件公示 }
+  - { id: subsidy_notice, zh: 补贴申报通知 }
+  - { id: standard_release, zh: 标准发布 }
+  - { id: inspection,     zh: 督察/执法通报 }
+
+# ---------- 你补充 URL 后我要做的 4 件事 ----------
+todo_after_urls_provided:
+  - 探测每个站点的可达性、更新频率、是否有栏目级 RSS
+  - 判断能否结构化直采（能 → 写 Connector；不能 → 降级为 site: 定向搜索）
+  - 回填 base_credibility 与 tier（部委 100 / 地方 90 / 平台 85）
+  - 与 EU/US 分册统一命名规范，接入同一套验证管线

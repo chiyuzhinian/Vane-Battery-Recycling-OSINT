@@ -1,0 +1,269 @@
+# ============================================================
+# 美国（US）动力电池回收政策数据源
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 维护：chiyuzhinian
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 字段说明见 03_数据源管理和验证体系.md §1.2
+# ============================================================
+
+region: US
+enabled: true
+language_policy:
+  fetch: [en]
+  store: [en, zh]
+  translator: claude
+
+schedule: { day_of_week: 1, hour: 9, minute: 0 }   # 与 EU 同批，周一 09:00
+
+topics:
+  - { id: federal_rule,     zh: 联邦法规,     en: ["battery recycling", "hazardous waste", "lithium-ion battery"] }
+  - { id: ira_credit,       zh: IRA 税收抵免, en: ["45X", "advanced manufacturing production credit", "48C", "battery material processing"] }
+  - { id: critical_minerals, zh: 关键矿产,    en: ["critical minerals", "lithium", "nickel", "cobalt", "graphite"] }
+  - { id: epa_rule,         zh: EPA 规章,     en: ["RCRA", "universal waste", "lithium battery fire"] }
+  - { id: state_rule,       zh: 州级立法,     en: ["state battery recycling law", "extended producer responsibility"] }
+  - { id: ev_policy,        zh: 新能源车政策, en: ["electric vehicle", "EV tax credit", "battery supply chain"] }
+  - { id: doe_funding,      zh: 能源部资助,   en: ["DOE funding opportunity", "battery manufacturing grant"] }
+
+sources:
+
+  # ---------- 一级：联邦权威源 ----------
+  - source_id: us_federal_register
+    name: 联邦公报（Federal Register）
+    domain: federalregister.gov
+    entry: https://www.federalregister.gov/documents/search
+    api: https://www.federalregister.gov/api/v1/documents.json
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    verified: true                 # ✅ 已实测：无需 API Key，直接返回 JSON
+    connector: us_federal
+    params:
+      # 实测可用示例（可直接访问验证）：
+      # https://www.federalregister.gov/api/v1/documents.json?conditions[term]=battery+recycling&conditions[agencies][]=energy-department&per_page=20&order=newest
+      api_key_required: false
+      term: "battery recycling"
+      agencies: ["energy-department", "environmental-protection-agency", "internal-revenue-service"]
+      extra_terms: ["lithium-ion battery", "battery material", "critical minerals"]
+      per_page: 20
+      order: newest
+      fields: [title, abstract, html_url, pdf_url, publication_date, document_number, agencies, type]
+      paginate: true
+      max_pages: 5
+    dimensions: [federal_rule, epa_rule, ira_credit, critical_minerals]
+    check_frequency: weekly
+    note: |
+      美国联邦政策的最上游入口。DOE/EPA/IRS/FERC 的规则、拟议规则、通知全部在此。
+      返回体含 count / results[]，字段 html_url 可直接作为溯源 URL。
+
+  - source_id: us_epa_batteries
+    name: 美国环保署（EPA）电池与危废
+    domain: epa.gov
+    entry: https://www.epa.gov/hw/used-lithium-ion-batteries-and-small-electronic-devices
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    verified: false
+    connector: null
+    params:
+      fallback: "vane_search"
+      site_query: "site:epa.gov lithium battery recycling"
+    dimensions: [epa_rule, federal_rule]
+    check_frequency: weekly
+
+  - source_id: us_doe_eere
+    name: 美国能源部 能效与可再生能源办公室（EERE）
+    domain: energy.gov
+    entry: https://www.energy.gov/eere/vehicles/batteries
+    source_type: announcement
+    tier: official
+    base_credibility: 98
+    priority: 2
+    verified: false
+    connector: null
+    params:
+      fallback: "vane_search"
+      site_query: "site:energy.gov battery recycling"
+    dimensions: [doe_funding, ev_policy]
+    check_frequency: weekly
+
+  - source_id: us_doe_mesc
+    name: 美国能源部 制造业与能源供应链办公室（MESC）
+    domain: energy.gov
+    entry: https://www.energy.gov/mesc/manufacturing-and-energy-supply-chains
+    source_type: announcement
+    tier: official
+    base_credibility: 98
+    priority: 2
+    verified: false
+    connector: null
+    params:
+      fallback: "vane_search"
+      site_query: "site:energy.gov/mesc battery"
+    dimensions: [doe_funding, critical_minerals]
+    check_frequency: weekly
+    note: 关键矿产与本土电池产能政策的实际执行口
+
+  - source_id: us_irs_45x
+    name: 美国国税局（IRS）45X / 先进制造生产抵免
+    domain: irs.gov
+    entry: https://www.irs.gov/credits-deductions/advanced-manufacturing-production-credit
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 2
+    verified: false
+    connector: null
+    params:
+      fallback: "vane_search"
+      site_query: "site:irs.gov advanced manufacturing production credit battery"
+      keywords: ["45X", "battery components", "critical minerals"]
+    dimensions: [ira_credit]
+    check_frequency: weekly
+
+  - source_id: us_congress_bills
+    name: 美国国会立法（Congress.gov）
+    domain: congress.gov
+    entry: https://www.congress.gov/search?q=battery%20recycling
+    api: https://api.congress.gov/v3/bill
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 3
+    verified: false
+    connector: null
+    params:
+      requires_api_key: true            # 需在 api.data.gov 申请免费 Key
+      api_key_env: CONGRESS_API_KEY
+      keywords: ["battery recycling", "lithium-ion", "critical minerals"]
+      fallback: "vane_search"
+    dimensions: [federal_rule]
+    check_frequency: weekly
+    note: 关注提案阶段（比生效早 6-18 个月，对你有情报价值）
+
+  # ---------- 二级：研究/行业权威源 ----------
+  - source_id: us_usgs_minerals
+    name: 美国地质调查局（USGS）关键矿产
+    domain: usgs.gov
+    entry: https://www.usgs.gov/programs/mineral-resources-program
+    source_type: research
+    tier: official
+    base_credibility: 95
+    priority: 3
+    verified: false
+    connector: null
+    params: { fallback: "vane_search", dataset_hint: "Mineral Commodity Summaries" }
+    dimensions: [critical_minerals]
+    check_frequency: monthly
+    note: 锂/镍/钴/石墨产量与储量权威数据，可用于交叉验证企业产能宣称
+
+  - source_id: us_recell
+    name: ReCell 中心（阿贡国家实验室电池回收研发中心）
+    domain: recellcenter.org
+    entry: https://www.recellcenter.org/
+    source_type: research
+    tier: industry
+    base_credibility: 88
+    priority: 4
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [technology, recycling_efficiency]
+    check_frequency: monthly
+
+  - source_id: us_nrel
+    name: 美国国家可再生能源实验室（NREL）
+    domain: nrel.gov
+    entry: https://www.nrel.gov/
+    source_type: research
+    tier: industry
+    base_credibility: 88
+    priority: 5
+    verified: false
+    connector: null
+    params: { fallback: "vane_search", site_query: "site:nrel.gov battery recycling" }
+    dimensions: [technology]
+    check_frequency: monthly
+
+  - source_id: us_bci
+    name: Battery Council International（铅酸与电池行业协会）
+    domain: batterycouncil.org
+    entry: https://batterycouncil.org/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 82
+    priority: 5
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [state_rule, recycling_efficiency]
+    check_frequency: monthly
+    note: 州级回收立法的行业推手，可提前感知各州 EPR 立法动向
+
+  - source_id: us_naatbatt
+    name: NAATBatt International（先进电池技术联盟）
+    domain: naatbatt.org
+    entry: https://naatbatt.org/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 80
+    priority: 6
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [strategy]
+    check_frequency: monthly
+
+  - source_id: us_call2recycle
+    name: Call2Recycle（北美电池回收组织）
+    domain: call2recycle.org
+    entry: https://www.call2recycle.org/
+    source_type: industry_db
+    tier: industry
+    base_credibility: 80
+    priority: 6
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [collection_target]
+    check_frequency: monthly
+
+  # ---------- 三级：重点州（电池立法最活跃）----------
+  - source_id: us_state_ca_calrecycle
+    name: 加州 CalRecycle（全美电池 EPR 立法最前沿）
+    domain: calrecycle.ca.gov
+    entry: https://calrecycle.ca.gov/bev/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 5
+    verified: false
+    connector: null
+    params: { fallback: "vane_search" }
+    dimensions: [state_rule]
+    check_frequency: monthly
+    note: 加州 SB 212 建立的电池 EPR 体系是全美样板，常被其他州照抄
+
+# ---------- 采集规则 ----------
+collection_rules:
+  dedup: true
+  cross_validate: true
+  translate_to_zh: true
+  min_quality_to_ingest: 60
+  vane_mode: quality
+  vane_sources: [web]
+
+event_types:
+  - { id: proposed_rule,   zh: 拟议规则（NPRM） }
+  - { id: final_rule,      zh: 最终规则 }
+  - { id: interim_rule,    zh: 临时最终规则 }
+  - { id: notice,          zh: 通知/征求意见（RFI） }
+  - { id: executive_order, zh: 行政令 }
+  - { id: funding_opportunity, zh: 资助机会公告 }
+  - { id: bill_introduced, zh: 提案提出 }
+  - { id: bill_enacted,    zh: 法案通过 }
+  - { id: state_law,       zh: 州法 }
+  - { id: enforcement,     zh: 执法行动 }

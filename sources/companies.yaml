@@ -1,0 +1,404 @@
+# ============================================================
+# 目标企业注册表（同行竞对监控名单）
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 【名单来源】
+#   用户在 2026-09-10 提供的名单中包含三类：
+#     ① 咨询机构（13 家）→ 归入 sources/info-sources.yaml（是"信息源"不是"采集目标"）
+#     ② 协会组织（18 项）→ 同上
+#     ③ 同行企业（24 家）→ 本文件，是真正的【企业名单】
+#   加上原本已配置的 2 家（格林美、邦普循环），共 26 家。
+#
+# 【重要】verify_status 字段：
+#   verified  → 公司主体、代码、母子关系已确认
+#   pending   → 主体全称/上市状态待人工核实（采集前请先看 note）
+#   标 pending 的企业已做保守处理：不写入不确定的股票代码，避免串数据。
+# ============================================================
+
+version: 1
+updated_at: 2026-09-10
+
+meta:
+  total: 26
+  verified: 8
+  pending_verification: 18
+  deep_dive_first: [gemm, brunp]      # 你指定的"先完善"两家
+
+# ---------- 维度默认配置（与 04 篇 DIMENSIONS 对应）----------
+defaults:
+  enabled: true
+  dimensions:
+    hr:         { enabled: true, frequency: weekly }
+    feedstock:  { enabled: true, frequency: weekly }
+    operation:  { enabled: true, frequency: weekly }
+    strategy:   { enabled: true, frequency: daily }   # 公告/项目变动最频繁
+    technology: { enabled: true, frequency: weekly }
+
+# ============================================================
+# 一、已深度配置（先完善的两家）
+# ============================================================
+companies:
+
+  - id: gemm
+    name: 格林美
+    full_name: 格林美股份有限公司
+    aliases: [格林美股份, GEM, 荆门格林美, 武汉格林美, 无锡格林美, 江西格林美, 格林美（荆门）]
+    stock_code: "002340.SZ"
+    exchange: SZSE
+    listing: listed
+    group: 上市系
+    verify_status: verified
+    deep_dive: true
+    profile: A股动力电池回收龙头，三元前驱体 + 电池回收双主业，覆盖"回收—冶炼—前驱体"全链条
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "002340", category: [annual_report, announcement] } }
+      - { type: eia,    params: { keyword: ["格林美", "格林美（荆门）", "荆门市格林美新材料"] } }
+      - { type: patent, params: { applicant: ["格林美股份有限公司", "荆门市格林美新材料有限公司"] } }
+
+  - id: brunp
+    name: 邦普循环
+    full_name: 广东邦普循环科技有限公司
+    aliases: [邦普, Brunp, 湖南邦普, 宁德邦普, 广东邦普, 邦普科技]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: catl, name: 宁德时代, stock_code: "300750.SZ" }
+    group: 母公司穿透
+    verify_status: verified
+    deep_dive: true
+    profile: 宁德时代控股子公司，国内动力电池回收与正极材料再生规模第一梯队
+    note: 未独立上市 → 公告需从母公司宁德时代(300750)公告中按关键词"邦普"穿透检索
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "300750", keyword: ["邦普", "邦普循环"] } }
+      - { type: eia,    params: { keyword: ["湖南邦普", "广东邦普", "宁德邦普"] } }
+
+# ============================================================
+# 二、上市公司系（可直采公告/年报）
+# ============================================================
+  - id: ghtech
+    name: 光华科技
+    full_name: 广东光华科技股份有限公司
+    aliases: [光华科技股份, 光华科技（汕头）]
+    stock_code: "002741.SZ"
+    exchange: SZSE
+    listing: listed
+    group: 上市系
+    verify_status: verified
+    profile: 电子化学品起家，布局磷酸铁锂回收与正极材料再生
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "002741", category: [annual_report, announcement] } }
+      - { type: eia,    params: { keyword: ["光华科技", "广东光华科技"] } }
+
+  - id: tianqi
+    name: 天奇股份
+    full_name: 天奇自动化工程股份有限公司
+    aliases: [天奇, 天奇锂电循环, 天奇自动化]
+    stock_code: "002009.SZ"
+    exchange: SZSE
+    listing: listed
+    group: 上市系
+    verify_status: verified
+    profile: 智能装备 + 锂电池循环（回收冶炼）双主业
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "002009", category: [annual_report, announcement] } }
+      - { type: eia,    params: { keyword: ["天奇", "天奇锂电循环"] } }
+
+  - id: zhongwei
+    name: 中伟新材料
+    full_name: 中伟新材料股份有限公司
+    aliases: [中伟股份, 中伟新材料, CNGR]
+    stock_code: "300919.SZ"
+    exchange: SZSE
+    listing: listed
+    group: 上市系
+    verify_status: verified
+    profile: 三元前驱体全球龙头，向上游回收与镍资源一体化延伸
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "300919", category: [annual_report, announcement] } }
+      - { type: patent, params: { applicant: ["中伟新材料股份有限公司"] } }
+
+  - id: camel_xy
+    name: 骆驼集团资源循环襄阳有限公司
+    full_name: 骆驼集团资源循环襄阳有限公司
+    aliases: [骆驼资源循环, 骆驼集团襄阳, 骆驼股份回收]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: camel, name: 骆驼股份, stock_code: "601311.SH" }
+    group: 母公司穿透
+    verify_status: verified
+    profile: 骆驼股份（铅酸龙头）旗下锂电回收主体，位于湖北襄阳
+    note: 公告从母公司骆驼股份(601311)穿透；环评走湖北襄阳地方生态环境局
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "601311", keyword: ["资源循环", "襄阳"] } }
+      - { type: eia,    params: { keyword: ["骆驼集团资源循环襄阳", "骆驼资源循环"] } }
+
+  - id: ganfeng_circular
+    name: 赣锋循环
+    full_name: 江西赣锋循环科技有限公司
+    aliases: [赣锋锂业回收, 赣锋循环科技]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: ganfeng, name: 赣锋锂业, stock_code: "002460.SZ" }
+    group: 母公司穿透
+    verify_status: verified
+    profile: 赣锋锂业旗下电池回收与再生利用平台
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "002460", keyword: ["循环", "回收"] } }
+      - { type: eia,    params: { keyword: ["赣锋循环", "江西赣锋循环"] } }
+
+  - id: jereh_circular
+    name: 杰瑞再生循环
+    full_name: 杰瑞环保科技有限公司（再生循环板块）
+    aliases: [杰瑞环保, 杰瑞股份再生循环, 杰瑞循环]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: jereh, name: 杰瑞股份, stock_code: "002353.SZ" }
+    group: 母公司穿透
+    verify_status: pending
+    verify_note: 需确认承载"再生循环"业务的法人主体全称（杰瑞环保科技 / 杰瑞新能源）
+    profile: 杰瑞股份（油气装备）跨界布局退役电池再生循环
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "002353", keyword: ["再生循环", "电池回收", "杰瑞环保"] } }
+      - { type: eia,    params: { keyword: ["杰瑞环保", "杰瑞再生循环"] } }
+
+  - id: sunwoda_recycle
+    name: 欣旺达再生
+    full_name: 深圳市欣旺达再生材料有限公司
+    aliases: [欣旺达再生资源, 欣旺达循环]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: sunwoda, name: 欣旺达, stock_code: "300207.SZ" }
+    group: 母公司穿透
+    verify_status: pending
+    verify_note: 需确认主体全称（欣旺达再生材料 / 欣旺达再生资源）
+    profile: 欣旺达旗下电池回收与再生材料平台
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "300207", keyword: ["再生", "回收"] } }
+      - { type: eia,    params: { keyword: ["欣旺达再生"] } }
+
+  - id: tianneng_material
+    name: 浙江天能新材料
+    full_name: 浙江天能新材料有限公司
+    aliases: [天能新材料, 天能循环]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: tianneng, name: 天能股份, stock_code: "688819.SH" }
+    group: 母公司穿透
+    verify_status: pending
+    verify_note: 需确认主体全称与上市归属（天能股份 vs 天能控股集团）
+    profile: 天能系锂电回收与再生材料主体
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "688819", keyword: ["新材料", "回收"] } }
+      - { type: eia,    params: { keyword: ["天能新材料", "浙江天能新材料"] } }
+
+  - id: xtc_circular
+    name: 厦门厦钨循环
+    full_name: 厦门厦钨循环科技有限公司
+    aliases: [厦钨循环, 厦钨新能源循环]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: xtc, name: 厦门钨业, stock_code: "600549.SH" }
+    group: 母公司穿透
+    verify_status: pending
+    verify_note: 需确认归属：厦门钨业(600549) 体系 或 厦钨新能(688778) 体系
+    profile: 厦钨系退役电池回收与正极材料再生
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "600549", keyword: ["循环", "回收"] } }
+      - { type: eia,    params: { keyword: ["厦门厦钨循环", "厦钨循环"] } }
+
+  - id: haopeng
+    name: 赣州豪鹏科技
+    full_name: 赣州豪鹏科技有限公司
+    aliases: [豪鹏科技, 赣州豪鹏, Highpower]
+    stock_code: null
+    listing: subsidiary
+    parent: { id: highpower, name: 豪鹏科技, stock_code: "001283.SZ" }
+    group: 母公司穿透
+    verify_status: pending
+    verify_note: 需确认赣州豪鹏与豪鹏科技(001283)的股权关系及主体全称
+    profile: 电池回收与材料再生，江西赣州
+    direct_sources:
+      - { type: cninfo, params: { stock_code: "001283", keyword: ["赣州豪鹏", "回收"] } }
+      - { type: eia,    params: { keyword: ["赣州豪鹏科技"] } }
+
+# ============================================================
+# 三、非上市专精企业（主力靠环评 / 招投标 / 专利 / 新闻）
+# ============================================================
+  - id: jinsheng
+    name: 金晟新能源
+    full_name: 广东金晟新能源股份有限公司
+    aliases: [金晟新能源, 金晟新能, 广东金晟]
+    stock_code: null
+    listing: ipo_pending            # 曾递交港股上市申请，状态需跟踪
+    group: 非上市专精
+    verify_status: pending
+    verify_note: 上市状态随时间变化，需核实当前是否为上市公司
+    profile: 锂电池综合回收龙头之一，退役电池高值化利用
+    direct_sources:
+      - { type: eia,    params: { keyword: ["金晟新能源", "广东金晟"] } }
+      - { type: patent, params: { applicant: ["广东金晟新能源股份有限公司"] } }
+      - { type: bidding, params: { keyword: ["金晟新能源"] } }
+
+  - id: bocui
+    name: 博萃循环
+    full_name: 上海博萃循环科技有限公司
+    aliases: [博萃循环科技, Botree]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    profile: 湿法冶金技术驱动的电池回收方案商，偏技术服务与工程
+    direct_sources:
+      - { type: patent, params: { applicant: ["上海博萃循环科技有限公司"] } }
+      - { type: eia,    params: { keyword: ["博萃循环"] } }
+
+  - id: zzh_battery
+    name: 中资环电池公司
+    full_name: 中国资源循环集团电池业务板块（主体全称待核实）
+    aliases: [中资环, 中国资源循环集团, 中资环电池]
+    stock_code: null
+    listing: state_owned
+    group: 央企新平台
+    verify_status: pending
+    verify_note: ⚠️ 2024 年新设央企"中国资源循环集团"，电池板块法人主体名称需核实后再建采集
+    profile: 中央企业循环经济平台，电池回收为其核心板块之一
+    direct_sources:
+      - { type: eia,    params: { keyword: ["中资环", "中国资源循环集团"] } }
+      - { type: bidding, params: { keyword: ["中国资源循环集团", "中资环"] } }
+
+  - id: jecheng
+    name: 杰成新能源
+    full_name: 广东杰成新能源科技有限公司
+    aliases: [杰成新能源, 深圳杰成]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    profile: 华南地区退役电池回收处理企业
+    direct_sources:
+      - { type: eia,    params: { keyword: ["杰成新能源"] } }
+      - { type: patent, params: { applicant: ["杰成新能源"] } }
+
+  - id: changqing
+    name: 福建常青新能源
+    full_name: 福建常青新能源科技有限公司
+    aliases: [常青新能源, 福建常青]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    verify_note: 需确认股东背景与主体全称
+    profile: 福建地区三元材料与电池回收企业
+    direct_sources:
+      - { type: eia,    params: { keyword: ["常青新能源", "福建常青"] } }
+
+  - id: batteritech
+    name: 巴特瑞科技
+    full_name: 巴特瑞科技有限公司
+    aliases: [巴特瑞, 北京巴特瑞]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    profile: 退役动力电池拆解与梯次利用
+    direct_sources:
+      - { type: eia,    params: { keyword: ["巴特瑞科技"] } }
+      - { type: patent, params: { applicant: ["巴特瑞科技有限公司"] } }
+
+  - id: hengchuang
+    name: 恒创睿能
+    full_name: 恒创睿能（主体全称待核实）
+    aliases: [恒创睿能科技]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    verify_note: ⚠️ 主体全称与注册地待核实（北京 / 山东 / 江苏 均可能有同名主体）
+    profile: 退役电池回收与梯次利用
+    direct_sources:
+      - { type: eia,    params: { keyword: ["恒创睿能"] } }
+
+  - id: nantong_beixin
+    name: 南通北新
+    full_name: 南通北新新能源科技有限公司
+    aliases: [北新新能源, 南通北新]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    profile: 江苏南通地区电池回收处理企业
+    direct_sources:
+      - { type: eia,    params: { keyword: ["南通北新", "北新新能源"] } }
+
+  - id: xunying
+    name: 安徽巡鹰
+    full_name: 安徽巡鹰动力能源科技有限公司
+    aliases: [巡鹰, 巡鹰集团, 安徽巡鹰]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    profile: 梯次利用与储能应用（"回收—梯次—储能"闭环）
+    direct_sources:
+      - { type: eia,    params: { keyword: ["巡鹰", "安徽巡鹰"] } }
+      - { type: patent, params: { applicant: ["安徽巡鹰动力能源科技有限公司"] } }
+
+  - id: qingshan
+    name: 江苏青衫
+    full_name: 江苏青衫（主体全称待核实）
+    aliases: []
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    verify_note: ⚠️ "青衫"疑为"青杉"，主体全称需核实后再启用
+    direct_sources:
+      - { type: eia, params: { keyword: ["青衫", "青杉"] } }
+
+  - id: xinmao
+    name: 鑫茂
+    full_name: 鑫茂（主体全称待核实）
+    aliases: []
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    verify_note: ⚠️ 重名率高（江西鑫茂 / 湖南鑫茂 / 鑫茂科技…），需你确认是哪一家后再启用
+    direct_sources:
+      - { type: eia, params: { keyword: ["鑫茂", "鑫茂新能源"] } }
+
+  - id: ruikemei
+    name: 瑞科美
+    full_name: 瑞科美（主体全称待核实）
+    aliases: [广东瑞科美, 瑞科美循环]
+    stock_code: null
+    listing: unlisted
+    group: 非上市专精
+    verify_status: pending
+    verify_note: ⚠️ 主体全称与注册地待核实
+    direct_sources:
+      - { type: eia,    params: { keyword: ["瑞科美"] } }
+
+# ============================================================
+# 附：待你确认的清单（建议按此顺序核实，逐个把 verify_status 改为 verified）
+# ============================================================
+pending_verify_checklist:
+  - { id: zzh_battery, question: "中资环电池板块的法人主体全称是什么？" }
+  - { id: xinmao,      question: "『鑫茂』具体指哪家（全称/所在地）？" }
+  - { id: qingshan,    question: "『江苏青衫』是否应为『江苏青杉』？全称是？" }
+  - { id: ruikemei,    question: "『瑞科美』主体全称与注册地？" }
+  - { id: hengchuang,  question: "『恒创睿能』主体全称与注册地？" }
+  - { id: jereh_circular, question: "杰瑞『再生循环』由哪家法人主体承载？" }
+  - { id: sunwoda_recycle, question: "欣旺达再生主体全称？" }
+  - { id: tianneng_material, question: "浙江天能新材料归属天能股份还是天能控股？" }
+  - { id: xtc_circular, question: "厦门厦钨循环归属厦门钨业还是厦钨新能？" }
+  - { id: haopeng,     question: "赣州豪鹏与豪鹏科技(001283)的股权关系？" }
+  - { id: jinsheng,    question: "金晟新能源当前上市状态（是否已上市/上市地）？" }
+  - { id: changqing,   question: "福建常青新能源股东背景与全称？" }
+  - { id: batteritech, question: "巴特瑞科技全称与注册地？" }
+  - { id: nantong_beixin, question: "南通北新全称？" }
+  - { id: jecheng,     question: "杰成新能源全称与注册地？" }
+  - { id: bocui,       question: "博萃循环全称？" }
+  - { id: xunying,     question: "安徽巡鹰主体全称？" }
+  - { id: jereh_circular, question: "（同第 6 项）" }
