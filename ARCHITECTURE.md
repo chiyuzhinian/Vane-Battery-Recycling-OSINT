@@ -372,18 +372,30 @@ graph LR
 
 ## 七、本机实测结论汇总（可复现）
 
+完整报告见 [`docs/verification-report-2026-09-10.md`](docs/verification-report-2026-09-10.md)。
+复现命令：`py scripts/verify_sources.py`（本机 Python 命令为 `py`，版本 3.12.10）。
+
+**42 个源：✅ 可达 32 / 🚫 反爬 8 / ❌ 失效 2**
+
 | # | 结论 | 证据 |
 |---|---|---|
-| 1 | Federal Register API 无需 Key 可用 | `curl` 返回 `200`，4680 bytes JSON |
-| 2 | 欧盟 SPARQL 端点可用 | `POST/GET /webapi/rdf/sparql` 返回 `200 application/sparql-results+json` |
-| 3 | SPARQL 能查到电池法规本体 | 查到 15 个 CELEX，其中 **14 个是更正版本** `R(01)(02)(04)(06)...` |
-| 4 | SPARQL 支持标题关键词发现 | 查到 `32025D1769` 等 2025 年新立法 |
-| 5 | 标题搜索**有大量假阳性** | `batter` 命中"battery-powered hold-open systems"（建筑产品，无关） |
-| 6 | 同一 CELEX 返回**多语言重复** | 同一法规返回 da/de/en/fr/it 五语标题 → 必须 `xml:lang=en` 过滤 |
-| 7 | EUR-Lex HTML 被反爬 | `202`，伪装 Chrome UA 仍 `202` |
-| 8 | ECHA 被反爬 | `403 Forbidden` |
-| 9 | DG ENV 页面可正常抓取 | `200`，84346 bytes |
-| 10 | 本机**无 Python 解释器** | `python` 为 WindowsApps 商店占位符 |
+| 1 | **CN 政策源 16/16 全部可达** | 实测 HTTP 200；最大单点 std.samr.gov.cn 占 52.9% |
+| 2 | Federal Register API 无需 Key 可用 | `200`，采集到 **138 条**真实文档，过滤后 57 条相关 |
+| 3 | 欧盟 SPARQL 端点可用 | `200 application/sparql-results+json` |
+| 4 | SPARQL 能精确跟踪法规 | 电池法规 32023R1542 + **14 个更正版本** R(01)~R(14) |
+| 5 | SPARQL 支持标题关键词发现 | 查到 `32025D1769` 等 2025 年新立法 |
+| 6 | 标题搜索**有大量假阳性** | `batter` 命中 "battery-powered hold-open systems"（建筑产品，无关） |
+| 7 | 同一 CELEX 返回**多语言重复** | 同一法规返回 dа/de/en/fr/it 多语标题 → 已按 `lang=en` 过滤（65→26 条） |
+| 8 | **Python TLS 栈连不上部分政府站点** | gxt.hunan.gov.cn `BAD_ECPOINT`、ec.europa.eu `DECRYPTION_FAILED`；**curl 均 200** |
+| 9 | 部分站点只放行浏览器 UA | recellcenter.org：默认 UA 403 → 浏览器 UA 200 |
+| 10 | EUR-Lex HTML 被反爬 | `202`，伪装 Chrome UA 仍 `202` → 改走 SPARQL |
+| 11 | ECHA 被反爬 | `403 Forbidden` |
+| 12 | DG ENV 页面可正常抓取 | `200`，84 KB，适合 diff 监测 |
+| 13 | 相关性规则必须用真实数据校准 | 首版误杀 45X 等 3 条核心政策；修正后 US 合规数 16 → **57** |
+| 14 | 2 个域名已失效 | nrel.gov、eba250.eu（`000`） |
+
+> ⚠️ **第 8 条是本次最重要的发现**：如果不做 curl 交叉验证，会把 2 个可用源误判为"失效"。
+> 已在 `app/connectors/base.py` 内置 curl 回退，并把已知不兼容的域名登记在 `TLS_QUIRK_HOSTS`。
 
 ---
 
@@ -391,14 +403,17 @@ graph LR
 
 基于以上实测，第一阶段的落地顺序应调整为：
 
-| 优先级 | 事项 | 理由 |
+| 优先级 | 事项 | 状态 / 理由 |
 |---|---|---|
-| 🥇 | 打通 **US Federal Register** 全量采集 | 唯一零障碍的官方 API，先跑出真实数据 |
-| 🥇 | 打通 **EU SPARQL**（CELEX 跟踪 + 修订关系） | 官方接口可用，拿到的字段比正文更结构化 |
-| 🥈 | 建立**搜索边界与覆盖率报告** | 没有它就无法回答"是否搜全" |
-| 🥈 | 建立**源真实性白名单** | 数据可信的前提 |
-| 🥉 | EUR-Lex 正文层 | 被反爬，改用 Playwright 或长期接受 SPARQL 替代 |
-| 🥉 | CN 政策源 | 等你提供 URL |
+| ✅ | 打通 **US Federal Register** 全量采集 | **已完成**：138 条真实数据，57 条相关 |
+| ✅ | 打通 **EU SPARQL**（CELEX 跟踪 + 修订关系） | **已完成**：法规 + 14 个更正版本 |
+| ✅ | 建立**搜索边界与覆盖率报告** | **已完成**：`sources/search-boundary.yaml` + `app/core/coverage.py` |
+| ✅ | 建立**源真实性白名单** | **已完成**：`app/core/authenticity.py` |
+| ✅ | CN 政策源接入 | **已完成**：16 个源全部验证可达 |
+| 🥇 | **写 std.samr.gov.cn 专用 Connector** | 占 CN 政策命中量 **52.9%**，单点 ROI 最高 |
+| 🥈 | **cninfo（公告/年报）+ eia（环评）连接器** | 企业侧 130 格的主力来源，eia 是非上市企业唯一产能来源 |
+| 🥉 | EUR-Lex 正文层 | 被反爬；如确需条款级正文，再加 Playwright |
+| 🥉 | Congress.gov API Key | api.data.gov 免费申请，补上美国立法提案源 |
 
 ---
 

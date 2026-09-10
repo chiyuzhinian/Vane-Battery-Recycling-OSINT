@@ -110,12 +110,17 @@ sources:
     base_credibility: 95
     priority: 2
     verified: true
+    requires_curl: true             # ⚠️ Python(OpenSSL) 报 DECRYPTION_FAILED，curl 正常
     connector: null
     params:
       search_terms: ["batteries", "battery recycling", "critical raw materials", "circular economy"]
       ip_filter: ["IP/", "MEX/", "SPEECH/"]
     dimensions: [regulation, crm]
     check_frequency: weekly
+    note: |
+      实测 httpx 报 SSLError: DECRYPTION_FAILED_OR_BAD_RECORD_MAC，
+      改用 curl.exe 返回 200 / 21 KB。已在 app/connectors/base.py 的
+      TLS_QUIRK_HOSTS 中登记 ec.europa.eu，运行时自动走 curl 回退。
 
   - source_id: eu_echa
     name: 欧洲化学品管理局（ECHA）电池相关
@@ -144,6 +149,7 @@ sources:
     base_credibility: 95
     priority: 3
     verified: true
+    requires_curl: true             # ⚠️ 同 ec.europa.eu，需 curl 回退
     connector: null
     params: { dataset_hint: "env_wasbat" }
     dimensions: [recycling_efficiency, collection_target]
@@ -160,10 +166,12 @@ sources:
     base_credibility: 88
     priority: 4
     verified: false
+    unreachable: true               # ❌ 实测 curl 与 httpx 均 000（域名不可达）
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [strategy, regulation]
     check_frequency: weekly
+    note: 站点疑似已迁移或停用，改走搜索兜底
 
   - source_id: eu_recharge
     name: RECHARGE（欧洲电池回收行业协会，AISBL）
@@ -173,7 +181,7 @@ sources:
     tier: industry
     base_credibility: 85
     priority: 4
-    verified: false
+    verified: true                  # ✅ 实测 200 / 71.2 KB
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [recycling_efficiency, collection_target]
@@ -187,7 +195,7 @@ sources:
     tier: industry
     base_credibility: 85
     priority: 4
-    verified: false
+    verified: true                  # ✅ 实测 200 / 229.5 KB
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [regulation, recycling_efficiency]
@@ -201,7 +209,7 @@ sources:
     tier: industry
     base_credibility: 82
     priority: 5
-    verified: false
+    verified: true                  # ✅ 实测 200 / 225.9 KB
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [recycling_efficiency, carbon_footprint]
@@ -232,8 +240,9 @@ sources:
     base_credibility: 92
     priority: 6
     verified: false
+    blocked: true                   # 🚫 实测 403（反爬）
     connector: null
-    params: { fallback: "vane_search", lang: fr }
+    params: { fallback: "vane_search", lang: fr, site_query: "site:ademe.fr batteries recyclage" }
     dimensions: [regulation, collection_target]
     check_frequency: monthly
 

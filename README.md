@@ -109,25 +109,34 @@ sources/
 
 ## 六、数据源可达性实测（能不能搜到？）
 
-本机**没有可用的 Python 解释器**，所以验证工具用 PowerShell + curl 实现，开箱即跑：
-
-```powershell
-powershell -ExecutionPolicy Bypass -NoProfile -File .\scripts\verify-sources.ps1
+```bash
+py scripts/verify_sources.py              # 全量可达性（本机 Python 命令为 py，3.12.10）
+py scripts/verify_sources.py --region CN  # 只看中国
+py scripts/verify_sources.py --collect US # 真实采集
 ```
 
-2026-09-10 实测结果：
+**42 个源：✅ 可达 32 / 🚫 反爬 8 / ❌ 失效 2**
+
+| 区域 | 结果 |
+|---|---|
+| 🇨🇳 CN | **16/16 全部可达**（最大单点: std.samr.gov.cn，占你历史命中量的 52.9%） |
+| 🇪🇺 EU | 8 可达 / 4 反爬（EUR-Lex 改走 SPARQL 已打通）/ 1 失效 |
+| 🇺🇸 US | 8 可达 / 4 反爬（均有 site: 降级）/ 1 失效 |
+
+**真实采集已跑通**：
 
 ```
-✅ [US] us_federal_register      HTTP 200    1189ms  命中 48    机构=DOE, 最新=2025-07-03
-✅ [EU] eu_eurlex_sparql         HTTP 200   16436ms  命中 15    含 14 个更正版本
-✅ [EU] eu_dg_env_batteries      HTTP 200    1355ms  命中 1     含法规链接，可 diff 监测
-🚫 [EU] eu_eurlex_html           HTTP 202    2285ms  命中 0     反爬，改用 SPARQL
-🚫 [EU] eu_echa                  HTTP 403    7478ms  命中 0     反爬，降级 site: 搜索
-
-汇总：✅ 可达 3 个 | 🚫 被反爬 2 个 | ❌ 失败 0 个
+美国 Federal Register：138 条原始 → 57 条相关（41%）
+欧盟 EUR-Lex SPARQL ：电池法规 32023R1542 + 14 个更正版本
 ```
 
-结论：**美国侧完全打通，欧盟侧走 SPARQL 打通**。EUR-Lex 网页正文被反爬，但 SPARQL 给出的信息更结构化（CELEX、生效日期、修订关系、更正版本）。
+完整报告：[`docs/verification-report-2026-09-10.md`](docs/verification-report-2026-09-10.md)
+
+> ⚠️ **两个必须知道的坑**（已修复）：
+> ① Python 的 TLS 栈连不上 `gxt.hunan.gov.cn` 和 `ec.europa.eu`，但 curl 完全正常——
+> 不做交叉验证会把可用源误判为失效。已在 `app/connectors/base.py` 内置 curl 回退。
+> ② 相关性规则必须用真实数据校准：首版误杀了 45X 最终规则等 3 条核心政策，
+> 修正后美国采集合规数从 16 条提升到 **57 条**。
 
 ---
 
@@ -140,19 +149,24 @@ powershell -ExecutionPolicy Bypass -NoProfile -File .\scripts\verify-sources.ps1
 ├── requirements.txt                 # Python 依赖（部署到 Linux 后使用）
 ├── app/
 │   ├── connectors/                  # 通道 B：定向源直采
-│   │   ├── base.py                  #   基类 + 限速 + ProbeResult
+│   │   ├── base.py                  #   基类 + 限速 + curl 回退 + ProbeResult
 │   │   ├── eur_lex.py               #   欧盟：走 Publications Office SPARQL
 │   │   └── us_federal.py            #   美国：走 Federal Register 公开 API
 │   └── core/
-│       ├── relevance.py             # 相关性三段式判定（必修词/拒绝词/人工复核）
+│       ├── relevance.py             # 相关性四段式判定（含回归自检）
 │       ├── authenticity.py          # 源真实性（白名单/同形字/编辑距离/TLS）
 │       └── coverage.py              # 覆盖率格子模型 + 缺口根因分类
+├── docs/
+│   └── verification-report-2026-09-10.md   # 42 源全量验证报告
 ├── scripts/
-│   └── verify-sources.ps1           # 可达性实测（本机可跑）
+│   ├── verify_sources.py            # 可达性 + 真实采集（Python，主用）
+│   ├── verify-sources.ps1           # 同上（PowerShell 版，备用）
+│   └── probe-urls.ps1               # curl 批量探测（诊断 TLS 问题用）
 └── sources/
     ├── battery-recycling-sources.yaml   # 总入口
     ├── search-boundary.yaml             # 搜索边界 / 相关性规则 / 召回金标准
-    ├── policy-cn.yaml / policy-eu.yaml / policy-us.yaml
+    ├── policy-cn.yaml                   # 中国 16 源（✅ 已验证）
+    ├── policy-eu.yaml / policy-us.yaml  # 欧美政策源（✅ 已验证）
     ├── companies.yaml                   # 26 家目标企业
     └── info-sources.yaml                # 咨询机构 + 协会
 ```

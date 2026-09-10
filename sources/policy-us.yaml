@@ -61,28 +61,31 @@ sources:
   - source_id: us_epa_batteries
     name: 美国环保署（EPA）电池与危废
     domain: epa.gov
-    entry: https://www.epa.gov/hw/used-lithium-ion-batteries-and-small-electronic-devices
+    entry: https://www.epa.gov/recycle/used-lithium-ion-batteries
     source_type: regulation
     tier: official
     base_credibility: 100
     priority: 1
-    verified: false
+    verified: true                  # ✅ 2026-09-10 实测 200 / 75.7 KB
     connector: null
     params:
       fallback: "vane_search"
       site_query: "site:epa.gov lithium battery recycling"
+      url_fix_note: |
+        原写 /hw/used-lithium-ion-batteries-and-small-electronic-devices 实测 404，
+        已更正为 /recycle/used-lithium-ion-batteries（200）。
     dimensions: [epa_rule, federal_rule]
     check_frequency: weekly
 
   - source_id: us_doe_eere
-    name: 美国能源部 能效与可再生能源办公室（EERE）
+    name: 美国能源部 能效与可再生能源办公室（EERE）- 电池
     domain: energy.gov
     entry: https://www.energy.gov/eere/vehicles/batteries
     source_type: announcement
     tier: official
     base_credibility: 98
     priority: 2
-    verified: false
+    verified: true                  # ✅ 2026-09-10 实测 200 / 115.7 KB
     connector: null
     params:
       fallback: "vane_search"
@@ -93,16 +96,20 @@ sources:
   - source_id: us_doe_mesc
     name: 美国能源部 制造业与能源供应链办公室（MESC）
     domain: energy.gov
-    entry: https://www.energy.gov/mesc/manufacturing-and-energy-supply-chains
+    entry: https://www.energy.gov/mesc
     source_type: announcement
     tier: official
     base_credibility: 98
     priority: 2
-    verified: false
+    verified: true                  # ✅ 实测 200 / 138 KB（子路径 404，用站根）
     connector: null
     params:
       fallback: "vane_search"
       site_query: "site:energy.gov/mesc battery"
+      url_fix_note: |
+        /mesc/manufacturing-and-energy-supply-chains 与
+        /mesc/office-manufacturing-and-energy-supply-chains 均 404，
+        已改用站根 https://www.energy.gov/mesc（200）。
     dimensions: [doe_funding, critical_minerals]
     check_frequency: weekly
     note: 关键矿产与本土电池产能政策的实际执行口
@@ -115,7 +122,7 @@ sources:
     tier: official
     base_credibility: 100
     priority: 2
-    verified: false
+    verified: true                  # ✅ 实测 200 / 101.3 KB
     connector: null
     params:
       fallback: "vane_search"
@@ -134,15 +141,21 @@ sources:
     base_credibility: 100
     priority: 3
     verified: false
+    blocked: true                   # 🚫 实测：网页与 API 均 403（API 缺 Key）
     connector: null
     params:
       requires_api_key: true            # 需在 api.data.gov 申请免费 Key
       api_key_env: CONGRESS_API_KEY
       keywords: ["battery recycling", "lithium-ion", "critical minerals"]
       fallback: "vane_search"
+      site_query: "site:congress.gov battery recycling bill"
     dimensions: [federal_rule]
     check_frequency: weekly
-    note: 关注提案阶段（比生效早 6-18 个月，对你有情报价值）
+    note: |
+      实测 www.congress.gov 与 api.congress.gov 均 403。
+      API 需免费 Key（api.data.gov 申请后填入 .env 的 CONGRESS_API_KEY）；
+      未拿到 Key 前走 site: 搜索兜底。
+      情报价值：提案阶段比生效早 6-18 个月。
 
   # ---------- 二级：研究/行业权威源 ----------
   - source_id: us_usgs_minerals
@@ -153,7 +166,7 @@ sources:
     tier: official
     base_credibility: 95
     priority: 3
-    verified: false
+    verified: true                  # ✅ 实测 200 / 112 KB
     connector: null
     params: { fallback: "vane_search", dataset_hint: "Mineral Commodity Summaries" }
     dimensions: [critical_minerals]
@@ -168,7 +181,8 @@ sources:
     tier: industry
     base_credibility: 88
     priority: 4
-    verified: false
+    verified: true                  # ✅ 实测 200 / 69.5 KB
+    requires_browser_ua: true       # ⚠️ 默认 UA 会 403，必须带浏览器 UA
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [technology, recycling_efficiency]
@@ -183,10 +197,12 @@ sources:
     base_credibility: 88
     priority: 5
     verified: false
+    unreachable: true               # ❌ 实测 curl 与 httpx 均 000（DNS/网络不可达）
     connector: null
     params: { fallback: "vane_search", site_query: "site:nrel.gov battery recycling" }
     dimensions: [technology]
     check_frequency: monthly
+    note: 本机网络环境无法直连；如服务器在海外可重新评估
 
   - source_id: us_bci
     name: Battery Council International（铅酸与电池行业协会）
@@ -197,11 +213,16 @@ sources:
     base_credibility: 82
     priority: 5
     verified: false
+    blocked: true                   # 🚫 实测 403（Cloudflare 类防护）
     connector: null
-    params: { fallback: "vane_search" }
+    params:
+      fallback: "vane_search"
+      site_query: "site:batterycouncil.org battery recycling"
     dimensions: [state_rule, recycling_efficiency]
     check_frequency: monthly
-    note: 州级回收立法的行业推手，可提前感知各州 EPR 立法动向
+    note: |
+      州级回收立法的行业推手，可提前感知各州 EPR 立法动向。
+      直采被 403，第一阶段走 site: 搜索；如需直采需 Playwright。
 
   - source_id: us_naatbatt
     name: NAATBatt International（先进电池技术联盟）
@@ -211,7 +232,7 @@ sources:
     tier: industry
     base_credibility: 80
     priority: 6
-    verified: false
+    verified: true                  # ✅ 实测 200 / 145 KB
     connector: null
     params: { fallback: "vane_search" }
     dimensions: [strategy]
@@ -226,8 +247,11 @@ sources:
     base_credibility: 80
     priority: 6
     verified: false
+    blocked: true                   # 🚫 实测 403
     connector: null
-    params: { fallback: "vane_search" }
+    params:
+      fallback: "vane_search"
+      site_query: "site:call2recycle.org battery collection"
     dimensions: [collection_target]
     check_frequency: monthly
 
@@ -241,11 +265,16 @@ sources:
     base_credibility: 92
     priority: 5
     verified: false
+    blocked: true                   # 🚫 实测 403（反爬）
     connector: null
-    params: { fallback: "vane_search" }
+    params:
+      fallback: "vane_search"
+      site_query: "site:calrecycle.ca.gov battery recycling"
     dimensions: [state_rule]
     check_frequency: monthly
-    note: 加州 SB 212 建立的电池 EPR 体系是全美样板，常被其他州照抄
+    note: |
+      加州 SB 212 建立的电池 EPR 体系是全美样板，常被其他州照抄，必须跟踪。
+      直采被 403，第一阶段走 site: 搜索。
 
 # ---------- 采集规则 ----------
 collection_rules:

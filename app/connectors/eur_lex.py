@@ -206,29 +206,40 @@ class EurLexConnector(BaseConnector):
             Q_KEYWORD.format(keyword=keyword.lower(), since=since, limit=limit)
         )
         out: list[RawEvidence] = []
-        seen: set[tuple[str, str | None]] = set()   # (celex, lang)
+        seen: set[str] = set()
+        skipped_langs: set[str] = set()
         for b in bindings:
             celex = self._val(b, "celex")
             lang = self._lang(b, "title")
             if not celex:
                 continue
-            # ⚠️ 实测：同一 CELEX 会返回 da/de/en/fr/it 多语言标题，
-            #    必须按语言去重，否则同一条法规会重复入库 5 次以上。
-            key = (celex, lang)
-            if key in seen:
+            # ⚠️ 实测：同一 CELEX 会返回 da/de/en/fr/it/... 多语言标题。
+            #    这是**同一条法规**的不同语言版本，不是多条法规。
+            #    只保留英文版本，否则同一条法规会在库里重复 5~24 次，
+            #    既污染去重统计，又让"独立来源计数"虚高（影响交叉验证）。
+            if lang != "en":
+                skipped_langs.add(lang or "und")
                 continue
-            seen.add(key)
+            if celex in seen:
+                continue
+            seen.add(celex)
             title = self._val(b, "title") or ""
             work = self._val(b, "work")
             out.append(RawEvidence(
-                evidence_id=f"eu_{celex}_{lang or 'xx'}",
+                evidence_id=f"eu_{celex}",
                 channel="connector",
                 source_id="eu_eurlex_keyword",
                 source_url=work,
                 source_title=title,
                 publish_date=parse_date(self._val(b, "date")),
                 raw_text=title,
-                meta={"celex": celex, "lang": lang, "discovered_by": keyword, "work": work},
+                meta={
+                    "celex": celex,
+                    "lang": lang,
+                    "discovered_by": keyword,
+                    "work": work,
+                    "other_langs": sorted(skipped_langs),
+                },
             ))
         return out
 

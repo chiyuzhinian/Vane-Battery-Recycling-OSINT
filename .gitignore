@@ -1,0 +1,25 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- 环境变量（含 API Key，绝不入库）----
+.env
+.env.local
+.env.*.local
+
+# ---- 采集产出（派生数据，会持续增长；结论已归档到 docs/verification-report-*.md）----
+outputs/
+*.jsonl
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.tmp

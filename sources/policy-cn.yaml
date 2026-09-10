@@ -1,14 +1,18 @@
 # ============================================================
 # 中国（CN）动力电池回收政策数据源
 # ------------------------------------------------------------
-# 状态：⏳ 待你提供具体站点与栏目 URL 后回填
-#       你已说明"中国政策已经有了"，本文件先建好结构，
-#       拿到 URL 后逐条填入即可，字段与 EU/US 分册完全一致。
+# 状态：✅ 已由用户提供真实来源清单（2026-09-10）
+# 数据依据：用户在过往检索中实际命中的 85 条政策，来源分布见文末
+# ------------------------------------------------------------
+# ⚠️ 重要洞察：国家标准全文公开系统一家占 52.9%
+#    → 中国"电池回收政策"的主体是【标准】(GB/T、GB)，
+#      而不是部委红头文件。这直接改变采集优先级：
+#      标准源 > 部委源 > 地方源
 # ============================================================
 
 region: CN
 enabled: true
-status: pending_user_input
+status: active
 language_policy:
   fetch: [zh]
   store: [zh]
@@ -16,42 +20,365 @@ language_policy:
 schedule: { day_of_week: 1, hour: 8, minute: 0 }   # 每周一 08:00
 
 topics:
-  - { id: national_policy,  zh: 国家层面政策,   keywords: [回收利用管理办法, 综合利用行业规范条件, 白名单, 试点] }
-  - { id: subsidy,          zh: 补贴与激励,     keywords: [补贴, 税收优惠, 专项资金, 以旧换新] }
-  - { id: standard,         zh: 标准与认证,     keywords: [GB, YS, 团体标准, 梯次利用, 溯源管理] }
-  - { id: epr,              zh: 生产者责任延伸, keywords: [EPR, 生产者责任, 强制回收] }
-  - { id: local_policy,     zh: 地方政策,       keywords: [省, 市, 产业园, 地方补贴] }
-  - { id: supervision,      zh: 监管与执法,     keywords: [环保督察, 整治, 违规] }
+  - { id: national_policy, zh: 国家层面政策,   keywords: [回收利用管理办法, 综合利用行业规范条件, 白名单, 试点] }
+  - { id: standard,        zh: 标准与认证,     keywords: [GB, GB/T, YS, 团体标准, 梯次利用, 溯源管理] }
+  - { id: subsidy,         zh: 补贴与激励,     keywords: [补贴, 税收优惠, 专项资金, 以旧换新, 增值税] }
+  - { id: epr,             zh: 生产者责任延伸, keywords: [EPR, 生产者责任, 强制回收, 回收目标责任制] }
+  - { id: local_policy,    zh: 地方政策,       keywords: [省, 市, 产业园, 地方补贴, 实施方案] }
+  - { id: supervision,     zh: 监管与执法,     keywords: [环保督察, 整治, 违规, 处罚] }
+  - { id: transport,       zh: 运输与危废,     keywords: [危险货物, 运输管理, 跨省转移] }
 
-# ---------- 待回填：请按下面模板补充你的实际数据源 ----------
-# 建议优先覆盖（仅供参考，按你的实际来源替换）：
-#   部委层面：工业和信息化部、国家发展改革委、生态环境部、财政部、商务部、国家能源局
-#   标准层面：全国标准信息公共服务平台（GB/YS）、中国汽车动力电池产业创新联盟标准
-#   地方层面：你重点关注省份的工信厅 / 生态环境厅
-#   监管层面：国家企业信用信息公示系统、各省环评公示平台
+# ============================================================
+# 源清单：16 个（按实测命中占比排序）
+# ============================================================
 sources:
-  # - source_id: cn_miit
-  #   name: 工业和信息化部
-  #   domain: miit.gov.cn
-  #   entry: https://www.miit.gov.cn/          # ← 请填你实际使用的栏目 URL
-  #   source_type: regulation
-  #   tier: official
-  #   base_credibility: 100
-  #   priority: 1
-  #   verified: false
-  #   connector: null                          # 政府站点建议先用搜索兜底，稳定后再写 connector
-  #   params: { fallback: vane_search, site_query: "site:miit.gov.cn 动力电池 回收" }
-  #   dimensions: [national_policy, standard]
-  #   check_frequency: weekly
 
-  # - source_id: cn_ndrc
-  #   name: 国家发展改革委
-  #   ...
+  # ---------- 🥇 一级：标准源（占比 54.1%，必须优先打通）----------
+  - source_id: cn_std_samr
+    name: 国家标准全文公开系统
+    domain: std.samr.gov.cn
+    entry: https://std.samr.gov.cn/
+    source_type: standard
+    tier: official
+    base_credibility: 100
+    priority: 1
+    region: CN
+    verified: false
+    connector: null
+    strategy: structured_portal       # 标准平台，优先找检索接口
+    params:
+      fallback: vane_search
+      site_query: "site:std.samr.gov.cn 动力电池 回收"
+      keywords: [动力电池回收, 退役电池, 梯次利用, 再生利用, 电池拆解]
+      note: |
+        实测占用户政策命中量的 52.9%（45/85 条）—— 单点最大的源。
+        待办：探测其检索接口（GB 标准查询页面结构固定，值得写专用 Connector）。
+    dimensions: [standard]
+    observed_share: 0.529
+    observed_count: 45
+    check_frequency: weekly
 
-  # - source_id: cn_mee
-  #   name: 生态环境部
-  #   ...
+  - source_id: cn_ttbz
+    name: 全国团体标准信息平台
+    domain: www.ttbz.org.cn
+    entry: https://www.ttbz.org.cn/
+    source_type: standard
+    tier: official
+    base_credibility: 95
+    priority: 2
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:ttbz.org.cn 电池 回收"
+      note: 团体标准是国标空白的先行指标，往往比国标早 1-2 年反映行业实践
+    dimensions: [standard]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: weekly
 
+  # ---------- 🥈 二级：部委源（占比 43.5%）----------
+  - source_id: cn_mee
+    name: 生态环境部
+    domain: www.mee.gov.cn
+    entry: https://www.mee.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    region: CN
+    verified: false
+    connector: null
+    strategy: listing_page
+    params:
+      fallback: vane_search
+      site_query: "site:mee.gov.cn 动力电池 回收"
+      sections: [政策法规, 规章, 公告, 征求意见]
+      note: |
+        实测占 16.5%（14/85 条）。环评与危废管理的归口部门，
+        与"废料量及来源"维度强相关。
+        栏目 URL 待探测后回填（政府站点结构常有变动，先不写死）。
+    dimensions: [national_policy, supervision, transport]
+    observed_share: 0.165
+    observed_count: 14
+    check_frequency: weekly
+
+  - source_id: cn_miit
+    name: 工业和信息化部
+    domain: www.miit.gov.cn
+    entry: https://www.miit.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 1
+    region: CN
+    verified: false
+    connector: null
+    strategy: listing_page
+    params:
+      fallback: vane_search
+      site_query: "site:miit.gov.cn 动力电池 回收 综合利用"
+      sections: [政策文件, 公示公告, 征求意见]
+      note: |
+        实测占 9.4%（8/85 条）。动力电池回收行业规范条件（白名单）
+        的发布主体，是行业准入的第一手来源。
+    dimensions: [national_policy, epr, standard]
+    observed_share: 0.094
+    observed_count: 8
+    check_frequency: weekly
+
+  - source_id: cn_miit_wap
+    name: 工业和信息化部（移动版）
+    domain: wap.miit.gov.cn
+    entry: https://wap.miit.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 3
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      note: |
+        实测占 3.5%（3/85 条）。移动版与主站内容有重叠但**不完全一致**，
+        移动版有时先于主站更新 —— 保留为独立源，但要与主站做去重。
+    dimensions: [national_policy]
+    observed_share: 0.035
+    observed_count: 3
+    check_frequency: weekly
+    dedup_with: cn_miit
+
+  - source_id: cn_samr
+    name: 国家市场监督管理总局
+    domain: www.samr.gov.cn
+    entry: https://www.samr.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 2
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:samr.gov.cn 电池 回收"
+      note: 标准化管理与认证认可归口；与 std.samr.gov.cn 形成上下游
+    dimensions: [standard, national_policy]
+    observed_share: 0.024
+    observed_count: 2
+    check_frequency: weekly
+
+  - source_id: cn_ndrc
+    name: 国家发展和改革委员会
+    domain: www.ndrc.gov.cn
+    entry: https://www.ndrc.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 2
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:ndrc.gov.cn 动力电池 回收"
+      note: 产业政策与循环经济宏观归口（含《产业结构调整指导目录》）
+    dimensions: [national_policy, subsidy]
+    observed_share: 0.024
+    observed_count: 2
+    check_frequency: weekly
+
+  - source_id: cn_gov
+    name: 中国政府网（移动版入口）
+    domain: app.www.gov.cn
+    entry: https://app.www.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 3
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      note: 国务院文件与政策库；比例虽低但常是政策的"首发转载点"
+    dimensions: [national_policy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: weekly
+
+  - source_id: cn_mot_xxgk
+    name: 交通运输部政府信息公开
+    domain: xxgk.mot.gov.cn
+    entry: https://xxgk.mot.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 2
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:xxgk.mot.gov.cn 电池 运输"
+      note: |
+        实测占 2.4%（2/85 条）。**容易被忽略但很关键**：
+        退役电池属于危险货物，运输合规直接影响回收企业的成本与渠道半径。
+    dimensions: [transport, supervision]
+    observed_share: 0.024
+    observed_count: 2
+    check_frequency: weekly
+
+  - source_id: cn_mof_szs
+    name: 财政部税政司
+    domain: szs.mof.gov.cn
+    entry: https://szs.mof.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 100
+    priority: 2
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:szs.mof.gov.cn 资源综合利用 增值税 电池"
+      note: 资源综合利用增值税优惠政策的直接来源，与"经营现状"维度强相关
+    dimensions: [subsidy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: weekly
+
+  - source_id: cn_tax_zj
+    name: 国家税务总局浙江省税务局
+    domain: zhejiang.chinatax.gov.cn
+    entry: https://zhejiang.chinatax.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 95
+    priority: 3
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      note: |
+        地方税务机关是税收优惠政策**落地执行细则**的源头。
+        浙江为电池回收产业大省，先纳入；后续可按产业集中度扩展到
+        广东、湖南、江苏、江西等省税务局。
+    dimensions: [subsidy, local_policy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: weekly
+
+  # ---------- 🥉 三级：地方源（占比 5.9%）----------
+  - source_id: cn_gz_gxj
+    name: 广州市工业和信息化局
+    domain: gxj.gz.gov.cn
+    entry: https://gxj.gz.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 4
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params: { fallback: vane_search }
+    dimensions: [local_policy, subsidy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: monthly
+
+  - source_id: cn_bj_jxj
+    name: 北京市经济和信息化局
+    domain: jxj.beijing.gov.cn
+    entry: https://jxj.beijing.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 4
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params: { fallback: vane_search }
+    dimensions: [local_policy, subsidy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: monthly
+
+  - source_id: cn_cq_jjxxw
+    name: 重庆市经济和信息化委员会
+    domain: jjxxw.cq.gov.cn
+    entry: https://jjxxw.cq.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 4
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params: { fallback: vane_search }
+    dimensions: [local_policy, subsidy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: monthly
+
+  - source_id: cn_hunan_gxt
+    name: 湖南省工业和信息化厅
+    domain: gxt.hunan.gov.cn
+    entry: https://gxt.hunan.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 3
+    region: CN
+    verified: true                  # ✅ 实测 curl 200 / 83.1 KB
+    requires_curl: true             # ⚠️ Python(OpenSSL) 报 SSL: BAD_ECPOINT，curl 正常
+    connector: null
+    strategy: site_search
+    params:
+      fallback: vane_search
+      site_query: "site:gxt.hunan.gov.cn 动力电池 回收"
+    dimensions: [local_policy, subsidy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: weekly
+    priority_reason: 与目标企业地理重叠度高（邦普、金晟等均在此有基地）
+
+  - source_id: cn_jl_gxt
+    name: 吉林省工业和信息化厅
+    domain: gxt.jl.gov.cn
+    entry: https://gxt.jl.gov.cn/
+    source_type: regulation
+    tier: official
+    base_credibility: 92
+    priority: 4
+    region: CN
+    verified: false
+    connector: null
+    strategy: site_search
+    params: { fallback: vane_search }
+    dimensions: [local_policy]
+    observed_share: 0.012
+    observed_count: 1
+    check_frequency: monthly
+
+# ============================================================
+# 采集规则
+# ============================================================
 collection_rules:
   dedup: true
   cross_validate: true
@@ -60,18 +387,61 @@ collection_rules:
   vane_mode: quality
   vane_sources: [web]
 
-event_types:
-  - { id: opinion_draft,  zh: 征求意见稿 }        # ← 征求意见稿阶段最具预警价值
-  - { id: issued,         zh: 正式印发 }
-  - { id: interpreted,    zh: 政策解读 }
-  - { id: whitelist,      zh: 白名单/规范条件公示 }
-  - { id: subsidy_notice, zh: 补贴申报通知 }
-  - { id: standard_release, zh: 标准发布 }
-  - { id: inspection,     zh: 督察/执法通报 }
+  # 同一政策被多站转载 → 以权威度最高的那条为主，其余作为交叉验证证据
+  repost_handling:
+    primary_by_tier: true
+    keep_others_as_evidence: true
 
-# ---------- 你补充 URL 后我要做的 4 件事 ----------
-todo_after_urls_provided:
-  - 探测每个站点的可达性、更新频率、是否有栏目级 RSS
-  - 判断能否结构化直采（能 → 写 Connector；不能 → 降级为 site: 定向搜索）
-  - 回填 base_credibility 与 tier（部委 100 / 地方 90 / 平台 85）
-  - 与 EU/US 分册统一命名规范，接入同一套验证管线
+event_types:
+  - { id: opinion_draft,    zh: 征求意见稿 }        # ← 最具预警价值
+  - { id: issued,           zh: 正式印发 }
+  - { id: interpreted,      zh: 政策解读 }
+  - { id: whitelist,        zh: 白名单/规范条件公示 }
+  - { id: subsidy_notice,   zh: 补贴申报通知 }
+  - { id: standard_draft,   zh: 标准征求意见 }
+  - { id: standard_release, zh: 标准发布 }
+  - { id: standard_impl,    zh: 标准实施 }
+  - { id: inspection,       zh: 督察/执法通报 }
+  - { id: tax_notice,       zh: 税收政策公告 }
+
+# ============================================================
+# 优先级依据（来自你提供的 85 条实测分布）
+# ============================================================
+priority_basis:
+  total_observed: 85
+  distribution:
+    - { source: std.samr.gov.cn,      count: 45, share: 0.529, group: 标准源 }
+    - { source: www.mee.gov.cn,       count: 14, share: 0.165, group: 部委源 }
+    - { source: www.miit.gov.cn,      count: 8,  share: 0.094, group: 部委源 }
+    - { source: wap.miit.gov.cn,      count: 3,  share: 0.035, group: 部委源 }
+    - { source: xxgk.mot.gov.cn,      count: 2,  share: 0.024, group: 部委源 }
+    - { source: www.samr.gov.cn,      count: 2,  share: 0.024, group: 部委源 }
+    - { source: www.ndrc.gov.cn,      count: 2,  share: 0.024, group: 部委源 }
+    - { source: app.www.gov.cn,       count: 1,  share: 0.012, group: 部委源 }
+    - { source: gxj.gz.gov.cn,        count: 1,  share: 0.012, group: 地方源 }
+    - { source: www.ttbz.org.cn,      count: 1,  share: 0.012, group: 标准源 }
+    - { source: szs.mof.gov.cn,       count: 1,  share: 0.012, group: 部委源 }
+    - { source: zhejiang.chinatax.gov.cn, count: 1, share: 0.012, group: 地方源 }
+    - { source: jxj.beijing.gov.cn,   count: 1,  share: 0.012, group: 地方源 }
+    - { source: jjxxw.cq.gov.cn,      count: 1,  share: 0.012, group: 地方源 }
+    - { source: gxt.hunan.gov.cn,     count: 1,  share: 0.012, group: 地方源 }
+    - { source: gxt.jl.gov.cn,        count: 1,  share: 0.012, group: 地方源 }
+
+  group_summary:
+    标准源: { sources: 2, count: 46, share: 0.541 }
+    部委源: { sources: 9, count: 37, share: 0.435 }
+    地方源: { sources: 5, count: 5,  share: 0.059 }
+
+  takeaway: |
+    ① 标准源占比过半 → 中国电池回收"政策"的主体是 GB/GB/T 与团体标准，
+       采集重心必须放在 std.samr.gov.cn，而不是部委新闻。
+    ② 部委源中 mee（16.5%）> miit（9.4%）→ 环保口比产业口信息更密。
+    ③ 地方源分散（5 个源各 1 条）→ 说明地方政策尚未成为主线，
+       但湖南/广东/浙江与目标企业地理重叠，值得按企业所在地扩面。
+
+todo:
+  - 逐个探测 16 个域名的可达性（跑 scripts/verify_sources.py --region CN）
+  - 为 std.samr.gov.cn 写专用 Connector（占比最高，ROI 最大）
+  - 探测各部委站点的栏目级 URL 与是否有 RSS
+  - 评估是否需要 Playwright（部分政府站点有 JS 渲染）
+
