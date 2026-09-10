@@ -182,15 +182,48 @@ class BrowserFetcher:
             await page.close()
 
     async def download(self, url: str, dest: Path) -> dict[str, Any]:
-        """用浏览器上下文下载（可绕过对普通客户端的 403）。"""
+        """用浏览器上下文下载（可绕过对普通客户端的 403）。
+
+        ⚠️ **只信内容，不信状态码与扩展名**（实测教训）
+        --------------------------------------------------
+        curl 下载 PHMSA 的 PDF 时返回 403，但**响应体被原样存成了 .pdf**，
+        得到一个 525 字节的 HTML 错误页伪装成 PDF —— 不校验就会把
+        "抓到了官方文档" 写进证据库。因此这里做双重把关：
+
+          1. 状态码必须 200
+          2. 内容魔数必须匹配扩展名（PDF → `%PDF-`；HTML → `<!DOCTYPE`/`<html`）
+
+        校验不通过则**不落盘**，并在返回值里说明原因。
+        """
         assert self._ctx is not None
         resp = await self._ctx.request.get(url, timeout=self.timeout_ms)
-        dest.parent.mkdir(parents=True, exist_ok=True)
         body = await resp.body()
-        if resp.status == 200 and body:
+
+        ctype = (resp.headers.get("content-type") or "").lower()
+        head = body[:8]
+        ok_status = resp.status == 200
+        is_pdf = head.startswith(b"%PDF-")
+        looks_html = head.lstrip()[:1] == b"<"
+
+        reason = ""
+        if not ok_status:
+            reason = f"HTTP {resp.status}"
+        elif dest.suffix.lower() == ".pdf" and not is_pdf:
+            # 典型陷阱：WAF 返回 200 + HTML 拦截页
+            reason = "内容不是 PDF（疑似 WAF 拦截页）" if looks_html else "内容魔数不匹配"
+        elif looks_html and dest.suffix.lower() != ".html":
+            reason = "响应是 HTML 而非目标二进制"
+
+        saved = None
+        if not reason:
+            dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(body)
+            saved = dest.as_posix()
+        else:
+            dest.unlink(missing_ok=True)        # 清掉可能存在的旧残留
+
         return {
             "url": url, "status": resp.status, "bytes": len(body),
-            "saved": dest.as_posix() if resp.status == 200 else None,
-            "content_type": resp.headers.get("content-type"),
+            "saved": saved, "verified": bool(saved),
+            "reason": reason, "content_type": ctype,
         }

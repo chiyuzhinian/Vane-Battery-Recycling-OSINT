@@ -23,3 +23,6 @@ outputs/
 Thumbs.db
 desktop.ini
 *.tmp
+
+# ---- MCP 浏览器临时页面快照（调试产物，不入库）----
+.playwright-mcp/

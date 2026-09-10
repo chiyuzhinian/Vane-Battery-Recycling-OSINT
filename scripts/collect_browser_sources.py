@@ -183,7 +183,9 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             try:
                 res = await asyncio.wait_for(bf.download(p, dest), timeout=FETCH_TIMEOUT)
                 ok = "✅" if res["saved"] else "🚫"
-                print(f"    {ok} HTTP {res['status']} {res['bytes']:>8} B  {Path(p).name[:58]}")
+                extra = f"  ← {res['reason']}" if res.get("reason") else ""
+                print(f"    {ok} HTTP {res['status']} {res['bytes']:>8} B  "
+                      f"{Path(p).name[:52]}{extra}")
             except Exception as exc:  # noqa: BLE001
                 print(f"    ⚠️ {Path(p).name[:58]} → {type(exc).__name__}")
 
