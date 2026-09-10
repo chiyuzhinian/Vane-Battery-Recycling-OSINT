@@ -118,15 +118,26 @@ eu:
 
     - id: eu_echa_batteries
       name: ECHA - 电池法规相关（化学品与危废定性）
-      url: https://echa.europa.eu/regulations/batteries-regulation
-      verified: false
-      blocked: true                   # 🚫 实测 403
-      fallback: "vane site:echa.europa.eu batteries"
+      url: https://echa.europa.eu/legislation
+      verified: true                  # ✅ 部分可达（浏览器通道）
+      direct_blocked: true            # 🚫 httpx/curl 403
+      channel: browser_capture
       tier: official
       base_credibility: 95
       clusters: [C3_black_mass]
-      need_browser: true              # 可用 MCP 浏览器接管
       check_frequency: weekly
+      note: |
+        ⚠️ 实测（2026-09-10）：ECHA 的 Azure WAF 是**路径级**拦截，不是整站封锁。逐个路径实测：
+          /legislation                      200  ✅（法规页，本入口）
+          /about-us                         200  ✅
+          /support/guidance                 200  ✅
+          /hot-topics/batteries             403  🚫（电池专题页被 WAF 点名拦）
+          /regulations/batteries-regulation 404  ❌（原本就是死链，此前误判为"反爬"）
+        教训：**403 与 404 必须分清**——把 404 当反爬会浪费调查方向。
+        替代路径（该专题页拿不到时的降级）：
+          · ECHA 电池相关内容通过 EUR-Lex SPARQL 取（法规正文已在 eu_eurlex_* 覆盖）
+          · 危废定性看 EPA RCRA（us_epa_rcra）
+          · 可重试策略：WAF 为间歇性，同域不同路径结果不同 → 分批+延时重试有效
 
   # ---------- 国际公约 ----------
   international:
@@ -221,16 +232,23 @@ us:
     - id: us_phmsa
       name: DOT PHMSA - 锂电池运输安全
       url: https://www.phmsa.dot.gov/lithiumbatteries
-      verified: false
-      blocked: true                   # 🚫 实测 403（整站拦截）
+      verified: true                  # ✅ 浏览器通道实测 HTTP 200
+      direct_blocked: true            # 🚫 httpx/curl 403（整站拦截）
+      channel: browser_capture        # ⭐ 走 app/connectors/browser.py
       tier: official
       base_credibility: 100
       clusters: [C6_transport_hazmat, C3_black_mass]
-      need_browser: true              # ⭐ 用 MCP 浏览器接管
+      strategy: page_diff             # 逐篇抓取 + PDF 落盘
+      check_frequency: monthly
       note: |
         ⭐ 黑粉与退役电池的**运输合规**在美国归 PHMSA 管（49 CFR 173）。
-        直连 403 → 用 Playwright MCP 打开并读取。
         关键议题：UN3480/3481 分类、DDR（损坏/缺陷/召回）电池规则、州际运输。
+        实测（2026-09-10）抓 9 条 → 7 条相关，含：
+          · Safety Advisory Notice for the Transportation of Lithium Batteries
+            for Disposal or Recycling  [Issued 2022-05-17]  ← 退役电池运输的核心依据
+          · Lithium Battery Guide for Shippers
+          · Understanding the Risks of DDR Lithium Batteries
+          · Lithium Battery Test Summaries (UN 新要求)
 
     - id: us_doe_mesc
       name: DOE MESC - 制造业与能源供应链
@@ -277,20 +295,21 @@ us:
     - id: us_state_ca_calrecycle
       name: 加州 CalRecycle（全美电池 EPR 样板）
       url: https://calrecycle.ca.gov/bev/
-      verified: false
-      blocked: true                   # 🚫 实测 403
+      verified: true                  # ✅ 浏览器通道可达
+      direct_blocked: true            # 🚫 httpx/curl 403
+      channel: browser_capture
       tier: official
       base_credibility: 92
       clusters: [C5_epr_collection, C1_eol_battery]
-      need_browser: true
-      note: SB 212 建立的电池 EPR 体系常被其他州照抄
+      check_frequency: monthly
+      note: SB 212 建立的电池 EPR 体系常被其他州照抄；州级比联邦立法早 2-4 年
 
   # ---------- 行业源 ----------
   industry:
     - { id: us_naatbatt,     name: NAATBatt International, url: "https://naatbatt.org/",            verified: true, base_credibility: 80, clusters: [C3_black_mass, C7_duediligence_crm] }
     - { id: us_recell,       name: ReCell Center（阿贡实验室）, url: "https://www.recellcenter.org/", verified: true, base_credibility: 88, clusters: [C3_black_mass, C4_recycling_efficiency], requires_browser_ua: true }
-    - { id: us_bci,          name: Battery Council International, url: "https://batterycouncil.org/", verified: false, blocked: true, base_credibility: 82, clusters: [C5_epr_collection], need_browser: true }
-    - { id: us_call2recycle, name: Call2Recycle,           url: "https://www.call2recycle.org/",     verified: false, blocked: true, base_credibility: 80, clusters: [C5_epr_collection], need_browser: true }
+    - { id: us_bci,          name: Battery Council International, url: "https://batterycouncil.org/", verified: true, direct_blocked: true, channel: browser_capture, base_credibility: 82, clusters: [C5_epr_collection] }
+    - { id: us_call2recycle, name: Call2Recycle,           url: "https://www.call2recycle.org/",     verified: true, direct_blocked: true, channel: browser_capture, base_credibility: 80, clusters: [C5_epr_collection] }
 
 # ============================================================
 # 需 MCP 浏览器接管的站点（直连被拦）

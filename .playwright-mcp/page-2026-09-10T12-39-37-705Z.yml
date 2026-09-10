@@ -1,0 +1,272 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - heading "USA Banner" [level=1] [ref=e7]
+      - complementary [ref=e12]:
+        - generic [ref=e13]:
+          - img "U.S. flag" [ref=e15]
+          - paragraph [ref=e17]:
+            - text: An official website of the United States government
+            - button "Here's how you know " [ref=e18] [cursor=pointer]
+    - generic [ref=e20]:
+      - img "U.S. Department of Transportation" [ref=e21]
+      - link "United States Department of Transportation" [ref=e27] [cursor=pointer]:
+        - /url: https://www.transportation.gov
+    - banner "Site header" [ref=e28]:
+      - navigation [ref=e31]:
+        - link [ref=e32] [cursor=pointer]:
+          - /url: /
+          - img "Home" [ref=e33]
+        - button "Toggle navigation" [ref=e34] [cursor=pointer]
+        - generic [ref=e37]:
+          - navigation [ref=e38]:
+            - heading "Utility Menu (above search form)" [level=2] [ref=e39]
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - link "Sign-up for Email Alerts" [ref=e42] [cursor=pointer]:
+                  - /url: https://service.govdelivery.com/accounts/USDOTPHMSA/subscriber/new
+              - listitem [ref=e43]:
+                - link "Newsroom" [ref=e44] [cursor=pointer]:
+                  - /url: /newsroom
+          - generic [ref=e47]:
+            - group "Search DOT" [ref=e48]:
+              - generic [ref=e49]: Search
+              - searchbox "Search" [ref=e50]
+            - button "Search" [ref=e51] [cursor=pointer]
+        - text: + + + +
+    - main "Site main" [ref=e52]:
+      - generic [ref=e54]:
+        - navigation "breadcrumb" [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "Home" [ref=e60] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e61]:
+              - text: /
+              - link "Training" [ref=e62] [cursor=pointer]:
+                - /url: /training/phmsa-training
+            - listitem [ref=e63]:
+              - text: /
+              - link "Hazmat" [ref=e64] [cursor=pointer]:
+                - /url: /training/hazmat/hazardous-materials-outreach-engagement
+        - generic [ref=e65]:
+          - complementary [ref=e67]:
+            - complementary [ref=e68]:
+              - navigation "In This Section" [ref=e70]:
+                - list [ref=e73]:
+                  - listitem [ref=e74]:
+                    - link "Hazardous Materials Outreach & Engagement" [ref=e75] [cursor=pointer]:
+                      - /url: /training/hazmat/hazardous-materials-outreach-engagement
+                  - listitem [ref=e76]:
+                    - link "Training Requirements for Industry" [ref=e77] [cursor=pointer]:
+                      - /url: /training/hazmat/training-requirements-industry
+                  - listitem [ref=e78]:
+                    - link "Emergency Response Guidebook (ERG)" [ref=e79] [cursor=pointer]:
+                      - /url: /training/hazmat/erg/emergency-response-guidebook-erg
+                  - listitem [ref=e80]:
+                    - link "HAZMAT Seminars & Workshops" [ref=e81] [cursor=pointer]:
+                      - /url: /training/hazmat/seminars/hazmat-seminars-workshops
+                  - listitem [ref=e82]:
+                    - link "Webinars" [ref=e83] [cursor=pointer]:
+                      - /url: /hazmat/seminars/webinars
+                  - listitem [ref=e84]:
+                    - link "Publications" [ref=e85] [cursor=pointer]:
+                      - /url: /training/hazmat/publications
+                  - listitem [ref=e86]:
+                    - link "Publicaciones (en español)" [ref=e87] [cursor=pointer]:
+                      - /url: /training/hazmat/publicaciones-en-espanol
+                  - listitem [ref=e88]:
+                    - link "Newsletters" [ref=e89] [cursor=pointer]:
+                      - /url: /training/hazmat/phmsas-quarterly-hazmat-newsletter
+                  - listitem [ref=e90]:
+                    - link "Training Modules" [ref=e91] [cursor=pointer]:
+                      - /url: /training/hazmat/training-modules
+                  - listitem [ref=e92]:
+                    - link "Videos and Mobile Apps" [ref=e93] [cursor=pointer]:
+                      - /url: /training/hazmat/videos-and-mobile-apps
+                  - listitem [ref=e94]:
+                    - link "Contact Us" [ref=e95] [cursor=pointer]:
+                      - /url: /training/hazmat/contact-us
+              - generic [ref=e97]:
+                - heading "Related Documents" [level=2] [ref=e98]
+                - list [ref=e99]:
+                  - listitem [ref=e100]:
+                    - link "Safety Advisory Notice for the Transportation of Lithium Batteries for Disposal or Recycling" [ref=e101] [cursor=pointer]:
+                      - /url: /training/hazmat/safety-advisory-notice-transportation-lithium-batteries-disposal-or-recycling
+                  - listitem [ref=e102]:
+                    - link "Lithium Battery Guide for Shippers" [ref=e103] [cursor=pointer]:
+                      - /url: /training/hazmat/lithium-battery-guide-shippers
+                  - listitem [ref=e104]:
+                    - link "Understanding the Risks of Damaged, Defective, or Recalled (DDR) Lithium Batteries" [ref=e105] [cursor=pointer]:
+                      - /url: /training/hazmat/understanding-risks-damaged-defective-or-recalled-ddr-lithium-batteries
+          - main [ref=e106]:
+            - article [ref=e110]:
+              - generic [ref=e111]:
+                - heading "Transporting Lithium Batteries" [level=1] [ref=e112]
+                - generic [ref=e113]:
+                  - paragraph [ref=e114]:
+                    - img "Lithium Battery image" [ref=e115]
+                  - paragraph [ref=e116]: Lithium cells and batteries power countless items that support everyday life from portable computers, cordless tools, mobile telephones, watches, to wheelchairs and motor vehicles. Our society has come to depend on lithium cells and batteries for an increasingly mobile lifestyle. Today's lithium cells and batteries are more energy dense than ever, bringing a steadily growing number of higher-powered devices to market. With the increased energy density comes greater risk and the need to manage it. Shippers play an important role in reducing this risk and preventing incidents—including fires aboard aircraft or other transport vehicles.
+                  - paragraph [ref=e117]: Lithium batteries are regulated as a hazardous material under the U.S. Department of Transportation's (DOT) Hazardous Materials Regulations (HMR; 49 C.F.R., Parts 171-180). The HMR apply to any material DOT determines can pose an unreasonable risk to health, safety, and property when transported in commerce. Lithium batteries must conform to all applicable HMR requirements when offered for transportation or transported by air, highway, rail, or water.
+                  - heading [level=3] [ref=e118]:
+                    - strong [ref=e119]: Why are Lithium Batteries Regulated in Transportation?
+                  - paragraph [ref=e120]: The risks posed by lithium cells and batteries are generally a function of type, size, and chemistry. Lithium cells and batteries can present both chemical (e.g., corrosive or flammable electrolytes) and electrical hazards. Unlike standard alkaline batteries, most lithium batteries manufactured today contain a flammable electrolyte and have an incredibly high energy density. They can overheat and ignite under certain conditions, such as a short circuit, physical damage, improper design, or assembly. Once ignited, lithium cell and battery fires can be difficult to extinguish. Additional, although infrequent, events can result in lithium cells and batteries experiencing thermal runaway, a chain reaction leading to a violent release of stored energy and flammable gas. This thermal runaway can propagate to other batteries or combustible materials nearby, potentially resulting in large scale thermal events with severe consequences.
+                - button "Expand All" [ref=e121] [cursor=pointer]
+                - button "Collapse All" [ref=e122] [cursor=pointer]
+                - generic [ref=e123]:
+                  - tab [ref=e125]:
+                    - link [ref=e127] [cursor=pointer]:
+                      - /url: "#collapse21776"
+                      - strong [ref=e128]: Resources for Recycling Batteries
+                      - text: 
+                  - tab [ref=e130]:
+                    - link [ref=e132] [cursor=pointer]:
+                      - /url: "#collapse21781"
+                      - strong [ref=e133]: Resources for Shippers
+                      - text: 
+                  - tab [ref=e135]:
+                    - link [ref=e137] [cursor=pointer]:
+                      - /url: "#collapse21786"
+                      - strong [ref=e138]: Lithium Battery Test Summaries
+                      - text: 
+                  - tab [ref=e140]:
+                    - link [ref=e142] [cursor=pointer]:
+                      - /url: "#collapse21791"
+                      - strong [ref=e143]: Resources on Lithium Batteries by Air
+                      - text: 
+                  - tab [ref=e145]:
+                    - link [ref=e147] [cursor=pointer]:
+                      - /url: "#collapse21796"
+                      - strong [ref=e148]: Resources for Airline Passengers
+                      - text: 
+                  - tab [ref=e150]:
+                    - link [ref=e152] [cursor=pointer]:
+                      - /url: "#collapse22346"
+                      - strong [ref=e153]: Public Safety Resources
+                      - text: 
+                  - tab [ref=e155]:
+                    - link [ref=e157] [cursor=pointer]:
+                      - /url: "#collapse21801"
+                      - strong [ref=e158]: Hazardous Materials Information Center
+                      - text: 
+                - generic [ref=e159]: "Last updated: Thursday, October 12, 2023"
+                - complementary [ref=e161]
+    - contentinfo [ref=e162]:
+      - generic [ref=e163]:
+        - generic [ref=e164]:
+          - generic [ref=e168]:
+            - paragraph [ref=e169]: U.S. DEPARTMENT OF TRANSPORTATION
+            - paragraph [ref=e170]:
+              - strong [ref=e171]: Pipeline and Hazardous Materials Safety Administration
+            - paragraph [ref=e172]:
+              - text: 1200 NEW JERSEY AVENUE, SE WASHINGTON, DC 20590
+              - link "202-366-4433" [ref=e173] [cursor=pointer]:
+                - /url: tel:202-366-4433
+            - paragraph [ref=e174]:
+              - text: "HAZMAT Registration Help Desk:"
+              - link "202-366-4109" [ref=e175] [cursor=pointer]:
+                - /url: tel:202-366-4109
+              - text: "Hazardous Materials Information Center:"
+              - link "1-800-467-4922" [ref=e176] [cursor=pointer]:
+                - /url: tel:1-800-467-4922
+            - paragraph [ref=e177]:
+              - text: "Office of Pipeline Safety Hotline: 202-366-4595 or"
+              - link [ref=e178] [cursor=pointer]:
+                - /url: mailto:phmsa.pipelinesafety@dot.gov
+                - text: phmsa.pipelinesafety@dot.gov
+                - img "(link sends email)" [ref=e179]
+              - text: "Pipeline Safety Concerns or Feedback on our Performance and Conduct: 202-366-4595 or"
+              - link [ref=e181] [cursor=pointer]:
+                - /url: mailto:phmsa.pipelinesafety@dot.gov
+                - text: phmsa.pipelinesafety@dot.gov
+                - img "(link sends email)" [ref=e182]
+              - text: "Report Waste, Fraud, Abuse or Mismanagement:"
+              - link "https://www.oig.dot.gov/hotline" [ref=e184] [cursor=pointer]:
+                - /url: https://www.oig.dot.gov/hotline
+            - paragraph [ref=e185]:
+              - text: "Website Concerns or Feedback:"
+              - link [ref=e186] [cursor=pointer]:
+                - /url: mailto:phmsawebsitemanager@dot.gov
+                - text: phmsawebsitemanager@dot.gov
+                - img "(link sends email)" [ref=e187]
+          - generic [ref=e192]:
+            - paragraph [ref=e193]:
+              - link "Subscribe to email updates" [ref=e194] [cursor=pointer]:
+                - /url: https://service.govdelivery.com/accounts/USDOTPHMSA/subscriber/new
+            - list [ref=e195]:
+              - listitem [ref=e196]:
+                - link "" [ref=e197] [cursor=pointer]:
+                  - /url: https://twitter.com/PHMSA_DOT
+              - listitem [ref=e200]:
+                - link "" [ref=e201] [cursor=pointer]:
+                  - /url: https://www.youtube.com/user/PHMSADOT
+              - listitem [ref=e204]:
+                - link "linkedin" [ref=e205] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/company/pipeline-and-hazardous-materials-safety-administration
+                  - generic "linkedin" [ref=e207]: 
+        - generic [ref=e208]:
+          - navigation [ref=e210]:
+            - heading "About" [level=2] [ref=e211]
+            - list [ref=e212]:
+              - listitem [ref=e213]:
+                - link "About PHMSA" [ref=e214] [cursor=pointer]:
+                  - /url: /about-phmsa/phmsas-mission
+              - listitem [ref=e215]:
+                - link "Regulations and Compliance" [ref=e216] [cursor=pointer]:
+                  - /url: /regulations-and-compliance
+              - listitem [ref=e217]:
+                - link "Resources" [ref=e218] [cursor=pointer]:
+                  - /url: /resources
+              - listitem [ref=e219]:
+                - link "Safety" [ref=e220] [cursor=pointer]:
+                  - /url: /safety
+          - navigation [ref=e222]:
+            - heading "PHMSA Resources" [level=2] [ref=e223]
+            - list [ref=e224]:
+              - listitem [ref=e225]:
+                - link "PHMSA Civil Rights" [ref=e226] [cursor=pointer]:
+                  - /url: /about-phmsa/offices/office-civil-rights
+              - listitem [ref=e227]:
+                - link "PHMSA Web Policies" [ref=e228] [cursor=pointer]:
+                  - /url: /about-phmsa/web-policies
+              - listitem [ref=e229]:
+                - link "Accessibility" [ref=e230] [cursor=pointer]:
+                  - /url: /about-phmsa/accessibility
+              - listitem [ref=e231]:
+                - link "Careers" [ref=e232] [cursor=pointer]:
+                  - /url: /careers
+          - navigation [ref=e234]:
+            - heading "Policies, Rights, Legal" [level=2] [ref=e235]
+            - list [ref=e236]:
+              - listitem [ref=e237]:
+                - link "About DOT" [ref=e238] [cursor=pointer]:
+                  - /url: https://www.transportation.gov/about
+              - listitem [ref=e239]:
+                - link "Budget and Performance" [ref=e240] [cursor=pointer]:
+                  - /url: https://www.transportation.gov/budget/dot-budget-and-performance
+              - listitem [ref=e241]:
+                - link "Civil Rights" [ref=e242] [cursor=pointer]:
+                  - /url: https://www.civilrights.dot.gov/
+              - listitem [ref=e243]:
+                - link "FOIA" [ref=e244] [cursor=pointer]:
+                  - /url: /foia
+              - listitem [ref=e245]:
+                - link "Information Quality" [ref=e246] [cursor=pointer]:
+                  - /url: https://www.transportation.gov/dot-information-dissemination-quality-guidelines
+              - listitem [ref=e247]:
+                - link "No FEAR Act" [ref=e248] [cursor=pointer]:
+                  - /url: https://www.civilrights.dot.gov/civil-rights-awareness-enforcement/employment-related/affirmative-employment/no-fear-act
+              - listitem [ref=e249]:
+                - link "Office of Inspector General" [ref=e250] [cursor=pointer]:
+                  - /url: https://www.oig.dot.gov/
+              - listitem [ref=e251]:
+                - link "USA.gov" [ref=e252] [cursor=pointer]:
+                  - /url: https://www.usa.gov/
+              - listitem [ref=e253]:
+                - link "Web Policies and Notices" [ref=e254] [cursor=pointer]:
+                  - /url: https://www.transportation.gov/web-policies
+              - listitem [ref=e255]:
+                - link "Web Standards" [ref=e256] [cursor=pointer]:
+                  - /url: https://www.transportation.gov/web-standards

@@ -192,12 +192,62 @@ def write_candidates_file(candidates: dict[str, dict], round_tested: dict[str, d
     print(f"\n  → 候选词清单已写入 {path.relative_to(ROOT)}")
 
 
+def load_browser_records() -> list[dict]:
+    """把浏览器抓取的证据接进闭环。
+
+    为什么需要
+    ----------
+    被反爬拦截的站点（PHMSA/ECHA/CalRecycle/BCI）走的是 browser_capture 通道，
+    产出在 outputs/browser_*.jsonl。它们是**站点级发现**而非关键词命中，
+    所以：
+      · 不带 `keyword` 字段（feedback.py 会归入 "(direct)"），避免污染关键词精确率
+      · 必须补 `evidence_id`（url 的 sha1），否则每轮都被判为"新发现"，收敛判据失效
+    """
+    import hashlib
+
+    files = sorted(OUT.glob("browser_*.jsonl"))
+    if not files:
+        return []
+
+    records: list[dict] = []
+    seen: set[str] = set()
+    for f in files:
+        for line in f.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            url = r.get("url") or ""
+            eid = hashlib.sha1(url.encode("utf-8")).hexdigest()[:16]
+            if eid in seen:                     # 跨文件去重（同一 URL 可能被多次抓到）
+                continue
+            seen.add(eid)
+            records.append({
+                "source_id": r.get("source_id") or "browser_capture",
+                "discovered_by": "browser_capture",   # 不设 keyword → 归入 (direct)
+                "cluster": r.get("cluster") or "C?",
+                "evidence_id": eid,
+                "title": r.get("title") or "",
+                "url": url,
+                "text": (r.get("text") or "")[:1500],
+                "relevant": bool(r.get("relevant")),
+                "needs_human_review": bool(r.get("needs_human_review")),
+                "score": r.get("score") or 0.0,
+            })
+    return records
+
+
 async def main() -> int:
     ap = argparse.ArgumentParser(description="闭环迭代：结果反推关键词与数据源")
     ap.add_argument("--include-eu", action="store_true", help="含欧盟（慢）")
     ap.add_argument("--max-rounds", type=int, default=MAX_ROUNDS)
     ap.add_argument("--since", default="2023-01-01")
     ap.add_argument("--reset", action="store_true", help="清空历史状态")
+    ap.add_argument("--include-browser", action="store_true",
+                    help="并入浏览器抓取的证据（outputs/browser_*.jsonl，被反爬站点）")
     args = ap.parse_args()
 
     OUT.mkdir(exist_ok=True)
@@ -233,6 +283,10 @@ async def main() -> int:
         records = await collect_us_round(keywords, cluster_of, plan["us_agencies"], args.since)
         if args.include_eu:
             records += await collect_eu_round(keywords, args.since)
+        if args.include_browser:
+            br = load_browser_records()
+            print(f"\n  浏览器通道并入 {len(br)} 条（被反爬站点）")
+            records += br
 
         obs = engine.observe(records, round_no)
         print(f"\n  观测：{obs['total_records']} 条记录，其中 {obs['new_novel']} 条为新条目")
