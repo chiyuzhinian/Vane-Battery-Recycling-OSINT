@@ -233,6 +233,21 @@ async def collect(region: str) -> dict[str, int]:
         stats["eur_lex"] = len(items)
         _dump(items, OUTPUTS_DIR / f"eur_lex_{stamp}.jsonl", region)
 
+    elif region == "CN":
+        # 企业侧：巨潮资讯（上市公司公告）
+        async with get_connector("cninfo") as conn:
+            ann = await conn.fetch(max_pages=2, page_size=30)          # 全市场关键词
+            ann += await conn.fetch("stock:002340", max_pages=1)       # 格林美
+            ann += await conn.fetch("stock:300750", max_pages=1)       # 宁德时代（邦普母公司）
+        stats["cninfo"] = len(ann)
+        _dump(ann, OUTPUTS_DIR / f"cninfo_{stamp}.jsonl", "CN")
+
+        # 企业侧：环评公示
+        async with get_connector("eia") as conn:
+            ev = await conn.fetch()
+        stats["eia"] = len(ev)
+        _dump(ev, OUTPUTS_DIR / f"eia_{stamp}.jsonl", "CN")
+
     return stats
 
 
@@ -290,9 +305,19 @@ def render(rows: list[Row]) -> None:
 async def main() -> int:
     ap = argparse.ArgumentParser(description="数据源可达性 + 真实采集合验")
     ap.add_argument("--region", choices=["CN", "EU", "US"], help="只验证某个区域")
-    ap.add_argument("--collect", choices=["US", "EU"], help="真实跑一遍采集并落盘")
+    ap.add_argument("--collect", choices=["US", "EU", "CN"], help="真实跑一遍采集并落盘")
     ap.add_argument("--json", action="store_true", help="以 JSON 输出")
+    ap.add_argument("--probe-connectors", action="store_true",
+                    help="额外探测连接器（cninfo/eia/eur_lex/us_federal）")
     args = ap.parse_args()
+
+    if args.probe_connectors:
+        from app.connectors import probe_all
+        print("\n▶ 连接器探测")
+        for pr in await probe_all():
+            print(f"  {pr}")
+            if pr.sample:
+                print(f"      样例: {pr.sample}")
 
     if args.collect:
         print(f"\n▶ 真实采集：{args.collect}")

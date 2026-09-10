@@ -159,13 +159,15 @@ class BaseConnector(ABC):
         )
 
     # ---------- HTTP ----------
-    async def _polite_get(self, url: str, **kwargs: Any) -> SimpleResponse:
-        """带单域名限速 + 抖动的 GET；遇 TLS 兼容问题自动回退到 curl。
+    async def _polite_get(self, url: str, method: str = "GET", **kwargs: Any) -> SimpleResponse:
+        """带单域名限速 + 抖动的请求；遇 TLS 兼容问题自动回退到 curl。
 
         策略链：
           1. httpx（默认 UA）
           2. 若该站已知有 TLS 兼容问题，或 httpx 抛 SSL/传输错误 → curl.exe 回退
           3. 回退时使用浏览器 UA（部分站点只对浏览器 UA 放行）
+
+        支持 method="POST" + data=（巨潮的公告查询接口即 POST 表单）。
 
         限速是"有礼貌采集"的底线：宁可慢，不能把对方站点打挂。
         """
@@ -178,9 +180,9 @@ class BaseConnector(ABC):
             if elapsed < interval:
                 await asyncio.sleep(interval - elapsed + random.uniform(0, 0.3))
             try:
-                resp = await self._try_httpx(url, kwargs)
+                resp = await self._try_httpx(url, method, kwargs)
             except (httpx.TransportError, httpx.HTTPError) as exc:
-                resp = await self._try_curl(url, kwargs, reason=str(exc))
+                resp = await self._try_curl(url, method, kwargs, reason=str(exc))
             finally:
                 _last_call[host] = time.monotonic()
 
@@ -196,10 +198,11 @@ class BaseConnector(ABC):
             raise ConnectorError(f"{self.source_id}: HTTP {resp.status_code} ({url})")
         return resp
 
-    async def _try_httpx(self, url: str, kwargs: dict[str, Any]) -> SimpleResponse | None:
+    async def _try_httpx(self, url: str, method: str,
+                         kwargs: dict[str, Any]) -> SimpleResponse | None:
         if httpx.URL(url).host in TLS_QUIRK_HOSTS:
             return None          # 已知不兼容，直接走 curl，省一次失败往返
-        resp = await self._client.get(url, **kwargs)
+        resp = await self._client.request(method, url, **kwargs)
         return SimpleResponse(
             status_code=resp.status_code,
             content=resp.content,
@@ -207,7 +210,7 @@ class BaseConnector(ABC):
             headers=dict(resp.headers),
         )
 
-    async def _try_curl(self, url: str, kwargs: dict[str, Any],
+    async def _try_curl(self, url: str, method: str, kwargs: dict[str, Any],
                         reason: str = "") -> SimpleResponse | None:
         """curl 回退。Windows 上 curl 走 SChannel，可绕过 OpenSSL 的 EC 曲线限制。"""
         exe = shutil.which("curl") or shutil.which("curl.exe")
@@ -219,8 +222,18 @@ class BaseConnector(ABC):
 
         cmd = [exe, "-s", "-L", "--max-time", "60",
                "-A", BROWSER_UA,
-               "-H", "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8",
-               "-w", "\n__HTTP__%{http_code}"]
+               "-H", "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8"]
+
+        for k, v in (kwargs.get("headers") or {}).items():
+            cmd += ["-H", f"{k}: {v}"]
+
+        if method.upper() == "POST":
+            from urllib.parse import urlencode
+            data = kwargs.get("data") or {}
+            pairs = data.items() if isinstance(data, dict) else data
+            cmd += ["-X", "POST",
+                    "-H", "Content-Type: application/x-www-form-urlencoded",
+                    "--data", urlencode(list(pairs), doseq=True)]
 
         params = kwargs.get("params")
         if params:
@@ -228,7 +241,8 @@ class BaseConnector(ABC):
             pairs = params.items() if isinstance(params, dict) else params
             sep = "&" if "?" in url else "?"
             url = f"{url}{sep}{urlencode(list(pairs), doseq=True)}"
-        cmd.append(url)
+
+        cmd += ["-w", "\n__HTTP__%{http_code}", url]
 
         proc = await asyncio.create_subprocess_exec(
             *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE

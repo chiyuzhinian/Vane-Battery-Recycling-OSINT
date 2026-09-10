@@ -123,11 +123,16 @@ py scripts/verify_sources.py --collect US # 真实采集
 | 🇪🇺 EU | 8 可达 / 4 反爬（EUR-Lex 改走 SPARQL 已打通）/ 1 失效 |
 | 🇺🇸 US | 8 可达 / 4 反爬（均有 site: 降级）/ 1 失效 |
 
-**真实采集已跑通**：
+**真实采集已跑通**（政策侧 + 企业侧）：
 
 ```
-美国 Federal Register：138 条原始 → 57 条相关（41%）
-欧盟 EUR-Lex SPARQL ：电池法规 32023R1542 + 14 个更正版本
+政策侧
+  美国 Federal Register：138 条原始 → 57 条相关（41%）
+  欧盟 EUR-Lex SPARQL ：电池法规 32023R1542 + 14 个更正版本
+企业侧
+  巨潮资讯 cninfo      ：84 条 → 23 条相关，全部命中目标企业
+                         （格林美/天奇/光华科技的动力电池回收项目公告）
+  环评公示 eia         ：10 个站点可采（企业级项目公示需打通省级专栏）
 ```
 
 完整报告：[`docs/verification-report-2026-09-10.md`](docs/verification-report-2026-09-10.md)
@@ -148,25 +153,29 @@ py scripts/verify_sources.py --collect US # 真实采集
 ├── README.md
 ├── requirements.txt                 # Python 依赖（部署到 Linux 后使用）
 ├── app/
-│   ├── connectors/                  # 通道 B：定向源直采
-│   │   ├── base.py                  #   基类 + 限速 + curl 回退 + ProbeResult
-│   │   ├── eur_lex.py               #   欧盟：走 Publications Office SPARQL
-│   │   └── us_federal.py            #   美国：走 Federal Register 公开 API
+│   ├── connectors/                  # 定向源直采（通道 B）
+│   │   ├── base.py                  #   基类 + 限速 + curl 回退 + POST 支持 + ProbeResult
+│   │   ├── cninfo.py                #   企业侧：巨潮资讯公告/年报（✅ 已验证）
+│   │   ├── eia.py                   #   企业侧：环评公示（✅ 多站点，结构无关抽取）
+│   │   ├── eur_lex.py               #   政策侧：欧盟 Publications Office SPARQL
+│   │   └── us_federal.py            #   政策侧：美国 Federal Register 公开 API
 │   └── core/
 │       ├── relevance.py             # 相关性四段式判定（含回归自检）
 │       ├── authenticity.py          # 源真实性（白名单/同形字/编辑距离/TLS）
 │       └── coverage.py              # 覆盖率格子模型 + 缺口根因分类
 ├── docs/
-│   └── verification-report-2026-09-10.md   # 42 源全量验证报告
+│   └── verification-report-2026-09-10.md   # 全量验证报告（政策侧 + 企业侧）
 ├── scripts/
 │   ├── verify_sources.py            # 可达性 + 真实采集（Python，主用）
 │   ├── verify-sources.ps1           # 同上（PowerShell 版，备用）
-│   └── probe-urls.ps1               # curl 批量探测（诊断 TLS 问题用）
+│   ├── probe-urls.ps1               # curl 批量探测（诊断 TLS 问题用）
+│   └── diag_cn_sources.py           # 中国源接口探测（写连接器前的摸底工具）
 └── sources/
     ├── battery-recycling-sources.yaml   # 总入口
     ├── search-boundary.yaml             # 搜索边界 / 相关性规则 / 召回金标准
     ├── policy-cn.yaml                   # 中国 16 源（✅ 已验证）
     ├── policy-eu.yaml / policy-us.yaml  # 欧美政策源（✅ 已验证）
+    ├── eia-sources.yaml                 # 环评公示源清单（10 站点）
     ├── companies.yaml                   # 26 家目标企业
     └── info-sources.yaml                # 咨询机构 + 协会
 ```

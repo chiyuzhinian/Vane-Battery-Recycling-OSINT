@@ -1,0 +1,163 @@
+# ============================================================
+# 环评公示（EIA）源清单
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 【为什么环评是最关键的缺口】
+# 26 家目标企业里有 13 家（邦普、金晟、博萃、杰成、常青、巴特瑞、恒创睿能、
+# 南通北新、安徽巡鹰、瑞科美、中资环、赣州豪鹏、鑫茂）**没有公告可查**。
+# 要拿到它们的产能、废料处理规模、工艺路线，环评公示是**唯一稳定的公开来源**：
+#   · 环境影响报告书/表里必有【建设规模】【处理能力】【工艺路线】【原辅材料】
+#   · 而且是报批前必须公示的法定文件 —— 数据可靠性和时效性都有保障
+#
+# 【采集方式】
+# 各省市生态环境厅/局的"建设项目环评受理公示"栏目是列表页，
+# 用 eia connector 做通用链接抽取 + 相关性过滤。
+# 政府站点栏目结构常有变动，因此这里只登记**栏目入口**，
+# 解析逻辑放在连接器里（结构无关的通用抽取）。
+# ============================================================
+
+version: 1
+updated_at: 2026-09-10
+
+defaults:
+  source_type: eia
+  tier: official
+  base_credibility: 92
+  connector: eia
+  check_frequency: weekly
+  enabled: true
+  # 列表页里"看起来像环评公示条目"的链接文本特征
+  link_hints:
+    - 环境影响
+    - 受理
+    - 公示
+    - 审批
+    - 报告书
+    - 报告表
+    - 拟批准
+    - 批复
+    - 建设项目
+
+sources:
+
+  # ---------- 国家级（受理公示，权威度最高）----------
+  - id: eia_mee_national
+    name: 生态环境部 - 建设项目环境影响评价
+    region: CN-NATIONAL
+    url: https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/
+    verified: true                  # ✅ 实测 200 / 74.8 KB
+    base_credibility: 100
+    priority: 1
+    note: 国家级受理公示，覆盖跨省重大项目
+
+  - id: eia_mee_management
+    name: 生态环境部 - 环境影响评价管理
+    region: CN-NATIONAL
+    url: https://www.mee.gov.cn/ywgz/hjyxpj/
+    verified: true                  # ✅ 实测 200 / 105.8 KB
+    base_credibility: 100
+    priority: 1
+
+  # ---------- 省级（按目标企业地理分布选）----------
+  # 说明：目标企业中邦普（湖南/广东/宁德）、金晟（广东）、博萃（上海）、
+  #       杰成（广东）、常青（福建）、恒创睿能（待核实）、南通北新（江苏）、
+  #       安徽巡鹰（安徽）、瑞科美（待核实）—— 优先覆盖这些省份。
+
+  - id: eia_gd
+    name: 广东省生态环境厅
+    region: CN-GD
+    url: https://gdee.gd.gov.cn/
+    verified: true                  # ✅ 实测 200 / 123 KB
+    priority: 2
+    note: 邦普（广东邦普）、金晟、杰成均在此有主体，优先级最高
+    listing_candidates:
+      - https://gdee.gd.gov.cn/hjyxpj/
+      - https://gdee.gd.gov.cn/zwgk/
+
+  - id: eia_js
+    name: 江苏省生态环境厅
+    region: CN-JS
+    url: https://sthjt.jiangsu.gov.cn/
+    verified: true                  # ✅ 实测 200 / 45.6 KB
+    priority: 2
+    note: 南通北新等江苏主体
+
+  - id: eia_hunan
+    name: 湖南省生态环境厅
+    region: CN-HN
+    url: https://sthjt.hunan.gov.cn/
+    verified: true                  # ✅ 实测 curl 200
+    requires_curl: true             # ⚠️ Python(OpenSSL) 报 SSL: BAD_ECPOINT
+    priority: 1
+    note: |
+      湖南是电池回收产业重镇（邦普循环、金晟等均在此有基地），
+      且邦普无独立公告 → 湖南省环评公示是获取其产能数据的关键路径。
+    listing_candidates:
+      - https://sthjt.hunan.gov.cn/sthjt/xxgk/xzsp/
+
+  - id: eia_jiangxi
+    name: 江西省生态环境厅
+    region: CN-JX
+    url: http://sthjt.jiangxi.gov.cn/
+    verified: false
+    blocked: true                   # 🚫 返回 JS cookie 挑战页（1 KB）
+    priority: 3
+    note: 赣州豪鹏、赣锋循环在此；需 Playwright 处理 JS 挑战
+
+  - id: eia_anhui
+    name: 安徽省生态环境厅
+    region: CN-AH
+    url: https://sthjt.ah.gov.cn/
+    verified: false
+    priority: 3
+    note: 安徽巡鹰
+
+  - id: eia_fujian
+    name: 福建省生态环境厅
+    region: CN-FJ
+    url: https://sthjt.fujian.gov.cn/
+    verified: false
+    priority: 3
+    note: 福建常青新能源（宁德）
+
+  - id: eia_shanghai
+    name: 上海市生态环境局
+    region: CN-SH
+    url: https://sthj.sh.gov.cn/
+    verified: false
+    priority: 4
+    note: 博萃循环
+
+  - id: eia_hubei
+    name: 湖北省生态环境厅
+    region: CN-HB
+    url: https://sthjt.hubei.gov.cn/
+    verified: false
+    priority: 3
+    note: 骆驼集团资源循环襄阳
+
+  - id: eia_zhejiang
+    name: 浙江省生态环境厅
+    region: CN-ZJ
+    url: https://sthjt.zj.gov.cn/
+    verified: false
+    priority: 3
+    note: 浙江天能新材料
+
+# ============================================================
+# 已知不可用 / 需替代方案
+# ============================================================
+excluded:
+  - { url: "https://www.chinaeia.com/", reason: "实测 ConnectTimeout（站点不可达）" }
+  - { url: "https://www.cnemc.cn/",     reason: "未验证，如需可加入" }
+
+# ============================================================
+# 待办
+# ============================================================
+todo:
+  - 用 probe 逐个确认各省栏目入口是否可解析出条目
+  - 对 JS 挑战页（江西）评估 Playwright
+  - 补充目标企业所在市一级生态环境局（如宁德市、荆门市、宜春市）
+    —— 市级公示往往比省级更早、更细（含具体处理规模）

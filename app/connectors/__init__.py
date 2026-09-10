@@ -21,17 +21,21 @@ from .base import (
     ProbeResult,
     RawEvidence,
 )
+from .cninfo import CninfoConnector
+from .eia import EiaConnector
 from .eur_lex import EurLexConnector
 from .us_federal import FederalRegisterConnector
 
 REGISTRY: dict[str, Type[BaseConnector]] = {
+    # ---- 政策侧 ----
     "eur_lex": EurLexConnector,
     "us_federal": FederalRegisterConnector,
-    # 待实现（见 04 篇 §7.1 第一阶段）：
-    # "cninfo":    CninfoConnector,      # 巨潮资讯：公告 / 年报
-    # "eia":       EiaConnector,         # 环评公示（非上市企业的主力来源）
-    # "bidding":   BiddingConnector,     # 招投标
-    # "patent":    PatentConnector,      # 专利
+    # ---- 企业侧 ----
+    "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
+    "eia": EiaConnector,            # 环评公示（非上市企业的唯一产能来源）
+    # 待实现（见 04 篇 §7.1）：
+    # "bidding": BiddingConnector,  # 招投标
+    # "patent":  PatentConnector,   # 专利
 }
 
 __all__ = [
@@ -43,6 +47,8 @@ __all__ = [
     "ConnectorError",
     "ProbeResult",
     "RawEvidence",
+    "CninfoConnector",
+    "EiaConnector",
     "EurLexConnector",
     "FederalRegisterConnector",
     "get_connector",

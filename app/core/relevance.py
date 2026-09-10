@@ -70,6 +70,11 @@ POLICY_MAYBE_TERMS: list[str] = [
     # 关键材料/矿产清单类：标题常不含 "battery"，但直接决定电池材料能否拿到激励
     r"critical minerals? list", r"critical materials? list",
     r"critical minerals?", r"critical materials?",
+    # 电池制造/材料制造类：不含"回收"字样，但**环评审批原则同样适用于回收项目**，
+    # 直接丢弃会漏掉"某个行业能不能获批建厂"这类关键政策
+    # （实测：生态环境部《锂离子电池及相关电池材料制造建设项目环评审批原则》）
+    r"锂离子电池", r"电池材料", r"电池制造", r"电池生产",
+    r"lithium[- ]ion batter", r"battery manufacturing", r"battery production",
 ]
 
 REJECT_IF_MATCH: list[str] = [
