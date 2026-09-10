@@ -38,6 +38,8 @@
 | 09 | 部署和维护 | 云端部署、监控告警、维护指南 | ⏳ 待写 |
 | 10 | 案例演示 | 格林美采集、政策跟踪、报告生成完整案例 | ⏳ 待写 |
 
+> 📐 **系统架构、Vane/SearxNG 各自作用、搜索边界定义** 见 [ARCHITECTURE.md](ARCHITECTURE.md)
+
 ---
 
 ## 三、数据源配置（`sources/`）
@@ -105,7 +107,59 @@ sources/
 
 ---
 
-## 六、快速开始
+## 六、数据源可达性实测（能不能搜到？）
+
+本机**没有可用的 Python 解释器**，所以验证工具用 PowerShell + curl 实现，开箱即跑：
+
+```powershell
+powershell -ExecutionPolicy Bypass -NoProfile -File .\scripts\verify-sources.ps1
+```
+
+2026-09-10 实测结果：
+
+```
+✅ [US] us_federal_register      HTTP 200    1189ms  命中 48    机构=DOE, 最新=2025-07-03
+✅ [EU] eu_eurlex_sparql         HTTP 200   16436ms  命中 15    含 14 个更正版本
+✅ [EU] eu_dg_env_batteries      HTTP 200    1355ms  命中 1     含法规链接，可 diff 监测
+🚫 [EU] eu_eurlex_html           HTTP 202    2285ms  命中 0     反爬，改用 SPARQL
+🚫 [EU] eu_echa                  HTTP 403    7478ms  命中 0     反爬，降级 site: 搜索
+
+汇总：✅ 可达 3 个 | 🚫 被反爬 2 个 | ❌ 失败 0 个
+```
+
+结论：**美国侧完全打通，欧盟侧走 SPARQL 打通**。EUR-Lex 网页正文被反爬，但 SPARQL 给出的信息更结构化（CELEX、生效日期、修订关系、更正版本）。
+
+---
+
+## 七、项目结构
+
+```
+├── ARCHITECTURE.md                  # 系统架构 + Vane/SearxNG 作用 + 搜索边界
+├── 0X_*.md                          # 11 篇方案文档（见上表）
+├── README.md
+├── requirements.txt                 # Python 依赖（部署到 Linux 后使用）
+├── app/
+│   ├── connectors/                  # 通道 B：定向源直采
+│   │   ├── base.py                  #   基类 + 限速 + ProbeResult
+│   │   ├── eur_lex.py               #   欧盟：走 Publications Office SPARQL
+│   │   └── us_federal.py            #   美国：走 Federal Register 公开 API
+│   └── core/
+│       ├── relevance.py             # 相关性三段式判定（必修词/拒绝词/人工复核）
+│       ├── authenticity.py          # 源真实性（白名单/同形字/编辑距离/TLS）
+│       └── coverage.py              # 覆盖率格子模型 + 缺口根因分类
+├── scripts/
+│   └── verify-sources.ps1           # 可达性实测（本机可跑）
+└── sources/
+    ├── battery-recycling-sources.yaml   # 总入口
+    ├── search-boundary.yaml             # 搜索边界 / 相关性规则 / 召回金标准
+    ├── policy-cn.yaml / policy-eu.yaml / policy-us.yaml
+    ├── companies.yaml                   # 26 家目标企业
+    └── info-sources.yaml                # 咨询机构 + 协会
+```
+
+---
+
+## 八、快速开始
 
 ```bash
 git clone https://github.com/chiyuzhinian/Vane-Battery-Recycling-OSINT.git

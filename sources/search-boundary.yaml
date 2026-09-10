@@ -1,0 +1,260 @@
+# ============================================================
+# 搜索边界 / 相关性判定 / 源真实性 / 召回金标准
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 作用：定义"要搜什么范围"「搜回来的要不要」『怎么证明搜全了』
+# 更新：2026-09-10
+# ------------------------------------------------------------
+# 本文件是"最终目标：搜索范围内全部都有并且正确"的可执行定义。
+# 没有这个文件，"搜全了没有"就是一句无法验证的口号。
+# ============================================================
+
+version: 1
+
+# ============================================================
+# 一、搜索边界（五维笛卡尔积）
+# ============================================================
+boundary:
+  entities:
+    source: sources/companies.yaml
+    count: 26
+    note: 边界随企业名单增长而重算
+
+  dimensions:
+    - { id: hr,         name: 人力资源,     coverage_threshold: 3, freshness_days: 180 }
+    - { id: feedstock,  name: 废料量及来源, coverage_threshold: 5, freshness_days: 180 }
+    - { id: operation,  name: 经营现状,     coverage_threshold: 5, freshness_days: 365 }
+    - { id: strategy,   name: 战略规划,     coverage_threshold: 3, freshness_days: 90 }
+    - { id: technology, name: 工艺技术,     coverage_threshold: 3, freshness_days: 730 }
+
+  source_types:
+    company: [annual_report, announcement, eia, bidding, patent, news, industry_db]
+    policy:  [CN, EU, US]
+
+  time_window:
+    company: { months: 24, reason: 企业动态两年内有效，更早的只作历史基线 }
+    policy:  { months: 36, reason: 政策需追溯征求意见稿阶段，且法规生命周期长 }
+
+  languages: [zh, en]
+
+  # ---------- 明确不覆盖（写进边界，防止无限扩大）----------
+  out_of_scope:
+    - { id: paywall,        detail: 付费墙正文（GGII 付费报告、SMM 付费数据） }
+    - { id: non_public,     detail: 未公开信息、内部资料（本项目只做 OSINT） }
+    - { id: pii,            detail: 自然人隐私信息（手机号、身份证、住址） }
+    - { id: login_wall,     detail: 需登录的社交平台私域内容 }
+    - { id: other_langs,    detail: 非中/英文原文（可经翻译间接覆盖） }
+
+  # ---------- 边界规模（自动计算，仅作展示）----------
+  size:
+    company_cells_total: 130        # 26 × 5
+    company_cells_with_sources: 910 # 26 × 5 × 7
+    policy_cells:
+      EU: 117                       # 13 源 × 9 主题
+      US: 91                        # 13 源 × 7 主题
+      CN: null                      # 待用户提供源后计算
+
+# ============================================================
+# 二、相关性判定（解决"搜到的不是我要的"）
+# ============================================================
+# ⚠️ 实测教训：用 "batter" 搜欧盟立法，第一条结果是
+#    "battery-powered hold-open systems"（电池供电门吸，建筑产品）—— 完全不相关。
+#    纯关键词匹配必然产生大量假阳性，必须有三段式判定。
+# ============================================================
+relevance:
+
+  # ---------- 第一段：必修词（命中 ≥1 才继续）----------
+  must_match_any:
+    core_zh: [电池回收, 退役电池, 废旧电池, 废电池, 梯次利用, 再生利用, 回收利用, 正极材料再生, 黑粉]
+    core_en: [battery recycling, waste batteries, end-of-life batter, spent batter,
+              repurposing, second life batter, black mass, battery recycl, cathode recover]
+    policy_zh: [动力电池回收, 综合利用, 生产者责任延伸, 回收率, 电池护照, 碳足迹, 尽职调查, 白名单]
+    policy_en: [battery regulation, recycling efficiency, recycled content, battery passport,
+                carbon footprint batter, due diligence batter, collection target, extended producer responsibility]
+
+  # ---------- 第二段：拒绝词（命中即丢弃，即使必修词命中）----------
+  reject_if_match:
+    unrelated_context:
+      - "battery-powered"        # ⚠️ 实测假阳性来源：电池供电的消费品/建材
+      - "battery operated"
+      - "batteridrevne"          # 丹麦语，实测噪声
+      - "纽扣电池"
+      - "battery charger"
+      - "电池供电"
+    wrong_industry:
+      - "启动电池"                # 铅酸启动电池，除非带政策词
+      - "consumer electronic batter"
+      - "hearing aid batter"
+    wrong_intent:
+      - "电池价格行情"            # 纯行情，无回收语境
+      - "电池概念股"
+      - "电池招聘"
+
+  # ---------- 第三段：人工复核（模糊地带，进 pending 而非自动判死）----------
+  human_review:
+    - solid state batter            # 固态电池：技术相关但非回收主线
+    - sodium ion batter             # 钠离子电池：同
+    - "海外建厂"                     # 可能是 strategy，也可能无关
+    - "回收价格"                     # 可能是 feedstock 价值信号，也可能是噪声
+
+  # ---------- 企业相关性（实体消解）----------
+  entity_rules:
+    require_alias_match: true       # 必须命中企业别名库，否则不归到该企业
+    ambiguous_names: [鑫茂, 瑞科美, 恒创睿能, 青衫]   # 重名企业，必须人工确认后才启用
+    parent_penetration:             # 母公司穿透（子公司无独立公告时）
+      brunp: catl
+      camel_xy: camel
+      ganfeng_circular: ganfeng
+      jereh_circular: jereh
+      sunwoda_recycle: sunwoda
+      tianneng_material: tianneng
+      xtc_circular: xtc
+      haopeng: highpower
+
+# ============================================================
+# 三、源真实性（Source Authenticity）
+# ============================================================
+source_authenticity:
+
+  # ---------- 域名白名单模式（永久可信）----------
+  trusted_domain_patterns:
+    - "*.gov"
+    - "*.gov.cn"
+    - "*.europa.eu"
+    - "eur-lex.europa.eu"
+    - "publications.europa.eu"
+    - "*.gov.uk"
+    - "*.edu.cn"
+    - "*.org.cn"          # 备案社团组织
+    - "*.ac.cn"
+
+  # ---------- 需人工确认主页后加入的行业源 ----------
+  industry_whitelist_pending:
+    - cninfo.com.cn       # 巨潮资讯（深交所指定披露平台）
+    - smm.cn              # 上海有色网
+    - gg-lb.com           # 高工锂电
+    - batterycouncil.org
+    - rechargebatteries.org
+
+  # ---------- 自动拒绝规则 ----------
+  auto_reject:
+    - id: homoglyph
+      rule: 与白名单域名的编辑距离 ≤ 2（防 one.gov.cn vs gоv.cn 同形字攻击）
+      action: 丢弃 + 钉钉 critical 告警
+    - id: new_domain
+      rule: WHOIS 注册时间 < 180 天且声称官方身份
+      action: 丢弃
+    - id: no_tls
+      rule: 无 HTTPS 或证书无效
+      action: 标记不可信，进人工队列
+    - id: mirror_site
+      rule: 内容与已知官方源相似度 > 0.95 但域名不同
+      action: 丢弃（疑似仿冒镜像）
+
+  # ---------- 每一层校验的动作 ----------
+  checks:
+    - { id: l1_domain,      desc: 域名是否匹配白名单模式,        action: auto }
+    - { id: l2_publisher,   desc: 页面是否声明主管/主办单位,      action: auto_extract + review }
+    - { id: l3_tls,         desc: HTTPS 与证书链校验,            action: auto }
+    - { id: l4_redirect,    desc: 跳转链是否落到非白名单域名,      action: auto }
+    - { id: l5_consistency, desc: 该域名历史产出稳定性,           action: auto }
+
+# ============================================================
+# 四、召回金标准（Recall Golden Set）
+# ============================================================
+# 用"已知答案"的探测题，定期验证系统是否真能搜到。
+# 每题都标了 expected 命中，跑完自动算召回率。
+# 任何一次采集管线改动后必须重跑，作为"质量安全带"。
+# ============================================================
+recall_probes:
+
+  # ---------- 政策侧（已实测可验证）----------
+  - id: probe_eu_battery_reg
+    region: EU
+    probe: 欧盟电池法规 CELEX 32023R1542
+    expect_any: ["32023R1542", "2023/1542"]
+    must_pass: true
+    verified_live: true            # ✅ 2026-09-10 实测通过
+    note: 应同时发现其更正版本 R(01)/R(02)/R(04)/R(06)
+
+  - id: probe_eu_corrigenda_count
+    region: EU
+    probe: 电池法规的更正版本数量
+    expect_min: 6
+    must_pass: true
+    verified_live: true
+    note: 实测返回 6 个更正版本——这是"法规稳定性"的重要情报信号
+
+  - id: probe_eu_new_legislation
+    region: EU
+    probe: 2025 年电池相关新立法
+    expect_any: ["32025D1769"]
+    must_pass: false               # 会随时间变化
+    verified_live: true
+
+  - id: probe_eu_noise_filter
+    region: EU
+    probe: 关键词 batter 的假阳性过滤
+    expect_reject: ["battery-powered hold-open systems"]
+    must_pass: true
+    verified_live: true
+    note: ⚠️ 实测确实返回该无关结果，用于验证 reject_if_match 规则生效
+
+  - id: probe_us_federal_register
+    region: US
+    probe: Federal Register 中 DOE 的 battery recycling 文件
+    expect_min_count: 48
+    must_pass: true
+    verified_live: true
+    note: 实测 count=48, total_pages=16
+
+  - id: probe_us_agencies
+    region: US
+    probe: 覆盖 DOE / EPA / IRS 三个机构
+    expect_any: [energy-department, environmental-protection-agency, internal-revenue-service]
+    must_pass: true
+
+  # ---------- 企业侧（需采集管线跑起来后验证）----------
+  - id: probe_gemm_operation
+    company: gemm
+    dimension: operation
+    probe: 格林美 电池回收 产能 万吨
+    expect_min: 3
+    must_pass: true
+    note: 上市公司，年报 + 公告 + 新闻，应轻松达标
+
+  - id: probe_brunp_feedstock
+    company: brunp
+    dimension: feedstock
+    probe: 邦普 废料来源 处理能力
+    expect_min: 5
+    must_pass: false
+    note: 未上市，需靠环评 + 母公司穿透；这是**已知难点**，用作压力测试
+
+# ============================================================
+# 五、覆盖率达标判定
+# ============================================================
+coverage_rules:
+
+  cell_criteria:                  # 三个条件同时满足才算覆盖
+    - { id: count,     rule: "verified_claims >= dimension.coverage_threshold" }
+    - { id: quality,   rule: "avg_quality_score >= 70" }
+    - { id: freshness, rule: "latest_claim_age_days <= dimension.freshness_days" }
+
+  cell_states:
+    - { id: covered,      symbol: "🟢", desc: 三项全过 }
+    - { id: weak,         symbol: "🟡", desc: 有数据但未达标 }
+    - { id: empty,        symbol: "⚪", desc: 一条都没有 }
+    - { id: out_of_scope, symbol: "⚫", desc: 明确不覆盖 }
+
+  gap_root_cause:                 # 空格子的根因分类，决定怎么补
+    - { id: no_source,     desc: 没有任何数据源覆盖该领域, action: 补数据源 }
+    - { id: no_connector,  desc: 有源但只能人工访问,       action: 写 Connector }
+    - { id: blocked,       desc: 源存在但被反爬拦截,       action: Playwright 或换入口 }
+    - { id: no_query,      desc: 有源可搜但查询词没写对,   action: 调查询模板 }
+    - { id: filtered_out,  desc: 搜到了但被相关性规则误杀, action: 修规则 }
+
+  report:
+    schedule: weekly
+    channel: dingtalk
+    include: [summary_matrix, top_gaps, root_cause, suggested_actions]

@@ -1,0 +1,65 @@
+# ============================================================
+# Vane-Battery-Recycling-OSINT 依赖
+# ------------------------------------------------------------
+# 说明：本机（Windows）当前没有可用的 Python 解释器，
+#       验证阶段用 scripts/verify-sources.ps1（PowerShell + curl）替代。
+#       部署到云服务器（Linux）后再用本文件安装。
+# 安装： pip install -r requirements.txt
+# ============================================================
+
+# ---------- Web 框架 ----------
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+
+# ---------- 异步 HTTP（连接器使用）----------
+httpx>=0.27.0
+# 注：只用 httpx，不引入 aiohttp，避免两套事件循环依赖
+
+# ---------- 任务队列 / 调度 ----------
+celery>=5.4.0
+redis>=5.2.0
+croniter>=3.0.0
+
+# ---------- 数据库 ----------
+SQLAlchemy>=2.0.36
+PyMySQL>=1.1.1
+alembic>=1.14.0
+
+# ---------- HTML / XML 解析 ----------
+beautifulsoup4>=4.12.0
+lxml>=5.3.0
+selectolax>=0.3.21
+
+# ---------- 文档解析（年报 / 环评 PDF）----------
+pdfplumber>=0.11.0
+python-docx>=1.1.2
+
+# ---------- 配置 / 工具 ----------
+PyYAML>=6.0.2
+python-dotenv>=1.0.1
+tenacity>=9.0.0
+
+# ---------- 语义处理（去重 / 相似度）----------
+sentence-transformers>=3.2.0
+faiss-cpu>=1.9.0
+numpy>=1.26.0
+
+# ---------- LLM ----------
+anthropic>=0.39.0
+
+# ---------- 对象存储 ----------
+minio>=7.2.10
+
+# ---------- 反爬兜底（仅对已知被拦的源启用，见 ARCHITECTURE.md §7）----------
+playwright>=1.48.0
+
+# ---------- 日志 ----------
+loguru>=0.7.2
+
+# ---------- 测试 ----------
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+respx>=0.21.1          # mock httpx（连接器契约测试）
+vcrpy>=6.0.2           # 录制真实响应，避免测试打真站
