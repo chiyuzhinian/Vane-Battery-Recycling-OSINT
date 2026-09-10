@@ -21,6 +21,27 @@
 version: 1
 updated_at: 2026-09-10
 
+# ============================================================
+# ⚠️ 数据源体系迭代记录（2026-09-10，由实测命中率驱动）
+# ------------------------------------------------------------
+# 实测各层级"投入产出比"，据此重新排序（不是凭感觉）：
+#
+#   层级            采集条数   相关条数   命中率
+#   ────────────────────────────────────────────
+#   省级厅            75         3       4.0%   ← 81% 是核技术/医疗类
+#   市级局             7         2      28.6%   ← 7 倍于省级
+#   国家级 MEE        15         0       0%     ← 打包公示，本项目级项目
+#
+# 结论（三条硬事实）：
+#   ① **电池回收工厂的环评在市级审批**，省厅只管核与辐射类；
+#      → 省厅源保留（危废许可/资源综合利用仍有用）但降级
+#   ② **市级局首页也不是好入口**（宁德首页 63 条里多数是新闻），
+#      需要定位到市局的「审批受理公示」专栏
+#   ③ **国家级 MEE 是跨省特大项目**，电池回收项目几乎不会出现在这里；
+#      其"受理情况"是打包公示（一页几十个项目、标题无行业线索），
+#      必须靠二级抓取正文才能发现 → 已实现 deep_check，实测本轮 0 命中（正常）
+# ============================================================
+
 defaults:
   source_type: eia
   tier: official
@@ -44,21 +65,29 @@ sources:
 
   # ---------- 国家级（受理公示，权威度最高）----------
   - id: eia_mee_national
-    name: 生态环境部 - 建设项目环境影响评价
+    name: 生态环境部 - 项目受理情况
     region: CN-NATIONAL
-    url: https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/
-    verified: true                  # ✅ 实测 200 / 74.8 KB
+    url: https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/xmslqk/
+    homepage: https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/
+    verified: true                  # ✅ 实测可达，条目为具体项目
     base_credibility: 100
     priority: 1
-    note: 国家级受理公示，覆盖跨省重大项目
+    note: |
+      ⚠️ 关键修正：**必须用「项目受理情况」专栏，而不是环评管理栏目首页**。
+      首页给的是政策与审批原则，专栏里才是具体建设项目的受理公示。
+      （这是上一轮 108 条只命中 2 条的根本原因）
+    listing_candidates:
+      - https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/nscxmgs/
 
   - id: eia_mee_management
-    name: 生态环境部 - 环境影响评价管理
+    name: 生态环境部 - 拟审查项目公示
     region: CN-NATIONAL
-    url: https://www.mee.gov.cn/ywgz/hjyxpj/
-    verified: true                  # ✅ 实测 200 / 105.8 KB
+    url: https://www.mee.gov.cn/ywgz/hjyxpj/jsxmhjyxpj/nscxmgs/
+    homepage: https://www.mee.gov.cn/ywgz/hjyxpj/
+    verified: true                  # ✅ 实测列出具体项目（如"XX水库工程等3项环评文件拟审查公示"）
     base_credibility: 100
     priority: 1
+    note: 拟审查公示 = 项目进入审批程序的关键节点，比批复更早
 
   # ---------- 省级（按目标企业地理分布选）----------
   # 说明：目标企业中邦普（湖南/广东/宁德）、金晟（广东）、博萃（上海）、
@@ -68,20 +97,29 @@ sources:
   - id: eia_gd
     name: 广东省生态环境厅
     region: CN-GD
-    url: https://gdee.gd.gov.cn/
-    verified: true                  # ✅ 实测 200 / 123 KB
-    priority: 2
-    note: 邦普（广东邦普）、金晟、杰成均在此有主体，优先级最高
+    url: https://gdee.gd.gov.cn/gsgg/index.html
+    homepage: https://gdee.gd.gov.cn/
+    verified: true
+    priority: 5                     # ⬇️ 从 2 降到 5：实测命中率仅 4%
+    demoted: true
+    demote_reason: |
+      实测该栏目 21 条里 17 条（81%）是核技术利用/医院/辐照/工业CT 类——
+      省级厅的审批权限集中在核与辐射，**一般工业项目（含电池回收工厂）在市级**。
+      保留但降级：危废经营许可、资源综合利用项目仍偶有相关（实测 3 条相关）。
+    observed_items: 75
+    observed_relevant: 3
+    note: 邦普（广东邦普）、金晟、杰成的主体在广东，但它们的项目环评要去**市级**找
     listing_candidates:
-      - https://gdee.gd.gov.cn/hjyxpj/
-      - https://gdee.gd.gov.cn/zwgk/
+      - https://gdee.gd.gov.cn/hpsp/index.html      # 条目更多（44 条），噪声 61%
+      - https://gdee.gd.gov.cn/hp5836/index.html
 
   - id: eia_js
     name: 江苏省生态环境厅
     region: CN-JS
-    url: https://sthjt.jiangsu.gov.cn/
-    verified: true                  # ✅ 实测 200 / 45.6 KB
-    priority: 2
+    url: https://sthjt.jiangsu.gov.cn/col/col83844/index.html
+    homepage: https://sthjt.jiangsu.gov.cn/
+    verified: true
+    priority: 3
     note: 南通北新等江苏主体
 
   - id: eia_hunan
@@ -100,33 +138,40 @@ sources:
   - id: eia_jiangxi
     name: 江西省生态环境厅
     region: CN-JX
-    url: http://sthjt.jiangxi.gov.cn/
-    verified: false
-    blocked: true                   # 🚫 返回 JS cookie 挑战页（1 KB）
+    url: http://sthjt.jiangxi.gov.cn/jxssthjt/col/col42145/index.html
+    homepage: http://sthjt.jiangxi.gov.cn/
+    verified: true                  # ✅ 实测可解析出公示条目（宜用 curl 回退）
     priority: 3
-    note: 赣州豪鹏、赣锋循环在此；需 Playwright 处理 JS 挑战
+    note: |
+      赣州豪鹏、赣锋循环在此。
+      首页有 JS cookie 跳转，**必须直接用 col42145 公示公告专栏**才能拿到条目。
+    listing_candidates:
+      - http://sthjt.jiangxi.gov.cn/{{pcUrl}}   # 该站模板占位，无效，勿用
 
   - id: eia_anhui
     name: 安徽省生态环境厅
     region: CN-AH
-    url: https://sthjt.ah.gov.cn/
-    verified: false
+    url: https://sthjt.ah.gov.cn/public/21691/
+    homepage: https://sthjt.ah.gov.cn/
+    verified: true                  # ✅ 实测列出项目级"批前公示"（如"XX电站项目生态环境影响报告书批前公示"）
     priority: 3
     note: 安徽巡鹰
 
   - id: eia_fujian
     name: 福建省生态环境厅
     region: CN-FJ
-    url: https://sthjt.fujian.gov.cn/
-    verified: false
+    url: https://sthjt.fujian.gov.cn/zwgk/gsgg/
+    homepage: https://sthjt.fujian.gov.cn/
+    verified: true                  # ✅ 实测 200
     priority: 3
     note: 福建常青新能源（宁德）
 
   - id: eia_shanghai
     name: 上海市生态环境局
     region: CN-SH
-    url: https://sthj.sh.gov.cn/
-    verified: false
+    url: https://sthj.sh.gov.cn/hbzhywpt1067/hbzhywpt1071/index.html
+    homepage: https://sthj.sh.gov.cn/
+    verified: true                  # ✅ 实测 200，环评与许可证专栏
     priority: 4
     note: 博萃循环
 
@@ -145,6 +190,58 @@ sources:
     verified: false
     priority: 3
     note: 浙江天能新材料
+
+# ============================================================
+# 市级生态环境局（⚠️ 2026-09-10 实测得出的关键结论）
+# ------------------------------------------------------------
+# 实测发现：省级厅"审批文件公示"栏目里 **90% 是核技术利用/医疗/工业CT 类项目**，
+# 因为一般工业建设项目的环评权限在**市级及以下**。
+# 也就是说 —— 邦普、金晟这类电池回收工厂的环评，
+# **不会出现在省厅，而在项目所在地的市生态环境局**。
+#
+# 因此：要拿到非上市企业的产能/处理规模，必须按"企业基地所在地"下沉到市级。
+#
+# ⚠️ 以下 URL 尚未验证（政府站点二级域名规律不完全一致），
+#    先用 scripts/diag_eia_columns.py 探测确认后再启用。
+# ============================================================
+city_sources:
+  enabled: true             # 5 个已验证，可直接用；其余标记待发现
+  defaults:
+    source_type: eia
+    tier: official
+    base_credibility: 90
+    connector: eia
+    check_frequency: weekly
+  sources:
+    # —— 已验证可用（2026-09-10 curl 实测 200）——
+    - { id: eia_city_ningde,   name: 宁德市生态环境局, url: "https://sthjj.ningde.gov.cn/",  verified: true, serves: [宁德邦普, 福建常青] }
+    - { id: eia_city_yichun,   name: 宜春市生态环境局, url: "https://sthjj.yichun.gov.cn/",  verified: true, serves: [赣锋循环, 赣州豪鹏] }
+    - { id: eia_city_jingmen,  name: 荆门市生态环境局, url: "http://sthjj.jingmen.gov.cn/", verified: true, serves: [格林美荆门] }
+    - { id: eia_city_dongguan, name: 东莞市生态环境局, url: "https://dgepb.dg.gov.cn/",      verified: true, serves: [杰成新能源] }
+    - { id: eia_city_nantong,  name: 南通市生态环境局, url: "https://sthjj.nantong.gov.cn/", verified: true, serves: [南通北新] }
+
+    # —— 域名未解析，需从市门户找入口（已实测 sthjj.* / sthj.* 均 000）——
+    - id: eia_city_foshan
+      name: 佛山市生态环境局
+      url: "https://www.foshan.gov.cn/"
+      verified: false
+      needs_discovery: true
+      serves: [广东邦普]
+      note: sthjj.foshan.gov.cn 与 fssthjj.* 均无法解析；建议从 www.foshan.gov.cn 站内找"生态环境局"栏目
+    - id: eia_city_zhaoqing
+      name: 肇庆市生态环境局
+      url: "https://www.zhaoqing.gov.cn/"
+      verified: false
+      needs_discovery: true
+      serves: [金晟新能源]
+      note: 同上，需从市门户站内导航发现
+    - id: eia_city_wuxi
+      name: 无锡市生态环境局
+      url: "https://www.wuxi.gov.cn/"
+      verified: false
+      needs_discovery: true
+      serves: [格林美无锡]
+      note: www.wuxi.gov.cn 可达（141.7 KB），但生态环境局子站域名未知
 
 # ============================================================
 # 已知不可用 / 需替代方案

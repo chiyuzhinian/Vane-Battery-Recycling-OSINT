@@ -98,6 +98,60 @@ _ANCHOR_RE = [re.compile(p, re.I) for p in CONTEXT_ANCHORS]
 _MAYBE_RE = [re.compile(p, re.I) for p in POLICY_MAYBE_TERMS]
 
 
+# ============================================================
+# 项目类规则（场景 2）—— 用于环评公示 / 招投标等"企业项目"场景
+# ------------------------------------------------------------
+# 为什么必须与政策类分开？
+# 实测（2026-09-10）：广东省生态环境厅"审批文件公示"栏目里
+#   **81% 是核技术利用 / 医院 / 辐照 / 工业CT 项目**，电池相关仅 1/21。
+# 政策类的词表（"电池回收""battery recycling"）在这里两头不讨好：
+#   · 拦不住核技术/医疗噪声（它们不含政策词，本就该丢）
+#   · 又误杀了真相关项目（"动力电池结构件"、"锂电胶粘材料"不含"回收"）
+# 因此项目类必须有自己的判定：
+#   项目 = 电池产业链的【建设/扩产/审批】事件
+# ============================================================
+
+# A. 强相关：标题里出现这些，就是电池产业链项目
+PROJECT_STRONG_PATTERNS: list[str] = [
+    # 回收/再生类（最核心）
+    r"电池[\s\S]{0,6}回收", r"回收[\s\S]{0,6}(电池|锂)", r"退役电池", r"废旧电池",
+    r"梯次利用", r"黑粉", r"电池[\s\S]{0,4}再生", r"再生[\s\S]{0,4}电池",
+    r"电池[\s\S]{0,4}拆解", r"电池[\s\S]{0,4}资源化", r"资源化[\s\S]{0,4}电池",
+    # 电池材料/制造类
+    r"锂(离子)?电池", r"锂电池", r"动力电池", r"储能电池", r"钠离子电池",
+    r"正极材料", r"负极材料", r"前驱体", r"电解液", r"隔膜",
+    r"电池[\s\S]{0,4}(材料|结构件|组件|制造|生产|基地)",
+    r"(锂电|锂离子|三元|磷酸铁锂)[\s\S]{0,6}材料",
+]
+
+# B. 明确无关（命中即丢）—— 这些是"审批公示"栏目里的常客，但与我们业务无关
+PROJECT_REJECT_PATTERNS: list[str] = [
+    # 核与辐射类（省级厅公示的主力，实测占 81%）
+    r"核技术利用", r"放射性同位素", r"放射源", r"辐照", r"工业CT", r"CT扩建",
+    r"X射线", r"探伤", r"核医学", r"辐射工作场所", r"退役项目.{0,6}辐射",
+    # 医疗/教育/市政
+    r"医院", r"医学院", r"卫生院", r"疾控", r"妇幼", r"门诊", r"卫生服务",
+    r"学校", r"中学", r"小学", r"幼儿园", r"大学",
+    # 基础设施（这些出现在环评公示里但与本行业无关）
+    r"输变电", r"变电站", r"输电线路", r"开闭所", r"配电站",
+    r"海砂", r"航道", r"码头", r"水库", r"水利", r"堤防", r"水厂", r"污水(处理)?厂",
+    r"公路", r"道路", r"铁路", r"桥梁", r"隧道", r"地铁", r"轨道交通",
+    r"房地产", r"住宅", r"商业综合体", r"写字楼",
+    r"垃圾(焚烧|填埋|中转)", r"污泥", r"餐厨",
+    r"光伏电站", r"风电场", r"抽水蓄能", r"天然气管道", r"油气管",
+]
+
+# C. 模糊地带 → 人工复核（不丢弃，但也绝不当作已确认）
+PROJECT_REVIEW_PATTERNS: list[str] = [
+    r"新能源", r"新材料", r"固废", r"危险废物", r"资源综合利用",
+    r"循环经济", r"再生资源",
+]
+
+_PROJ_STRONG_RE = [re.compile(p, re.I) for p in PROJECT_STRONG_PATTERNS]
+_PROJ_REJECT_RE = [re.compile(p, re.I) for p in PROJECT_REJECT_PATTERNS]
+_PROJ_REVIEW_RE = [re.compile(p, re.I) for p in PROJECT_REVIEW_PATTERNS]
+
+
 @dataclass
 class RelevanceVerdict:
     relevant: bool
@@ -123,7 +177,62 @@ def _contains(text: str, term: str) -> bool:
     return term in text
 
 
-def judge(text: str, title: str | None = None) -> RelevanceVerdict:
+def judge_project(text: str, title: str | None = None) -> RelevanceVerdict:
+    """项目类判定（环评公示 / 招投标 / 项目批复）。
+
+    判定顺序（**拒绝优先**，宁可漏也不塞垃圾）：
+      1. 命中明确无关（核技术/医院/输变电/水库…）→ 丢弃
+      2. 命中电池产业链强模式 → 相关
+      3. 命中模糊地带（新能源/固废/资源综合利用）→ 相关但标记人工复核
+      4. 其余 → 丢弃
+    """
+    if not text:
+        return RelevanceVerdict(relevant=False, score=0.0)
+
+    haystack = f"{title or ''}\n{text}"
+
+    # 1) 明确无关 —— 必须最先判，否则"XX医院核技术利用项目"里的
+    #    "利用"等字眼可能被后面的规则误捞
+    for rx in _PROJ_REJECT_RE:
+        m = rx.search(haystack)
+        if m:
+            return RelevanceVerdict(relevant=False, score=0.0,
+                                    rejected_by=f"project_reject:{m.group(0)[:20]}")
+
+    # 2) 电池产业链强模式
+    hits = [m.group(0)[:30] for rx in _PROJ_STRONG_RE
+            if (m := rx.search(haystack))]
+
+    if hits:
+        score = min(1.0, 0.6 + 0.15 * len(hits))
+        return RelevanceVerdict(relevant=True, score=round(score, 3), hits=hits[:5])
+
+    # 3) 模糊地带 → 人工复核
+    for rx in _PROJ_REVIEW_RE:
+        m = rx.search(haystack)
+        if m:
+            return RelevanceVerdict(
+                relevant=True, score=0.5,
+                hits=[f"review:{m.group(0)[:20]}"],
+                needs_human_review=True,
+                review_reason="泛行业词（新能源/固废/资源综合利用），需人工确认是否涉及电池",
+            )
+
+    # 4) 无关
+    return RelevanceVerdict(relevant=False, score=0.0)
+
+
+def judge(text: str, title: str | None = None, scenario: str = "policy") -> RelevanceVerdict:
+    """统一入口。scenario:
+        "policy"  → 政策法规场景（默认）
+        "project" → 企业项目场景（环评 / 招投标）
+    """
+    if scenario == "project":
+        return judge_project(text, title)
+    return judge_policy(text, title)
+
+
+def judge_policy(text: str, title: str | None = None) -> RelevanceVerdict:
     """对一段文本（标题+正文）做相关性判定。
 
     判定顺序：
@@ -208,9 +317,12 @@ def batch_judge(items: list[dict]) -> list[dict]:
 
 
 if __name__ == "__main__":
-    # 回归样本：全部来自 2026-09-10 的真实采集结果
-    samples = [
-        # 真阳性（第一版规则误杀，必须通过）
+    print("相关性规则回归自检")
+    print("=" * 88)
+    print("【场景 1：政策法规】")
+    print("-" * 88)
+    # 全部来自 2026-09-10 的真实采集结果
+    policy_samples = [
         ("Advanced Manufacturing Production Credit ... credit for the production and sale of "
          "battery components and critical minerals processing", "真阳性-45X最终规则"),
         ("Clean Vehicle Credits Under Sections 25E and 30D; Transfer of Credits; "
@@ -220,15 +332,38 @@ if __name__ == "__main__":
          "Recycling Inc. Superfund Site", "真阳性-夹词回收"),
         ("Regulation (EU) 2023/1542 on batteries and waste batteries", "真阳性-欧盟电池法"),
         ("格林美2025年年报：动力电池回收量达 8 万吨", "真阳性-中文"),
-        # 真阴性（必须拒绝）
         ("Energy Conservation Program: Test Procedure for Battery Chargers", "真阴性-充电器"),
         ("Significant New Use Rules on Certain Chemical Substances (26-2)", "真阴性-化学品"),
         ("Air Plan Approval; Georgia; Second Period Regional Haze Plan", "真阴性-空气计划"),
-        # 人工复核
         ("Section 45Y Clean Electricity Production Credit and Section 48E Clean Energy "
          "Investment Credit", "人工复核-能源条款"),
     ]
-    print("相关性规则回归自检")
-    print("-" * 78)
-    for text, label in samples:
-        print(f"{label:24s} → {judge(text)}")
+    for text, label in policy_samples:
+        print(f"  {label:26s} → {judge(text, scenario='policy')}")
+
+    print()
+    print("【场景 2：企业项目（环评/招投标）】")
+    print("-" * 88)
+    project_samples = [
+        # ⚠️ 真实采集到的条目：上一版规则把它们判为"不相关"，是误杀
+        ("2026年9月8日建设项目环境影响报告书（表）审批受理情况公示"
+         "（锂电胶粘材料数字化转型升级暨智能制造基地建设项目）", "真阳性-锂电材料项目"),
+        ("宁德市生态环境局关于宁德长盈新能源汽车动力电池结构件（三期）"
+         "环境影响报告表的批复", "真阳性-动力电池结构件"),
+        ("格林美（荆门）动力电池回收与资源化利用项目环境影响报告书受理公示", "真阳性-回收项目"),
+        ("XX公司废旧锂电池梯次利用及黑粉提取项目环评受理公示", "真阳性-梯次利用"),
+        # 真阴性：省厅公示栏目的噪声主力（实测占 81%）
+        ("东莞市道滘医院核技术利用扩建项目生态环境影响报告表受理公告", "真阴性-核技术利用"),
+        ("广东省生态环境厅关于广东省汕尾市陆丰西南海域SW24-12矿区海砂开采"
+         "环境影响报告书的批复及公告", "真阴性-海砂开采"),
+        ("广州中医药大学顺德医院医技楼一层核医学科辐射工作场所退役项目", "真阴性-医院核医学"),
+        ("南方医科大学南方医院核技术利用改扩建项目（重新报批）受理公告", "真阴性-医院扩建"),
+        ("广东省生态环境厅关于中国科学院高能物理研究所东莞研究部核技术利用"
+         "改扩建项目环境影响报告书的批复及公告", "真阴性-科研核利用"),
+        # 模糊地带
+        ("广东省生态环境厅拟对广东誉兴环境科技有限公司资源综合利用项目"
+         "生态环境影响评价文件作出批准决定的公示", "人工复核-资源综合利用"),
+    ]
+    for text, label in project_samples:
+        print(f"  {label:26s} → {judge(text, scenario='project')}")
+

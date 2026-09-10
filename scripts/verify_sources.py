@@ -252,13 +252,21 @@ async def collect(region: str) -> dict[str, int]:
 
 
 def _dump(items: list, path: Path, region: str) -> None:
-    """落盘 + 顺带跑一次相关性判定，直观看到"搜到的是不是我要的"。"""
-    kept, rejected = 0, 0
+    """落盘 + 顺带跑一次相关性判定，直观看到"搜到的是不是我要的"。
+
+    判定场景由每条证据的 meta.relevance_scenario 决定：
+        eia（环评）→ "project"（项目类规则）
+        其余        → "policy"（政策类规则）
+    """
+    kept, rejected, review = 0, 0, 0
     with path.open("w", encoding="utf-8") as f:
         for it in items:
-            v = judge(it.raw_text, it.source_title)
+            scenario = it.meta.get("relevance_scenario", "policy")
+            v = judge(it.raw_text, it.source_title, scenario=scenario)
             if v.relevant:
                 kept += 1
+                if v.needs_human_review:
+                    review += 1
             else:
                 rejected += 1
             record = {
@@ -269,14 +277,17 @@ def _dump(items: list, path: Path, region: str) -> None:
                 "title": it.source_title,
                 "publish_date": it.publish_date.isoformat() if it.publish_date else None,
                 "relevant": v.relevant,
+                "relevance_scenario": scenario,
                 "relevance_score": v.score,
                 "rejected_by": v.rejected_by,
                 "needs_human_review": v.needs_human_review,
+                "review_reason": v.review_reason,
                 "meta": it.meta,
                 "text": it.raw_text[:800],
             }
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
-    print(f"  → 落盘 {path.relative_to(ROOT)}  （相关 {kept} / 被相关性规则拒绝 {rejected}）")
+    print(f"  → 落盘 {path.relative_to(ROOT)}  "
+          f"（相关 {kept}（待人工 {review}）/ 被拒 {rejected}）")
 
 
 # ============================================================

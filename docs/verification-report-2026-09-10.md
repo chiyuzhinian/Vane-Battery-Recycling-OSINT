@@ -279,7 +279,91 @@ py app/core/relevance.py
 
 ---
 
-## 七、复现方式
+## 七、欧美政策全量采集（同日第二轮）
+
+上一轮只做了「可达性 + 小样本采集」。本轮把欧美政策**采全**。
+
+命令：`py scripts/collect_policies.py --region BOTH --since 2024-01-01`
+
+### 7.1 美国 Federal Register
+
+```
+配置：6 关键词 × 4 机构（DOE / EPA / IRS / DOT）× 5 页 × 50 条
+取回：452 条
+结果：138 条相关（30.5%），其中 89 条标记待人工复核
+```
+
+> 89 条待人工复核偏高，来源是 `POLICY_MAYBE_TERMS`（税优/能源条款类）。
+> 这是有意的取舍——**宁可多一条待审，不可漏一条政策**。
+> 下一轮可考虑：对"同时命中 `battery` 锚点"的 MAYBE 项直接判相关，进一步降噪。
+
+### 7.2 欧盟 EUR-Lex SPARQL
+
+```
+路径 A（CELEX 精确跟踪）  ：32023R1542(15) + 32006L0066(5) + 32000L0053(4)
+路径 B（关键词发现，仅英文）：battery(16) batteries(3) waste batteries(2)
+                            critical raw materials(4) end-of-life vehicles(1)
+去重后：47 条 → 19 条相关
+```
+
+**修复的性能问题（重要）**：初版关键词查询在全库上做标题 `CONTAINS`，
+单次 >90 秒，7 个关键词连续超时直接拖垮采集。
+改为**先用 CELEX 年份前缀走索引缩小候选集**：
+
+```sparql
+FILTER(REGEX(STR(?celex), "^(3)(202[4-9])"))
+```
+
+加这一行后 7 个关键词全部跑通。
+
+### 7.3 法规关系图（新增能力）
+
+`fetch_relations()` 拉取主干法规的完整关系网。电池法规 (EU) 2023/1542 实测结果：
+
+| 关系类型 | 数量 | 含义 |
+|---|---|---|
+| `resource_legal_amends_resource_legal` | 2 | 修订了 2 部法规 |
+| `resource_legal_repeals_resource_legal` | 1 | 废止 1 部（旧电池指令 2006/66/EC） |
+| `resource_legal_codified_version` | 1 | 有 1 个合并/编纂版本 |
+| `resource_legal_published_in_official-journal` | 1 | 官方公报出处 |
+| `resource_legal_responsibility_of_agent` | 2 | 2 个责任机构 |
+| `resource_legal_based_on_resource_legal` | 2 | 法律依据来源 |
+
+> 这张图能直接回答"新法规取代了哪些旧规、由谁负责、是否有合并版本"——
+> 对判断**合规要求的适用时间线**是刚需，而不是可选项。
+
+---
+
+## 八、环评专栏入口发现（解锁非上市企业的关键）
+
+上一轮结论是"环评只采到 2 条政策，没打到企业"。
+本轮定位到根因：**用错了页面层级**。
+
+| 页面层级 | 内容 | 是否可用 |
+|---|---|---|
+| 厅局**首页** / 环评管理处栏目 | 政策、审批原则、通知 | ❌ 不是企业项目 |
+| **"受理情况 / 拟审查 / 批前公示"专栏** | **具体建设项目的环评公示** | ✅ 正是所需 |
+
+**已定位的专栏入口**：
+
+| 站点 | 专栏 URL | 优先级 |
+|---|---|---|
+| 生态环境部 | `/ywgz/hjyxpj/jsxmhjyxpj/xmslqk/`（项目受理情况） | 🥇 |
+| 生态环境部 | `/ywgz/hjyxpj/jsxmhjyxpj/nscxmgs/`（拟审查项目公示） | 🥇 |
+| 广东省生态环境厅 | `gdee.gd.gov.cn/gsgg/index.html`（审批文件公示公告） | 🥇 邦普/金晟/杰成 |
+| 湖南省生态环境厅 | 需 curl 回退（邦普循环所在地） | 🥇 |
+| 江苏省生态环境厅 | `sthjt.jiangsu.gov.cn/col/col83844/index.html` | 🥈 南通北新 |
+| 安徽省生态环境厅 | `sthjt.ah.gov.cn/public/21691/`（批前公示） | 🥈 安徽巡鹰 |
+| 上海市生态环境局 | `sthj.sh.gov.cn/hbzhywpt1067/hbzhywpt1071/index.html` | 🥉 博萃循环 |
+| 福建省生态环境厅 | `sthjt.fujian.gov.cn/zwgk/gsgg/` | 🥉 福建常青 |
+| 江西省生态环境厅 | `sthjt.jiangxi.gov.cn/jxssthjt/col/col42145/index.html` | 🥉 赣州豪鹏 |
+
+工具：`py scripts/diag_eia_columns.py` —— 抓首页并列出所有"像环评专栏"的链接，
+换站点或站点改版时重跑即可。
+
+---
+
+## 九、复现方式
 
 ```bash
 # 环境：Python 3.12（本机命令为 py）

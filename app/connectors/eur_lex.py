@@ -64,19 +64,24 @@ LIMIT {limit}
 """
 
 # 关键词发现：限定在立法（有 CELEX）范围内，避免全库扫描
+#
+# ⚠️ 实测教训（2026-09-10）：
+#   朴素写法 `?work cdm:resource_legal_id_celex ?celex . ?work cdm:work_date_document ?date .`
+#   再对 title 做 CONTAINS，会在整个 Cellar 库上做全表扫描 —— 单次查询超过 90 秒，
+#   连续 7 个关键词直接拖垮采集。
+#   修复：先用 **CELEX 年份前缀**（走索引）把候选集从百万级缩到万级，再做标题过滤。
+#   CELEX 结构：sector(1) + year(4) + type(1) + number(4)，sector 3 = 立法。
 Q_KEYWORD = """
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 SELECT DISTINCT ?work ?celex ?title ?date
 WHERE {{
   ?work cdm:resource_legal_id_celex ?celex .
+  FILTER(REGEX(STR(?celex), "^(3)({celex_years})"))
   ?work cdm:work_date_document ?date .
   ?expr cdm:expression_belongs_to_work ?work .
   ?expr cdm:expression_title ?title .
   FILTER(CONTAINS(LCASE(STR(?title)), "{keyword}"))
-  FILTER(?date >= "{since}"^^xsd:date)
 }}
-ORDER BY DESC(?date)
 LIMIT {limit}
 """
 
@@ -202,8 +207,11 @@ class EurLexConnector(BaseConnector):
         return out
 
     async def _fetch_by_keyword(self, keyword: str, since: str, limit: int) -> list[RawEvidence]:
+        # 从 since 年份推出 CELEX 年份正则，如 "2024-01-01" → "202[4-9]"
+        start_year = int((since or "2024")[:4])
+        celex_years = f"202[{start_year % 10}-9]"
         bindings = await self._sparql(
-            Q_KEYWORD.format(keyword=keyword.lower(), since=since, limit=limit)
+            Q_KEYWORD.format(keyword=keyword.lower(), celex_years=celex_years, limit=limit)
         )
         out: list[RawEvidence] = []
         seen: set[str] = set()

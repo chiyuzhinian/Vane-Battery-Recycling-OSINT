@@ -57,45 +57,75 @@ boundary:
 # ============================================================
 # 二、相关性判定（解决"搜到的不是我要的"）
 # ============================================================
-# ⚠️ 实测教训：用 "batter" 搜欧盟立法，第一条结果是
-#    "battery-powered hold-open systems"（电池供电门吸，建筑产品）—— 完全不相关。
-#    纯关键词匹配必然产生大量假阳性，必须有三段式判定。
+# ⚠️ 核心设计：**必须按场景分开判定**。同一个词在不同场景含义完全不同。
+#
+# 【演进记录】2026-09-10，两轮真实数据驱动的迭代：
+#   第 1 版：单套词表（政策向）→ 采集美国政策时误杀 45X 最终规则等 3 条核心政策
+#   第 2 版：政策词表加"正则强模式 + 上下文词&锚点 + 税优类转人工"
+#            → 美国合规数 16 → 57（3.6 倍）
+#   第 3 版：**发现环评场景完全不能复用政策词表**
+#            · 拦不住噪声：广东省厅公示 81% 是核技术/医院/工业CT
+#            · 又误杀真相关："动力电池结构件""锂电胶粘材料"不含"回收"
+#            → 拆出独立的「项目类」规则，实测 10/10 回归样本全对
 # ============================================================
 relevance:
 
-  # ---------- 第一段：必修词（命中 ≥1 才继续）----------
-  must_match_any:
-    core_zh: [电池回收, 退役电池, 废旧电池, 废电池, 梯次利用, 再生利用, 回收利用, 正极材料再生, 黑粉]
-    core_en: [battery recycling, waste batteries, end-of-life batter, spent batter,
-              repurposing, second life batter, black mass, battery recycl, cathode recover]
-    policy_zh: [动力电池回收, 综合利用, 生产者责任延伸, 回收率, 电池护照, 碳足迹, 尽职调查, 白名单]
-    policy_en: [battery regulation, recycling efficiency, recycled content, battery passport,
-                carbon footprint batter, due diligence batter, collection target, extended producer responsibility]
+  # ========== 场景 1：政策法规（scenario="policy"）==========
+  # 判定目标：这条法规/政策是否影响电池回收行业
+  policy:
+    must_match_any:
+      core_zh: [电池回收, 退役电池, 废旧电池, 废电池, 梯次利用, 再生利用, 回收利用, 正极材料再生, 黑粉]
+      core_en: [battery recycling, waste batteries, end-of-life batter, spent batter,
+                repurposing, second life batter, black mass, battery recycl, cathode recover]
+      policy_zh: [动力电池回收, 综合利用, 生产者责任延伸, 回收率, 电池护照, 碳足迹, 尽职调查, 白名单]
+      policy_en: [battery regulation, recycling efficiency, recycled content, battery passport,
+                  carbon footprint batter, due diligence batter, collection target, extended producer responsibility]
 
-  # ---------- 第二段：拒绝词（命中即丢弃，即使必修词命中）----------
-  reject_if_match:
-    unrelated_context:
-      - "battery-powered"        # ⚠️ 实测假阳性来源：电池供电的消费品/建材
-      - "battery operated"
-      - "batteridrevne"          # 丹麦语，实测噪声
-      - "纽扣电池"
-      - "battery charger"
-      - "电池供电"
-    wrong_industry:
-      - "启动电池"                # 铅酸启动电池，除非带政策词
-      - "consumer electronic batter"
-      - "hearing aid batter"
-    wrong_intent:
-      - "电池价格行情"            # 纯行情，无回收语境
-      - "电池概念股"
-      - "电池招聘"
+    reject_if_match:
+      unrelated_context: ["battery-powered", "battery operated", "batteridrevne", "纽扣电池", "battery charger", "电池供电", "电池充电器"]
+      wrong_industry: ["启动电池", "consumer electronic batter", "hearing aid batter"]
+      wrong_intent: ["电池价格行情", "电池概念股", "电池招聘"]
 
-  # ---------- 第三段：人工复核（模糊地带，进 pending 而非自动判死）----------
-  human_review:
-    - solid state batter            # 固态电池：技术相关但非回收主线
-    - sodium ion batter             # 钠离子电池：同
-    - "海外建厂"                     # 可能是 strategy，也可能无关
-    - "回收价格"                     # 可能是 feedstock 价值信号，也可能是噪声
+    human_review:
+      - solid state batter
+      - sodium ion batter
+      - "海外建厂"
+      - "回收价格"
+      - "critical minerals?"        # 关键矿产单独出现（无电池锚点）
+      - "advanced manufacturing production credit"
+      - "锂离子电池"                # 电池制造类：可能适用于回收项目，需人工判断
+
+  # ========== 场景 2：企业项目（scenario="project"）==========
+  # 用于环评公示 / 招投标 / 项目批复。判定目标：这是不是一个电池产业链的建设项目
+  #
+  # ⚠️ 判定顺序是「拒绝优先」：先排噪声，再看相关性。
+  #    因为"XX医院核技术利用扩建项目"这类标题里可能夹杂通用词，
+  #    必须先拦掉，否则会污染数据（这正是"不要把不相关结果塞进来"的技术实现）。
+  project:
+    # A. 强相关：电池产业链的建设/扩产/审批
+    strong:
+      - "电池[\s\S]{0,6}回收"
+      - "回收[\s\S]{0,6}(电池|锂)"
+      - "退役电池|废旧电池|梯次利用|黑粉"
+      - "电池[\s\S]{0,4}(再生|拆解|资源化)"
+      - "锂(离子)?电池|锂电池|动力电池|储能电池|钠离子电池"
+      - "正极材料|负极材料|前驱体|电解液|隔膜"
+      - "电池[\s\S]{0,4}(材料|结构件|组件|制造|生产|基地)"
+      - "(锂电|锂离子|三元|磷酸铁锂)[\s\S]{0,6}材料"
+
+    # B. 明确无关 —— 命中即丢（这批词是"环评公示"栏目里的噪声主力）
+    reject:
+      核与辐射: ["核技术利用", "放射性同位素", "放射源", "辐照", "工业CT", "CT扩建",
+                 "X射线", "探伤", "核医学", "辐射工作场所"]
+      医疗教育: ["医院", "医学院", "卫生院", "疾控", "妇幼", "门诊", "学校", "中学", "小学", "幼儿园", "大学"]
+      基础设施: ["输变电", "变电站", "输电线路", "海砂", "航道", "码头", "水库", "水利",
+                 "堤防", "水厂", "污水厂", "公路", "道路", "铁路", "桥梁", "隧道", "地铁",
+                 "房地产", "住宅", "商业综合体"]
+      其他行业: ["垃圾焚烧", "垃圾填埋", "污泥", "餐厨", "光伏电站", "风电场", "抽水蓄能",
+                 "天然气管道", "油气管"]
+
+    # C. 模糊地带 → 人工复核（不丢弃，也绝不当作已确认）
+    review: ["新能源", "新材料", "固废", "危险废物", "资源综合利用", "循环经济", "再生资源"]
 
   # ---------- 企业相关性（实体消解）----------
   entity_rules:
