@@ -297,7 +297,12 @@ async def main() -> int:
         if is_shadow:
             per_kw: dict[str, dict] = defaultdict(lambda: {"raw": 0, "relevant": 0, "novel": 0})
             for r in records:
-                k = r["keyword"]
+                # ⚠️ 必须用 .get：浏览器通道的记录是**站点级发现**，没有 keyword 字段。
+                #    影子测试结算的是"候选关键词"的表现，站点级记录不属于任何候选词，
+                #    直接跳过（它们已由 feedback.observe 计入源维度）。
+                k = r.get("keyword")
+                if not k:
+                    continue
                 per_kw[k]["raw"] += 1
                 per_kw[k]["relevant"] += 1 if r["relevant"] else 0
             for s in engine.pair_stats():

@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from app.connectors.browser import BrowserFetcher   # noqa: E402
-from app.core.relevance import judge               # noqa: E402
+from app.core.relevance_browser import judge_browser  # noqa: E402
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -86,6 +86,9 @@ SITES: dict[str, dict] = {
         "doc_pattern": r"batter|recycl|stewardship|responsib|extended producer|legislat|law",
         "cluster": "C5_epr_collection",
     },
+    # 说明：doc_pattern 是**链接发现**用的粗筛，故意放宽；
+    #       最终相关性由 judge_browser 以页面身份（标题+URL）为准判定。
+    #       両者职责不同：粗筛保召回，judge_browser 保精确率。
     "bci": {
         "name": "Battery Council International（州级立法推手）",
         "region": "US",
@@ -112,7 +115,23 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
 
     def add(url: str, title: str, text: str, status: int = 200,
             date_hint: str | None = None, kind: str = "page") -> None:
-        v = judge(text, title, scenario="policy")
+        # ⚠️ 必须用 judge_browser，不能用 judge_policy：
+        #    浏览器抓的是整页渲染文本，全局导航会带来大量同母类噪声
+        #    （实测 CalRecycle `/epr/` 把纺织/包装产品线都判成了相关）
+        v = judge_browser(title, url, text)
+        # ⚠️ 非 200 一律不作为证据：403/404/5xx 返回的是拦截页或错误页，
+        #    哪怕内容像那么回事也不能入库（实测 ECHA 的 Azure WAF 页
+        #    标题就是 "Azure WAF"，曾被评为"相关"）。
+        if status != 200:
+            records.append({
+                "source_id": f"browser_{key}", "cluster": cfg["cluster"],
+                "channel": "browser_capture", "kind": kind, "url": url,
+                "title": title, "publish_date_hint": date_hint, "http": status,
+                "text": "", "relevant": False, "score": 0.0,
+                "needs_human_review": False, "hits": [],
+                "rejected_by": f"http_{status}",
+            })
+            return
         records.append({
             "source_id": f"browser_{key}",
             "cluster": cfg["cluster"],

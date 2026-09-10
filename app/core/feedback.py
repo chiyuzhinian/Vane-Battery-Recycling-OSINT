@@ -144,11 +144,15 @@ class PairStat:
     """单个 (数据源, 关键词) 组合的统计。"""
     source_id: str
     keyword: str
-    raw: int = 0            # 返回条数
-    relevant: int = 0       # 判定相关
-    novel: int = 0          # 其中"没见过的新条目"
+    raw: int = 0            # 返回条数（累积）
+    relevant: int = 0       # 判定相关（累积）
+    novel: int = 0          # 其中"没见过的新条目"（累积）
     rounds_seen: list[int] = field(default_factory=list)
     last_adjusted_round: int = -99
+    # 本轮增量：{round_no: {"raw": n, "novel": n}}
+    # why 必须按轮存：累积比率是**滞后指标**，会长期停留在高位
+    # （旧条目没变但分母持续增长），导致收敛判据永远不触发。
+    rounds: dict = field(default_factory=dict)
 
     @property
     def precision(self) -> float:
@@ -156,7 +160,14 @@ class PairStat:
 
     @property
     def novel_rate(self) -> float:
+        """累积边际新发现率（滞后指标，仅作参考）。"""
         return self.novel / self.raw if self.raw else 0.0
+
+    def round_novel_rate(self, round_no: int) -> float:
+        """**本轮**边际新发现率 —— 收敛判据与源/词调权都应当用这个。"""
+        r = self.rounds.get(str(round_no)) or self.rounds.get(round_no) or {}
+        raw = r.get("raw", 0)
+        return (r.get("novel", 0) / raw) if raw else 0.0
 
     @property
     def key(self) -> str:
@@ -252,10 +263,16 @@ class FeedbackEngine:
             if r.get("relevant"):
                 stat["relevant"] = stat.get("relevant", 0) + 1
 
+            # 本轮增量（收敛判据的基础）
+            rstat = stat.setdefault("rounds", {}).setdefault(
+                str(round_no), {"raw": 0, "novel": 0})
+            rstat["raw"] += 1
+
             eid = str(r.get("evidence_id") or "")
             if eid and eid not in self._seen:
                 self._seen.add(eid)
                 stat["novel"] = stat.get("novel", 0) + 1
+                rstat["novel"] += 1
                 new_novel += 1
 
             rs = stat.setdefault("rounds_seen", [])
@@ -274,35 +291,52 @@ class FeedbackEngine:
                 novel=v.get("novel", 0),
                 rounds_seen=v.get("rounds_seen", []),
                 last_adjusted_round=v.get("last_adjusted_round", -99),
+                rounds=v.get("rounds", {}),
             ))
         return out
 
-    def source_view(self) -> dict[str, dict[str, float]]:
-        """按源聚合（跨关键词）。"""
+    def source_view(self, round_no: int | None = None) -> dict[str, dict[str, float]]:
+        """按源聚合（跨关键词）。
+
+        round_no 给定时，novel_rate 是**本轮**边际新发现率（调权用这个）；
+        否则是累积值（仅作参考，是滞后指标）。
+        """
         agg: dict[str, dict[str, float]] = defaultdict(
-            lambda: {"raw": 0, "relevant": 0, "novel": 0})
+            lambda: {"raw": 0, "relevant": 0, "novel": 0, "round_raw": 0, "round_novel": 0})
         for s in self.pair_stats():
             a = agg[s.source_id]
             a["raw"] += s.raw
             a["relevant"] += s.relevant
             a["novel"] += s.novel
+            if round_no is not None:
+                r = s.rounds.get(str(round_no)) or {}
+                a["round_raw"] += r.get("raw", 0)
+                a["round_novel"] += r.get("novel", 0)
         for a in agg.values():
             a["precision"] = a["relevant"] / a["raw"] if a["raw"] else 0.0
             a["novel_rate"] = a["novel"] / a["raw"] if a["raw"] else 0.0
+            a["round_novel_rate"] = (a["round_novel"] / a["round_raw"]
+                                      if a["round_raw"] else 0.0)
         return dict(agg)
 
-    def keyword_view(self) -> dict[str, dict[str, float]]:
+    def keyword_view(self, round_no: int | None = None) -> dict[str, dict[str, float]]:
         """按关键词聚合（跨源）—— 回答"这个词到底有效吗"。"""
         agg: dict[str, dict[str, float]] = defaultdict(
-            lambda: {"raw": 0, "relevant": 0, "novel": 0})
+            lambda: {"raw": 0, "relevant": 0, "novel": 0, "round_raw": 0, "round_novel": 0})
         for s in self.pair_stats():
             a = agg[s.keyword]
             a["raw"] += s.raw
             a["relevant"] += s.relevant
             a["novel"] += s.novel
+            if round_no is not None:
+                r = s.rounds.get(str(round_no)) or {}
+                a["round_raw"] += r.get("raw", 0)
+                a["round_novel"] += r.get("novel", 0)
         for a in agg.values():
             a["precision"] = a["relevant"] / a["raw"] if a["raw"] else 0.0
             a["novel_rate"] = a["novel"] / a["raw"] if a["raw"] else 0.0
+            a["round_novel_rate"] = (a["round_novel"] / a["round_raw"]
+                                      if a["round_raw"] else 0.0)
         return dict(agg)
 
     def coverage_matrix(self) -> dict[str, dict[str, int]]:
@@ -321,48 +355,63 @@ class FeedbackEngine:
         """基于统计产出动作清单 + 收敛判断。"""
         actions: list[Action] = []
         stats = self.pair_stats()
+        srcs = self.source_view(round_no)         # 本轮边际
+        kws = self.keyword_view(round_no)
 
         # ---- 源维度 ----
-        for src, a in self.source_view().items():
+        for src, a in srcs.items():
             if a["raw"] < MIN_RAW_TO_JUDGE:
                 continue
-            if a["novel_rate"] < 0.01 and a["precision"] < 0.05:
+            # 用本轮边际：某源累积边际可能很高，但本轮已无新增 → 应该降权
+            if a["round_novel_rate"] < 0.01 and a["precision"] < 0.05:
                 actions.append(Action(
                     "demote_source", src,
-                    f"边际新发现 {a['novel_rate']:.1%}、精确率 {a['precision']:.1%}，"
+                    f"本轮边际 {a['round_novel_rate']:.1%}、精确率 {a['precision']:.1%}，"
                     f"该源对本主题已无增量", magnitude=-0.2))
-            elif a["novel_rate"] >= 0.10:
+            elif a["round_novel_rate"] >= 0.10:
                 actions.append(Action(
                     "boost_source", src,
-                    f"边际新发现 {a['novel_rate']:.1%}，持续带回新信息", magnitude=0.2))
+                    f"本轮边际 {a['round_novel_rate']:.1%}，持续带回新信息",
+                    magnitude=0.2))
 
         # ---- 关键词维度 ----
         for kw, a in self.keyword_view().items():
             if a["raw"] < MIN_RAW_TO_JUDGE:
                 continue
-            if a["precision"] < MIN_PRECISION_TO_KEEP and a["novel"] == 0:
+            if a["precision"] < MIN_PRECISION_TO_KEEP and a["round_novel"] == 0:
                 actions.append(Action(
                     "retire_keyword", kw,
-                    f"精确率 {a['precision']:.1%} 且零边际产出，建议停用"))
-            elif a["precision"] >= 0.30 and a["novel_rate"] >= 0.05:
+                    f"精确率 {a['precision']:.1%} 且本轮零边际产出，建议停用"))
+            elif a["precision"] >= 0.30 and a["round_novel_rate"] >= 0.05:
                 actions.append(Action(
                     "keep_keyword", kw,
-                    f"精确率 {a['precision']:.1%} + 边际 {a['novel_rate']:.1%}，保持"))
+                    f"精确率 {a['precision']:.1%} + 本轮边际 "
+                    f"{a['round_novel_rate']:.1%}，保持"))
 
         # ---- 组合维度：饱和 ----
+        # ⚠️ 用**本轮**边际判饱和，不用累积（同收敛判据的理由）
         for s in stats:
             if s.raw >= MIN_RAW_TO_JUDGE and s.rounds_seen and \
-                    s.rounds_seen.count(max(s.rounds_seen)) and s.novel_rate < NOVEL_RATE_CONVERGENCE:
+                    s.rounds_seen.count(max(s.rounds_seen)) and \
+                    s.round_novel_rate(round_no) < NOVEL_RATE_CONVERGENCE:
                 if round_no - s.last_adjusted_round >= COOLDOWN_ROUNDS:
                     actions.append(Action(
                         "saturate_pair", s.key,
-                        f"连续 {len(s.rounds_seen)} 轮、边际 {s.novel_rate:.1%} 已饱和",
+                        f"连续 {len(s.rounds_seen)} 轮、本轮边际 "
+                        f"{s.round_novel_rate(round_no):.1%} 已饱和",
                         reversible=True))
 
         # ---- 收敛判断 ----
-        total_raw = sum(s.raw for s in stats)
-        total_novel = sum(s.novel for s in stats)
-        rate = (total_novel / total_raw) if total_raw else 0.0
+        # ⚠️ 必须用**本轮**边际新发现率，不能用累积比率。
+        #    累积比率是滞后指标：旧条目没变但分母持续增长，
+        #    它会长期停留在高位 → 阈值 2% 永远触发不了 → 收敛判据形同虚设。
+        #    （实测 2026-09-10：第 3 轮真实边际 0/98 = 0%，累积却显示 59.7%，
+        #      报告说"仍有增量"，而实际上已经完全不饱和了。）
+        round_raw = sum(
+            (s.rounds.get(str(round_no)) or {}).get("raw", 0) for s in stats)
+        round_novel = sum(
+            (s.rounds.get(str(round_no)) or {}).get("novel", 0) for s in stats)
+        rate = (round_novel / round_raw) if round_raw else 0.0
         hist = self.state["history"]
         streak = 1 if (hist and hist[-1].get("novel_rate", 1.0) < NOVEL_RATE_CONVERGENCE
                        and rate < NOVEL_RATE_CONVERGENCE) else 0
@@ -520,26 +569,31 @@ class FeedbackEngine:
             "=" * 96,
             f" 收敛状态：{'✅ 已收敛' if report.converged else '🔄 继续迭代'}"
             f"  —— {report.reason}",
-            f" 本轮边际新发现率：{report.novel_rate:.1%}",
+            f" 本轮边际新发现率：{report.novel_rate:.1%}"
+            f"   ← 收敛判据用这个（不是累积比率）",
             "",
             " 【源维度】",
-            f"  {'source':<28}{'raw':>6}{'rel':>6}{'novel':>7}{'精确率':>9}{'边际':>8}",
-            "  " + "-" * 66,
+            f"  {'source':<28}{'raw':>6}{'rel':>6}{'novel':>7}{'精确率':>9}"
+            f"{'本轮边际':>10}{'累积':>8}",
+            "  " + "-" * 76,
         ]
-        for src, a in sorted(self.source_view().items(),
-                             key=lambda kv: kv[1]["novel_rate"], reverse=True)[:12]:
+        for src, a in sorted(self.source_view(report.round_no).items(),
+                             key=lambda kv: kv[1]["round_novel_rate"], reverse=True)[:12]:
             lines.append(f"  {src:<28}{int(a['raw']):>6}{int(a['relevant']):>6}"
-                         f"{int(a['novel']):>7}{a['precision']:>8.1%}{a['novel_rate']:>8.1%}")
+                         f"{int(a['novel']):>7}{a['precision']:>8.1%}"
+                         f"{a['round_novel_rate']:>10.1%}{a['novel_rate']:>8.1%}")
 
         lines += ["", " 【关键词维度】（只列样本量足够的）"]
-        lines.append(f"  {'keyword':<34}{'raw':>6}{'rel':>6}{'novel':>7}{'精确率':>9}{'边际':>8}")
-        lines.append("  " + "-" * 72)
-        for kw, a in sorted(self.keyword_view().items(),
+        lines.append(f"  {'keyword':<34}{'raw':>6}{'rel':>6}{'novel':>7}{'精确率':>9}"
+                     f"{'本轮边际':>10}{'累积':>8}")
+        lines.append("  " + "-" * 82)
+        for kw, a in sorted(self.keyword_view(report.round_no).items(),
                             key=lambda kv: kv[1]["raw"], reverse=True):
             if a["raw"] < MIN_RAW_TO_JUDGE:
                 continue
             lines.append(f"  {kw[:33]:<34}{int(a['raw']):>6}{int(a['relevant']):>6}"
-                         f"{int(a['novel']):>7}{a['precision']:>8.1%}{a['novel_rate']:>8.1%}")
+                         f"{int(a['novel']):>7}{a['precision']:>8.1%}"
+                         f"{a['round_novel_rate']:>10.1%}{a['novel_rate']:>8.1%}")
 
         lines += ["", " 【反推动作】"]
         if not actions:

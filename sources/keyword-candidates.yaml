@@ -10,10 +10,34 @@
 # ⚠️ 未确认前不要加入 sources/keyword-taxonomy-eol-battery.yaml 的 discovery_terms
 # ============================================================
 
-generated_at: 2026-09-10T20:37:36
-total_candidates: 3
+generated_at: 2026-09-10T21:26:47
+total_candidates: 5
 
 candidates:
+  - term: "battery council"
+    status: candidate          # candidate | shadow_tested | approved | rejected
+    doc_frequency: 4
+    discovered_round: 1
+    example: "Battery Council International Home | Battery Council International"
+    shadow_test:
+      raw: 17
+      relevant: 13
+      precision: 0.765
+      novel: 11
+      verdict: recommend_approve
+
+  - term: "battery council international"
+    status: candidate          # candidate | shadow_tested | approved | rejected
+    doc_frequency: 4
+    discovered_round: 1
+    example: "Battery Council International Home | Battery Council International"
+    shadow_test:
+      raw: 4
+      relevant: 2
+      precision: 0.500
+      novel: 1
+      verdict: insufficient
+
   - term: "rechargeable lithium"
     status: candidate          # candidate | shadow_tested | approved | rejected
     doc_frequency: 3
