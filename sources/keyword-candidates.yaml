@@ -1,0 +1,51 @@
+# ============================================================
+# 关键词候选池（系统自动生成 + 影子测试实测）
+# ------------------------------------------------------------
+# 工作方式：
+#   ① 系统从高相关文本里挖出候选术语（不直接进正式词表）
+#   ② 下一轮拿这些词去实际采集（结果标记 provisional，不并入正式库）
+#   ③ 用实测精确率证明这个词到底有没有用
+#   ④ **人工只需做最后确认** —— 把 status 改成 approved 即可进正式词表
+#
+# ⚠️ 未确认前不要加入 sources/keyword-taxonomy-eol-battery.yaml 的 discovery_terms
+# ============================================================
+
+generated_at: 2026-09-10T20:37:36
+total_candidates: 3
+
+candidates:
+  - term: "rechargeable lithium"
+    status: candidate          # candidate | shadow_tested | approved | rejected
+    doc_frequency: 3
+    discovered_round: 1
+    example: "Special Conditions: Xtreme Avionics, LLC, Airbus Defense and Space S.A. Model 212 Series A"
+    shadow_test:
+      raw: 20
+      relevant: 8
+      precision: 0.400
+      novel: 9
+      verdict: recommend_approve
+
+  - term: "battery system"
+    status: candidate          # candidate | shadow_tested | approved | rejected
+    doc_frequency: 3
+    discovered_round: 1
+    example: "Special Conditions: Xtreme Avionics, LLC, Airbus Defense and Space S.A. Model 212 Series A"
+    shadow_test:
+      raw: 25
+      relevant: 5
+      precision: 0.200
+      novel: 12
+      verdict: recommend_approve
+
+  - term: "battery system installations"
+    status: candidate          # candidate | shadow_tested | approved | rejected
+    doc_frequency: 3
+    discovered_round: 1
+    example: "Special Conditions: Xtreme Avionics, LLC, Airbus Defense and Space S.A. Model 212 Series A"
+    shadow_test:
+      raw: 6
+      relevant: 1
+      precision: 0.167
+      novel: 1
+      verdict: insufficient

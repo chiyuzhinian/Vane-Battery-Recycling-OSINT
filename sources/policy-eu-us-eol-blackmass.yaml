@@ -1,0 +1,309 @@
+# ============================================================
+# 欧盟 / 美国 · 退役电池 + 报废汽车(ELV) + 黑粉 —— 政策法规源清单
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 更新：2026-09-10
+# 关键词体系见：sources/keyword-taxonomy-eol-battery.yaml
+# ------------------------------------------------------------
+# 探针结果（2026-09-10 curl 实测）已如实标注，未验证的一律标 false，不写死。
+# ============================================================
+
+version: 1
+scope: { regions: [EU, US], domain: eol-battery + elv + black-mass }
+enabled: true
+
+# ============================================================
+# 欧盟
+# ============================================================
+eu:
+  # ---------- 一级立法：全部走 SPARQL（HTML 被 202 反爬，实测）----------
+  sources:
+    - id: eu_eurlex_battery_reg
+      name: 电池与废电池法规 (EU) 2023/1542
+      domain: eur-lex.europa.eu
+      access: { method: sparql, celex: "32023R1542", verified: true, latency: slow }
+      tier: official
+      base_credibility: 100
+      clusters: [C1_eol_battery, C4_recycling_efficiency, C5_epr_collection, C7_duediligence_crm, C8_carbon_passport]
+      note: 主干法规；实测含 **14 个更正版本**，另废止旧电池指令 2006/66/EC
+
+    - id: eu_eurlex_elv
+      name: 报废汽车（ELV）指令 2000/53/EC 及其替代法规
+      domain: eur-lex.europa.eu
+      access: { method: sparql, celex: "32000L0053", verified: true, latency: slow }
+      tier: official
+      base_credibility: 100
+      clusters: [C2_elv, C1_eol_battery]
+      related_celex:
+        - id: "52023PC0451"
+          desc: 2023 年新 ELV 法规提案（COM(2023)451）—— 车辆设计中电池的循环性要求
+          note: 提案阶段，情报价值最高（生效早 2-3 年）
+      note: |
+        ELV 指令是电池回收的**上游规则来源**：它规定报废车辆拆解时必须移除电池。
+        新提案将把 ELV 从"指令"升格为"法规"，并加入再生材料强制比例。
+
+    - id: eu_eurlex_waste_shipment
+      name: 废物转移条例 (EU) 2024/1157
+      domain: eur-lex.europa.eu
+      access: { method: sparql, celex: "32024R1157", verified: true, latency: slow }
+      tier: official
+      base_credibility: 100
+      clusters: [C3_black_mass, C6_transport_hazmat]
+      note: |
+        ⭐ **黑粉监管的核心法规**。黑粉属于废物，其跨境转移受本条例约束：
+          · 向非 OECD 国家出口废电池/黑粉基本被禁
+          · 需预先知情同意（PIC）程序
+        实测：EUR-Lex HTML 页返回 202 反爬，但 SPARQL 可查到该 CELEX。
+
+    - id: eu_eurlex_crm
+      name: 关键原材料法案 (EU) 2024/1252
+      domain: eur-lex.europa.eu
+      access: { method: sparql, celex: "32024R1252", verified: true, latency: slow }
+      tier: official
+      base_credibility: 100
+      clusters: [C7_duediligence_crm, C3_black_mass]
+      note: 定义了哪些材料是"战略/关键"——决定黑粉回收的经济价值与政策支持力度
+
+    - id: eu_eurlex_oj_l
+      name: 欧盟官方公报 L 系列（法规动态）
+      domain: eur-lex.europa.eu
+      access: { method: sparql, oj_series: L, verified: true }
+      tier: official
+      base_credibility: 100
+      clusters: [C4_recycling_efficiency, C1_eol_battery]
+      note: 2025-07-04 发布废电池回收效率核算与验证新规（OJ L 202500606）
+
+  # ---------- 政策进度页：HTML 抓取 + diff 监测 ----------
+  policy_pages:
+    - id: eu_dg_env_elv
+      name: 欧盟委员会 DG ENV - 报废汽车专题
+      url: https://environment.ec.europa.eu/topics/waste-and-recycling/end-life-vehicles_en
+      verified: true                  # ✅ 实测 200 / 92 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C2_elv, C1_eol_battery]
+      strategy: page_diff
+      check_frequency: weekly
+      note: ELV 法规进展最权威入口；用页面 diff 捕捉立法节点变化
+
+    - id: eu_dg_env_waste_shipment
+      name: 欧盟委员会 DG ENV - 废物转移专题
+      url: https://environment.ec.europa.eu/topics/waste-and-recycling/waste-shipments_en
+      verified: true                  # ✅ 实测 200 / 98.8 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C3_black_mass, C6_transport_hazmat]
+      strategy: page_diff
+      check_frequency: weekly
+
+    - id: eu_dg_env_batteries
+      name: 欧盟委员会 DG ENV - 电池专题
+      url: https://environment.ec.europa.eu/topics/waste-and-recycling/batteries_en
+      verified: true                  # ✅ 实测 200 / 82 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C1_eol_battery, C4_recycling_efficiency, C8_carbon_passport]
+      strategy: page_diff
+      check_frequency: weekly
+
+    - id: eu_dg_grow_automotive
+      name: 欧盟委员会 DG GROW - 汽车工业
+      url: https://single-market-economy.ec.europa.eu/sectors/automotive-industry_en
+      verified: true                  # ✅ 实测 200 / 101 KB
+      tier: official
+      base_credibility: 95
+      clusters: [C2_elv]
+      strategy: page_diff
+      check_frequency: monthly
+
+    - id: eu_echa_batteries
+      name: ECHA - 电池法规相关（化学品与危废定性）
+      url: https://echa.europa.eu/regulations/batteries-regulation
+      verified: false
+      blocked: true                   # 🚫 实测 403
+      fallback: "vane site:echa.europa.eu batteries"
+      tier: official
+      base_credibility: 95
+      clusters: [C3_black_mass]
+      need_browser: true              # 可用 MCP 浏览器接管
+      check_frequency: weekly
+
+  # ---------- 国际公约 ----------
+  international:
+    - id: unep_basel
+      name: 巴塞尔公约（UNEP）——控制危险废物越境转移
+      url: https://www.basel.int/
+      section_url: https://www.basel.int/Implementation/Controllingtransboundaries/transboundarymovements/tabid/3330/Default.aspx
+      verified: true                  # ✅ 实测 200（首页 47 KB / 栏目 123 KB；响应慢 ~19-25s）
+      tier: official
+      base_credibility: 100
+      clusters: [C3_black_mass, C6_transport_hazmat]
+      strategy: page_diff
+      check_frequency: monthly
+      note: |
+        ⭐ 黑粉跨境贸易的国际法基础。
+        关注点：黑粉/废锂电池是否被列入附件（如 Y49 类目）、修正案谈判进展、
+        以及"电子废物修正案"对电池废物的适用范围。
+        ⚠️ 站点响应极慢（实测 19-25 秒），需把超时调到 60s。
+
+  # ---------- 行业源（交叉验证用，不作事实来源）----------
+  industry:
+    - { id: eu_recharge,  name: RECHARGE（欧洲电池回收协会）, url: "https://rechargebatteries.org/",        verified: true, base_credibility: 85, clusters: [C3_black_mass, C4_recycling_efficiency] }
+    - { id: eu_acea,      name: ACEA（欧洲汽车制造商协会）,   url: "https://www.acea.auto/",                verified: true, base_credibility: 82, clusters: [C2_elv] }
+    - { id: eu_eurometaux, name: Eurometaux（欧洲有色金属协会）, url: "https://eurometaux.eu/",              verified: true, base_credibility: 82, clusters: [C3_black_mass, C7_duediligence_crm] }
+    - { id: eu_tande,     name: Transport & Environment,     url: "https://www.transportenvironment.org/topics/batteries/", verified: true, base_credibility: 82, clusters: [C2_elv, C4_recycling_efficiency] }
+    - { id: eu_eurobat,   name: EUROBAT,                     url: "https://www.eurobat.org/",              verified: true, base_credibility: 85, clusters: [C1_eol_battery] }
+    - { id: eu_de_uba,    name: 德国联邦环境署 UBA,           url: "https://www.umweltbundesamt.de/en/topics/waste-resources", verified: true, base_credibility: 92, clusters: [C1_eol_battery, C2_elv] }
+
+# ============================================================
+# 美国
+# ============================================================
+us:
+  # ---------- 联邦公报：一个源覆盖多机构（实测最有效）----------
+  federal_register:
+    id: us_federal_register
+    name: 联邦公报 Federal Register
+    api: https://www.federalregister.gov/api/v1/documents.json
+    verified: true                    # ✅ 实测 200，无需 API Key
+    tier: official
+    base_credibility: 100
+    method: api
+    # ⭐ 按机构定向检索比泛搜精准得多（实测 count 可核对）
+    agencies_by_cluster:
+      C3_black_mass:            [environmental-protection-agency, transportation-department, energy-department]
+      C1_eol_battery:           [environmental-protection-agency, energy-department]
+      C2_elv:                   [environmental-protection-agency, transportation-department]
+      C6_transport_hazmat:      [transportation-department]
+      C7_duediligence_crm:      [energy-department, internal-revenue-service]
+    terms_by_cluster:
+      C3_black_mass:            ["black mass", "shredded lithium", "hazardous secondary material", "battery recycling"]
+      C1_eol_battery:           ["waste battery", "spent lithium", "used lithium-ion batter", "battery disposal"]
+      C2_elv:                   ["end-of-life vehicle", "salvage vehicle", "vehicle recycling", "junk vehicle"]
+      C6_transport_hazmat:      ["lithium battery transport", "hazmat lithium", "damaged defective recalled"]
+      C7_duediligence_crm:      ["critical minerals", "battery material", "advanced manufacturing production credit"]
+    check_frequency: weekly
+
+  # ---------- 部门专页 ----------
+  agency_pages:
+    - id: us_epa_universal_waste
+      name: EPA - Universal Waste 规则（电池定性的关键）
+      url: https://www.epa.gov/hw/universal-waste
+      verified: true                  # ✅ 实测 200 / 80.8 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C3_black_mass, C1_eol_battery]
+      note: |
+        ⭐ 美国**没有联邦电池 EPR 法**，退役电池的联邦监管主要靠 RCRA 下的
+        Universal Waste 规则 —— 这决定了黑粉在美国的法律定性（废物 or 产品）。
+      strategy: page_diff
+      check_frequency: weekly
+
+    - id: us_epa_rcra
+      name: EPA - RCRA（资源保护与回收法）
+      url: https://www.epa.gov/rcra
+      verified: true                  # ✅ 实测 200 / 58.5 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C3_black_mass, C1_eol_battery]
+      strategy: page_diff
+      check_frequency: monthly
+
+    - id: us_epa_batteries
+      name: EPA - 废旧锂电池
+      url: https://www.epa.gov/recycle/used-lithium-ion-batteries
+      verified: true                  # ✅ 实测 200 / 75.7 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C1_eol_battery]
+      strategy: page_diff
+      check_frequency: weekly
+
+    - id: us_phmsa
+      name: DOT PHMSA - 锂电池运输安全
+      url: https://www.phmsa.dot.gov/lithiumbatteries
+      verified: false
+      blocked: true                   # 🚫 实测 403（整站拦截）
+      tier: official
+      base_credibility: 100
+      clusters: [C6_transport_hazmat, C3_black_mass]
+      need_browser: true              # ⭐ 用 MCP 浏览器接管
+      note: |
+        ⭐ 黑粉与退役电池的**运输合规**在美国归 PHMSA 管（49 CFR 173）。
+        直连 403 → 用 Playwright MCP 打开并读取。
+        关键议题：UN3480/3481 分类、DDR（损坏/缺陷/召回）电池规则、州际运输。
+
+    - id: us_doe_mesc
+      name: DOE MESC - 制造业与能源供应链
+      url: https://www.energy.gov/mesc
+      verified: true                  # ✅ 实测 200 / 139 KB
+      tier: official
+      base_credibility: 98
+      clusters: [C7_duediligence_crm, C3_black_mass]
+      strategy: page_diff
+      check_frequency: monthly
+
+    - id: us_usgs_minerals
+      name: USGS - 关键矿产
+      url: https://www.usgs.gov/programs/mineral-resources-program
+      verified: true                  # ✅ 实测 200 / 112 KB
+      tier: official
+      base_credibility: 95
+      clusters: [C7_duediligence_crm]
+      check_frequency: monthly
+
+    - id: us_irs_45x
+      name: IRS - 45X 先进制造生产抵免
+      url: https://www.irs.gov/credits-deductions/advanced-manufacturing-production-credit
+      verified: true                  # ✅ 实测 200 / 101.3 KB
+      tier: official
+      base_credibility: 100
+      clusters: [C7_duediligence_crm]
+      check_frequency: weekly
+
+    - id: us_congress_bills
+      name: Congress.gov - 立法提案
+      url: https://www.congress.gov/search?q=battery%20recycling
+      api: https://api.congress.gov/v3/bill
+      verified: false
+      blocked: true                   # 🚫 实测 403（需 API Key）
+      tier: official
+      base_credibility: 100
+      clusters: [C1_eol_battery, C2_elv]
+      requires_api_key: CONGRESS_API_KEY
+      note: 需在 api.data.gov 申请免费 Key；提案阶段比生效早 6-18 个月
+
+  # ---------- 州级（美国电池 EPR 的实际立法层级）----------
+  state:
+    - id: us_state_ca_calrecycle
+      name: 加州 CalRecycle（全美电池 EPR 样板）
+      url: https://calrecycle.ca.gov/bev/
+      verified: false
+      blocked: true                   # 🚫 实测 403
+      tier: official
+      base_credibility: 92
+      clusters: [C5_epr_collection, C1_eol_battery]
+      need_browser: true
+      note: SB 212 建立的电池 EPR 体系常被其他州照抄
+
+  # ---------- 行业源 ----------
+  industry:
+    - { id: us_naatbatt,     name: NAATBatt International, url: "https://naatbatt.org/",            verified: true, base_credibility: 80, clusters: [C3_black_mass, C7_duediligence_crm] }
+    - { id: us_recell,       name: ReCell Center（阿贡实验室）, url: "https://www.recellcenter.org/", verified: true, base_credibility: 88, clusters: [C3_black_mass, C4_recycling_efficiency], requires_browser_ua: true }
+    - { id: us_bci,          name: Battery Council International, url: "https://batterycouncil.org/", verified: false, blocked: true, base_credibility: 82, clusters: [C5_epr_collection], need_browser: true }
+    - { id: us_call2recycle, name: Call2Recycle,           url: "https://www.call2recycle.org/",     verified: false, blocked: true, base_credibility: 80, clusters: [C5_epr_collection], need_browser: true }
+
+# ============================================================
+# 需 MCP 浏览器接管的站点（直连被拦）
+# ------------------------------------------------------------
+# 已实测 403/202 且 curl 无法绕过：
+#   us_phmsa              403   ⭐ 黑粉运输合规核心
+#   eu_echa_batteries     403
+#   us_state_ca_calrecycle 403
+#   us_bci / us_call2recycle 403
+#   eur-lex.europa.eu HTML 202（但 SPARQL 已覆盖，无需浏览器）
+# ============================================================
+browser_required:
+  - { id: us_phmsa,               priority: 1, reason: 黑粉/退役电池运输合规在美国的唯一官方入口 }
+  - { id: us_state_ca_calrecycle, priority: 2, reason: 州级 EPR 样板 }
+  - { id: eu_echa_batteries,      priority: 3, reason: 黑粉危废定性 }
+  - { id: us_bci,                 priority: 4, reason: 州级立法推手 }

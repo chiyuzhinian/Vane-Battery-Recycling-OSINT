@@ -1,0 +1,222 @@
+# ============================================================
+# 关键词体系：欧盟 / 美国「退役电池 · 报废汽车 · 黑粉」政策法规
+# ------------------------------------------------------------
+# 归属：Vane-Battery-Recycling-OSINT / sources
+# 更新：2026-09-10
+# 范围：**只看欧盟与美国**，不再覆盖中国
+# ------------------------------------------------------------
+# 本文件回答一个方法论问题：**"这个关键词对应的数据，应该去哪个源找？"**
+#
+# 工作流（三步，缺一不可）：
+#   ① 关键词分层   —— 把一个业务概念拆成"监管会用的官方术语"，
+#                     因为**法规不会用我们的口语，只会用它的法定术语**
+#   ② 源定位       —— 判断这类信息在哪个监管层级产生（立法/实施/执法/运输/统计）
+#   ③ 搜证 → 抓取  —— 先在这些源里定向搜，命中后再抓全文
+#
+# ⚠️ 核心认知：**关键词不是拿来搜的，是拿来定位源的。**
+#    例如"黑粉"这个词在法规里根本不存在，欧盟用的是
+#    "intermediate waste from battery recycling"，美国用的是
+#    "shredded lithium-ion batteries / hazardous secondary material"。
+# ============================================================
+
+version: 1
+scope: { regions: [EU, US], topic: end-of-life battery + ELV + black mass }
+
+# ============================================================
+# ⭐ 精选检索词（DISCOVERY TERMS）
+# ------------------------------------------------------------
+# 设计要点：**不是所有同义词都值得拿去搜。**
+#   · clusters 里的 terms 是"概念全集"，用于人工理解与后续 NLP 标注
+#   · 下面这 12 个才是**真正拿去检索**的——挑选标准：
+#       ① 该词会出现在法规标题/正文里（官方用词，非口语）
+#       ② 覆盖面广（一个词能带出一批相关法规）
+#       ③ 彼此不重叠（避免同一批结果被反复命中，浪费查询配额）
+# 实测教训：把 83 个同义词全拿去跑 SPARQL，单次要 15-80 分钟，
+#          且后 70 个词几乎带不回新结果（长尾词在法规文本中不出现）。
+# ============================================================
+discovery_terms:
+  - { term: "batteries",              cluster: C1_eol_battery,          why: 覆盖面最广，能带出所有电池相关立法 }
+  - { term: "waste batteries",        cluster: C1_eol_battery,          why: 法规法定用语（"废电池"） }
+  - { term: "end-of-life vehicle",    cluster: C2_elv,                  why: ELV 法规的标准表述 }
+  - { term: "vehicle recycling",      cluster: C2_elv,                  why: 车辆回收相关法规 }
+  - { term: "black mass",             cluster: C3_black_mass,           why: 直接命中（欧盟文件中也开始用该词） }
+  - { term: "waste shipment",         cluster: C3_black_mass,           why: 黑粉跨境转移的法规链 }
+  - { term: "recycled content",      cluster: C4_recycling_efficiency, why: 再生含量强制要求 }
+  - { term: "recycling efficiency",   cluster: C4_recycling_efficiency, why: 回收效率核算规则 }
+  - { term: "producer responsibility", cluster: C5_epr_collection,      why: EPR 义务 }
+  - { term: "lithium battery transport", cluster: C6_transport_hazmat,  why: 运输合规 }
+  - { term: "critical raw materials", cluster: C7_duediligence_crm,     why: 黑粉的战略价值来源 }
+  - { term: "battery passport",       cluster: C8_carbon_passport,      why: 护照与追溯 }
+
+# ============================================================
+# 关键词簇（8 个）
+# ============================================================
+clusters:
+
+  - id: C1_eol_battery
+    name: 退役 / 报废电池本体
+    intent: 电池进入废弃阶段的法定定义、报废标准、移除要求
+    terms:
+      en: [end-of-life battery, waste battery, waste batteries, spent battery,
+           retired battery, used battery, battery reaching end of life,
+           removal of batteries, removability, replaceability, battery depollution]
+      official_eu: ["waste batteries", "batteries that have become waste", "portable batteries"]
+      official_us: ["used lithium-ion batteries", "spent batteries", "discarded batteries"]
+    where_data_lives:
+      - { layer: 立法, eu: "EUR-Lex 2023/1542（电池法规）第 8 章", us: "EPA RCRA / Universal Waste Rule" }
+      - { layer: 实施, eu: "DG ENV 电池专题页 + 授权法案", us: "EPA 州级授权与指南" }
+      - { layer: 标准, eu: "CEN/CENELEC Harmonised Standards", us: "NFPA / UL 标准（US 常走行业标准）" }
+    source_ids: [eu_eurlex_battery_reg, eu_dg_env_batteries, us_epa_batteries, us_epa_universal_waste]
+
+  - id: C2_elv
+    name: 报废汽车（ELV）与拆解
+    intent: 车辆报废流程中电池的处理义务、拆解要求、粉碎残渣
+    terms:
+      en: [end-of-life vehicle, ELV, end of life vehicles, vehicle dismantling,
+           depollution of vehicles, certificate of destruction, deregistration,
+           auto shredder residue, ASR, vehicle recycling]
+      official_eu: [end-of-life vehicles, ELV Directive, "Directive 2000/53/EC",
+                    "Regulation on circularity requirements for vehicle design"]
+      official_us: [salvage vehicle, junk vehicle, motor vehicle recycling, scrap vehicle]
+    where_data_lives:
+      - { layer: 立法, eu: "ELV 指令 2000/53/EC + **2023 年新 ELV 法规提案 COM(2023)451**", us: "无联邦 ELV 法 → 州法 + EPA 危废规则" }
+      - { layer: 政策, eu: "DG ENV「End-of-life vehicles」专题页", us: "州级 salvage/junk 法规（各州差异大）" }
+      - { layer: 行业, eu: "ACEA（欧洲汽车制造商协会）", us: "（暂缺权威）" }
+    source_ids: [eu_eurlex_elv, eu_dg_env_elv, eu_acea, us_federal_register]
+
+  - id: C3_black_mass
+    name: 黑粉（Black Mass）★用户特别关注
+    intent: 黑粉的定性（废物/产品）、跨境转移、出口管制、加工与冶炼
+    terms:
+      en: [black mass, blackmass, battery shredding, shredded batteries,
+           shredder fines, intermediate waste, intermediate product from battery recycling,
+           black mass processing, black mass refining, black mass export, black mass trade,
+           black mass smelting, battery breaking]
+      official_eu: ["intermediate wastes from battery recycling",
+                    "hazardous waste containing lithium", "waste shipment of batteries"]
+      official_us: ["shredded lithium-ion batteries", "hazardous secondary material",
+                    "battery shredder material", "black mass"]
+    # ⚠️ 黑粉的监管不在"电池法"里，而在【废物跨境转移 + 危险货物运输 + 回收效率核算】三条线上
+    where_data_lives:
+      - { layer: 跨境转移, eu: "**废物转移条例 (EU) 2024/1157** + Basel 公约", us: "EPA 出口/进口废物规则（RCRA Subtitle C）" }
+      - { layer: 国际公约, intl: "**Basel 公约**（UNEP）——黑粉条目与修正案谈判", us: "美国是 Basel 缔约方但未批准修正案" }
+      - { layer: 危险货物运输, eu: "ADR（欧洲危险货物道路运输协定）", us: "**DOT PHMSA** 锂电运输规则" }
+      - { layer: 定性认定, eu: "ECHA / 委员会关于黑粉是否属危险废物的认定", us: "EPA RCRA 危废认定与豁免" }
+      - { layer: 加工产能, eu: "行业（RECHARGE / Eurometaux）", us: "行业（NAATBatt）" }
+    source_ids: [eu_eurlex_waste_shipment, unep_basel, us_phmsa, us_epa_universal_waste,
+                 eu_recharge, eu_eurometaux, us_naatbatt]
+
+  - id: C4_recycling_efficiency
+    name: 回收效率与回收含量
+    intent: 回收率强制目标、回收含量计算与验证、再生材料比例
+    terms:
+      en: [recycling efficiency, material recovery, recovered materials, recycled content,
+           recovery rate, recycling target, material recovery rate, mass balance]
+      official_eu: ["recycling efficiency", "recycled content", "verification of recycling efficiency"]
+    where_data_lives:
+      - { layer: 立法, eu: "(EU) 2023/1542 第 7 章 + **2025-07-04 回收效率核算新规 OJ L 202500606**" }
+      - { layer: 技术支撑, eu: "联合研究中心（JRC）技术报告" }
+    source_ids: [eu_eurlex_battery_reg, eu_eurlex_oj_l, eu_dg_env_batteries]
+
+  - id: C5_epr_collection
+    name: 生产者责任延伸与收集目标
+    intent: EPR 义务、收集率目标、押金返还、回收网络
+    terms:
+      en: [extended producer responsibility, EPR, producer responsibility organisation,
+           PRO, collection target, collection rate, take-back scheme, deposit return scheme,
+           battery collection, separate collection]
+      official_us: ["battery producer responsibility", "battery stewardship", "state battery recycling law"]
+    where_data_lives:
+      - { layer: 立法 EU, eu: "(EU) 2023/1542 第 8 章（收集目标 45%→63%→73%）" }
+      - { layer: 立法 US, us: "**州级 EPR 法**（加州 SB 212、新泽西、华盛顿等）——美国无联邦层面" }
+      - { layer: 数据, eu: "Eurostat（电池与蓄电池回收统计）" }
+    source_ids: [eu_eurlex_battery_reg, eu_eurostat_batteries, us_state_ca_calrecycle, us_call2recycle]
+
+  - id: C6_transport_hazmat
+    name: 危险货物运输（退役电池与黑粉）
+    intent: 运输分类、包装要求、SOC 状态判定、跨州/跨境运输
+    terms:
+      en: [dangerous goods, hazardous materials, hazmat, UN 3480, UN 3481, UN 3090, UN 3091,
+           damaged defective recalled batteries, DDR batteries, transport of waste batteries,
+           ADR, IMDG, packaging instruction, state of charge]
+      official_us: ["lithium battery air transport", "hazmat special permit", "PHMSA lithium battery"]
+    where_data_lives:
+      - { layer: 国际规则, intl: "UN 危险货物运输建议书（橙皮书）" }
+      - { layer: 区域规则, eu: "ADR / RID / IMDG" }
+      - { layer: 美国规则, us: "**DOT PHMSA HM-215 / 49 CFR 173**" }
+    source_ids: [us_phmsa, us_federal_register, unep_basel]
+
+  - id: C7_duediligence_crm
+    name: 尽职调查与关键原材料
+    intent: 供应链尽职调查义务、关键原材料清单、二次资源战略地位
+    terms:
+      en: [due diligence, supply chain due diligence, critical raw materials,
+           critical minerals, strategic raw materials, secondary raw materials,
+           material security, recycling as domestic source]
+    where_data_lives:
+      - { layer: 立法 EU, eu: "**关键原材料法案 (EU) 2024/1252** + 2023/1542 第 5 章尽职调查" }
+      - { layer: 立法 US, us: "**IRA 45X**（先进制造生产抵免）+ DOE 关键材料清单" }
+      - { layer: 数据 US, us: "USGS Mineral Commodity Summaries" }
+    source_ids: [eu_eurlex_battery_reg, eu_eurlex_crm, us_irs_45x, us_usgs_minerals, us_federal_register]
+
+  - id: C8_carbon_passport
+    name: 碳足迹与电池护照
+    intent: 碳足迹申报、数字产品护照、追溯体系
+    terms:
+      en: [carbon footprint, carbon footprint declaration, battery passport,
+           digital product passport, lifecycle assessment, LCA, traceability,
+           battery identification, QR code battery]
+    where_data_lives:
+      - { layer: 立法, eu: "(EU) 2023/1542 第 9-10 章 + 授权法案（碳足迹 2025 起分阶段）" }
+      - { layer: 实施, eu: "DG ENV + JRC 的方法学与格式规范" }
+    source_ids: [eu_eurlex_battery_reg, eu_dg_env_batteries, eu_dg_env_news]
+
+# ============================================================
+# 术语对照表（"我们说的" vs "法规说的"）
+# ------------------------------------------------------------
+# ⚠️ 直接用口语词搜官方库必然低召回。这张表是**搜索词翻译层**。
+# ============================================================
+term_mapping:
+  - { colloquial: 黑粉,     eu_official: "intermediate wastes from battery recycling", us_official: "shredded lithium-ion batteries / black mass" }
+  - { colloquial: 退役电池, eu_official: "waste batteries", us_official: "used / spent lithium-ion batteries" }
+  - { colloquial: 报废汽车, eu_official: "end-of-life vehicles (ELV)", us_official: "salvage / junk vehicles" }
+  - { colloquial: 回收率,   eu_official: "recycling efficiency / recycled content", us_official: "material recovery" }
+  - { colloquial: 梯次利用, eu_official: "repurposing / second life", us_official: "repurposing / second use" }
+  - { colloquial: 危废,     eu_official: "hazardous waste", us_official: "hazardous waste (RCRA Subtitle C)" }
+  - { colloquial: 跨境转移, eu_official: "shipment of waste", us_official: "export/import of hazardous waste" }
+
+# ============================================================
+# 源定位总表（每类信息在哪个监管层级产生）
+# ============================================================
+layer_map:
+  EU:
+    - { layer: 一级立法,    providers: [EUR-Lex (CELEX), 官方公报 OJ L 系列] }
+    - { layer: 二级立法,    providers: [授权法案 / 实施法案（DG ENV 发布）] }
+    - { layer: 成员国实施,  providers: [德国 UBA, 法国 ADEME] }
+    - { layer: 统计,        providers: [Eurostat] }
+    - { layer: 化学品与定性, providers: [ECHA（⚠️ 反爬 403）] }
+    - { layer: 国际公约,    providers: [UNEP Basel Convention] }
+    - { layer: 行业声音,    providers: [RECHARGE, EUROBAT, Eurometaux, ACEA, T&E] }
+  US:
+    - { layer: 联邦法规,    providers: ["Federal Register（一站式，按机构过滤 DOE/EPA/IRS/DOT）"] }
+    - { layer: 危废与回收,  providers: [EPA RCRA / Universal Waste] }
+    - { layer: 运输,        providers: ["DOT PHMSA（⚠️ 直连 403，需浏览器）"] }
+    - { layer: 税收激励,    providers: [IRS 45X] }
+    - { layer: 矿产数据,    providers: [USGS] }
+    - { layer: 立法提案,    providers: ["Congress.gov（需免费 API Key）"] }
+    - { layer: 州级,        providers: ["加州 CalRecycle（⚠️ 403）等各州 EPR 立法"] }
+
+# ============================================================
+# 采集优先级（按信息价值 × 可得性）
+# ============================================================
+priority:
+  - { rank: 1, target: eu_eurlex_battery_reg,    reason: 主干法规 + 14 个更正版本，SPARQL 已打通 }
+  - { rank: 1, target: eu_eurlex_waste_shipment, reason: 黑粉跨境转移的核心法规 }
+  - { rank: 1, target: unep_basel,               reason: 黑粉国际公约层，跨境贸易必看 }
+  - { rank: 1, target: us_federal_register,      reason: 一个源覆盖 DOE/EPA/IRS/DOT，实测可用 }
+  - { rank: 2, target: eu_eurlex_elv,            reason: ELV 法规（含 2023 新提案）}
+  - { rank: 2, target: eu_dg_env_elv,            reason: ELV 政策进展最权威入口 }
+  - { rank: 2, target: eu_eurlex_crm,            reason: 关键原材料法案——黑粉的战略价值来源 }
+  - { rank: 3, target: us_epa_universal_waste,   reason: 美国黑粉定性的关键 }
+  - { rank: 3, target: us_phmsa,                 reason: 运输合规（需 MCP 浏览器） }
+  - { rank: 4, target: 行业源,                    reason: 交叉验证用，不作事实来源 }
