@@ -474,6 +474,238 @@ def judge_policy(text: str, title: str | None = None) -> RelevanceVerdict:
     )
 
 
+# ============================================================
+# 门户类批量源判定（scenario="portal"）—— Federal Register / BOE 等批量文书库
+# ------------------------------------------------------------
+# ⭐ 判据不是拍脑袋写的，来自**用户审核给出的标准样本**（2026-09-12）。
+#    用户原话：「我需要的是**报废退役电池处置**相关的政策法规，黑粉也有」
+#    「这个是符合标准的 —— 按照这个纠正」 ※指 PHMSA 安全通告
+#
+#   ✅ 正样本（标准的形状）
+#      PHMSA《Safety Advisory Notice for the Disposal and Recycling of
+#      Lithium Batteries in Commercial Transportation》
+#      —— 「退役/损坏状态的电池」×「处置/回收动作」×「操作性规则」，
+#         三者都在**主旨**上（标题即 "Disposal and Recycling of ... Batteries"）
+#   ✅ 正样本（用户标注 relevant）
+#      FR 2024-09094 清洁车辆抵免（标题含 Critical Minerals and Battery
+#      Components）—— 涉电池材料合规，按本判据落「待人工」档
+#   ❌ 负样本（用户标注 irrelevant）
+#      FR 2024-08913《Interpretation of Foreign Entity of Concern》
+#      —— "recycling" 只作为**拨款项目名**出现（"Battery Manufacturing and
+#         Recycling Grants programs"），规则本身讲的是外国实体认定
+#   ❌ 实测噪声
+#      TSCA「新化学物质状态通告」（正文列了个 battery component 化学品）
+#      NESHAP「空气排放标准」（正文顺带提了一次电池回收商）
+#
+# 由此得到三条可执行规则：
+#   ① **身份优先**：主依据是「标题 + 摘要」，不是全文任意位置的命中。
+#      FR 的 excerpts 是检索词扫到的零散片段 —— "某处提到" ≠ "在讲这个"。
+#      （与浏览器通道同一原则：那里已证明整页噪声会让判定失真）
+#   ② **"回收/处置"的两种出现方式必须分开**：
+#        被规制对象（"shipping batteries for recycling"、"recycled in
+#                    North America"）        → ✅ 证据
+#        财政工具宾语（"Recycling Grants programs"、"prioritize recycling
+#                    applicants"）            → ❌ 不是证据（项目名/资格条件）
+#   ③ **材料/供应链类**（battery component、critical minerals、clean vehicle
+#      credit）不再单独判相关 —— 没有处置语义，一律转人工。
+# ============================================================
+
+# 处置链证据：要求「电池/车辆」与「处置/退役」**在同一短语内**共现
+PORTAL_DISPOSAL_PATTERNS = [
+    # 退役状态 + 电池
+    r"(spent|used|waste|end[- ]of[- ]life|retired|scrapped|discarded|dead)\s+"
+    r"(lithium[- ]ion\s+|li[- ]ion\s+)?batter",
+    r"batter\w*[\s,]{1,6}(spent|end[- ]of[- ]life|waste|scrap|retired)",
+    # 处置/回收动作 + 电池（双向；含 reuse，梯次利用同属处置链）
+    r"batter\w*[\s\S]{0,40}?\b(recycl|dispos|shredd|dismantl|repurpos|"
+    r"second[- ]life|salvag|reus)",
+    r"\b(recycl|dispos|shredd|dismantl|repurpos|salvag|reus)\w*[\s\S]{0,30}?"
+    r"(lithium[- ]ion\s+|spent\s+|waste\s+|used\s+|end[- ]of[- ]life\s+)?batter",
+    # 回收体系术语（收集/回收点）
+    r"batter\w*\s+collection", r"collection\s+of\s+batter",
+    # 黑粉（多语）
+    r"black\s+mass", r"masse\s+noire", r"schwarzmasse", r"zwarte\s+massa",
+    r"masa\s+negra", r"黑粉",
+    # 运输 / 包装 / 贮存（处置链环节 —— PHMSA 标准的核心）
+    # ⚠️ 这里**必须收窄**（实测误收，2026-09-12）：
+    #    首版用 `batter\w* ...(transport|shipment|shipping|packag)` 的宽间隔匹配，
+    #    结果把两条**完全无关**的航空文书也捞成"相关"：
+    #      · "Special Conditions: ... Non-Rechargeable Lithium Batteries ...
+    #        on certain **transport category airplanes**"  ← transport 是航空器类别词
+    #      · "FMVSS No. 305a Electric-Powered Vehicles ... National **Transport**..."
+    #    教训：`transport` 在英文法规里**不只表示货运**。必须要求它与电池
+    #    构成"运输某物"的句法，而不是碰巧同段。
+    r"batter\w*[\s-]{0,2}(transport|shipment|shipping)",           # battery transport / shipment
+    r"(transport|shipment|shipping|packaging)\s+of\s+.{0,20}?batter",  # transport of ... batteries
+    r"batter\w*[\s\S]{0,20}?\bfor\s+(disposal|recycling|transport)",
+    r"(damaged|defective|recalled)[\s,]+.{0,25}batter",
+    r"\bun\s*348[01]\b", r"\b49\s+cfr\s+17",
+    # 报废车侧
+    r"end[- ]of[- ]life\s+vehicle", r"\belvs?\b", r"\baltfahrzeug",
+    r"v[eé]hicule\s+hors", r"\bvhu\b", r"autowrak",
+]
+
+# 财政工具框架 —— "回收/处置"出现在这里时**不算处置证据**（08913 的判例）
+PORTAL_FINANCIAL_FRAME = [
+    r"(recycl\w*|dispos\w*)\s+(grants?|programs?|funding|applicants?|awards?|projects?)",
+    r"(grants?|funding|programs?|credits?)[\s\S]{0,24}\bfor\b[\s\S]{0,24}(recycl|dispos)",
+    r"priorit\w+[\s\S]{0,40}(recycl|dispos)\w*\s+applicants?",
+]
+
+# 材料 / 供应链锚点 —— 单独出现（无处置证据）时转人工，不直接判相关
+PORTAL_MATERIAL_ANCHORS = [
+    r"batter\w*\s+(components?|materials?|supply\s+chains?)",
+    r"critical\s+(minerals?|materials?)",
+    r"clean\s+vehicle\s+credits?",
+    r"recycled\s+content",
+    r"\b45x\b", r"\b30d\b", r"\b25e\b",
+]
+
+# 标题级程序性模板 —— 这类文书**从不承载处置政策**，直接排除
+#   ⚠️ `foreign-trade zone` **不列入**：FTZ 生产活动通知是真实产能信号，
+#      属于企业情报（但在政策视图里无处置语义，最终仍落"不相关"）。
+#   ⚠️ special permits 的变体要写全（实测漏网）：
+#      "Applications for New" / "Actions on" / "Applications for **Modification To**"
+#      —— 漏了最后一个变体，24 条审批通告混进了"待人工"。
+PORTAL_PROCEDURAL_TITLES = [
+    r"agency information collection activities",
+    r"(notice of )?(actions on|applications? for (new|modification to)|modification to)"
+    r"\s+special permits?",
+    r"notice of public meeting", r"public meeting",
+    r"receipt and status information",       # TSCA 新化学物质状态通告
+    r"proposed collection", r"information collection",
+]
+
+# 标题里的领域锚点（判断"标题是否在讲电池/车辆"）
+PORTAL_DOMAIN_ANCHORS = [
+    r"batter", r"lithium", r"accumulator", r"\bvehicle", r"\belvs?\b",
+    r"电池", r"车辆",
+]
+
+# 身份区长度：标题之后的摘要通常落在前 900 字符内
+_PORTAL_IDENTITY_CHARS = 900
+
+_PORTAL_DISP_RE = [re.compile(p, re.I) for p in PORTAL_DISPOSAL_PATTERNS]
+_PORTAL_FIN_RE = [re.compile(p, re.I) for p in PORTAL_FINANCIAL_FRAME]
+_PORTAL_MAT_RE = [re.compile(p, re.I) for p in PORTAL_MATERIAL_ANCHORS]
+_PORTAL_PROC_RE = [re.compile(p, re.I) for p in PORTAL_PROCEDURAL_TITLES]
+_PORTAL_DOMAIN_RE = [re.compile(p, re.I) for p in PORTAL_DOMAIN_ANCHORS]
+
+
+def _portal_disposal_hits(hay: str) -> list[str]:
+    """列出"处置链"命中，并剔除落在**财政工具框架**内的（08913 的判例）。
+
+    只做"位置剔除"不做"语义理解"：命中点前后 40 字符里若出现
+    grants/programs/applicants 等资助语境，就认为这是在讲**项目**而非**处置**。
+    """
+    out: list[str] = []
+    for rx in _PORTAL_DISP_RE:
+        for m in rx.finditer(hay):
+            snippet = hay[max(0, m.start() - 40): m.end() + 40]
+            if any(f.search(snippet) for f in _PORTAL_FIN_RE):
+                continue                      # 财政工具语境 —— 不是处置证据
+            out.append(m.group(0)[:44])
+    return out
+
+
+def judge_portal_policy(text: str, title: str | None = None) -> RelevanceVerdict:
+    """门户类批量源判定（scenario="portal"）。
+
+    与 `judge_policy` 的差别：**不信任"全文某处提到"**。证据分三层：
+
+      0. 标题是程序性模板（信息收集/会议通知/许可通告）→ 直接排除
+      1. **标题**命中处置链 → 相关（强）            —— PHMSA 判例
+      2. **身份区**（标题 + 摘要前 900 字符）命中处置链：
+           标题含电池/车辆锚点 → 相关
+           标题不含锚点        → 转人工（保守：不直接采信摘要）
+      3. **正文**命中处置链 ≥2 处 → 转人工
+         标题含材料/供应链锚点  → 转人工            —— 09094 判例
+         黑粉监管四线           → 转人工
+      4. 其余 → 不相关
+    """
+    if not text:
+        return RelevanceVerdict(relevant=False, score=0.0)
+
+    title_text = title or ""
+    lowered = f"{title_text}\n{text}".lower()
+
+    # ---- 0a) 拒绝词（沿用政策类）----
+    for bad in REJECT_IF_MATCH:
+        if bad.lower() in lowered:
+            if bad == "启动电池" and any(
+                k in lowered for k in ("法规", "指令", "regulation", "directive", "回收")
+            ):
+                continue
+            return RelevanceVerdict(relevant=False, score=0.0, rejected_by=bad)
+
+    # ---- 0b) 标题程序性模板 → 排除 ----
+    for rx in _PORTAL_PROC_RE:
+        m = rx.search(title_text)
+        if m:
+            return RelevanceVerdict(relevant=False, score=0.0,
+                                    rejected_by=f"procedural:{m.group(0)[:30]}")
+
+    # ---- 1) 标题命中处置链 → 强相关 ----
+    title_hits = _portal_disposal_hits(title_text)
+    if title_hits:
+        return RelevanceVerdict(
+            relevant=True, score=0.9,
+            hits=[f"title:{h}" for h in title_hits[:4]],
+        )
+
+    title_has_anchor = any(rx.search(title_text) for rx in _PORTAL_DOMAIN_RE)
+
+    # ---- 2) 身份区（标题 + 摘要）命中处置链 ----
+    identity = title_text + "\n" + text[:_PORTAL_IDENTITY_CHARS]
+    ident_hits = _portal_disposal_hits(identity)
+    if ident_hits:
+        if title_has_anchor:
+            return RelevanceVerdict(
+                relevant=True, score=0.75,
+                hits=[f"summary:{h}" for h in ident_hits[:4]],
+            )
+        return RelevanceVerdict(
+            relevant=True, score=0.5,
+            hits=[f"summary:{h}" for h in ident_hits[:4]],
+            needs_human_review=True,
+            review_reason="摘要提及电池处置/回收，但标题无电池锚点，需人工确认主旨",
+        )
+
+    # ---- 3a) 正文多处提及处置链 → 转人工 ----
+    body_hits = _portal_disposal_hits(text)
+    if len(body_hits) >= 2:
+        return RelevanceVerdict(
+            relevant=True, score=0.5,
+            hits=[f"body:{h}" for h in body_hits[:4]],
+            needs_human_review=True,
+            review_reason="正文多处提及电池处置/回收，但标题与摘要未体现，需人工确认",
+        )
+
+    # ---- 3b) 标题含材料/供应链锚点 → 转人工（09094 判例）----
+    mat = next((m for rx in _PORTAL_MAT_RE if (m := rx.search(title_text))), None)
+    if mat:
+        return RelevanceVerdict(
+            relevant=True, score=0.5,
+            hits=[f"material:{mat.group(0)[:30]}"],
+            needs_human_review=True,
+            review_reason="电池材料/供应链类（无处置语义），需人工裁决",
+        )
+
+    # ---- 3c) 黑粉监管四线 → 转人工 ----
+    lines = black_mass_lines(text, title_text)
+    if lines:
+        return RelevanceVerdict(
+            relevant=True, score=0.5,
+            hits=[f"line:{n}" for n in lines],
+            needs_human_review=True,
+            review_reason=f"命中黑粉监管线「{'、'.join(lines)}」，"
+                          f"需人工确认与电池/黑粉的关联",
+        )
+
+    # ---- 4) 其余 → 不相关 ----
+    return RelevanceVerdict(relevant=False, score=0.0)
+
+
 def batch_judge(items: list[dict]) -> list[dict]:
     """批量判定。items: [{"id":..., "title":..., "text":...}]"""
     out = []

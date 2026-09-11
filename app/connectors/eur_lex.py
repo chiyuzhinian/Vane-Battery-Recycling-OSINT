@@ -51,6 +51,7 @@ from __future__ import annotations
 import asyncio
 import html
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -535,6 +536,7 @@ class EurLexConnector(BaseConnector):
         picked: dict[str, dict[str, Any]] = {}
         batches = [prefixes[i:i + chunk] for i in range(0, len(prefixes), chunk)]
         for idx, group in enumerate(batches, 1):
+            _t0 = time.monotonic()
             pattern = "|".join(re.escape(p) for p in group)
             # ⚠️⚠️ **SPARQL 字符串层转义**（2026-09-11 修复，5 个批次反复失败的唯一根因）
             #
@@ -587,7 +589,8 @@ class EurLexConnector(BaseConnector):
                     "date": self._val(b, "date"),
                 }
             print(f"    批量 {idx}/{len(batches)} → {len(rows)} 行"
-                  f"（新增 {len(picked) - got_before} 个 CELEX）")
+                  f"（新增 {len(picked) - got_before} 个 CELEX）"
+                  f" {time.monotonic() - _t0:5.1f}s")
 
         for celex, info in picked.items():
             title = info["title"]
