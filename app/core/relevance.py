@@ -48,6 +48,40 @@ STRONG_PATTERNS: list[str] = [
     r"battery material", r"battery component", r"battery supply chain",
 ]
 
+# ============================================================
+# 第一段 B：欧盟成员国语言（德 / 法）—— ⚠️ 不加这一组会丢失整个成员国层
+# ------------------------------------------------------------
+# 实测（2026-09-11）：
+#     altautov（德国 AltfahrzeugV 报废车法，5.4 万字符） → ❌ 未命中必修词
+#     avv     （德国 AVV 欧洲废物目录，危废分类依据）    → ❌ 未命中必修词
+#     ADEME REP-VHU-broyeurs（法国 122 条破碎厂数据）    → ❌ 未命中必修词
+#   即：**数据采到了，但系统不认** —— 这是最危险的一类 bug，
+#   因为采集日志一切正常，只是入不了库。
+#
+# 选词标准：必须是本国**本领域专有名词**，不是通用词。
+# 反而要避免的：bare `batterie`（`batter` 已覆盖）、通用 `Abfall`（=waste，太泛）。
+# ============================================================
+MEMBER_STATE_PATTERNS: list[str] = [
+    # ---- 德语（德国转化 ELV 指令、实施 EU 电池法）----
+    r"altfahrzeug",              # 报废车（德语 ELV 的标准说法）
+    r"altbatterie",              # 废电池
+    r"batteriegesetz", r"\bbattdg\b",      # 德国电池法
+    r"abfallverzeichnis",        # 废物目录（AVV，危废分类）
+    r"fahrzeugverwertung",       # 车辆回收利用
+    r"schwarzmasse",             # 黑粉（德语）
+    r"schredder",                # 破碎机
+    r"r[uü]cknahmepflicht",      # 回收义务
+    # ---- 法语（法国 REP / VHU 体系）----
+    r"\bvhu\b",                  # 报废车（véhicule hors d'usage）
+    r"v[eé]hicule\s+hors\s+d'?usage",
+    r"masse\s+noire",            # 黑粉（法语）
+    r"broyeur",                  # 破碎机 —— 实测这个查出英文找不到的数据集
+    r"d[eé]pollution",           # 去除污染（报废车预处理）
+    r"responsabilit[eé]\s+[eé]largie\s+du\s+producteur",   # 生产者延伸责任
+    r"fili[eè]re\s+[àa]\s+responsabilit",                  # REP 体系的法式说法
+    r"centre\s+de\s+traitement\s+de\s+v[eé]hicules",       # 报废车处理中心
+]
+
 # 第二段 B：上下文词 —— 单独出现不算，必须与"锚点"共现
 CONTEXT_TERMS: list[str] = [
     r"critical mineral", r"critical material", r"due diligence",
@@ -92,7 +126,8 @@ HUMAN_REVIEW_MARKERS: list[str] = [
     "海外建厂", "回收价格",
 ]
 
-_STRONG_RE = [re.compile(p, re.I) for p in STRONG_PATTERNS]
+_STRONG_RE = [re.compile(p, re.I)
+              for p in STRONG_PATTERNS + MEMBER_STATE_PATTERNS]
 _CONTEXT_RE = [re.compile(p, re.I) for p in CONTEXT_TERMS]
 _ANCHOR_RE = [re.compile(p, re.I) for p in CONTEXT_ANCHORS]
 _MAYBE_RE = [re.compile(p, re.I) for p in POLICY_MAYBE_TERMS]
@@ -337,6 +372,16 @@ if __name__ == "__main__":
         ("Air Plan Approval; Georgia; Second Period Regional Haze Plan", "真阴性-空气计划"),
         ("Section 45Y Clean Electricity Production Credit and Section 48E Clean Energy "
          "Investment Credit", "人工复核-能源条款"),
+        # ---- 跨语言回归用例（2026-09-11，全部为实测误杀）----
+        ("Verordnung über die Überlassung, Rücknahme und umweltverträgliche Entsorgung "
+         "von Altfahrzeugen (AltfahrzeugV)", "真阳性-德国报废车法(德语)"),
+        ("Gesetz zur Durchführung der Verordnung (EU) 2023/1542 betreffend Batterien "
+         "und Altbatterien (BattDG)", "真阳性-德国电池法(德语)"),
+        ("Verordnung über das Europäische Abfallverzeichnis (AVV) —— gefährliche "
+         "Abfälle, Schredder-Rückstände", "真阳性-德国废物目录(德语)"),
+        ("REP - VHU - Tonnages collectés Broyeurs depuis 2018 —— "
+         "Nombre_de_carcasses_prises_en_charge", "真阳性-法国破碎厂数据(法语)"),
+        ("Masse noire issue du broyage des véhicules hors d'usage", "真阳性-法语黑粉"),
     ]
     for text, label in policy_samples:
         print(f"  {label:26s} → {judge(text, scenario='policy')}")

@@ -181,6 +181,49 @@ async def collect_us(plan: dict, since: str) -> list:
     return _dedupe(items)
 
 
+# ============================================================
+# 欧盟成员国层（德国 / 法国）—— 走官方结构化通道，不爬页面
+# ------------------------------------------------------------
+# ⭐ 这一层的价值：欧盟法规告诉你"要求是什么"，成员国数据告诉你"实际做到多少"。
+#    实测两个通道都是**官方结构化数据**，比网页抓取可靠得多：
+#      de_gesetze 德国联邦法律门户 XML  → 6130 部法规，正文带修订历史
+#      datafair   法国 ADEME Data Fair   → 122 条/集，按省分的破碎厂与报废车量
+# ============================================================
+async def collect_member_states() -> list:
+    items: list = []
+
+    print("\n🇩🇪 德国联邦法律（官方 XML）")
+    try:
+        async with get_connector("de_gesetze") as conn:
+            batch = await conn.fetch(slugs=[
+                "altautov",       # AltfahrzeugV 报废车法（转化 ELV 指令）
+                "battdg",         # BattDG 电池法（实施 EU 2023/1542）
+                "avv",            # AVV 欧洲废物目录（危废分类 → 黑粉定性）
+                "eag-behandv",    # 废弃电子电气设备处理要求
+            ])
+            for it in batch:
+                hits = it.meta.get("term_hits") or {}
+                print(f"  {it.meta['slug']:<14} {len(it.raw_text):>7} 字符"
+                      f" | 术语命中 {list(hits)[:4]}")
+            items += batch
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ⚠️ 德国法规失败: {type(exc).__name__}")
+
+    print("\n🇫🇷 法国 ADEME 开放数据（Data Fair API）")
+    try:
+        async with get_connector("datafair") as conn:
+            batch = await conn.fetch(ids=list(
+                get_connector("datafair").DEFAULT_DATASETS))
+            for it in batch:
+                print(f"  {it.meta['dataset_id'][:56]:<58}"
+                      f" 记录 {it.meta['rows_total']}")
+            items += batch
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ⚠️ 法国 ADEME 失败: {type(exc).__name__}")
+
+    return _dedupe(items)
+
+
 def _dedupe(items: list) -> list:
     seen: set[str] = set()
     out = []
@@ -357,6 +400,8 @@ async def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="只打印检索计划")
     ap.add_argument("--include-browser", action="store_true",
                     help="并入浏览器捕获的被拦站点（PHMSA/CalRecycle/BCI/ECHA/ADEME）")
+    ap.add_argument("--no-member-states", action="store_true",
+                    help="跳过欧盟成员国层（德国法规 XML + 法国 ADEME API）")
     args = ap.parse_args()
 
     taxonomy, sources = load_config()
@@ -386,6 +431,8 @@ async def main() -> int:
 
     if args.region in ("EU", "BOTH"):
         items = await collect_eu(plan, args.since)
+        if not args.no_member_states:
+            items += await collect_member_states()
         items += browser_by_region.get("EU", [])
         stats["EU"] = dump(items, OUT / f"eol_EU_{stamp}.jsonl", "EU")
         samples["EU"] = top_n(items)
