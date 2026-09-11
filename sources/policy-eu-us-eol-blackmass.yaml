@@ -391,18 +391,114 @@ us:
       note: 需在 api.data.gov 申请免费 Key；提案阶段比生效早 6-18 个月
 
   # ---------- 州级（美国电池 EPR 的实际立法层级）----------
+  #
+  # ⚠️ 美国**没有联邦电池 EPR 法**，生产者责任立法全部发生在州级。
+  #    这一层是本项目最薄的一环，下面是 2026-09-11 摸底后的实测结论。
+  #
+  # 三条方法结论（每条都有代价）：
+  #   ① **不要猜 URL** —— 一次性猜了 14 个州的深链，**全错**
+  #      （404 / 403 / 连不上 / 200 但只有 212 字节空壳）。
+  #      正解是用**站点自己的导航或 sitemap**：
+  #        · CalRecycle  ：浏览器从 `/` 下钻 → `/epr/` → `/EPR/batteries/`
+  #        · Minnesota   ：`sitemap.xml`（1828 条）里筛出 `rechargeable-batteries`
+  #        ⚠️ 顺带发现：之前猜的 MN 页 `/business-with-us/batteries` 是 404，
+  #           真 slug 是 `rechargeable-batteries`。
+  #   ② **浏览器通道与 HTTP 通道的连通性不同**，必须按站选：
+  #        · CalRecycle / Ecology      → HTTP 403（Cloudflare），浏览器可开
+  #        · MPCA / Illinois EPA       → 浏览器 ERR_CONNECTION_CLOSED，HTTP 可开
+  #        · NJ DEP / NY DEC / CT DEEP → **两条通道都不通**，暂放弃
+  #   ③ **「已验证」会过期**：原配置里 CalRecycle `/bev/` 标着 `verified: true`，
+  #      实测现在已是 **404**（站点改版）。→ 加了 `verified_at` 字段，
+  #      这条要**定期复验**，不能一劳永逸。
+  #
+  # 当前覆盖：CA / IL / MN 已确证；OR 根可达但未找到电池页；WA/VT/ME 待定。
   state:
     - id: us_state_ca_calrecycle
-      name: 加州 CalRecycle（全美电池 EPR 样板）
-      url: https://calrecycle.ca.gov/bev/
-      verified: true                  # ✅ 浏览器通道可达
-      direct_blocked: true            # 🚫 httpx/curl 403
+      name: 加州 CalRecycle —— 负责任电池回收计划（全美电池 EPR 样板）
+      url: https://calrecycle.ca.gov/EPR/batteries/
+      hub: https://calrecycle.ca.gov/epr/
+      verified: true
+      verified_at: "2026-09-11"
+      verified_how: "浏览器通道下钻：/ → /epr/ → /EPR/batteries/（页面标题「Responsible Battery Recycling Program」）"
+      direct_blocked: true            # 🚫 httpx/curl 403（Cloudflare: Just a moment...）
+      channel: browser_capture
+      tier: official
+      base_credibility: 95
+      clusters: [C5_epr_collection, C1_eol_battery]
+      check_frequency: monthly
+      note: |
+        SB 212 建立的电池 EPR 体系是全美样板，其他州照抄。
+        ⚠️ 旧 URL `/bev/` 已 404（站点改版），当前入口是 `/epr/`。
+        同域名下的其他产品线（药针/床垫/地毯/油漆）**不属于本专题**，
+        抓取时要用 judge_browser 压掉——它们是同一"EPR 母类"下的兄弟流。
+
+    - id: us_state_il_epa_batteries
+      name: 伊利诺伊州 EPA —— 电池处置与管理
+      url: https://epa.illinois.gov/topics/waste-management/waste-disposal/household-hazardous-waste/batteries.html
+      verified: true
+      verified_at: "2026-09-11"
+      verified_how: "浏览器下钻 found → HTTP 复核 200 / 603 KB / 标题「Batteries」"
+      channel: http                   # ✅ 直连可用
+      tier: official
+      base_credibility: 92
+      clusters: [C5_epr_collection, C1_eol_battery]
+      check_frequency: monthly
+      note: 伊利诺伊州 2024 年通过电池管理法，由州 EPA 主管。
+
+    - id: us_state_mn_pca_batteries
+      name: 明尼苏达州 PCA —— 可充电电池
+      url: https://www.pca.state.mn.us/business-with-us/rechargeable-batteries
+      verified: true
+      verified_at: "2026-09-11"
+      verified_how: "sitemap.xml（1828 条 URL）中筛出；站点根 HTTP 200 / 71 KB"
+      channel: http                   # ✅ 直连可用（浏览器通道反而连不上）
+      tier: official
+      base_credibility: 92
+      clusters: [C5_epr_collection, C1_eol_battery]
+      check_frequency: monthly
+
+    - id: us_state_or_deq_recycling
+      name: 俄勒冈州 DEQ —— 回收与废物
+      url: https://www.oregon.gov/deq/
+      verified: partial
+      verified_at: "2026-09-11"
+      verified_how: "站点根 HTTP 200 / 179 KB；但落地页无电池直链，需再下钻"
+      channel: http
+      tier: official
+      base_credibility: 92
+      clusters: [C5_epr_collection]
+      check_frequency: monthly
+      note: ⚠️ 待办：从根页栏目再下钻一层找电池/生产者责任页。
+
+    - id: us_state_wa_ecology
+      name: 华盛顿州 Ecology —— 电池管理
+      url: https://ecology.wa.gov/
+      verified: partial
+      verified_at: "2026-09-11"
+      verified_how: "HTTP 403；浏览器通道可打开首页（1755 字符）"
+      direct_blocked: true
       channel: browser_capture
       tier: official
       base_credibility: 92
       clusters: [C5_epr_collection, C1_eol_battery]
       check_frequency: monthly
-      note: SB 212 建立的电池 EPR 体系常被其他州照抄；州级比联邦立法早 2-4 年
+      note: |
+        ⚠️ 待办：浏览器下钻首页栏目找电池管理页。
+        实测首页只直链了一篇"battery energy storage"的 SEPA 环评博文，**不是** EPR 页。
+        华盛顿州 2023 年通过电池管理法（ESSB 5144），应有专页。
+
+    - id: us_state_gap_notes
+      name: 州级已知缺口（占位，不作为采集源）
+      url: ""
+      verified: false
+      note: |
+        ❌ 两通道均不通（暂放弃）：NJ DEP · NY DEC · CT DEEP · ME DEP
+        ⚠️ 待定（HTTP 403，浏览器未知）：VT DEC
+        ⚠️ 未摸底：CA 以外的其他已立法州（如 MD / DC / RI / HI 等）
+        📌 参考路径：全美州议会联合会（NCSL）的电池立法追踪页是"一页覆盖 50 州"的
+           最佳单点，但 **Cloudflare 连浏览器通道也过不去**，需要专门的过挑战方案。
+        📌 另一条可行路径：各州 EPR 法都要求设立 **生产者责任组织（PRO）**，
+           由 PRO 定期发布项目计划与年报——这些报告通常比州政府站点更好抓。
 
   # ---------- 行业源 ----------
   industry:

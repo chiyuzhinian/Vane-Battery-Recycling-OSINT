@@ -48,6 +48,7 @@ SPARQL 本体字段（实测确认，勿臆造）
 
 from __future__ import annotations
 
+import asyncio
 import html
 import re
 from datetime import datetime, timezone
@@ -151,6 +152,41 @@ WHERE {{
 LIMIT {limit}
 """
 
+# ⭐ 批量按 CELEX 取记录 —— **实测比逐个查询快约 12 倍**
+#
+# 实测（2026-09-11，46 个跟踪法案的场景）：
+#     逐个查询：单 CELEX 37s / 95s（均值 66s）→ 46 个需约 **40 分钟**
+#     合并 10 个用 OR-STRSTARTS                 → 8.1s/个
+#     合并 10 个用 **REGEX 交替**（本查询）      → **5.3s/个**
+#
+#   端点本身 1 秒就答（无过滤的全库计数查询）—— 慢的是 Virtuoso 的查询规划。
+#   所以「减少查询次数」比「优化单次查询」有效得多。
+#
+# ⚠️ 前缀要用 `re.escape()` 转义：CELEX 里含 `(` `)`，
+#    如 `32023R1542R(05)` —— 不转义会被当成正则分组。
+# ⚠️⚠️ **形状必须是计时实测过的那个精简版**。
+#
+# 踩过的坑（2026-09-11）：我先把完整元数据形状（Q_CELEX 那套，6 个 OPTIONAL
+# + DISTINCT 8 变量）直接拿去批量，结果 6 批里 **5 批超时失败**（httpx 90s /
+# curl 60s 都不够）；而计时测试用的是下面这个精简形状，10 个前缀只要 52s。
+#
+# **计时测试用的形状，就是上线能用的形状。换成"更全的"就得重新计时。**
+#
+# 拿掉的：eli / type / inForce / entryForce（漂亮但非必需）。
+# 保留的：work / celex / date / title —— 建记录够用，正文另有 _with_fulltext 补。
+Q_CELEX_BATCH = """
+PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+SELECT DISTINCT ?work ?celex ?date ?title
+WHERE {{
+  ?work cdm:resource_legal_id_celex ?celex .
+  FILTER(REGEX(STR(?celex), "^({pattern})"))
+  ?work cdm:work_date_document ?date .
+  ?expr cdm:expression_belongs_to_work ?work .
+  ?expr cdm:expression_title ?title .
+}}
+LIMIT {limit}
+"""
+
 # 单部法规的关系图（修订 / 废止 / 合并版本）
 Q_RELATIONS = """
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
@@ -187,7 +223,10 @@ class EurLexConnector(BaseConnector):
 
     source_id = "eu_eurlex"
     base_url = SPARQL_ENDPOINT
-    timeout = 90.0        # SPARQL 查询较慢，实测单次 10-60s
+    # ⚠️ 必须给足：单次 SPARQL 实测 37s~95s **波动极大**（Virtuoso 冷/热缓存
+    #    与查询规划差异）。曾用 90s，结果批量查询 6 批里 5 批超时。
+    #    curl 回退也用这个值（base.py 已改为读 self.timeout）。
+    timeout = 240.0
 
     # ---------- 底层 ----------
     async def _sparql(self, query: str) -> list[dict[str, Any]]:
@@ -472,6 +511,90 @@ class EurLexConnector(BaseConnector):
                     "sector": "提案" if sector == "5" else "立法",
                     "work": self._val(b, "work"),
                 })
+        return out
+
+    async def fetch_celex_batch(self, prefixes: list[str],
+                                limit: int = 1500,
+                                chunk: int = 4,
+                                tries: int = 3) -> list[RawEvidence]:
+        """批量按 CELEX 前缀取记录（一次查询合并多个前缀）。
+
+        语义与逐个 `fetch("celex:xxx")` 一致：前缀匹配会顺带覆盖
+        该法的更正版本（`32023R1542` → 也命中 `32023R1542R(05)`）。
+
+        ⚠️ 必须批量：见 Q_CELEX_BATCH 注释 —— 46 次单查约 40 分钟。
+        ⚠️⚠️ **必须重试**：这个端点在本会话里反复抖动 —— 同一批前缀，
+           独立测试 105 秒成功返回 37 条，放到采集流程里却整批
+           ConnectorError（8 批里挂 6 批）。加大超时到 240s 也治不好。
+           这与法国 DILA、ECHA 的抖动是同一类问题：
+           **瞬时失败不能当成"这个源不行"**，要重试后再下结论。
+        ⚠️ chunk 默认 4（而非 6）：前缀越多单次查询越重，抖动概率越高。
+        """
+        out: list[RawEvidence] = []
+        # celex → 已选中的标题；同一 CELEX 会有多语言标题，优先英文
+        picked: dict[str, dict[str, Any]] = {}
+        batches = [prefixes[i:i + chunk] for i in range(0, len(prefixes), chunk)]
+        for idx, group in enumerate(batches, 1):
+            pattern = "|".join(re.escape(p) for p in group)
+            rows: list[dict[str, Any]] = []
+            last_err = ""
+            for attempt in range(1, tries + 1):
+                try:
+                    rows = await self._sparql(
+                        Q_CELEX_BATCH.format(pattern=pattern, limit=limit))
+                    last_err = ""
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    last_err = type(exc).__name__
+                    if attempt < tries:
+                        await asyncio.sleep(3.0 * attempt)
+            if last_err:
+                print(f"    ⚠️ 批量 {idx}/{len(batches)}"
+                      f"（{group[0]}…）重试 {tries} 次仍失败：{last_err}")
+                continue
+
+            got_before = len(picked)
+            for b in rows:
+                celex = self._val(b, "celex")
+                if not celex:
+                    continue
+                lang = self._lang(b, "title")
+                cur = picked.get(celex)
+                # 优先保留英文标题；非英文仅在还没选中时启用
+                if cur is not None and (cur["lang"] == "en" or lang != "en"):
+                    continue
+                picked[celex] = {
+                    "lang": lang or "",
+                    "work": self._val(b, "work"),
+                    "title": self._val(b, "title") or "",
+                    "date": self._val(b, "date"),
+                }
+            print(f"    批量 {idx}/{len(batches)} → {len(rows)} 行"
+                  f"（新增 {len(picked) - got_before} 个 CELEX）")
+
+        for celex, info in picked.items():
+            title = info["title"]
+            out.append(RawEvidence(
+                evidence_id=f"eu_{celex}",
+                channel="connector",
+                source_id="eu_eurlex_battery_reg",
+                source_url=self._eurlex_url(celex),
+                source_title=(f"{title} [CELEX {celex}]" if title
+                              else f"EU legislation CELEX {celex}"),
+                publish_date=parse_date(info["date"]),
+                raw_text=self._with_fulltext(
+                    celex,
+                    (f"EU legislation CELEX {celex}\n{title}\n"
+                     f"Date: {info['date'] or ''}")),
+                meta={
+                    "celex": celex,
+                    "title_en": title,
+                    "title_lang": info["lang"],
+                    "corrigendum": bool(re.search(r"R\(\d+\)$", celex)),
+                    "work": info["work"],
+                    "batched": True,
+                },
+            ))
         return out
 
     # ---------- 探测 ----------

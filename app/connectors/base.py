@@ -223,7 +223,7 @@ class BaseConnector(ABC):
         # 复用限速节奏，保持"有礼貌"
         await asyncio.sleep(RATE_LIMITS.get(httpx.URL(url).host or "", 1.0))
 
-        cmd = [exe, "-s", "-L", "--max-time", "60",
+        cmd = [exe, "-s", "-L", "--max-time", str(int(self.timeout)),
                "-A", BROWSER_UA,
                "-H", "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8"]
 

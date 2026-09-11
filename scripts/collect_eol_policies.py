@@ -163,17 +163,20 @@ async def collect_eu(plan: dict, since: str) -> list:
     print(f"\n🇪🇺 欧盟 EUR-Lex SPARQL（{len(plan['eu_celex'])} 个 CELEX + {len(plan['eu_keywords'])} 个关键词）")
     items, failures = [], []
     async with get_connector("eur_lex") as conn:
-        for c in plan["eu_celex"]:
+        # ⭐ **必须批量**：逐个 CELEX 查询实测 66s/个，46 个要 **40 分钟**；
+        #    合并成 8 个一批（REGEX 交替）后约 5.3s/个，总时长降到 4~6 分钟。
+        #    端点在无过滤时 1 秒就答 —— 慢的是 Virtuoso 的查询规划，
+        #    所以「减少查询次数」比「优化单次查询」有效得多。
+        prefixes = [c["celex"] for c in plan["eu_celex"]]
+        if prefixes:
             try:
-                batch = await conn.fetch(f"celex:{c['celex']}", limit=PER_SOURCE_LIMIT)
-                if batch:
-                    for b in batch:
-                        b.meta["cluster_hint"] = c["source_id"]
-                print(f"  CELEX {c['celex']:<14} → {len(batch)} 条")
+                batch = await conn.fetch_celex_batch(prefixes)
+                print(f"  CELEX 批量取回 {len(batch)} 条"
+                      f"（{len(prefixes)} 个前缀，分 {(len(prefixes) + 7) // 8} 批）")
                 items += batch
             except Exception as exc:  # noqa: BLE001
-                failures.append(f"celex:{c['celex']}")
-                print(f"  ⚠️ CELEX {c['celex']} 失败: {type(exc).__name__}")
+                failures.append("celex-batch")
+                print(f"  ⚠️ CELEX 批量失败: {type(exc).__name__}")
 
         for kw in plan["eu_keywords"]:
             try:
