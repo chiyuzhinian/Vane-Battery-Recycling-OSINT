@@ -30,8 +30,13 @@ from .eia import EiaConnector
 from .eur_lex import EurLexConnector
 from .gesetze_de import GesetzeDeConnector
 from .us_federal import FederalRegisterConnector
+from .vane import VaneConnector
 
 REGISTRY: dict[str, Type[BaseConnector]] = {
+    # ---- ⭐ 通道 A：通用搜索（未知源发现）----
+    #   与下面所有「定向连接器」互补：定向回答「已知源里有什么」，
+    #   Vane 回答「哪里还有我不知道的源」。未部署时可用 available() 跳过。
+    "vane": VaneConnector,             # Vane /api/search（SearXNG + LLM 重排）
     # ---- 政策侧 ----
     "eur_lex": EurLexConnector,        # 欧盟一级立法（SPARQL + EUR-Lex 正文）
     "us_federal": FederalRegisterConnector,
@@ -66,6 +71,7 @@ __all__ = [
     "EurLexConnector",
     "FederalRegisterConnector",
     "GesetzeDeConnector",
+    "VaneConnector",
     "get_connector",
     "probe_all",
 ]
