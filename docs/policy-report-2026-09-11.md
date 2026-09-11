@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 05:53 UTC　（数据截止同上）
+生成时间：2026-09-11 06:37 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -11,10 +11,10 @@
 
 | 指标 | 数量 |
 |---|---:|
-| 去重后的证据条目 | 1626 |
-| 判定为**相关** | **358** |
-| 　其中高置信（自动判定） | 158 |
-| 　其中待人工复核 | 200 |
+| 去重后的证据条目 | 1651 |
+| 判定为**相关** | **373** |
+| 　其中高置信（自动判定） | 166 |
+| 　其中待人工复核 | 207 |
 | 覆盖监管层级 | 7 |
 | 欧盟法规全文快照 | **7 部**（可离线核查条文） |
 
@@ -22,7 +22,7 @@
 
 | 层级 | 条目 | 主要机构 | 最高可信度 |
 |---|---:|---|---:|
-| EU 一级立法 | 50 | 欧盟官方公报（EUR-Lex）、欧盟官方公报（EUR-Lex 关键词检索） | 100 |
+| EU 一级立法 | 65 | 欧盟官方公报（EUR-Lex）、欧盟官方公报（EUR-Lex 关键词检索） | 100 |
 | EU 机构文件 | 6 | 欧洲化学品管理局（ECHA） | 95 |
 | 成员国法 | 28 | 荷兰 KOOP BWB 基础法规库（官方 XML）、西班牙官方公报 BOE（立法整合库 REST API） | 100 |
 | 成员国数据 | 19 | ADEME 开放数据门户、Stichting OPEN（电池/电子生产者责任组织） | 95 |
@@ -56,20 +56,20 @@
 - **CELEX 52023PC0451**（236,682 字符）
   - 本地快照：`sources/eurlex-fulltext/52023PC0451.txt`
 
-**属该监管领域、但未检出电池线索（6 条）**
+**属该监管领域、但未检出电池线索（14 条）**
 
 > 这些文件在正文里出现该领域的通用表述（如"危险货物法规"样板文字），可能相关也可能无关，需人工判断。
 
+- **Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on public contracts and concessions, repealing D**
+  - 日期：`2026-09-09`
+  - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0590
 - **Regulation (EU) 2024/1157 of the European Parliament and of the Council of 11 April 2024 on shipments of waste, amending**
   - 日期：`2020-08-20`
   - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157
 - **EU legislation CELEX 32024R1157R(01)**
   - 日期：`2024-09-20`
   - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(01)
-- **EU legislation CELEX 32024R1157R(02)**
-  - 日期：`2024-12-09`
-  - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(02)
-  - …另有 3 条
+  - …另有 11 条
 
 ### ②危险货物运输 —— 按 UN 编号运输时的包装、文件与培训要求
 
@@ -146,20 +146,20 @@
   - 日期：`2024-11-26`
   - 原文：https://www.federalregister.gov/documents/2024/11/26/2024-27588/advanced-manufacturing-production-credit-correction
 
-**属该监管领域、但未检出电池线索（11 条）**
+**属该监管领域、但未检出电池线索（12 条）**
 
 > 这些文件在正文里出现该领域的通用表述（如"危险货物法规"样板文字），可能相关也可能无关，需人工判断。
 
+- **Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on public contracts and concessions, repealing D**
+  - 日期：`2026-09-09`
+  - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0590
 - **Corrigendum to Regulation (EU) 2024/1252 of the European Parliament and of the Council of 11 April 2024 establishing a f**
   - 日期：`2024-06-03`
   - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(01)
 - **Regulation (EU) 2024/1252 of the European Parliament and of the Council of 11 April 2024 establishing a framework for en**
   - 日期：`2024-05-23`
   - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252
-- **Corrigendum to Regulation (EU) 2024/1252 of the European Parliament and of the Council of 11 April 2024 establishing a f**
-  - 日期：`2024-10-01`
-  - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(02)
-  - …另有 8 条
+  - …另有 9 条
 
 ---
 
@@ -167,42 +167,38 @@
 
 ### EU 一级立法
 
-**机构**：欧盟官方公报（EUR-Lex）　**可信度**：100/100　**条目**：50　
+**机构**：欧盟官方公报（EUR-Lex）　**可信度**：100/100　**条目**：65　
 **内容**：电池与废电池法规 (EU) 2023/1542 及关联立法
 
-#### 欧盟官方公报（EUR-Lex）（42 条）
+#### 欧盟官方公报（EUR-Lex）（57 条）
 
+- **Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on public contracts and concessions, repealing Directives **　`黑粉线 ①/④`
+  - 日期 2026-09-09　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0590
 - **EU legislation CELEX 32023R1542R(14)**
   - 日期 2026-07-28　原文：http://publications.europa.eu/resource/cellar/ab3cbe7e-8a1f-11f1-8e61-01aa75ed71a1
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(14)**
   - 日期 2026-07-28　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542R(14)
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
+- **Regulation (EU) 2026/1703 of the European Parliament and of the Council of 8 July 2026 amending Regulation (EU) 2024/1157 as regar**　`待复核、黑粉线 ①`
+  - 日期 2026-07-08　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1703
+- **Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL amending Regulation (EU) 2024/1157 as regards the prohibit**　`待复核、黑粉线 ①`
+  - 日期 2026-04-29　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52026PC0183
 - **EU legislation CELEX 32023R1542R(13)**
   - 日期 2026-04-10　原文：http://publications.europa.eu/resource/cellar/0247a0f6-3476-11f1-be39-01aa75ed71a1
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **Corrigendum to Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and wa**
   - 日期 2026-04-10　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542R(13)
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
+- **Commission Decision (EU) 2026/681 of 20 March 2026 entrusting the European Anti-Fraud Office (OLAF) with certain enforcement actio**　`待复核、黑粉线 ①`
+  - 日期 2026-03-20　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D0681
 - **EU legislation CELEX 32023R1542R(12)**
   - 日期 2026-02-17　原文：http://publications.europa.eu/resource/cellar/3f4e448f-0ba1-11f1-8870-01aa75ed71a1
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(12)**
   - 日期 2026-02-17　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542R(12)
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
-- **EU legislation CELEX 32024R1252R(05)**　`待复核、黑粉线 ④`
-  - 日期 2026-02-11　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(05)
-  - 全文快照：`sources/eurlex-fulltext/32024R1252.txt`（221,942 字符）
-- **EU legislation CELEX 32024R1157R(05)**　`待复核、黑粉线 ①`
-  - 日期 2025-12-12　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(05)
-  - 全文快照：`sources/eurlex-fulltext/32024R1157.txt`（303,332 字符）
-- **EU legislation CELEX 32024R1157R(04)**　`待复核、黑粉线 ①`
-  - 日期 2025-12-11　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(04)
-  - 全文快照：`sources/eurlex-fulltext/32024R1157.txt`（303,332 字符）
-- **EU legislation CELEX 32024R1252R(04)**　`待复核、黑粉线 ④`
-  - 日期 2025-11-14　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(04)
-  - 全文快照：`sources/eurlex-fulltext/32024R1252.txt`（221,942 字符）
-  - …另有 32 条（共 42 条，见 `outputs/eol_*.jsonl`）
+  - …另有 47 条（共 57 条，见 `outputs/eol_*.jsonl`）
 
 #### 欧盟官方公报（EUR-Lex 关键词检索）（8 条）
 
@@ -535,6 +531,22 @@
 
 - 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000L0053
 
+### Directive (EU) 2018/851 of the European Parliament and of the Council of 30 May 2018 amending Di
+
+主体 CELEX `32018L0851`　共 7 个版本（更正 6 次）
+
+| 日期 | 版本 | CELEX |
+|---|---|---|
+| 2018-05-30 | 本体 | `32018L0851` |
+| 2019-01-07 | 更正 | `32018L0851R(01)` |
+| 2019-07-04 | 更正 | `32018L0851R(02)` |
+| 2019-09-26 | 更正 | `32018L0851R(03)` |
+| 2020-07-30 | 更正 | `32018L0851R(04)` |
+| 2025-04-10 | 更正 | `32018L0851R(05)` |
+| 2026-02-16 | 更正 | `32018L0851R(06)` |
+
+- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32018L0851
+
 ### EU legislation CELEX 32006L0066
 
 主体 CELEX `32006L0066`　共 5 个版本（更正 4 次）
@@ -561,27 +573,17 @@
 
 - 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L1892
 
-### Commission Implementing Regulation (EU) 2024/1866 of 3 July 2024 imposing a provisional counterv
+### Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL amending Regulations (EU
 
-主体 CELEX `32024R1866`　共 2 个版本（更正 1 次）
-
-| 日期 | 版本 | CELEX |
-|---|---|---|
-| 2024-07-03 | 本体 | `32024R1866` |
-| 2024-07-30 | 更正 | `32024R1866R(01)` |
-
-- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1866
-
-### Commission Delegated Decision (EU) 2025/934 of 5 March 2025 amending Decision 2000/532/EC as reg
-
-主体 CELEX `32025D0934`　共 2 个版本（更正 1 次）
+主体 CELEX `52025PC0501`　共 3 个版本（更正 2 次）
 
 | 日期 | 版本 | CELEX |
 |---|---|---|
-| 2025-03-05 | 本体 | `32025D0934` |
-| 2025-08-19 | 更正 | `32025D0934R(01)` |
+| 2025-05-21 | 本体 | `52025PC0501` |
+| 2025-05-23 | 更正 | `52025PC0501R(01)` |
+| 2025-07-02 | 更正 | `52025PC0501R(02)` |
 
-- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025D0934
+- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0501
 
 ---
 
@@ -623,7 +625,7 @@
 | 源 | 层级 | 机构 | 相关条目 |
 |---|---|---|---:|
 | `us_federal_register` | 美国联邦 | 美国联邦公报（Federal Register） | 236 |
-| `eu_eurlex_battery_reg` | EU 一级立法 | 欧盟官方公报（EUR-Lex） | 42 |
+| `eu_eurlex_battery_reg` | EU 一级立法 | 欧盟官方公报（EUR-Lex） | 57 |
 | `nl_bwb` | 成员国法 | 荷兰 KOOP BWB 基础法规库（官方 XML） | 17 |
 | `browser_france` | 成员国数据 | ADEME 开放数据门户 | 12 |
 | `eu_eurlex_keyword` | EU 一级立法 | 欧盟官方公报（EUR-Lex 关键词检索） | 8 |

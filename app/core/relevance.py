@@ -95,6 +95,19 @@ MEMBER_STATE_PATTERNS: list[str] = [
     r"responsabilit[eé]\s+[eé]largie\s+du\s+producteur",   # 生产者延伸责任
     r"fili[eè]re\s+[àa]\s+responsabilit",                  # REP 体系的法式说法
     r"centre\s+de\s+traitement\s+de\s+v[eé]hicules",       # 报废车处理中心
+    # ⚠️ 2026-09-11 补：法语此前**只有 ELV / 黑粉侧词汇，没有电池侧词汇**。
+    #    后果：《环境法典》里「Chapitre III —— Dispositions propres à certaines
+    #    catégories de produits et de déchets」（电池与蓄电池专章）这类条文
+    #    虽然命中了 accumulateur / pile，却因模式库无对应词被判为不相关。
+    #    与德语（batteriegesetz）、荷兰语（batterij）、西语（batería）不对称，
+    #    属于**语言覆盖不完整**而非源不可用。
+    r"batterie",                 # 电池（含 batteries；法语政策文本里基本无歧义）
+    r"accumulateur",             # 蓄电池（含 accumulateurs）
+    r"broyage",                  # 破碎（黑粉产出的上游工序，↔ 英语 shredding）
+    # `pile` 单用有「堆/桩」义，故只收**限定搭配**，不做裸词匹配
+    r"\bpiles?\s+(?:usag[eé]es?|alcalines?|bouton|au\s+lithium)",
+    r"\bpiles?\s+et\s+accumulateurs?",
+    r"d[eé]chets?\s+d'?[eé]quipements\s+[eé]lectriques",    # DEEE（电子废弃物）
     # ---- 荷兰语（荷兰《环境管理法》/《报废车辆管理令》体系，KOOP BWB）----
     r"autowrak",                # 报废车（荷兰语 ELV 标准说法，含 autowrakken）
     r"batterij",                # 电池（含 batterijen）

@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import io
 import re
+import html
 import asyncio
 import tarfile
 from datetime import datetime, timezone
@@ -48,6 +49,40 @@ _WS_RE = re.compile(r"\s+")
 # 增量包名形如 LEGI_20260911-003012.tar.gz / JORF_20260911-002839.tar.gz
 _NAME_DATE_RE = re.compile(r"_(\d{8})-\d{6}\.tar\.gz$")
 
+# ⭐ DILA XML 的**正文容器**（按优先级）。
+#    实测 JORF 的 <BLOC_TEXTUEL> 内长 26,883 字符，LEGI 同构。
+#
+#    ⚠️ 不要把 <TEXTE> 放进来：在 JORF 里它是「所属文本的引用信息」
+#       （cid / date_publi / nature），内长仅 412 字符，是**指针不是正文**。
+#       把它当正文会让判定器又一次只看到元数据。
+_BODY_TAGS = ("BLOC_TEXTUEL", "CONTENU")
+# 剥标签兜底时要**先扔掉**的元数据块（它们会霸占文本开头）
+_META_BLOCKS = ("META", "CONTEXTE", "META_COMMUN", "META_SPEC", "META_ARTICLE")
+# 法语字母范围（含变音），用于词边界断言
+_FR_LETTERS = "a-zA-Z\u00c0-\u024f\u00c0-\u00ff"
+
+
+def _kw_pattern(kw: str) -> "re.Pattern[str]":
+    """把关键词编译成**词边界**正则。
+
+    ⚠️ 为什么不能裸子串匹配：`KEYWORDS_FR` 里的 `"pile"`（电芯）
+       用 `"pile" in text` 会命中 `compilation`、`empiler` 等无关词；
+       `"VHU"` 同理。子串匹配会把无关法案拖进来（违反用户「不塞不相关结果」的约束）。
+
+    支持法语常见变形（复数 / 形容词性数配合）：
+        batterie → batteries；recyclé → recyclés / recyclée / recyclées；
+        déchet → déchets。尾缀只加在**最后一个词**上，
+        所以 `véhicule hors d'usage` 也能命中 `véhicules hors d'usage`。
+    """
+    suffix = r"(?:s|e|es|x|ee|ees|ée|ées|és)?"
+    if " " in kw:
+        head, _, last = kw.rpartition(" ")
+        pat = rf"{re.escape(head)}\s+{re.escape(last)}{suffix}"
+    else:
+        pat = rf"{re.escape(kw)}{suffix}"
+    return re.compile(
+        rf"(?<![{_FR_LETTERS}]){pat}(?![{_FR_LETTERS}])", re.I)
+
 
 def _date_from_name(name: str) -> "datetime | None":
     """从增量包文件名解析发布日期（否则 publish_date 永远是 None）。"""
@@ -59,14 +94,30 @@ def _date_from_name(name: str) -> "datetime | None":
     except ValueError:
         return None
 
-# 本领域关键词（法语）。用于从增量包里筛出相关文本。
-KEYWORDS_FR: list[str] = [
-    "batterie", "batteries", "accumulateur", "pile",
+# 本领域关键词（法语），**强词** —— 电池 / ELV / 黑粉的专有表述。
+# 单独命中即可召回。
+KEYWORDS_STRONG_FR: list[str] = [
+    "batterie", "batteries", "accumulateur",
     "véhicule hors d'usage", "vehicule hors d'usage", "VHU",
-    "dépollution", "recyclage", "recyclé", "filière REP",
-    "responsabilité élargie", "déchet", "masse noire",
-    "brovage", "broyeur", "métaux", "cobalt", "lithium",
+    "dépollution", "masse noire", "broyage", "broyeur",
+    "filière REP", "responsabilité élargie",
+    "cobalt", "lithium",
 ]
+
+# **通用词** —— 废物 / 循环类。
+#
+# ⚠️ 单独命中**不召回**。实测（2026-09-11，LEGI_20260910 增量）：
+#    仅靠 `déchet`/`recyclage` 从 7,202 个 XML 里拖出 37 条，
+#    其中 **36 条完全不含电池/ELV/黑粉任何核心名词**
+#    （废纸分类、公共采购、疫苗接种中心……），相关率 2.7%。
+#    这类词只能作为**辅助信号**（比如 "piles et accumulateurs usagés" 里
+#    真正起作用的是 accumulateur）。
+KEYWORDS_GENERIC_FR: list[str] = [
+    "pile", "déchet", "recyclage", "recyclé", "métaux",
+]
+
+# 向后兼容：外部若直接引用 KEYWORDS_FR 仍可拿到全集
+KEYWORDS_FR: list[str] = KEYWORDS_STRONG_FR + KEYWORDS_GENERIC_FR
 
 
 class DilaFrConnector(BaseConnector):
@@ -97,7 +148,11 @@ class DilaFrConnector(BaseConnector):
            这里做的是**关键词命中即取片段**：对"今天有没有相关法规变动"
            这个问题足够，且对 DTD 变化鲁棒。
         """
-        kws = [k.lower() for k in (keywords or KEYWORDS_FR)]
+        # 强词单独命中即召回；通用词只在**强词缺席时**作为补充信号，
+        # 且必须多个共现（单靠 `déchet` 会拖入废纸分类之类的无关文本）。
+        kw_strong = [(_kw_pattern(k), k) for k in (keywords or KEYWORDS_STRONG_FR)]
+        kw_generic = ([(_kw_pattern(k), k) for k in KEYWORDS_GENERIC_FR]
+                      if keywords is None else [])
         files = await self.list_files(dataset, limit=max(latest, 1) * 2)
         if not files:
             raise ConnectorError(f"{self.source_id}: {dataset} 目录下没有找到增量包")
@@ -107,14 +162,17 @@ class DilaFrConnector(BaseConnector):
             blob = await self._download_retry(name, dataset)
             if blob is None:
                 continue
-            hits = self._scan(blob, kws, max_files_scanned)
+            hits = self._scan(blob, kw_strong, kw_generic, max_files_scanned)
             print(f"    {name}（{len(blob) / 1024:.0f} KB）→ 命中 {len(hits)} 个文本")
             for h in hits:
+                # ⭐ URL 必须**唯一**：包 URL 会让同包多条法条在报告里去重掉。
+                #    优先用 ELI 官链；拿不到时退回「包 URL#包内路径」保唯一。
+                url = h.get("eli_url") or f"{BASE}/{dataset}/{name}#{h['file']}"
                 out.append(RawEvidence(
                     evidence_id="",
                     channel="connector",
                     source_id=self.source_id,
-                    source_url=f"{BASE}/{dataset}/{name}",
+                    source_url=url,
                     source_title=f"[DILA {dataset}] {h['title']}",
                     publish_date=_date_from_name(name),
                     raw_text=h["text"][:4000],
@@ -125,6 +183,8 @@ class DilaFrConnector(BaseConnector):
                         "archive": name,
                         "legi_file": h["file"],
                         "matched_terms": h["terms"],
+                        "body_chars": h["body_chars"],
+                        "archive_url": f"{BASE}/{dataset}/{name}",
                         "channel_note": "DILA 开放数据（Légifrance 原始源），日增量",
                     },
                 ))
@@ -159,9 +219,73 @@ class DilaFrConnector(BaseConnector):
         resp = await self._polite_get(f"{BASE}/{dataset}/{name}")
         return resp.content
 
-    def _scan(self, blob: bytes, kws: list[str],
+    @staticmethod
+    def _eli_url(content: str) -> str:
+        """取法条的**官方可访问 URL**（Légifrance ELI 链接）。
+
+        ⚠️ 为什么不能用增量包 URL 当 source_url：
+           增量包里一个包含 7,202 个 XML（多个法条），若都用包 URL，
+           下游 `make_report.load_records()` 按 URL 去重时会把
+           **同一个包里的多条法条互相去重掉，只留下一 1 条**。
+
+           实测（2026-09-11）：LEGI 召 37 条，报告中实际只剩 1 条。
+
+           `<ID_ELI>` 是 Légifrance 的官方链接（人类可直接打开），
+           天然唯一，既修去重又让报告里的链接可用。
+        """
+        m = re.search(r"<ID_ELI>\s*([^<\s]+)\s*</ID_ELI>", content, re.I)
+        return m.group(1).strip() if m else ""
+
+    @staticmethod
+    def _extract_body(content: str) -> str:
+        """从 DILA XML 里取出**法律正文**的纯文本。
+
+        ⚠️ 为什么必须单独提取（而不是对整份文件剥标签）：
+           DILA 的 XML 结构是 `<META>`（元数据）→ `<CONTEXTE>` → `<BLOC_TEXTUEL>`（正文）。
+           `<META>` 里有 ID / ID_ELI / URL / NATURE / DATE_DEBUT / DATE_FIN 等字段，
+           数量多、占位大。对整份文件剥标签后，**前几千字符全是这些机器字段**，
+           真正的条文排在后面；而下游判定器只读 raw_text 的前 4000 字符，
+           结果是「**正文确实存在，却被判成不相关**」。
+
+           这是本项目同型缺陷的**第 4 例**，前三例：
+             · 荷兰 KOOP `<work>` 壳（WTI 元数据，没有法条正文）
+             · EUR-Lex `Q_CELEX` 缺 `expression_title`
+             · EUR-Lex 元数据记录（只有 CELEX 号码，没有文本）
+
+           通用教训：**「取到记录」≠「取到内容」**，
+           必须在连接器层保证 raw_text 是**内容**而不是**指针**。
+        """
+        for tag in _BODY_TAGS:
+            m = re.search(rf"<{tag}\b[^>]*>(.*?)</{tag}>", content, re.S | re.I)
+            if not m:
+                continue
+            raw = m.group(1)
+            # <BLOC_TEXTUEL> 里常是**转义过的** HTML 片段（&lt;p&gt;…），先还原
+            if "&lt;" in raw:
+                raw = html.unescape(raw)
+            text = _WS_RE.sub(" ", _TAG_RE.sub(" ", raw)).strip()
+            if len(text) > 200:      # 太短的说明这个标签不是正文容器
+                return text
+
+        # ---- 兜底：没有正文容器时，先剥掉元数据块再剥标签 ----
+        # 否则 <META> 里的 ID/URL/DATE_* 会霸占文本开头，判定器又只看得到机器字段。
+        stripped = content
+        for blk in _META_BLOCKS:
+            stripped = re.sub(rf"<{blk}\b[^>]*>.*?</{blk}>", " ", stripped,
+                              flags=re.S | re.I)
+        return _WS_RE.sub(" ", _TAG_RE.sub(" ", stripped)).strip()
+
+    def _scan(self, blob: bytes, kw_strong: list, kw_generic: list,
               max_files: int) -> list[dict]:
-        """在 tar.gz 里逐文件扫关键词，命中即返回（含命中的词）。"""
+        """在 tar.gz 里逐文件扫关键词，命中即返回（含命中的词）。
+
+        召回规则（实测调优，见 KEYWORDS_GENERIC_FR 注释）：
+          1. 命中**强词** → 直接召回
+          2. 只命中通用词 → 需 **≥2 个不同通用词共现** 才召回
+        
+        关键词匹配**只在「标题 + 正文」上做**，不在 `<META>` 元数据上做：
+        元数据里的 URL（`article/JORF/ARTI/...`）和 ID 会制造无意义的假命中。
+        """
         hits: list[dict] = []
         try:
             tar = tarfile.open(fileobj=io.BytesIO(blob), mode="r:gz")
@@ -182,14 +306,22 @@ class DilaFrConnector(BaseConnector):
                 content = raw.read().decode("utf-8", "replace")
             except Exception:  # noqa: BLE001
                 continue
-            low = content.lower()
-            matched = [k for k in kws if k in low]
-            if not matched:
-                continue
-            text = _WS_RE.sub(" ", _TAG_RE.sub(" ", content)).strip()
+
             title = self._title(content, member.name)
+            body = self._extract_body(content)
+            haystack = f"{title}\n{body}"
+
+            strong = [kw for rx, kw in kw_strong if rx.search(haystack)]
+            generic = [kw for rx, kw in kw_generic if rx.search(haystack)] if not strong else []
+            if not strong and len(generic) < 2:
+                continue
+
+            # 正文优先；正文提取失败才退回原文剥标签（并保证不是空指针）
+            text = body or _WS_RE.sub(" ", _TAG_RE.sub(" ", content)).strip()
             hits.append({"file": member.name, "title": title,
-                         "text": text, "terms": matched[:6]})
+                         "text": text, "terms": (strong + generic)[:6],
+                         "body_chars": len(body),
+                         "eli_url": self._eli_url(content)})
         return hits
 
     @staticmethod
