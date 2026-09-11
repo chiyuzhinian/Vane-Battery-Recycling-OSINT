@@ -68,12 +68,23 @@ from typing import Any, Iterable
 
 # ============================================================
 # 防死循环参数（集中管理，便于审计）
+# ------------------------------------------------------------
+# 演进（2026-09-11）：
+#   MAX_ROUNDS 3 → 5。原因：收敛判据修复为**本轮**边际率后，
+#   实测第 3 轮才首次低于 2%（streak=1），第 4 轮才能自然收敛。
+#   硬上限 3 会抢在自然判据之前截断 → 收敛是被"截停"的，不是被"证明"的。
+#   ⚠️ 放宽硬上限 = 削弱兜底，因此**同步补了两道新闸门**：
+#     ① MIN_RAW_FOR_CONVERGENCE：样本量不足的一轮**不计入收敛计数**
+#        （否则 API 故障返回 0 条 → 边际率 0% → 被误判成"已收敛"）
+#     ② ZERO_YIELD_ALERT：整轮 0 条 → 显式报警"疑似源故障"，绝不当作收敛
 # ============================================================
-MAX_ROUNDS = 3                    # 硬轮次上限
+MAX_ROUNDS = 5                    # 硬轮次上限（兜底）
 MAX_NEW_TERMS_PER_ROUND = 8       # 每轮最多新增候选词
 COOLDOWN_ROUNDS = 2               # 权重调整冷却期（轮）
 NOVEL_RATE_CONVERGENCE = 0.02     # 边际新发现率低于 2% 视为饱和
 CONVERGENCE_STREAK = 2            # 连续两轮低于阈值 → 收敛
+MIN_RAW_FOR_CONVERGENCE = 30      # ⭐ 单轮样本量低于此值不计入收敛计数
+                                  #    （防"抓不到数据"被误判为"已收敛"）
 MIN_PRECISION_TO_KEEP = 0.05      # 精确率低于 5% 的词考虑停用
 MIN_RAW_TO_JUDGE = 20             # 样本量不足不做判断（防小样本误判）
 EXTERNAL_ANCHOR_SHARE = 0.5       # 正式词表中外部锚点词的最低占比
@@ -413,23 +424,56 @@ class FeedbackEngine:
             (s.rounds.get(str(round_no)) or {}).get("novel", 0) for s in stats)
         rate = (round_novel / round_raw) if round_raw else 0.0
         hist = self.state["history"]
-        streak = 1 if (hist and hist[-1].get("novel_rate", 1.0) < NOVEL_RATE_CONVERGENCE
-                       and rate < NOVEL_RATE_CONVERGENCE) else 0
 
-        if round_no >= MAX_ROUNDS:
-            report = ConvergeReport(True, f"达到硬轮次上限 {MAX_ROUNDS}", round_no, rate, streak)
-        elif streak >= CONVERGENCE_STREAK:
-            report = ConvergeReport(True, f"连续 {streak} 轮边际新发现 <{NOVEL_RATE_CONVERGENCE:.0%}",
-                                    round_no, rate, streak)
+        # ---- ⭐ 闸门 ②：整轮零产出 = 疑似源故障，绝不当作"收敛" ----
+        if round_raw == 0:
+            report = ConvergeReport(
+                False,
+                "⚠️ 本轮 0 条记录 —— 疑似数据源故障，不能判为收敛。"
+                "请检查网络/限流/API 变更后重跑。", round_no, 0.0, 0)
+            # ⚠️ 仍要写 history：下一轮的 streak 计算依赖 hist[-1]，
+            #    这里不写会造成历史与轮次错位。
+            self._record_history(round_no, report, round_raw)
+            self._pending_actions = actions
+            return report
+
+        # ---- ⭐ 闸门 ①：样本量不足的一轮不计入收敛计数 ----
+        #    否则「抓不到数据」会被当成「没有新数据」——两者含义完全相反。
+        below = rate < NOVEL_RATE_CONVERGENCE
+        if round_raw < MIN_RAW_FOR_CONVERGENCE:
+            new_streak = 0          # 不计入，也无法证明饱和
+        elif below and hist and hist[-1].get("novel_rate", 1.0) < NOVEL_RATE_CONVERGENCE:
+            new_streak = (hist[-1].get("streak", 0) or 0) + 1
+        elif below:
+            new_streak = 1
         else:
-            report = ConvergeReport(False, f"边际新发现 {rate:.1%}，仍有增量", round_no, rate, streak)
+            new_streak = 0
+        streak = new_streak
 
-        self.state["history"].append({
-            "round": round_no, "novel_rate": rate, "converged": report.converged,
-            "reason": report.reason,
-        })
+        if streak >= CONVERGENCE_STREAK:
+            report = ConvergeReport(
+                True, f"连续 {streak} 轮边际新发现 <{NOVEL_RATE_CONVERGENCE:.0%}（样本量充足），"
+                      f"已自然收敛", round_no, rate, streak)
+        elif round_no >= MAX_ROUNDS:
+            report = ConvergeReport(
+                True, f"达到硬轮次上限 {MAX_ROUNDS}（兜底截断，非自然收敛）",
+                round_no, rate, streak)
+        else:
+            report = ConvergeReport(
+                False, f"边际新发现 {rate:.1%}，仍有增量", round_no, rate, streak)
+
+        self._record_history(round_no, report, round_raw)
         self._pending_actions = actions
         return report
+
+    def _record_history(self, round_no: int, report: "ConvergeReport",
+                        round_raw: int) -> None:
+        """留痕：streak 与样本量必须落盘，否则下一轮无法正确续算。"""
+        self.state["history"].append({
+            "round": round_no, "novel_rate": report.novel_rate,
+            "streak": report.streak, "round_raw": round_raw,
+            "converged": report.converged, "reason": report.reason,
+        })
 
     # ---------- ④ 执行（全部可逆 + 留痕）----------
     def apply(self, actions: list[Action], round_no: int) -> dict[str, Any]:
@@ -609,8 +653,15 @@ class FeedbackEngine:
                              f"例：{c['example'][:44]}")
 
         lines += ["", " 【防死循环状态】",
-                  f"  · 轮次 {report.round_no}/{MAX_ROUNDS}",
+                  f"  · 轮次 {report.round_no}/{MAX_ROUNDS}"
+                  f"（硬上限仅为兜底；正常应由自然收敛判据先触发）",
                   f"  · 每轮新增词上限 {MAX_NEW_TERMS_PER_ROUND}",
                   f"  · 权重调整冷却期 {COOLDOWN_ROUNDS} 轮",
-                  f"  · 收敛阈值 边际新发现 <{NOVEL_RATE_CONVERGENCE:.0%} 连续 {CONVERGENCE_STREAK} 轮"]
+                  f"  · 收敛阈值 边际新发现 <{NOVEL_RATE_CONVERGENCE:.0%} "
+                  f"连续 {CONVERGENCE_STREAK} 轮（当前连击 {report.streak}）",
+                  f"  · 收敛计数门槛 单轮样本量 ≥{MIN_RAW_FOR_CONVERGENCE} 条"
+                  f"（防「抓不到数据」被误判为「已收敛」）",
+                  f"  · 整轮 0 条 → 报警为源故障，不判收敛",
+                  f"  · 外部锚点占比 ≥{EXTERNAL_ANCHOR_SHARE:.0%}（防回音室）",
+                  f"  · 自动动作仅限「候选池 + 源权重」；进正式词表/删源必须人工"]
         return "\n".join(lines)
