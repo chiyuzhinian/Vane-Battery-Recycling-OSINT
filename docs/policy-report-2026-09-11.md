@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 03:50 UTC　（数据截止同上）
+生成时间：2026-09-11 04:55 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -11,10 +11,10 @@
 
 | 指标 | 数量 |
 |---|---:|
-| 去重后的证据条目 | 1348 |
-| 判定为**相关** | **290** |
-| 　其中高置信（自动判定） | 154 |
-| 　其中待人工复核 | 136 |
+| 去重后的证据条目 | 1616 |
+| 判定为**相关** | **357** |
+| 　其中高置信（自动判定） | 158 |
+| 　其中待人工复核 | 199 |
 | 覆盖监管层级 | 7 |
 | 欧盟法规全文快照 | **7 部**（可离线核查条文） |
 
@@ -26,7 +26,7 @@
 | EU 机构文件 | 6 | 欧洲化学品管理局（ECHA） | 95 |
 | 成员国法 | 28 | 荷兰 KOOP BWB 基础法规库（官方 XML）、西班牙官方公报 BOE（立法整合库 REST API） | 100 |
 | 成员国数据 | 19 | ADEME 开放数据门户、Stichting OPEN（电池/电子生产者责任组织） | 95 |
-| 美国联邦 | 177 | 美国联邦公报（Federal Register）、DOT 管道与危险材料安全管理局（PHMSA） | 100 |
+| 美国联邦 | 244 | 美国联邦公报（Federal Register）、DOT 管道与危险材料安全管理局（PHMSA） | 100 |
 | 美国州级 | 3 | CalRecycle | 92 |
 | 美国行业 | 8 | Battery Council International（铅电池协会） | 82 |
 
@@ -106,12 +106,19 @@
 
 > 为什么归这条线：定性不同，运输、存储、处置的许可与成本差一个量级
 
-**属该监管领域、但未检出电池线索（1 条）**
+**属该监管领域、但未检出电池线索（5 条）**
 
 > 这些文件在正文里出现该领域的通用表述（如"危险货物法规"样板文字），可能相关也可能无关，需人工判断。
 
 - **Verordnung über das Europäische Abfallverzeichnis [avv]**
   - 原文：https://www.gesetze-im-internet.de/avv/
+- **Authorization of State Hazardous Waste Management Program Revisions: California**
+  - 日期：`2025-09-11`
+  - 原文：https://www.federalregister.gov/documents/2025/09/11/2025-17540/authorization-of-state-hazardous-waste-management-program-revisions-california
+- **Massachusetts: Final Authorization of State Hazardous Waste Management Program Revisions**
+  - 日期：`2025-09-05`
+  - 原文：https://www.federalregister.gov/documents/2025/09/05/2025-17053/massachusetts-final-authorization-of-state-hazardous-waste-management-program-revisions
+  - …另有 2 条
 
 ### ④战略价值认定 —— 黑粉作为关键原材料回收能拿到的政策激励
 
@@ -337,10 +344,10 @@
 
 ### 美国联邦
 
-**机构**：美国联邦公报（Federal Register）　**可信度**：100/100　**条目**：177　
+**机构**：美国联邦公报（Federal Register）　**可信度**：100/100　**条目**：244　
 **内容**：DOE / EPA / IRS / DOT 的法规、通知与征询
 
-#### 美国联邦公报（Federal Register）（169 条）
+#### 美国联邦公报（Federal Register）（236 条）
 
 - **Securing the United States Bulk-Power System**　`待复核`
   - 日期 2026-09-09　原文：https://www.federalregister.gov/documents/2026/09/09/2026-18370/securing-the-united-states-bulk-power-system
@@ -350,19 +357,19 @@
   - 日期 2026-09-02　原文：https://www.federalregister.gov/documents/2026/09/02/2026-17979/repeal-of-fossil-fuel-restrictions-for-new-federal-buildings-and-major-renovations-of-federal
 - **Rescission of Production Incentives for Cellulosic Biofuels**　`待复核`
   - 日期 2026-09-01　原文：https://www.federalregister.gov/documents/2026/09/01/2026-17872/rescission-of-production-incentives-for-cellulosic-biofuels
+- **Foreign-Trade Zone (FTZ) 126, Notification of Proposed Production Activity; Panasonic Energy Corporation of North America; (Lithiu**　`待复核`
+  - 日期 2026-08-26　原文：https://www.federalregister.gov/documents/2026/08/26/2026-17358/foreign-trade-zone-ftz-126-notification-of-proposed-production-activity-panasonic-energy-corporation
+- **Agency Information Collection Activities; Submission to the Office of Management and Budget (OMB) for Review and Approval; Comment**　`待复核`
+  - 日期 2026-08-25　原文：https://www.federalregister.gov/documents/2026/08/25/2026-17323/agency-information-collection-activities-submission-to-the-office-of-management-and-budget-omb-for
 - **Nominations Request for the Good Neighbor Environmental Board**　`待复核`
   - 日期 2026-08-20　原文：https://www.federalregister.gov/documents/2026/08/20/2026-16931/nominations-request-for-the-good-neighbor-environmental-board
 - **Secretary of Energy Advisory Board**　`待复核`
   - 日期 2026-08-18　原文：https://www.federalregister.gov/documents/2026/08/18/2026-16801/secretary-of-energy-advisory-board
+- **Notice of Intent To Prepare an Environmental Impact Statement for the Proposed Issuance of an Exploration License to The Metals Co**　`待复核`
+  - 日期 2026-08-17　原文：https://www.federalregister.gov/documents/2026/08/17/2026-16722/notice-of-intent-to-prepare-an-environmental-impact-statement-for-the-proposed-issuance-of-an
 - **Agency Information Collection Activities; Comment Request on U.S. Trust and Estate Income Tax Returns and Related Forms, Schedules**　`待复核`
   - 日期 2026-08-10　原文：https://www.federalregister.gov/documents/2026/08/10/2026-16243/agency-information-collection-activities-comment-request-on-us-trust-and-estate-income-tax-returns
-- **Agency Information Collection Activities; Comment Request on U.S. Business Income Tax Returns and Related Forms, Schedules, Attach**
-  - 日期 2026-08-10　原文：https://www.federalregister.gov/documents/2026/08/10/2026-16262/agency-information-collection-activities-comment-request-on-us-business-income-tax-returns-and
-- **Hazardous Materials: Notice of Actions on Special Permits**　`待复核、黑粉线 ②`
-  - 日期 2026-08-06　原文：https://www.federalregister.gov/documents/2026/08/06/2026-15973/hazardous-materials-notice-of-actions-on-special-permits
-- **Hazardous Materials: Notice of Applications for New Special Permits**　`待复核、黑粉线 ②`
-  - 日期 2026-08-06　原文：https://www.federalregister.gov/documents/2026/08/06/2026-15971/hazardous-materials-notice-of-applications-for-new-special-permits
-  - …另有 159 条（共 169 条，见 `outputs/eol_*.jsonl`）
+  - …另有 226 条（共 236 条，见 `outputs/eol_*.jsonl`）
 
 #### DOT 管道与危险材料安全管理局（PHMSA）（8 条）
 
@@ -612,7 +619,7 @@
 
 | 源 | 层级 | 机构 | 相关条目 |
 |---|---|---|---:|
-| `us_federal_register` | 美国联邦 | 美国联邦公报（Federal Register） | 169 |
+| `us_federal_register` | 美国联邦 | 美国联邦公报（Federal Register） | 236 |
 | `eu_eurlex_battery_reg` | EU 一级立法 | 欧盟官方公报（EUR-Lex） | 42 |
 | `nl_bwb` | 成员国法 | 荷兰 KOOP BWB 基础法规库（官方 XML） | 17 |
 | `browser_france` | 成员国数据 | ADEME 开放数据门户 | 12 |
@@ -742,7 +749,96 @@
 3. 新增回归测试 `tests/test_member_state_patterns.py`，用真实法规原文锁住"成员国层必须能过判定"这个不变量；
 4. **英语 ELV 词族补齐**——本轮发现英语模式里只有 battery 侧的词、**没有 vehicle 侧**：`end-of-life vehicle` / `2000/53/EC` / `certificate of destruction` / `dismantlers` / `shredder light fraction` 一个都没有。ELV 指令此前只是靠着法语模式里的 `depollution` 才勉强命中——**一个偶然**。
 
-### 10.4 已备好、尚未接入的入口
+### 10.4 欧美覆盖面的本轮扩充（优先欧美政策法规采集）
+
+#### 🇪🇺 欧盟：从精确跟踪 5 部法 → 46 部法案
+
+**问题**：核心法（电池法 / ELV 指令）只是**框架**。真正落地义务的是它们的
+**授权法案与实施法案**——碳足迹计算方法、再生料含量核算、尽职调查、
+电池护照、回收效率……这些一部都没被跟踪。
+结果是「知道有法规，不知道具体要做什么」。
+
+**方法**：这类法案的标题里**必然写明**所依据的基础法号
+（如 `Commission Delegated Regulation (EU) 2025/606 supplementing
+Regulation (EU) 2023/1542`），所以按**标题锚点**检索最稳。锚点：
+`2023/1542` · `2000/53/EC` · `2024/1157` · `2024/1252` · `2006/66/EC` · `2008/98/EC`
+
+```
+候选 96 个  →  筛选后固化 43 个（29 立法 + 14 提案）
+剔除 44 个程序性文件：SC 员工工作报告 21 · AP 议会决议 9 ·
+                       DC 报告 6 · AE 意见 5 · AG 理事会立场 2 · XC 1
+```
+
+**发现的高价值法案**（`sources/eu-acts-tracked.yaml`）：
+
+| CELEX | 内容 | 对本专题的意义 |
+|---|---|---|
+| `32024R1781` | 生态设计法规 ESPR | 数字产品护照的母法（电池护照的上位依据） |
+| `32026R1738` | 2026-07-08 新条例 | 同时出现在电池法与 ELV 两个锚点下 |
+| `32024R2571` | 授权条例补充 2024/1157 | 黑粉跨境运输的**实施细则** |
+| `32024R3230` | 授权条例修订 2024/1157 | 同上 |
+| `32025R1290` | 实施条例（废物运输） | 同上 |
+| `32026D0681` | 委托 OLAF 欧洲反欺诈办公室 | 废物运输的**执法**安排 |
+| `32025D0840` / `32025D1174` | 委员会决定：承认某些关键原材料 | 直接决定黑粉的**战略价值认定** |
+| `32025R2194` | 实施条例（关键原材料） | 单一机制 |
+| `32020L0362` / `32020L0363` / `32023L0544` | 授权指令修订 ELV 附件 II | 报废车**拆解与去污**的具体要求 |
+| `52025PC0501` / `52025PC0258` | 修订电池法的提案 | 立法前预警信号 |
+| `32018L0849` / `32018L0851` | 修订 ELV 指令 / 废物框架指令 | 上轮循环经济一揽子 |
+
+⚠️ **查询形状的坑（代价约 20 分钟）**：我在这条查询上「顺手改进」了三处——
+加 `FILTER(LANG(?title)="en")`、把日期/类型改成 `OPTIONAL`、`DISTINCT` 多投影一个变量。
+结果查询**直接超时**（curl 60s / 150s 均无响应），而端点本身 1 秒就答。
+回退成与已验证可用的 `Q_KEYWORD` **完全同形**后，21 秒返回。
+→ **在慢查询引擎上，不要把工作版本的形状顺手改好。**
+
+#### 🇺🇸 美国：机构 4 → 15 个，关键词 20 → 27 个，配对 30 → 37 组
+
+**机构 slug 全部取自联邦公报自己的官方机构表**
+（`GET /api/v1/agencies.json`，472 个机构含子机构）。
+
+> ⚠️ slug 猜错**不会报错，只会静默返回 0 条**。所以每个都要用常见词做对照验证：
+> `py scripts/verify_fr_agencies.py`（实测剔除 `customs-service`、
+> `council-on-environmental-quality`、`environment-office-energy-department`）。
+
+**⭐ 一个被推翻的重要假设**：用「black mass」逐机构实测，命中分布是
+
+```
+industry-and-security-bureau   (BIS 出口管制)       2 条
+state-department               (国务院 / 巴塞尔公约) 2 条
+commerce-department            (商务部 / 关键矿产)   2 条
+justice-department             (司法部 / 执法)       2 条
+environmental-protection-agency / transportation-department / energy-department
+                                                     0 条
+```
+
+> **黑粉在美国的真实监管不在 EPA / DOT / DOE，而在
+> 出口管制 + 巴塞尔公约 + 关键矿产 + 执法 四条线上。**
+> 原配置只查 EPA/DOE/DOT，**这四条全漏了**。
+
+**扩充带来的噪声，以及它是什么**：机构与词表一扩，「待人工复核」从个位数冲到 **180 条**。
+抽样发现绝大多数来自联邦公报的**批量行政文书**：
+
+| 文书类型 | 条数 |
+|---|---:|
+| `Agency Information Collection Activities`（信息收集公告） | 64 |
+| `Notice of Applications / Actions on Special Permits`（PHMSA 许可通告） | 23 |
+| `... State Hazardous Waste Program`（州级 RCRA 授权） | 18 |
+| `Foreign-Trade Zone (FTZ) ...`（对外贸易区通知） | 36 |
+
+> ⚠️ 这与本项目早先踩过的坑是**同一类**：那时是「不要加 `shippers?`」——
+> 每份危险货物文件都含 shipper，64 条命中里绝大多数是 Special Permits 通告。
+> **现在换个词，又从一个新门进来了。**
+
+**正解不是收窄关键词**（会漏真政策），而是**按文档类型过滤**：
+新增 `BATCH_DOC_NOISE`（只看标题——这类文书标题是固定模板；
+正文里出现相同短语可能是合法的政策引用，不能一概而论）。
+效果：总 **510 → 450**，待人工复核 **180 → 140**。
+
+> ❗ `foreign-trade zone` **刻意不列入**过滤表：FTZ 的生产活动通知
+> （如 `FTZ 193; Authorization of Production Activity; Lithionics Battery`）
+> 虽是行政文书，但它是**真实的产能信号**，应归企业情报而不是丢弃。
+
+### 10.5 已备好、尚未接入的入口
 
 **N-Lex 全成员国法规库入口（27 个，实测可达）**
 

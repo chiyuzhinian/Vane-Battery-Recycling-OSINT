@@ -197,18 +197,101 @@ us:
     base_credibility: 100
     method: api
     # ⭐ 按机构定向检索比泛搜精准得多（实测 count 可核对）
+    #
+    # ⚠️ slug **全部取自 Federal Register 自己的官方机构表**
+    #    （GET /api/v1/agencies.json → 472 个机构）：
+    #    **不要猜 slug** —— 猜错不会报错，只会静默返回 0 条。
+    #
+    # 2026-09-11 扩充：此前只有 EPA / DOE / DOT / IRS 四个，漏掉了本领域
+    # 最关键的几个机构：
+    #   · pipeline-and-hazardous-materials-safety-administration ← **PHMSA**，
+    #     黑粉与退役电池运输（②线）的主管机构：49 CFR 173、UN3480/3481、
+    #     DDR（损坏/缺陷/召回）电池规则。此前只能靠浏览器爬它的网页。
+    #   · industry-and-security-bureau ← **BIS**，出口管制（黑粉出口）
+    #   · state-department ← **国务院**，巴塞尔公约缔约方事务
+    #   · customs-service / homeland-security-department ← 进出口与边境
+    #   · coast-guard / federal-aviation-administration /
+    #     transportation-security-administration ← 海运与空运锂电池
+    # ⭐⭐ 实测（2026-09-11）：用「battery」作对照验证每个 slug，再用
+    #     本领域词看实际命中。**结果推翻了一个重要假设**：
+    #
+    #       black mass 命中分布：
+    #         industry-and-security-bureau (BIS 出口管制)   2 条
+    #         state-department          (国务院/巴塞尔公约) 2 条
+    #         commerce-department       (商务部/关键矿产)  2 条
+    #         justice-department        (司法部/执法)      2 条
+    #         environmental-protection-agency / transportation-department /
+    #         energy-department                              0 条
+    #
+    #     → **黑粉在美国的真实监管不在 EPA/DOT/DOE，而在
+    #        出口管制 + 巴塞尔公约 + 关键矿产 + 执法 四条线上。**
+    #       原配置只查 EPA/DOE/DOT，这四条全漏了。
+    #
+    # ⚠️ 验证方法：`py scripts/verify_fr_agencies.py`
+    #    slug 猜错**不会报错**，只会静默返回 0 条
+    #    （实测 customs-service 与 council-on-environmental-quality 均无效，已剔除）。
     agencies_by_cluster:
-      C3_black_mass:            [environmental-protection-agency, transportation-department, energy-department]
-      C1_eol_battery:           [environmental-protection-agency, energy-department]
-      C2_elv:                   [environmental-protection-agency, transportation-department]
-      C6_transport_hazmat:      [transportation-department]
-      C7_duediligence_crm:      [energy-department, internal-revenue-service]
+      C1_eol_battery:           [environmental-protection-agency, energy-department,
+                                 energy-efficiency-and-renewable-energy-office,
+                                 pipeline-and-hazardous-materials-safety-administration,
+                                 national-highway-traffic-safety-administration,
+                                 national-institute-of-standards-and-technology,
+                                 federal-trade-commission]
+      C2_elv:                   [environmental-protection-agency, transportation-department,
+                                 national-highway-traffic-safety-administration,
+                                 federal-highway-administration]
+      C3_black_mass:            [environmental-protection-agency, transportation-department,
+                                 energy-department,
+                                 pipeline-and-hazardous-materials-safety-administration,
+                                 industry-and-security-bureau, state-department,
+                                 commerce-department, justice-department,
+                                 coast-guard, federal-railroad-administration]
+      C4_recycling_efficiency:  [environmental-protection-agency,
+                                 energy-efficiency-and-renewable-energy-office,
+                                 national-institute-of-standards-and-technology,
+                                 federal-trade-commission]
+      C5_epr_collection:        [environmental-protection-agency, federal-trade-commission,
+                                 interior-department]
+      C6_transport_hazmat:      [pipeline-and-hazardous-materials-safety-administration,
+                                 transportation-department, federal-aviation-administration,
+                                 transportation-security-administration, coast-guard,
+                                 federal-railroad-administration, homeland-security-department,
+                                 national-transportation-safety-board]
+      C7_duediligence_crm:      [energy-department, internal-revenue-service,
+                                 commerce-department, interior-department,
+                                 international-trade-administration,
+                                 industry-and-security-bureau, state-department,
+                                 international-trade-commission,
+                                 trade-representative-office-of-united-states,
+                                 homeland-security-department]
+      C8_carbon_passport:       [environmental-protection-agency,
+                                 national-institute-of-standards-and-technology,
+                                 commerce-department, federal-trade-commission]
+    # ⚠️ 每个词 = 1 次 API 调用（1 req/s 限速），所以词表不是越长越好，
+    #    但要覆盖全部 8 个簇 —— 此前 C4/C5/C8 没有专属词，走的是兜底。
     terms_by_cluster:
-      C3_black_mass:            ["black mass", "shredded lithium", "hazardous secondary material", "battery recycling"]
-      C1_eol_battery:           ["waste battery", "spent lithium", "used lithium-ion batter", "battery disposal"]
-      C2_elv:                   ["end-of-life vehicle", "salvage vehicle", "vehicle recycling", "junk vehicle"]
-      C6_transport_hazmat:      ["lithium battery transport", "hazmat lithium", "damaged defective recalled"]
-      C7_duediligence_crm:      ["critical minerals", "battery material", "advanced manufacturing production credit"]
+      C3_black_mass:            ["black mass", "shredded lithium",
+                                 "hazardous secondary material", "battery recycling",
+                                 "shredder residue", "battery shredding"]
+      C1_eol_battery:           ["waste battery", "spent lithium",
+                                 "used lithium-ion batter", "battery disposal",
+                                 "lithium-ion battery recycling"]
+      C2_elv:                   ["end-of-life vehicle", "salvage vehicle",
+                                 "vehicle recycling", "junk vehicle",
+                                 "automotive shredder"]
+      C4_recycling_efficiency:  ["recycling efficiency", "recycled content",
+                                 "material recovery"]
+      C5_epr_collection:        ["extended producer responsibility",
+                                 "product stewardship", "battery collection",
+                                 "battery take-back"]
+      C6_transport_hazmat:      ["lithium battery transport", "hazmat lithium",
+                                 "damaged defective recalled",
+                                 "UN3480", "lithium battery air transport"]
+      C7_duediligence_crm:      ["critical minerals", "battery material",
+                                 "advanced manufacturing production credit",
+                                 "lithium", "cobalt", "graphite"]
+      C8_carbon_passport:       ["battery passport", "digital product passport",
+                                 "carbon footprint battery"]
     check_frequency: weekly
 
   # ---------- 部门专页 ----------
@@ -388,9 +471,16 @@ open_data_portals:
       base_credibility: 100
       clusters: [C2_elv, C1_eol_battery]
       note: |
-        ⭐ 正确获取路径不是直连 Légifrance，而是
-        **EUR-Lex 的「成员国转化措施」(national transposition measures)** ——
-        指令的各国转化法条在 EUR-Lex 上可查，且走 SPARQL 不受封锁。
+        ⚠️ **已证伪的旧结论（保留以防重蹈）**：曾记"正确获取路径是 EUR-Lex 的
+        「成员国转化措施」(national transposition measures)"。
+        实测（2026-09-11）：把 `32000L0053` 的全部谓词汇总查了一遍，
+        **EUR-Lex 的 Cellar 本体里不存在这个谓词**。
+        成员国法只能**逐国解决**，不要指望一次覆盖：
+          · 德国 gesetze-im-internet 官方 XML ✅
+          · 荷兰 KOOP BWB（SRU 检索 + 版本级 XML）✅
+          · 西班牙 BOE 开放数据 API（需 Accept: application/xml）✅
+          · 法国 DILA 日增量（LEGI 修订 / JORF 发布）✅
+          · 其余 23 国入口清单见 N-Lex（/n-lex/legis_{cc}/..._form）
 
   eu_level:
     - id: eu_data_portal

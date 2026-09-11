@@ -48,6 +48,12 @@ except Exception:  # noqa: BLE001
 OUT = ROOT / "outputs"
 TAXONOMY_FILE = ROOT / "sources" / "keyword-taxonomy-eol-battery.yaml"
 SOURCES_FILE = ROOT / "sources" / "policy-eu-us-eol-blackmass.yaml"
+# ⭐ 关联法案：由 EUR-Lex SPARQL 按**标题锚点**发现（discover_eu_acts.py），
+#    再经 merge_eu_candidates.py 筛选固化。
+#    为什么必须单列：核心法（电池法/ELV 指令）只是框架，**真正落地义务的是
+#    授权/实施法案**（碳足迹计算方法、再生料核算、尽职调查、电池护照…）。
+#    不跟踪这些 = "知道有法规，不知道具体要做什么"。
+EU_ACTS_FILE = ROOT / "sources" / "eu-acts-tracked.yaml"
 
 # 每个源最多取多少条（防止单源刷爆）
 PER_SOURCE_LIMIT = 120
@@ -77,6 +83,25 @@ def build_plan(taxonomy: dict, sources: dict, cluster: str | None) -> dict:
         for rel in (s.get("related_celex") or []):
             eu_celex.append({"celex": rel["id"], "source_id": s["id"],
                              "name": rel.get("desc", "")})
+
+    # ⭐ 并入发现出来的关联法案（授权/实施法案与提案）
+    if EU_ACTS_FILE.exists():
+        acts = yaml.safe_load(EU_ACTS_FILE.read_text(encoding="utf-8")) or {}
+        known = {c["celex"] for c in eu_celex}
+        added = 0
+        for a in (acts.get("tracked") or []):
+            cx = a.get("celex")
+            if not cx or cx in known:
+                continue
+            known.add(cx)
+            eu_celex.append({
+                "celex": cx,
+                "source_id": "eu_eurlex_battery_reg",
+                "name": f"[{a.get('kind', '')}] {(a.get('title') or '')[:64]}",
+            })
+            added += 1
+        if added:
+            print(f"  ⊕ 关联法案 {added} 个（来源 {EU_ACTS_FILE.name}）")
 
     eu_keywords: list[str] = []
     # 优先用配置里的「精选检索词」——不是所有同义词都值得搜（见 taxonomy 说明）

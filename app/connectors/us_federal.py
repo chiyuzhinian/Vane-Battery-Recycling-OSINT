@@ -49,6 +49,32 @@ FIELDS = [
     "document_number", "type", "agencies", "excerpts",
 ]
 
+# ⚠️⚠️ 联邦公报的**批量行政文书** —— FR 全文检索的固有噪声
+#
+# 实测（2026-09-11）：把机构从 4 个扩到 15 个、词表从 20 个扩到 27 个之后，
+#   “待人工复核”从个位数冲到 **180 条**。抽样发现绝大多数来自这几类文书：
+#
+#     “Agency Information Collection Activities”            47+17 条 ← ICR 信息收集公告
+#     “Notice of Applications/Actions on Special Permits”   23 条   ← PHMSA 许可通告
+#     “Alaska/Alabama: ... State Hazardous Waste Program”   18 条   ← 州级 RCRA 授权
+#
+#   ⚠️ 这与本项目早先踩过的坑是**同一类**：那时是“不要加 `shippers?`” ——
+#     每份危险货物文件都含 shipper，64 条命中里绝大多数是 Special Permits 通告。
+#     现在换个词，又从另一个门进来了。
+#
+#   正解**不是收窄关键词**（会漏真政策），而是**按文档类型过滤**：
+#   这些是“行政批量公告”，不是“政策法规”。
+#
+#   ❗ 注意 “foreign-trade zone” **不列入本表**：FTZ 的生产活动通知
+#      （如 “FTZ 193; Authorization of Production Activity; Lithionics Battery”）
+#      虽然是行政文书，但它是**真实的产能信号**，应归企业情报而不是丢弃。
+BATCH_DOC_NOISE = (
+    "agency information collection activities",
+    "notice of applications for new special permits",
+    "notice of actions on special permits",
+    "preliminary effluent guidelines",
+)
+
 
 class FederalRegisterConnector(BaseConnector):
     """美国联邦公报连接器。"""
@@ -123,6 +149,9 @@ class FederalRegisterConnector(BaseConnector):
                 # 例：搜 "black mass" 时，"Massachusetts ... black-lung" 这类会被剔除。
                 if not self._phrase_ok(doc, term):
                     continue
+                # 批量行政文书：FR 全文检索的固有噪声（见 BATCH_DOC_NOISE 注释）
+                if self._is_batch_noise(doc):
+                    continue
                 out.append(self._to_evidence(doc, term))
 
             total_pages = int(payload.get("total_pages") or 0)
@@ -143,6 +172,16 @@ class FederalRegisterConnector(BaseConnector):
         if not haystack:
             return True          # 没内容可比对时不误杀
         return all(re.search(rf"\b{re.escape(w.lower())}", haystack) for w in words)
+
+    @staticmethod
+    def _is_batch_noise(doc: dict[str, Any]) -> bool:
+        """该文书是否为“行政批量公告”（非政策法规）？
+
+        只看**标题**：这些文书的标题是固定模板，命中即整类剔除；
+        而正文里出现相同短语可能是合法的政策引用，不能一概而论。
+        """
+        title = (doc.get("title") or "").lower()
+        return any(noise in title for noise in BATCH_DOC_NOISE)
 
     def _to_evidence(self, doc: dict[str, Any], term: str) -> RawEvidence:
         agencies = ", ".join(

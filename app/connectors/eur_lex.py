@@ -113,6 +113,44 @@ WHERE {{
 LIMIT {limit}
 """
 
+# 按标题锚点找「以某部法为依据」的法案 —— **欧盟层的最大缺口在这里**
+#
+# 为什么必须单列这个查询
+# ----------------------
+# 电池法 (EU) 2023/1542 本身只是框架：真正落地义务的是它的
+# **授权法案（delegated）与实施法案（implementing）**——
+# 碳足迹计算方法、再生料含量核算、尽职调查、电池护照、回收效率……
+# 这些一部都没被跟踪，等于"知道有法规，不知道具体要做什么"。
+#
+# 怎么找：这些法案的标题里**必然写明** supplementing/amending 的基础法号
+#   e.g. "Commission Delegated Regulation (EU) 2025/606 supplementing
+#         Regulation (EU) 2023/1542 ..."
+# 所以按标题锚定字符串（"2023/1542"）检索最稳。
+#
+# ⚠️ 必须先按 CELEX 年份前缀收窄再做标题 CONTAINS ——
+#    直接对全库标题做 CONTAINS 会全表扫描（见 Q_KEYWORD 的教训）。
+# ⚠️ sector 3 = 正式立法，5 = 提案。两者都要（提案是监测信号）。
+# ⚠️ 查询形状必须与已验证可用的 Q_KEYWORD **完全一致**。
+#    实测教训（2026-09-11）：我加了三处"改进"——
+#      · FILTER(LANG(?title)="en")  · OPTIONAL 日期/类型  · DISTINCT 多投影一个变量
+#    结果查询直接**超时**（curl 60s / 150s 均无响应），而端点本身 1 秒就答。
+#    回退成同形写法后立即返回。**在慢查询引擎上不要把工作版本的形状"顺手改好"。**
+#    语言去重在 Python 侧做（同 _fetch_by_keyword 的做法）。
+# ⚠️ sector：3 = 正式立法，5 = 提案。要用两次分别查，不要在正则里写 (3|5)。
+Q_TITLE_ANCHOR = """
+PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+SELECT DISTINCT ?work ?celex ?title ?date
+WHERE {{
+  ?work cdm:resource_legal_id_celex ?celex .
+  FILTER(REGEX(STR(?celex), "^({sector})({years})"))
+  ?work cdm:work_date_document ?date .
+  ?expr cdm:expression_belongs_to_work ?work .
+  ?expr cdm:expression_title ?title .
+  FILTER(CONTAINS(STR(?title), "{anchor}"))
+}}
+LIMIT {limit}
+"""
+
 # 单部法规的关系图（修订 / 废止 / 合并版本）
 Q_RELATIONS = """
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
@@ -394,6 +432,47 @@ class EurLexConnector(BaseConnector):
             o = self._val(b, "object") or ""
             rel.setdefault(p.replace(CDM, ""), []).append(o)
         return rel
+
+    async def find_acts_by_title(self, anchor: str,
+                                 years: str = "20(2[3-9])",
+                                 limit: int = 120,
+                                 sectors: tuple[str, ...] = ("3", "5")) -> list[dict[str, Any]]:
+        """按标题锚点找「以某部法为依据」的法案（授权/实施/修订/提案）。
+
+        参数
+        ----
+        anchor : 出现在标题里的基础法号，如 "2023/1542"（电池法）、
+                 "2000/53/EC"（报废车指令）、"2024/1157"（废物运输）
+        years  : CELEX 年份正则片段（**必须先收窄再做标题 CONTAINS**，
+                 否则全表扫描；见 Q_KEYWORD 的实测教训）
+        sectors: 3=正式立法 5=提案。**分两次查**，不要写成 (3|5) ——
+                 实测那样会超时（见 Q_TITLE_ANCHOR 注释）。
+        """
+        out: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for sector in sectors:
+            try:
+                rows = await self._sparql(Q_TITLE_ANCHOR.format(
+                    anchor=anchor, years=years, limit=limit, sector=sector))
+            except Exception as exc:  # noqa: BLE001
+                print(f"    ⚠️ 锚点 {anchor} sector={sector} 失败：{type(exc).__name__}")
+                continue
+            for b in rows:
+                celex = self._val(b, "celex")
+                if not celex or celex in seen:
+                    continue
+                # 语言去重（同 _fetch_by_keyword：只要英文标题）
+                if self._lang(b, "title") not in ("en", None):
+                    continue
+                seen.add(celex)
+                out.append({
+                    "celex": celex,
+                    "title": self._val(b, "title") or "",
+                    "date": self._val(b, "date"),
+                    "sector": "提案" if sector == "5" else "立法",
+                    "work": self._val(b, "work"),
+                })
+        return out
 
     # ---------- 探测 ----------
     async def probe(self) -> ProbeResult:
