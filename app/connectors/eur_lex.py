@@ -225,7 +225,7 @@ class EurLexConnector(BaseConnector):
                 publish_date=parse_date(
                     self._val(b, "entryForce") or self._val(b, "date")
                 ),
-                raw_text=self._render(celex, b),
+                raw_text=self._with_fulltext(celex, self._render(celex, b)),
                 meta={
                     "celex": celex,
                     "title_en": title,
@@ -273,7 +273,7 @@ class EurLexConnector(BaseConnector):
                 source_url=self._eurlex_url(celex),
                 source_title=title,
                 publish_date=parse_date(self._val(b, "date")),
-                raw_text=title,
+                raw_text=self._with_fulltext(celex, title),
                 meta={
                     "celex": celex,
                     "title_en": title,
@@ -286,7 +286,32 @@ class EurLexConnector(BaseConnector):
         return out
 
     # ---------- 正文（EUR-Lex HTML）----------
-    #
+    @staticmethod
+    def _with_fulltext(celex: str, base_text: str, chars: int = 12000) -> str:
+        """若磁盘已有正文快照，把它并进 raw_text。
+
+        ⚠️ 为什么必须并：SPARQL 只给元数据，raw_text 里只有
+           "EU legislation CELEX 32000L0053" 这种占位符 →
+           **相关性判定根本没有内容可判** → 整部法规被静默丢弃。
+
+           实测（2026-09-11）：报废车指令 2000/53/EC（ELV 主干法）
+           就因为这个原因被判为不相关，尽管它的全文早已落盘在
+           `sources/eurlex-fulltext/32000L0053.txt`。
+
+           这与荷兰 BWB 取到 `<work>` 空壳、以及 Q_CELEX 早期漏掉
+           `expression_title` 是**同一类问题**：
+             记录存在，但内容为空。
+        """
+        path = FULLTEXT_DIR / f"{celex}.txt"
+        if not path.exists():
+            return base_text
+        try:
+            body = path.read_text(encoding="utf-8")
+        except Exception:  # noqa: BLE001
+            return base_text
+        return f"{base_text}\n\n[正文快照 {path.name}，{len(body)} 字符]\n{body[:chars]}"
+
+    # ---------- 正文（EUR-Lex HTML）----------
     # 为什么必须有这条通道：SPARQL 只给元数据。整个欧盟层曾长期"只有 CELEX 号、
     # 没有条文"，导致报告里只能列出法规清单，无法引用"第 X 条规定了什么"。
     #

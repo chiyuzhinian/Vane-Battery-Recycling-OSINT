@@ -34,7 +34,9 @@ from __future__ import annotations
 
 import io
 import re
+import asyncio
 import tarfile
+from datetime import datetime, timezone
 from typing import Any
 
 from .base import BaseConnector, ConnectorError, ProbeResult, RawEvidence
@@ -43,6 +45,19 @@ BASE = "https://echanges.dila.gouv.fr/OPENDATA"
 _HREF_RE = re.compile(r'href="([^"]+)"')
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
+# 增量包名形如 LEGI_20260911-003012.tar.gz / JORF_20260911-002839.tar.gz
+_NAME_DATE_RE = re.compile(r"_(\d{8})-\d{6}\.tar\.gz$")
+
+
+def _date_from_name(name: str) -> "datetime | None":
+    """从增量包文件名解析发布日期（否则 publish_date 永远是 None）。"""
+    m = _NAME_DATE_RE.search(name)
+    if not m:
+        return None
+    try:
+        return datetime.strptime(m.group(1), "%Y%m%d").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
 
 # 本领域关键词（法语）。用于从增量包里筛出相关文本。
 KEYWORDS_FR: list[str] = [
@@ -60,6 +75,9 @@ class DilaFrConnector(BaseConnector):
     source_id = "fr_dila"
     base_url = BASE
     timeout = 90.0
+
+    # ⚠️ 该主机偶发返回空响应（curl code 0），必须重试
+    RETRY_ON_EMPTY = 3
 
     async def list_files(self, dataset: str = "LEGI",
                          limit: int = 200) -> list[str]:
@@ -86,10 +104,8 @@ class DilaFrConnector(BaseConnector):
 
         out: list[RawEvidence] = []
         for name in files[:latest]:
-            try:
-                blob = await self._download(name)
-            except Exception as exc:  # noqa: BLE001
-                print(f"    ⚠️ {name} 下载失败：{type(exc).__name__}")
+            blob = await self._download_retry(name, dataset)
+            if blob is None:
                 continue
             hits = self._scan(blob, kws, max_files_scanned)
             print(f"    {name}（{len(blob) / 1024:.0f} KB）→ 命中 {len(hits)} 个文本")
@@ -100,7 +116,7 @@ class DilaFrConnector(BaseConnector):
                     source_id=self.source_id,
                     source_url=f"{BASE}/{dataset}/{name}",
                     source_title=f"[DILA {dataset}] {h['title']}",
-                    publish_date=None,
+                    publish_date=_date_from_name(name),
                     raw_text=h["text"][:4000],
                     meta={
                         "country": "FR",
@@ -114,8 +130,33 @@ class DilaFrConnector(BaseConnector):
                 ))
         return out
 
-    async def _download(self, name: str) -> bytes:
-        resp = await self._polite_get(f"{BASE}/LEGI/{name}")
+    async def _download_retry(self, name: str, dataset: str,
+                              tries: int = 3) -> bytes | None:
+        """带重试的下载。
+
+        ⚠️ 该主机（echanges.dila.gouv.fr）**已知会瞬时失败**：
+           实测出现过 curl 返回空（code 0）、以及 LEGI 大包下载报 ConnectorError。
+           同一次运行里 JORF 成功、LEGI 失败 —— 完全是抖动，不是不可用。
+           不重试就会把"这次没拿到"误记成"这个源不行"。
+        """
+        last: str = ""
+        for attempt in range(tries):
+            try:
+                return await self._download(name, dataset)
+            except Exception as exc:  # noqa: BLE001
+                last = type(exc).__name__
+                if attempt < tries - 1:
+                    await asyncio.sleep(2.0 * (attempt + 1))
+        print(f"    ⚠️ {name} 重试 {tries} 次仍失败（{last}）")
+        return None
+
+    async def _download(self, name: str, dataset: str = "LEGI") -> bytes:
+        """下载增量包。
+
+        ⚠️ 必须带上 dataset：曾经硬编码 `/LEGI/`，
+           导致 `fetch(dataset="JORF")` 是**去 LEGI 目录下找 JORF 的文件**（必然 404）。
+        """
+        resp = await self._polite_get(f"{BASE}/{dataset}/{name}")
         return resp.content
 
     def _scan(self, blob: bytes, kws: list[str],

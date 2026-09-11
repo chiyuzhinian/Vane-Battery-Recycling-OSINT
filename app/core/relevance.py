@@ -46,20 +46,35 @@ STRONG_PATTERNS: list[str] = [
     r"recycled content", r"battery passport",
     r"recycling efficiency", r"collection target",
     r"battery material", r"battery component", r"battery supply chain",
+    # ---- ELV（报废车）侧 —— 英语/欧盟术语 ----
+    # ⚠️ 这是一个真实缺口：英语模式里**只有 battery 侧的词，没有 vehicle 侧**。
+    #    实测后果：报废车指令 2000/53/EC（ELV 主干法，3.2 万字符全文）
+    #    只能靠 `depollution` 勉强命中 —— 而那是法语模式顺带覆盖的，
+    #    `end-of-life vehicle` / `2000/53/EC` / `shredder light fraction`
+    #    这些 ELV 核心术语一个都没有。
+    r"end-of-life\s+vehicles?", r"\belv\b",
+    r"2000/53/EC", r"2005/64/EC",                    # ELV 指令 / 3R 型式认证
+    r"certificate\s+of\s+destruction",               # 报废证明（COD）
+    r"dismantl\w*\s+of\s+vehicles?", r"dismantlers?",
+    r"shredder\s+light\s+fraction", r"\bslf\b",     # 破碎轻馏分
+    r"vehicle\s+recycl",
+    r"take-back\s+of\s+(old\s+)?vehicles",
 ]
 
 # ============================================================
-# 第一段 B：欧盟成员国语言（德 / 法）—— ⚠️ 不加这一组会丢失整个成员国层
+# 第一段 B：欧盟成员国语言（德 / 法 / 荷）—— ⚠️ 不加这一组会丢失整个成员国层
 # ------------------------------------------------------------
 # 实测（2026-09-11）：
 #     altautov（德国 AltfahrzeugV 报废车法，5.4 万字符） → ❌ 未命中必修词
 #     avv     （德国 AVV 欧洲废物目录，危废分类依据）    → ❌ 未命中必修词
 #     ADEME REP-VHU-broyeurs（法国 122 条破碎厂数据）    → ❌ 未命中必修词
+#   BWB 荷兰法规正文                                    → 若不补则同样丢失
 #   即：**数据采到了，但系统不认** —— 这是最危险的一类 bug，
 #   因为采集日志一切正常，只是入不了库。
 #
 # 选词标准：必须是本国**本领域专有名词**，不是通用词。
-# 反而要避免的：bare `batterie`（`batter` 已覆盖）、通用 `Abfall`（=waste，太泛）。
+# 反而要避免的：bare `batterie`（`batter` 已覆盖）、通用 `Abfall`（=waste，太泛）、
+#                荷兰语通用 `afvalstof`（=waste）——只取精确的 `afvalstoffenlijst`。
 # ============================================================
 MEMBER_STATE_PATTERNS: list[str] = [
     # ---- 德语（德国转化 ELV 指令、实施 EU 电池法）----
@@ -80,6 +95,26 @@ MEMBER_STATE_PATTERNS: list[str] = [
     r"responsabilit[eé]\s+[eé]largie\s+du\s+producteur",   # 生产者延伸责任
     r"fili[eè]re\s+[àa]\s+responsabilit",                  # REP 体系的法式说法
     r"centre\s+de\s+traitement\s+de\s+v[eé]hicules",       # 报废车处理中心
+    # ---- 荷兰语（荷兰《环境管理法》/《报废车辆管理令》体系，KOOP BWB）----
+    r"autowrak",                # 报废车（荷兰语 ELV 标准说法，含 autowrakken）
+    r"batterij",                # 电池（含 batterijen）
+    r"\baccu'?s?\b",            # 蓄电池（法规中的常用简称）
+    r"accumulatoren?",          # 蓄电池（正式写法）
+    r"zwarte\s+massa",          # 黑粉（荷兰语）
+    r"afvalstoffenlijst",       # 废物清单（危废定性依据，对应德国 abfallverzeichnis）
+    r"producentenverantwoordelijkheid",   # 生产者延伸责任（对应法国 REP）
+    r"batterijverordening",     # 电池条例（欧盟 2023/1542 的荷兰语称法）
+    # ---- 西班牙语（西班牙 BOE 立法整合库）----
+    r"bater[ií]a",              # 电池
+    r"\bpilas?\b",             # 电池（西语常用，注意 pila 也有“堆”义）
+    r"acumulador",             # 蓄电池
+    r"veh[ií]culos?\s+fuera\s+de\s+uso",   # 报废车（西语 VFU）
+    r"\bvfu\b",
+    r"masa\s+negra",           # 黑粉（西语）
+    r"descontaminaci[óo]n",    # 去除污染（报废车预处理）
+    r"fragmentaci[óo]n",       # 破碎（↔ 英语 shredding）
+    r"residuos?\s+peligrosos", # 危险废物
+    r"chatarra",               # 废金属
 ]
 
 # 第二段 B：上下文词 —— 单独出现不算，必须与"锚点"共现
@@ -143,6 +178,11 @@ BLACK_MASS_LINE_PATTERNS: list[tuple[str, str]] = [
     (r"transboundary\s+movements?", LINE_EOL_SHIPMENT),
     (r"abfallverbringung", LINE_EOL_SHIPMENT),
     (r"transfert\s+de\s+d[eé]chets", LINE_EOL_SHIPMENT),
+    # ⚠️ 成员国语言版本：不加则荷兰/西班牙法规在四线分析里"看不见"
+    (r"overbrenging\s+van\s+afvalstoffen", LINE_EOL_SHIPMENT),   # 荷兰语
+    (r"grensoverschrijdende\s+overbrenging", LINE_EOL_SHIPMENT),
+    (r"traslado\s+de\s+residuos", LINE_EOL_SHIPMENT),            # 西班牙语
+    (r"movimientos?\s+transfronterizos?\s+de\s+residuos", LINE_EOL_SHIPMENT),
     # ---- ② 危险货物运输 ----
     # ⚠️ 不要加 `shippers?`：每份危险货物文件都会出现 "shipper"，
     #    实测导致 64 条命中里绝大多数是 "Notice of Actions on Special Permits"
@@ -157,6 +197,10 @@ BLACK_MASS_LINE_PATTERNS: list[tuple[str, str]] = [
     (r"\brcra\b", LINE_HAZWASTE),
     (r"abfallverzeichnis", LINE_HAZWASTE),
     (r"avfallsf[oö]rordning", LINE_HAZWASTE),
+    # ⚠️ 都是"废物清单"的精确对应词，不是泛指的"废物"：
+    (r"afvalstoffenlijst", LINE_HAZWASTE),                    # 荷兰语
+    (r"lista\s+europea\s+de\s+residuos", LINE_HAZWASTE),      # 西班牙语（LER）
+    (r"\bler\b\s*\(?\s*lista", LINE_HAZWASTE),
     # ---- ④ 战略价值认定 ----
     (r"\b2024/1252\b", LINE_STRATEGIC),             # 关键原材料法
     (r"critical\s+raw\s+materials?\s+act", LINE_STRATEGIC),

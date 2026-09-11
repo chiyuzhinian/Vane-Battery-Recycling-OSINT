@@ -209,6 +209,47 @@ async def collect_member_states() -> list:
     except Exception as exc:  # noqa: BLE001
         print(f"  ⚠️ 德国法规失败: {type(exc).__name__}")
 
+    print("\n🇳🇱 荷兰国家法规（KOOP BWB 官方 XML）")
+    try:
+        async with get_connector("nl_bwb") as conn:
+            # ⚠️ 检索词必须是荷兰语**词形**：索引精确词匹配，autowrak 查不到 autowrakken
+            batch = await conn.fetch(
+                terms=["autowrakken", "batterijen", "accumulatoren", "afvalstoffen"],
+                limit=25,
+            )
+            for it in batch:
+                print(f"  {it.meta['bwb_id']:<14} {len(it.raw_text):>7} 字符"
+                      f" | 版本 {it.meta.get('version_count'):>3}"
+                      f" | {it.meta.get('version_start')}"
+                      f" | {(it.meta.get('law_title') or '')[:38]}")
+            items += batch
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ⚠️ 荷兰法规失败: {type(exc).__name__}: {exc}")
+
+    print("\n🇪🇸 西班牙立法整合库（BOE 官方 API）")
+    try:
+        async with get_connector("es_boe") as conn:
+            # min_score=2：只取含“电池/报废车/破碎/回收”类词的法，
+            # 排掉只含 residuo 的自治区通用废物法（25~48 万字符/部，会把目录冲垮）
+            batch = await conn.fetch(min_score=2, drop_expired=True, limit=15)
+            for it in batch:
+                print(f"  {it.meta['boe_id']:<20} {len(it.raw_text):>7} 字符"
+                      f" | {'精选' if it.meta.get('curated') else '目录分 ' + str(it.meta.get('title_score'))}"
+                      f" | {(it.meta.get('law_title') or '')[:34]}")
+            items += batch
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ⚠️ 西班牙法规失败: {type(exc).__name__}: {exc}")
+
+    print("\n🇫🇷 法国 DILA（LEGI 法规修订 + JORF 新法规发布）")
+    async with get_connector("dila_fr") as conn:
+        for dataset, label in (("LEGI", "法规被修订"), ("JORF", "新法规发布")):
+            try:
+                batch = await conn.fetch(dataset=dataset, latest=1)
+                print(f"  {dataset}（{label}）→ {len(batch)} 条")
+                items += batch
+            except Exception as exc:  # noqa: BLE001
+                print(f"  ⚠️ {dataset} 失败: {type(exc).__name__}: {exc}")
+
     print("\n🇫🇷 法国 ADEME 开放数据（Data Fair API）")
     try:
         async with get_connector("datafair") as conn:
@@ -402,6 +443,8 @@ async def main() -> int:
                     help="并入浏览器捕获的被拦站点（PHMSA/CalRecycle/BCI/ECHA/ADEME）")
     ap.add_argument("--no-member-states", action="store_true",
                     help="跳过欧盟成员国层（德国法规 XML + 法国 ADEME API）")
+    ap.add_argument("--only-member-states", action="store_true",
+                    help="只采成员国层（德/荷/西/法），跳过 EU SPARQL 与 US")
     args = ap.parse_args()
 
     taxonomy, sources = load_config()
@@ -415,6 +458,16 @@ async def main() -> int:
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     stats: dict[str, dict] = {}
     samples: dict[str, list] = {}
+
+    # 只跑成员国层：日常迭代这一层时不必等 EU SPARQL（偶发超时）与 US
+    if args.only_member_states:
+        items = await collect_member_states()
+        if args.include_browser:
+            items += load_browser_evidence()
+        stats["EU"] = dump(items, OUT / f"eol_EU_{stamp}.jsonl", "EU")
+        samples["EU"] = top_n(items)
+        write_summary(OUT / f"eol_summary_{stamp}.md", stats, samples, plan)
+        return 0
 
     # 浏览器捕获通道（按证据自带的 region 分配到对应区域）
     # 用前缀匹配而不是精确匹配：region 有 "EU" / "EU-MemberState" / "US" /

@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 02:41 UTC　（数据截止同上）
+生成时间：2026-09-11 03:48 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -11,10 +11,10 @@
 
 | 指标 | 数量 |
 |---|---:|
-| 去重后的证据条目 | 1320 |
-| 判定为**相关** | **266** |
-| 　其中高置信（自动判定） | 131 |
-| 　其中待人工复核 | 135 |
+| 去重后的证据条目 | 1348 |
+| 判定为**相关** | **290** |
+| 　其中高置信（自动判定） | 154 |
+| 　其中待人工复核 | 136 |
 | 覆盖监管层级 | 7 |
 | 欧盟法规全文快照 | **7 部**（可离线核查条文） |
 
@@ -24,7 +24,7 @@
 |---|---:|---|---:|
 | EU 一级立法 | 49 | 欧盟官方公报（EUR-Lex）、欧盟官方公报（EUR-Lex 关键词检索） | 100 |
 | EU 机构文件 | 6 | 欧洲化学品管理局（ECHA） | 95 |
-| 成员国法 | 4 | 德国联邦法律门户（官方 XML） | 100 |
+| 成员国法 | 28 | 荷兰 KOOP BWB 基础法规库（官方 XML）、西班牙官方公报 BOE（立法整合库 REST API） | 100 |
 | 成员国数据 | 19 | ADEME 开放数据门户、Stichting OPEN（电池/电子生产者责任组织） | 95 |
 | 美国联邦 | 177 | 美国联邦公报（Federal Register）、DOT 管道与危险材料安全管理局（PHMSA） | 100 |
 | 美国州级 | 3 | CalRecycle | 92 |
@@ -180,7 +180,22 @@
 - **EU legislation CELEX 32023R1542R(12)**
   - 日期 2026-02-17　原文：http://publications.europa.eu/resource/cellar/3f4e448f-0ba1-11f1-8870-01aa75ed71a1
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
-  - …另有 37 条（共 42 条，见 `outputs/eol_*.jsonl`）
+- **EU legislation CELEX 32023R1542R(12)**
+  - 日期 2026-02-17　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542R(12)
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
+- **EU legislation CELEX 32024R1252R(05)**　`待复核、黑粉线 ④`
+  - 日期 2026-02-11　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(05)
+  - 全文快照：`sources/eurlex-fulltext/32024R1252.txt`（221,942 字符）
+- **EU legislation CELEX 32024R1157R(05)**　`待复核、黑粉线 ①`
+  - 日期 2025-12-12　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(05)
+  - 全文快照：`sources/eurlex-fulltext/32024R1157.txt`（303,332 字符）
+- **EU legislation CELEX 32024R1157R(04)**　`待复核、黑粉线 ①`
+  - 日期 2025-12-11　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157R(04)
+  - 全文快照：`sources/eurlex-fulltext/32024R1157.txt`（303,332 字符）
+- **EU legislation CELEX 32024R1252R(04)**　`待复核、黑粉线 ④`
+  - 日期 2025-11-14　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(04)
+  - 全文快照：`sources/eurlex-fulltext/32024R1252.txt`（221,942 字符）
+  - …另有 32 条（共 42 条，见 `outputs/eol_*.jsonl`）
 
 #### 欧盟官方公报（EUR-Lex 关键词检索）（7 条）
 
@@ -194,7 +209,10 @@
   - 日期 2025-11-13　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R2289
 - **Regulation (EU) 2025/1561 of the European Parliament and of the Council of 18 July 2025 amending Regulation (EU) 2023/1542 as rega**
   - 日期 2025-07-18　原文：http://publications.europa.eu/resource/cellar/fe1163e4-6cdd-11f0-bf4e-01aa75ed71a1
-  - …另有 2 条（共 7 条，见 `outputs/eol_*.jsonl`）
+- **Commission Delegated Regulation (EU) 2025/606 of 21 March 2025 supplementing Regulation (EU) 2023/1542 of the European Parliament **
+  - 日期 2025-03-21　原文：http://publications.europa.eu/resource/cellar/5881a55e-5873-11f0-a9d0-01aa75ed71a1
+- **Commission Delegated Regulation (EU) 2025/606 of 21 March 2025 supplementing Regulation (EU) 2023/1542 of the European Parliament **
+  - 日期 2025-03-21　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0606
 
 ### EU 机构文件
 
@@ -211,12 +229,15 @@
   - 原文：https://echa.europa.eu/understanding-batteries-regulation
 - **ECHA's activities under Batteries Regulation - ECHA**
   - 原文：https://echa.europa.eu/echas-activities-under-batteries-regulation
-  - …另有 1 条（共 6 条，见 `outputs/eol_*.jsonl`）
+- **EU-BATTERIES_REGULATION-ANX_I_VI_ART_13_5 - ECHA**　`黑粉线 ④`
+  - 原文：https://echa.europa.eu/eu-batteries_regulation-anx_i_vi_art_13_5?p_p_id=eucleflegislationlist_WAR_euclefportlet&p_p_lifecycle=0
 
 ### 成员国法
 
-**机构**：德国联邦法律门户（官方 XML）　**可信度**：100/100　**条目**：4　
+**机构**：德国联邦法律门户（官方 XML）　**可信度**：100/100　**条目**：28　
 **内容**：AltfahrzeugV 报废车法 / BattDG 电池法 / AVV 废物目录
+
+#### 德国联邦法律门户（官方 XML）（4 条）
 
 - **Verordnung über Anforderungen an die Behandlung von Elektro- und Elektronik-Altgeräten* [eag-behandv]**
   - 原文：https://www.gesetze-im-internet.de/eag-behandv/
@@ -226,6 +247,47 @@
   - 原文：https://www.gesetze-im-internet.de/battdg/
 - **Verordnung über das Europäische Abfallverzeichnis [avv]**　`黑粉线 ③`
   - 原文：https://www.gesetze-im-internet.de/avv/
+
+#### 荷兰 KOOP BWB 基础法规库（官方 XML）（17 条）
+
+- **Besluit stortplaatsen en stortverboden afvalstoffen [BWBR0009094] 2026-01-01**
+  - 日期 2026-01-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0009094/2026-01-01_0/xml/BWBR0009094_2026-01-01_0.xml
+- **Besluit melden bedrijfsafvalstoffen en gevaarlijke afvalstoffen [BWBR0017294] 2025-07-01**
+  - 日期 2025-07-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0017294/2025-07-01_0/xml/BWBR0017294_2025-07-01_0.xml
+- **Besluit inzamelen afvalstoffen [BWBR0016530] 2024-01-01**
+  - 日期 2024-01-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0016530/2024-01-01_0/xml/BWBR0016530_2024-01-01_0.xml
+- **Besluit beheer autowrakken [BWBR0013707] 2024-01-01**
+  - 日期 2024-01-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0013707/2024-01-01_0/xml/BWBR0013707_2024-01-01_0.xml
+- **Regeling beheer batterijen en accu’s 2008 [BWBR0024492] 2024-01-01**
+  - 日期 2024-01-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0024492/2024-01-01_0/xml/BWBR0024492_2024-01-01_0.xml
+- **Verzamelbesluit wijziging bestaande UPV’s [BWBR0048234] 2023-07-01**
+  - 日期 2023-07-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0048234/2023-07-01_0/xml/BWBR0048234_2023-07-01_0.xml
+- **Regeling meldingsformulier batterijen en accu’s [BWBR0024500] 2023-07-01**
+  - 日期 2023-07-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0024500/2023-07-01_0/xml/BWBR0024500_2023-07-01_0.xml
+- **Besluit beheer batterijen en accu’s 2008 [BWBR0024491] 2023-01-01**
+  - 日期 2023-01-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0024491/2023-01-01_0/xml/BWBR0024491_2023-01-01_0.xml
+- **Wijzigingsbesluit Besluit beheer autobanden, enz. (aanpassing van de meldings- en mededelingstermijn (onbeperkte geldigheid meldin**
+  - 日期 2008-04-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0023036/2008-04-01_0/xml/BWBR0023036_2008-04-01_0.xml
+- **Besluit beheer batterijen [BWBR0007227] 2008-04-01**
+  - 日期 2008-04-01　原文：https://repository.officiele-overheidspublicaties.nl/bwb/BWBR0007227/2008-04-01_0/xml/BWBR0007227_2008-04-01_0.xml
+  - …另有 7 条（共 17 条，见 `outputs/eol_*.jsonl`）
+
+#### 西班牙官方公报 BOE（立法整合库 REST API）（7 条）
+
+- **Orden INT/1920/2011, de 1 de julio, por la que se refuerza el control respecto al comercio del cobre para los centros gestores de **
+  - 日期 2011-07-12　原文：https://www.boe.es/buscar/act.php?id=BOE-A-2011-11947
+- **Real Decreto 1619/2005, de 30 de diciembre, sobre la gestión de neumáticos fuera de uso. [BOE-A-2006-41]**
+  - 日期 2006-01-03　原文：https://www.boe.es/buscar/act.php?id=BOE-A-2006-41
+- **Real Decreto 1093/2024 —— 废物管理 [BOE-A-2024-21709]**　`待复核`
+  - 原文：https://www.boe.es/buscar/act.php?id=BOE-A-2024-21709
+- **Real Decreto 846/2011 —— 报废车辆（VFU）处理设施的条件 [BOE-A-2011-11827]**
+  - 原文：https://www.boe.es/buscar/act.php?id=BOE-A-2011-11827
+- **Real Decreto 106/2008 —— 电池与蓄电池及其废物的环境管理（西班牙实施欧盟电池指令的国内法） [BOE-A-2008-2387]**
+  - 原文：https://www.boe.es/buscar/act.php?id=BOE-A-2008-2387
+- **Real Decreto 993/2022 —— 电池相关的控制措施 [BOE-A-2022-19914]**
+  - 原文：https://www.boe.es/buscar/act.php?id=BOE-A-2022-19914
+- **Ley 7/2022 —— 废物与污染土壤（循环经济）国家基础法 [BOE-A-2022-5809]**
+  - 原文：https://www.boe.es/buscar/act.php?id=BOE-A-2022-5809
 
 ### 成员国数据
 
@@ -244,7 +306,17 @@
   - 原文：https://data.ademe.fr/datasets/materiaux-te-t1
 - **REP - VHU - TRR et TRV des Broyeurs depuis 2018**
   - 原文：https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-broyeurs-en-2018
-  - …另有 7 条（共 12 条，见 `outputs/eol_*.jsonl`）
+- **REP - VHU - TRR et TRV des CVHU depuis 2018**
+  - 原文：https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-cvhu-en-2018
+- **REP - VHU - Performances cumulées depuis 2018**
+  - 原文：https://data.ademe.fr/datasets/rep-vhu-performances-cumulees-en-2018
+- **REP - VHU - Liste des producteurs enregistrés à SYDEREP**
+  - 原文：https://data.ademe.fr/datasets/rep-vhu-liste-des-societes-inscrites-a-syderep
+- **Page non trouvée**
+  - 原文：https://data.ademe.fr/datasets/rep-vhu-tonnages-collectes-cvhu-depuis-2018
+- **Page non trouvée**
+  - 原文：https://data.ademe.fr/datasets/rep-vhu-tonnages-collectes-broyeurs-depuis-2018
+  - …另有 2 条（共 12 条，见 `outputs/eol_*.jsonl`）
 
 #### Stichting OPEN（电池/电子生产者责任组织）（7 条）
 
@@ -258,7 +330,10 @@
   - 原文：https://www.stichting-open.org/onze-organisatie/onzekerntaken/
 - **Stichting OPEN draagt met recordinzameling elektrisch afval bij aan grondstoffenzekerheid - Stichting OPEN**　`待复核`
   - 原文：https://www.stichting-open.org/2026/05/26/stichting-open-draagt-met-recordinzameling-elektrisch-afval-bij-aan-grondstoffenzekerheid/
-  - …另有 2 条（共 7 条，见 `outputs/eol_*.jsonl`）
+- **Peperzeel opent nieuwe sorteerlijn voor batterijen - Stichting OPEN**
+  - 原文：https://www.stichting-open.org/2026/07/15/peperzeel-opent-nieuwe-sorteerlijn-voor-batterijen/
+- **Humberto Tan verzorgt aftrap landelijke inlevercampagne batterijen ‘Doe maar apart’ - Stichting OPEN**
+  - 原文：https://www.stichting-open.org/2026/06/16/humberto-tan-verzorgt-aftrap-landelijke-inlevercampagne-batterijen-doe-maar-apart/
 
 ### 美国联邦
 
@@ -277,7 +352,17 @@
   - 日期 2026-09-01　原文：https://www.federalregister.gov/documents/2026/09/01/2026-17872/rescission-of-production-incentives-for-cellulosic-biofuels
 - **Nominations Request for the Good Neighbor Environmental Board**　`待复核`
   - 日期 2026-08-20　原文：https://www.federalregister.gov/documents/2026/08/20/2026-16931/nominations-request-for-the-good-neighbor-environmental-board
-  - …另有 164 条（共 169 条，见 `outputs/eol_*.jsonl`）
+- **Secretary of Energy Advisory Board**　`待复核`
+  - 日期 2026-08-18　原文：https://www.federalregister.gov/documents/2026/08/18/2026-16801/secretary-of-energy-advisory-board
+- **Agency Information Collection Activities; Comment Request on U.S. Trust and Estate Income Tax Returns and Related Forms, Schedules**　`待复核`
+  - 日期 2026-08-10　原文：https://www.federalregister.gov/documents/2026/08/10/2026-16243/agency-information-collection-activities-comment-request-on-us-trust-and-estate-income-tax-returns
+- **Agency Information Collection Activities; Comment Request on U.S. Business Income Tax Returns and Related Forms, Schedules, Attach**
+  - 日期 2026-08-10　原文：https://www.federalregister.gov/documents/2026/08/10/2026-16262/agency-information-collection-activities-comment-request-on-us-business-income-tax-returns-and
+- **Hazardous Materials: Notice of Actions on Special Permits**　`待复核、黑粉线 ②`
+  - 日期 2026-08-06　原文：https://www.federalregister.gov/documents/2026/08/06/2026-15973/hazardous-materials-notice-of-actions-on-special-permits
+- **Hazardous Materials: Notice of Applications for New Special Permits**　`待复核、黑粉线 ②`
+  - 日期 2026-08-06　原文：https://www.federalregister.gov/documents/2026/08/06/2026-15971/hazardous-materials-notice-of-applications-for-new-special-permits
+  - …另有 159 条（共 169 条，见 `outputs/eol_*.jsonl`）
 
 #### DOT 管道与危险材料安全管理局（PHMSA）（8 条）
 
@@ -291,7 +376,12 @@
   - 原文：https://www.epa.gov/smm/sustainable-materials-management-smm-web-academy-webinar-safe-transportation-lithium-batteries
 - **Used Lithium-Ion Batteries | US EPA**
   - 原文：https://www.epa.gov/recycle/used-lithium-ion-batteries
-  - …另有 3 条（共 8 条，见 `outputs/eol_*.jsonl`）
+- **Used Household Batteries | US EPA**
+  - 原文：https://www.epa.gov/recycle/used-household-batteries
+- **Safety Advisory Notice for the Transportation of Lithium Batteries for Disposal or Recycling | PHMSA**
+  - 日期 May 17, 20　原文：https://www.phmsa.dot.gov/training/hazmat/safety-advisory-notice-transportation-lithium-batteries-disposal-or-recycling
+- **Green Job Hazards - Recycling: Batteries | Occupational Safety and Health Administration**
+  - 原文：https://www.osha.gov/green-jobs/recycling/batteries
 
 ### 美国州级
 
@@ -320,7 +410,12 @@
   - 原文：https://batterycouncil.org/news/critical-mineral-recovery-why-every-lead-battery-matters-to-americas-supply-chain/
 - **Battery Policy & Initiatives | Battery Council International**
   - 原文：https://batterycouncil.org/policy-initiatives/
-  - …另有 3 条（共 8 条，见 `outputs/eol_*.jsonl`）
+- **New Study Confirms Lead Batteries Are America's Most Recycled Consumer Product, With a 98% Recycling Rate**
+  - 原文：https://batterycouncil.org/news/responsible-lead-battery-recycling-growth-through-continuous-improvement/
+- **New Study Confirms Lead Batteries Are America's Most Recycled Consumer Product, With a 98% Recycling Rate**
+  - 原文：https://batterycouncil.org/news/new-study-confirms-lead-batteries-are-americas-most-recycled-consumer-product-with-a-98-recycling-rate/
+- **Lead Battery Recycling | Battery Council International**
+  - 原文：https://batterycouncil.org/battery-facts-and-applications/battery-recycling/
 
 ---
 
@@ -515,38 +610,151 @@
 
 ## 八、数据源健康度
 
-| 源 | 层级 | 相关条目 | 命中率参考 |
-|---|---|---:|---|
-| `us_federal_register` | 美国联邦 | 169 | — |
-| `eu_eurlex_battery_reg` | EU 一级立法 | 42 | — |
-| `browser_france` | 成员国数据 | 12 | — |
-| `browser_bci` | 美国行业 | 8 | — |
-| `browser_phmsa` | 美国联邦 | 8 | — |
-| `eu_eurlex_keyword` | EU 一级立法 | 7 | — |
-| `browser_netherlands` | 成员国数据 | 7 | — |
-| `browser_echa` | EU 机构文件 | 6 | — |
-| `de_gesetze` | 成员国法 | 4 | — |
-| `browser_calrecycle` | 美国州级 | 3 | — |
+| 源 | 层级 | 机构 | 相关条目 |
+|---|---|---|---:|
+| `us_federal_register` | 美国联邦 | 美国联邦公报（Federal Register） | 169 |
+| `eu_eurlex_battery_reg` | EU 一级立法 | 欧盟官方公报（EUR-Lex） | 42 |
+| `nl_bwb` | 成员国法 | 荷兰 KOOP BWB 基础法规库（官方 XML） | 17 |
+| `browser_france` | 成员国数据 | ADEME 开放数据门户 | 12 |
+| `browser_bci` | 美国行业 | Battery Council International（铅电池协会） | 8 |
+| `browser_phmsa` | 美国联邦 | DOT 管道与危险材料安全管理局（PHMSA） | 8 |
+| `eu_eurlex_keyword` | EU 一级立法 | 欧盟官方公报（EUR-Lex 关键词检索） | 7 |
+| `browser_netherlands` | 成员国数据 | Stichting OPEN（电池/电子生产者责任组织） | 7 |
+| `es_boe` | 成员国法 | 西班牙官方公报 BOE（立法整合库 REST API） | 7 |
+| `browser_echa` | EU 机构文件 | 欧洲化学品管理局（ECHA） | 6 |
+| `de_gesetze` | 成员国法 | 德国联邦法律门户（官方 XML） | 4 |
+| `browser_calrecycle` | 美国州级 | CalRecycle | 3 |
 
 > 命中率口径说明：不同通道的采集方式不同（API 精准查询 vs 全文检索），
 > 跨通道比较命中率没有意义，故此处不列。同类通道内的命中率见 `outputs/eol_summary_*.md`。
 
 ---
 
-## 九、已知覆盖缺口
+## 九、已知覆盖缺口（截至本次更新）
 
-| 缺口 | 说明 |
-|---|---|
-| 法国法规正文 | 已通 DILA 开放数据（日增量 0.9~1.8MB，已接入）；但 Légifrance 直连被 Cloudflare 拦截 |
-| 荷兰法规正文 | `wetten.overheid.nl` 可达但搜索是 JS 表单；需 BWB 编号或 SRU 连接名 |
-| 其他欧盟成员国 | 目前只覆盖德国、法国、荷兰；西班牙/意大利/波兰/比利时尚未接入 |
-| 美国州级立法 | 仅加州 CalRecycle；其他州（如华盛顿、缅因）的电池 EPR 法案未覆盖 |
-| 国际公约 | 巴塞尔公约（UNEP）源已登记但未纳入主管线 |
-| 行业数据库 | Fastmarkets / Benchmark 等付费源未接入（成本问题） |
-| 回收企业 | 目前仅有 Peperzeel（荷兰）一条企业产能情报，欧洲主要回收商（Umicore / Accurec / Duesenfeld）未系统覆盖 |
+| 缺口 | 状态 | 说明 |
+|---|---|---|
+| 法国法规正文 | ✅ 已闭环 | DILA 开放数据（日增量 0.9~1.8MB）已接入；另 JORF 数据集打通——**新法规发布**与**法规被修订**是两个不同信号，分别由 JORF 与 LEGI 承载 |
+| 荷兰法规正文 | ✅ 已闭环 | KOOP BWB 官方 XML 已接入（见第十章）；《报废车辆管理令》20,790 字符，含 22 个历史版本 |
+| 西班牙法规正文 | ✅ 已闭环 | BOE 官方 REST API 已接入（见第十章） |
+| 意大利法规正文 | ❌ 未接 | `normattiva.it` 可达但为 JS 门户；无公开结构化 API |
+| 其他成员国（波/比/奥/丹…） | ❌ 未接 | 入口清单已备（N-Lex 27 国，见第十章），逐个接入即可 |
+| 美国州级立法 | ⚠️ 部分 | 仅加州 CalRecycle；华盛顿/缅因等州的电池 EPR 法案未覆盖 |
+| 国际公约 | ❌ 未接 | 巴塞尔公约站点直连返回**同一个壳页**（连 PDF 路径都返回首页 125,948 字节），需走浏览器通道 |
+| 行业数据库 | ⚠️ 成本 | Fastmarkets / Benchmark 等付费源未接入 |
+| 回收企业 | ⚠️ 偏薄 | 企业侧仍是最薄一层；欧洲主要回收商（Umicore / Accurec / Duesenfeld）未系统覆盖 |
 
 > 成员国源的选择方法（重要）：**看有没有专业机构或结构化 API，而不是看有没有开放数据门户。**
 > 实测通用国家门户（govdata.de / dane.gov.pl）的全文搜索是**单字 OR 匹配**，搜"报废车"会返回"职业介绍所登记册"，垂直检索不可用。
+> 反例是德国 `gesetze-im-internet` 与荷兰 `KOOP BWB`、西班牙 `BOE`：都是**本国官方法规库的官方接口**，不是开放数据门户，一次接通整层可用。
+
+---
+
+## 十、缺口攻坚记录
+
+> 本章记录每个缺口**具体怎么试的、结论是什么、证据是什么**。
+> 失败项同样保留——本章里过半的"旧结论"后来被证明是错的。
+
+### 10.1 本轮关闭的缺口
+
+| 缺口 | 关键突破 | 证据 |
+|---|---|---|
+| 荷兰法规正文 | **SRU 参数名与索引名反直觉**：连接名必须是 `BWB`；版本参数是 `version`（不是 `x-version`）；索引名不能猜，要问 `operation=explain` | 该接口返回 14 个索引、库容 **148,242 条** |
+| 荷兰正文取法 | **作品级 XML 不含法条**：`/bwb/{ID}` 是 `<work>` WTI 元数据（6,090 字符，`autowrak` 出现 **0 次**）；必须用 `locatie_toestand` 版本级 XML（20,191 字符，`autowrak` **26 次**） | 两种取法实测对比 |
+| 法国新法规发布 | DILA `JORF/` 目录打通；由**瞬时失败**误判为不可用 | 重试后 200 / 133,698 B，共 **781 个增量包，每天两批** |
+| 西班牙法规正文 | **严格内容协商**：不带 `Accept: application/xml` 一律 400（不是反爬） | 带对头后 200；全量目录 **12,395 部**，单部法正文 2 万~64 万字符 |
+| 成员国入口全景 | **N-Lex 是 27 国国家法规库的官方目录** | `/n-lex/legis_{cc}/…_form` 共 **27 个**入口 |
+
+### 10.2 旧结论被推翻（本轮的反复）
+
+| 旧结论 | 实际情况 | 教训 |
+|---|---|---|
+| 荷兰"需 BWB 编号才行" | 编号有现成检索 API，只是参数名差一个 `x-` | **参数名猜不得**，先找 `explain` 一类的自描述入口 |
+| 法国 DILA "不好用" | 用户级误判来自拿"全量 1.17GB"评估；**监测要的是日增量（0.9~1.8MB）** | 用错粒度评估一个源，会把它判死 |
+| 巴塞尔公约"可达" | 三个不同 URL 返回**字节数完全一致**（125,948），连 PDF 路径都返回首页 | **HTTP 200 ≠ 拿到内容**；要比较响应指纹 |
+| 西班牙"有开放数据门户" | BOE 有完整 REST API（19 个端点），但**网页检索结果不在 HTML 里** | 门户 ≠ API；先找 API 帮助页 |
+
+### 10.3 本轮新发现的操作陷阱
+
+| 陷阱 | 表现 | 处置 |
+|---|---|---|
+| 索引做**精确词匹配** | 荷兰 `titel=autowrak` → **0 条**，`titel=autowrakken` → **44 条** | 荷兰语/德语复合词必须逐词形检索 |
+| 目录**顺序任意**，局部扫描碰不到目标 | BOE 前 2,000 部里电池专法命中 **0**（而语料共 10k~15k 部） | 建目录要**建全**，不能扫一段就下结论 |
+| **不能猜编号** | 猜的 BOE 编号全 404（真值 `BOE-A-2008-2387`，猜的是 `-2981`）；德国 `AltfahrzeugV` 的真实 slug 是 `altautov` | 先拿目录/清单，再取记录 |
+| 单部法规可达 20~48 万字符 | 若沿用"摘要即内容"会把关键条文截断 | 正文入库前**不做摘要截断** |
+| 关键词**分级**不能一视同仁 | 西班牙只用 `residuos?` 会把自治区通用废物法（25~48 万字符/部）全部捞进来 | 专有词 / 中等 / 通用 三级打分 |
+| 失败 **≠** 源不可用 | DILA 首次请求返回空（curl code 0），重试即 200 | 瞬时失败必须重试后再下结论 |
+| 索引的"失效标记"**不可靠** | 西班牙 RD 846/2011 与 RD 1619/2005 在索引里 `vigencia_agotada=N`（未失效），但**正文第一行写着 `Norma derogada`（已废止）** | 不能信索引标志，要**读正文抬头**；且**废止本身是情报**——说明监管已转移 |
+
+### 10.3.1 本轮入库的成员国核心法规
+
+| 国 | 编号 | 法规 | 正文体量 |
+|---|---|---|---:|
+| 🇩🇪 | `altautov` | AltfahrzeugV 报废车法（转化 ELV 指令 2000/53/EC） | 54,439 字符 |
+| 🇩🇪 | `battdg` | BattDG 电池法（实施 EU 2023/1542） | 127,617 字符 |
+| 🇩🇪 | `avv` | AVV 欧洲废物目录（危废分类 → 黑粉定性） | 77,588 字符 |
+| 🇳🇱 | `BWBR0013707` | Besluit beheer autowrakken 报废车辆管理令 | 20,790 字符 / 22 版本 |
+| 🇳🇱 | `BWBR0014293` | Regeling beheer autowrakken 报废车管理条例 | 7,125 字符 / 10 版本 |
+| 🇳🇱 | `BWBR0048234` | UPV 生产者延伸责任修订令（含电池） | 2,976 字符 |
+| 🇪🇸 | `BOE-A-2008-2387` | RD 106/2008 电池与蓄电池废物环境管理 ★ | 202,213 字符 |
+| 🇪🇸 | `BOE-A-2022-5809` | Ley 7/2022 废物与污染土壤国家基础法 ★ | 641,728 字符 |
+| 🇪🇸 | `BOE-A-2022-19914` | RD 993/2022 电池相关控制措施 | 46,687 字符 |
+| 🇪🇸 | `BOE-A-2024-21709` | RD 1093/2024 废物管理 | 117,827 字符 |
+| 🇪🇸 | `BOE-A-2011-11827` | RD 846/2011 报废车（VFU）处理设施条件 ⚠️已废止 | 16,871 字符 |
+| 🇫🇷 | DILA `LEGI` | 法律/法令日增量（法规被修订） | 日增 0.9~1.8 MB |
+| 🇫🇷 | DILA `JORF` | 官方公报日增量（新法规发布） | 每天 2 批 |
+
+> ★ = 该层核心法规；⚠️ = 已废止（保留但标记，因为废止本身说明监管转移）
+
+### 10.3.2 ⭐ 同一类缺陷在本轮出现了三次：**记录存在，但内容为空**
+
+| # | 位置 | 现象 | 后果 |
+|---|---|---|---|
+| 1 | 荷兰 BWB | `/bwb/{ID}` 返回 `<work>` WTI 元数据（6,090 字符，`autowrak` 出现 **0 次**） | 记录"采集成功"但一个字法条都没有 |
+| 2 | EUR-Lex `Q_CELEX` | 早期漏 select `expression_title`，raw_text 里只有占位符 `EU legislation CELEX 32024R1157` | 黑粉①线《废物运输条例》被相关性判定丢弃——**不是规则错，是没内容可判** |
+| 3 | EUR-Lex 元数据 | 正文早已落盘 `sources/eurlex-fulltext/32000L0053.txt`，但 jsonl 里那条记录只有 CELEX 号 | **报废车指令 2000/53/EC（ELV 主干法）被判为不相关** |
+
+**这三个的共性**：采集层、存储层、判定层各自看起来都正常，
+坏在"交出去的东西是空的"。没有报错、没有丢数据、指标也正常，
+只是整条内容在判定那一刻等于不存在。
+
+**对策（已落地）**：
+1. 连接器里加**根标签/内容形态防护**——BWB 取到 `<work>` 直接报错，不允许静默入库；
+2. 判定前**并入已落盘的正文快照**（`EurLexConnector._with_fulltext`）；
+3. 新增回归测试 `tests/test_member_state_patterns.py`，用真实法规原文锁住"成员国层必须能过判定"这个不变量；
+4. **英语 ELV 词族补齐**——本轮发现英语模式里只有 battery 侧的词、**没有 vehicle 侧**：`end-of-life vehicle` / `2000/53/EC` / `certificate of destruction` / `dismantlers` / `shredder light fraction` 一个都没有。ELV 指令此前只是靠着法语模式里的 `depollution` 才勉强命中——**一个偶然**。
+
+### 10.4 已备好、尚未接入的入口
+
+**N-Lex 全成员国法规库入口（27 个，实测可达）**
+
+```
+at 奥地利  be 比利时  bg 保加利亚  cy 塞浦路斯  cz 捷克
+de 德国    dk 丹麦    ee 爱沙尼亚  es 西班牙    fi 芬兰
+fr 法国    gr 希腊    hr 克罗地亚  hu 匈牙利    ie 爱尔兰
+it 意大利  lt 立陶宛  lu 卢森堡    lv 拉脱维亚  mt 马耳他
+nl 荷兰    pl 波兰    pt 葡萄牙    ro 罗马尼亚  sk 斯洛伐克
+sl 斯洛文尼亚  sv 瑞典
+```
+
+> 路径形如 `https://n-lex.europa.eu/n-lex/legis_{cc}/{库名}_form`，
+> 另有 `/n-lex/aggregated-search` 可跨成员国聚合检索。
+> 接入时**优先找该国官方库自己的 API**（德/荷/西三国的经验：都能直接拿结构化数据），
+> 把 N-Lex 当作入口清单用，而不是当作数据源用。
+
+**法国 DILA 其他数据集（40+）**
+
+| 数据集 | 内容 |
+|---|---|
+| `LEGI` | 法律与法令整合库（法规被修订）✅ 已接 |
+| `JORF` | 官方公报（新法规发布）✅ 已接 |
+| `JADE` | 行政判例 |
+| `CIRCULAIRES` | 部委通函（执法口径，实践中常先于法规变化） |
+| `BODACC` | 商事与破产公告（← 企业侧：回收商并购/倒闭信号） |
+| `KALI` / `CONSTIT` / `CAPP` … | 集体协议 / 宪法 / 等 |
+
+> ⭐ 其中 `BODACC` 值得优先——它是**企业情报**目前最薄的那一层，
+> 而破产/并购公告恰好是回收行业产能出清的直接信号。
 
 ---
 

@@ -54,6 +54,9 @@ RATE_LIMITS: dict[str, float] = {
     "cninfo.com.cn": 2.0,
     "epa.gov": 3.0,
     "energy.gov": 3.0,
+    # 荷兰 KOOP：SRU 检索服务偶发 SSL 握手失败，放慢并靠 curl 回退
+    "zoekservice.overheid.nl": 2.0,
+    "repository.officiele-overheidspublicaties.nl": 1.5,
 }
 
 _last_call: dict[str, float] = {}

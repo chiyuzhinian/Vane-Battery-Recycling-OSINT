@@ -21,6 +21,8 @@ from .base import (
     ProbeResult,
     RawEvidence,
 )
+from .boe_es import BoeEsConnector
+from .bwb_nl import BwbNlConnector
 from .cninfo import CninfoConnector
 from .datafair import DataFairConnector
 from .dila_fr import DilaFrConnector
@@ -34,6 +36,8 @@ REGISTRY: dict[str, Type[BaseConnector]] = {
     "eur_lex": EurLexConnector,        # 欧盟一级立法（SPARQL + EUR-Lex 正文）
     "us_federal": FederalRegisterConnector,
     "de_gesetze": GesetzeDeConnector,  # ⭐ 德国联邦法律（官方 XML，成员国层）
+    "nl_bwb": BwbNlConnector,          # ⭐ 荷兰国家法规（KOOP BWB 官方 XML）
+    "es_boe": BoeEsConnector,          # ⭐ 西班牙立法整合库（BOE 官方 API）
     "dila_fr": DilaFrConnector,        # ⭐ 法国 DILA 开放数据（Légifrance 原始源）
     "datafair": DataFairConnector,     # ⭐ Data Fair 开放数据平台（法国 ADEME 等）
     # ---- 企业侧 ----
@@ -49,6 +53,8 @@ __all__ = [
     "RATE_LIMITS",
     "USER_AGENT",
     "BaseConnector",
+    "BoeEsConnector",
+    "BwbNlConnector",
     "ConnectorBlocked",
     "ConnectorError",
     "ProbeResult",
