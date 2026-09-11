@@ -189,6 +189,28 @@ async def collect_eu(plan: dict, since: str) -> list:
                 print(f"  ⚠️ 关键词「{kw}」失败: "
                       f"{type(exc).__name__}: {str(exc)[:200]}")
 
+        # ⭐ 失败的词**必须再跑一轮**才算"采到穷尽"。
+        #   为什么：同一个词，端点 10 秒返回与 8 分钟超时**都可能发生**
+        #   （Virtuoso 的查询规划与缓存状态波动极大）。不重试就等于
+        #   "因为端点当时忙，永久放弃这个词"—— 那是把**端点抖动**误当成
+        #   "这个词没有数据"，会直接造成内容缺口。
+        #   ⚠️ 重试成本不低（最坏 8 分钟/词），但"穷尽"优先于"快"。
+        retry_queue = [k for k in plan["eu_keywords"]
+                       if f"keyword:{k}" in failures]
+        if retry_queue:
+            print(f"\n  ↻ 对 {len(retry_queue)} 个失败关键词重跑一轮"
+                  f"（端点响应时间波动极大，失败不代表该词无数据）")
+            for kw in retry_queue:
+                try:
+                    batch = await conn.fetch(f"keyword:{kw}", since=since,
+                                             limit=PER_SOURCE_LIMIT)
+                    print(f"  ✓ 重跑「{kw}」→ {len(batch)} 条")
+                    items += batch
+                    failures.remove(f"keyword:{kw}")
+                except Exception as exc:  # noqa: BLE001
+                    print(f"  ✗ 重跑「{kw}」仍失败: "
+                          f"{type(exc).__name__}: {str(exc)[:200]}")
+
     if failures:
         # ⚠️ 不要再写"SPARQL 偶发超时"：2026-09-11 已查实，批次失败是
         #    `re.escape` 的 `\(` 写进 SPARQL 字符串导致的**非法转义**（HTTP 400），
