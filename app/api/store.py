@@ -143,11 +143,10 @@ class DataStore:
         sid = r.get("source_id") or "?"
         code = SOURCE_COUNTRY.get(sid, "ZZ")
         r["geo_code"] = code
-        # ⚠️ 必须用 `unit_of(...).name_zh`，不要写 `country_label(code)` ——
-        #    后者在 geo.py 里**根本不存在**，而且 store.py 也没导入它。
-        #    一旦执行到这一行就是 NameError → 整个面板 API 直接 500。
-        #    （geo.unit_of 对未知 code 返回 "ZZ" 单元，不会抛异常。）
-        r["geo_name"] = unit_of(code).name_zh
+        # 展示名走 country_label()（定义在**本文件顶部**，= unit_of(code).name_zh）。
+        # ⚠️ 别被"grep geo.py 找不到它"误导 —— 它不是从 geo.py 导入的。
+        #    （我自己踩过：只看 import 行就去"修"，白改一遍。）
+        r["geo_name"] = country_label(code)
         r["geo_parent"] = rollup_parent(code)       # US-CA → US（地图聚合用）
 
         # 审核叠加：原始判定保持不动，另记有效判定
