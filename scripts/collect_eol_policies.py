@@ -253,7 +253,7 @@ def _dedupe(items: list) -> list:
 # 新增被拦站点时**必须两处都加**，否则区域会归错。
 _BROWSER_REGION_FALLBACK = {
     "phmsa": "US", "calrecycle": "US", "bci": "US", "call2recycle": "US",
-    "echa": "EU", "france": "EU-MemberState",
+    "echa": "EU", "france": "EU-MemberState", "netherlands": "EU-MemberState",
 }
 
 

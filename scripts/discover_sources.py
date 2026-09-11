@@ -84,7 +84,7 @@ PORTALS: dict[str, dict] = {
         "platform": "datagouv",
         "api": "https://www.data.gouv.fr/api/1/datasets/",
         "region": "EU-MemberState/FR",
-        "note": "国家级门户，聚合各部委数据集",
+        "note": "⚠️ 与 fr_gouv 同一端点（重复登记）—— 以 fr_gouv 为准，保留本条目只为兼容旧调用",
     },
     # ---------- 欧盟 ----------
     "eu_data": {
@@ -100,7 +100,12 @@ PORTALS: dict[str, dict] = {
         "platform": "ckan",
         "api": "https://catalog.data.gov/api/3/action/package_search",
         "region": "US",
-        "note": "联邦级数据集总目录",
+        # ⚠️ 实测（2026-09-11）：该端点已失效（/api/3/ 与 /api/ 均 404），
+        #    catalog.data.gov 已迁移。美国侧改用：
+        #      us_federal（Federal Register 政策）
+        #      us_socrata（州/市级开放数据，实测可用）
+        "deprecated": True,
+        "note": "🚫 端点已失效，保留条目以记录探测结论",
     },
     "us_socrata": {
         "name": "Socrata 门户群（州/市级）",
@@ -115,6 +120,68 @@ PORTALS: dict[str, dict] = {
         "api": "https://data.gov.uk/api/3/action/package_search",
         "region": "UK",
         "note": "英国 ELV/电池政策的配套数据",
+    },
+    # ============================================================
+    # 欧盟成员国层（逐个实测端点后才登记 —— 猜端点会白跑）
+    # ------------------------------------------------------------
+    # ⚠️ 实测教训（2026-09-11）：
+    #   ① 端点路径必须实测。`govdata.de/api/…` → 不可达；
+    #      `govdata.de/ckan/api/…` → 200 ✅（多一层 /ckan/）
+    #   ② **curl 失败 ≠ 不可达**：波兰 `api.dane.gov.pl` curl 返回 000，
+    #      浏览器却是 200。与之前"Python TLS 栈连不上但 curl 正常"正好相反。
+    #      → 判定端点失效前要 **curl 与浏览器双向交叉验证**。
+    # ============================================================
+    "de_govdata": {
+        "name": "德国 GovData（联邦开放数据门户）",
+        "platform": "ckan",
+        "api": "https://www.govdata.de/ckan/api/3/action/package_search",
+        "region": "EU-MemberState/DE",
+        "note": "147,453 个数据集；⚠️ 路径多一层 /ckan/",
+    },
+    "nl_data": {
+        "name": "荷兰 data.overheid.nl",
+        "platform": "ckan",
+        "api": "https://data.overheid.nl/data/api/3/action/package_search",
+        "region": "EU-MemberState/NL",
+        "note": "荷兰国家级开放数据",
+    },
+    "be_data": {
+        "name": "比利时 data.gov.be",
+        "platform": "ckan",
+        # ⚠️ 必须带语言前缀 /en/ —— 缺了会直接回 HTML 反爬页（不是 404，更隐蔽）
+        #    实测：/api/3/action/... → 200 但 content-type=text/html（机器人防护页）
+        #          /en/api/3/action/... → 200 且是真 JSON ✅
+        "api": "https://data.gov.be/en/api/3/action/package_search",
+        "region": "EU-MemberState/BE",
+        "note": "联邦级；法语/荷语双语术语都要试",
+    },
+    "ie_data": {
+        "name": "爱尔兰 data.gov.ie",
+        "platform": "ckan",
+        "api": "https://data.gov.ie/api/3/action/package_search",
+        "region": "EU-MemberState/IE",
+        "note": "英语，检索门槛最低",
+    },
+    "pt_dados": {
+        "name": "葡萄牙 dados.gov.pt",
+        "platform": "datagouv",
+        "api": "https://dados.gov.pt/api/1/datasets/",
+        "region": "EU-MemberState/PT",
+        "note": "与法国 data.gouv.fr 同构",
+    },
+    "pl_dane": {
+        "name": "波兰 dane.gov.pl",
+        "platform": "dane_gov_pl",
+        "api": "https://api.dane.gov.pl/1.4/datasets",
+        "region": "EU-MemberState/PL",
+        "note": "⚠️ curl 返回 000，浏览器 200 —— 端点本身可用，是网络栈问题",
+    },
+    "fr_gouv": {
+        "name": "法国政府开放数据",
+        "platform": "datagouv",
+        "api": "https://www.data.gouv.fr/api/1/datasets/",
+        "region": "EU-MemberState/FR",
+        "note": "国家级门户，聚合各部委数据集（与 fr_datagouv 同一站，保留此条为准）",
     },
 }
 
@@ -158,60 +225,108 @@ def _phrase_hit(text: str, query: str) -> bool:
 # ------------------------------------------------------------
 # ⭐ 同一个东西，各成员国叫法完全不同：
 #     报废车：EN end-of-life vehicle ｜ FR VHU ｜ DE Altfahrzeug
-#     电池：  EN battery ｜ FR batterie/pile ｜ DE Batterie
-#     黑粉：  EN black mass ｜ FR masse noire ｜ DE Schwarzmasse
+#             NL autowrak ｜ PL pojazd wycofany ｜ PT veículo em fim de vida
+#     电池：  EN battery ｜ FR batterie/pile ｜ DE Batterie/Akku
+#             NL batterij/accu ｜ PL bateria/akumulator ｜ PT bateria/pilha
 #   只用英语检索成员国的数据门户，会**全军覆没**（实测 ADEME：
 #   "battery recycling" 过滤后 0 条，而法语 "vhu" 能拿到 9 个 REP 数据集）。
+#
+# ⚠️ 新增语言时**必须同步** `app/core/relevance_browser.py` 的
+#    BROWSER_FOCUS_ANCHORS，否则会出现"检索到了却判为不相关"。
 # ============================================================
 CONCEPTS: dict[str, dict[str, list[str]]] = {
     "elv": {
         "en": ["end-of-life vehicle", "ELV", "vehicle recycling", "depollution"],
         "fr": ["VHU", "véhicule hors d'usage", "dépollution véhicule"],
         "de": ["Altfahrzeug", "Fahrzeugverwertung"],
+        "nl": ["autowrak", "afgedankte voertuigen", "autodemontage"],
+        "pl": ["pojazd wycofany z eksploatacji", "samochód wycofany", "autozłom"],
+        "pt": ["veículo em fim de vida", "VFV", "desmantelamento"],
+        "es": ["vehículo fuera de uso", "VFU", "desguace"],
+        "it": ["veicolo fuori uso", "VFU", "autodemolizione"],
     },
     "battery": {
         "en": ["battery", "lithium battery", "li-ion"],
         "fr": ["batterie", "pile", "accumulateur"],
         "de": ["Batterie", "Akku", "Akkumulator"],
+        "nl": ["batterij", "accu"],
+        "pl": ["bateria", "akumulator"],
+        "pt": ["bateria", "pilha", "acumulador"],
+        "es": ["batería", "pila", "acumulador"],
+        "it": ["batteria", "pila", "accumulatore"],
     },
     "blackmass": {
         "en": ["black mass"],
         "fr": ["masse noire"],
         "de": ["Schwarzmasse"],
+        "nl": ["zwarte massa"],
+        "pl": ["masa czarna"],
+        "pt": ["massa negra"],
+        "es": ["masa negra"],
+        "it": ["massa nera"],
     },
     "recycling": {
         "en": ["recycling", "recycled content", "recycling efficiency"],
         "fr": ["recyclage", "taux de recyclage", "valorisation"],
         "de": ["Recycling", "Verwertung"],
+        "nl": ["recycling", "recyclage", "verwerking"],
+        "pl": ["recykling", "odzysk"],
+        "pt": ["reciclagem", "valorização"],
+        "es": ["reciclaje", "valorización"],
+        "it": ["riciclaggio", "recupero"],
     },
     "epr": {
         "en": ["extended producer responsibility", "producer responsibility"],
         "fr": ["REP", "responsabilité élargie du producteur"],
         "de": ["erweiterte Herstellerverantwortung"],
+        "nl": ["uitgebreide producentenverantwoordelijkheid"],
+        "pl": ["rozszerzona odpowiedzialność producenta"],
+        "pt": ["responsabilidade alargada do produtor"],
+        "es": ["responsabilidad ampliada del productor"],
+        "it": ["responsabilità estesa del produttore"],
     },
     "shredder": {
         "en": ["shredder", "shredding"],
         "fr": ["broyeur", "broyage"],
         "de": ["Schredder"],
+        "nl": ["versnipperaar", "shredder"],
+        "pl": ["strzępiarka", "rozdrabnianie"],
+        "pt": ["triturador", "trituração"],
+        "es": ["triturador", "fragmentación"],
+        "it": ["trituratore", "triturazione"],
     },
     "waste_shipment": {
         "en": ["waste shipment", "transboundary movement"],
         "fr": ["transfert de déchets", "mouvement transfrontalier"],
         "de": ["Abfallverbringung"],
+        "nl": ["afvaltransport", "grensoverschrijdende overbrenging"],
+        "pl": ["przemieszczanie odpadów"],
+        "pt": ["transferência de resíduos"],
+        "es": ["traslado de residuos"],
+        "it": ["spedizione di rifiuti"],
     },
 }
 
+ALL_LANGS: tuple[str, ...] = ("en", "fr", "de", "nl", "pl", "pt", "es", "it")
 
-def expand_concepts(names: list[str]) -> list[str]:
-    """把概念名展开为多语言检索词。"""
+
+def expand_concepts(names: list[str],
+                    langs: tuple[str, ...] | None = None) -> list[str]:
+    """把概念名展开为多语言检索词。
+
+    langs 给定时只展开这些语言（例如只做德语区就传 ("de",)）；
+    不给则展开 ALL_LANGS 里该概念有的全部语言。
+    """
     out: list[str] = []
     for n in names:
         c = CONCEPTS.get(n.strip().lower())
         if not c:
             out.append(n)                     # 不是概念名 → 当普通关键词
             continue
-        for lang in ("en", "fr", "de"):
-            out += c.get(lang, [])
+        for lang, terms in c.items():
+            if langs and lang not in langs:
+                continue
+            out += terms
     # 去重保序
     seen, uniq = set(), []
     for t in out:
@@ -344,13 +459,116 @@ def search_socrata(client: httpx.Client, api: str, q: str, size: int) -> list[di
     } for r in (d.get("results") or [])]
 
 
+def search_dane_gov_pl(client: httpx.Client, api: str, q: str, size: int) -> list[dict]:
+    """波兰 dane.gov.pl（JSON:API 风格，结构与 CKAN 不同）。
+
+    ⚠️ 该端点 curl 返回 000 但浏览器 200 —— 若 httpx 也连不上，
+    会把异常抛给调用方，由 --probe-portals 报告出来。
+    """
+    d = _get(client, f"{api}?q={quote(q)}&per_page={size}")
+    if not d:
+        return []
+    rows = d.get("data") or []
+    out = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        attr = r.get("attributes") or r
+        out.append({
+            "title": _as_text(attr.get("title")),
+            "url": f"https://dane.gov.pl/dataset/{r.get('id')}" if r.get("id") else "",
+            "org": _as_text((attr.get("institution") or {}).get("name")
+                            if isinstance(attr.get("institution"), dict) else None),
+            "updated": attr.get("modified") or attr.get("created"),
+            "extra": {"count": (d.get("meta") or {}).get("count")},
+        })
+    return out
+
+
 ADAPTERS = {
     "datafair": search_datafair,
     "ckan": search_ckan,
     "datagouv": search_datagouv,
     "socrata": search_socrata,
     "eu_hub": search_eu_hub,
+    "dane_gov_pl": search_dane_gov_pl,
 }
+
+
+# ============================================================
+# 端点体检 —— 这就是「根据结果修正方案」的可复现形式
+# ------------------------------------------------------------
+# 每新增一个门户都应先跑一次：能连上吗？返回结构对得上吗？命中几条？
+# 不要在"猜的端点"上写业务逻辑。
+# ============================================================
+def probe_portals(targets: list[str]) -> int:
+    """端点体检。
+
+    ⚠️ 探针词必须**多语言**（2026-09-11 踩过的坑）：
+       首版只用英语 "battery" 探所有门户 → 法/荷/葡门户全部返回 0，
+       被误报为"返回为空"。但那不是故障，是**探针语言不对**。
+       一个错探针会把好门户判死，比不体检更糟。
+    """
+    probes = [("en", "battery"), ("fr", "batterie"), ("de", "Batterie"),
+              ("nl", "batterij"), ("pl", "bateria"), ("pt", "bateria")]
+    print(f"{'portal':<14}{'platform':<12}{'HTTP':>6}{'最佳命中':>9}  探针 / 状态")
+    print("-" * 96)
+    bad = 0
+    with httpx.Client(headers={"User-Agent": UA}, follow_redirects=True) as client:
+        for pid in targets:
+            p = PORTALS.get(pid)
+            if not p:
+                print(f"{pid:<14}{'?':<12}{'—':>6}{'—':>9}  ❓ 未登记")
+                bad += 1
+                continue
+            adapter = ADAPTERS.get(p["platform"])
+            if adapter is None:
+                print(f"{pid:<14}{p['platform']:<12}{'—':>6}{'—':>9}  ❓ 无适配器")
+                bad += 1
+                continue
+
+            best_n, best_lang, err = 0, "", None
+            shape_ok = False
+            any_items = False
+            for lang, term in probes:
+                try:
+                    items = adapter(client, p["api"], term, 3)
+                except Exception as exc:  # noqa: BLE001
+                    err = type(exc).__name__
+                    continue
+                if items:
+                    any_items = True
+                n = (items[0]["extra"].get("count") if items else 0) or len(items)
+                if items and all(_as_text(i.get("title")) for i in items):
+                    shape_ok = True
+                if n > best_n:
+                    best_n, best_lang = n, lang
+
+            tag = "🚫 已弃用" if p.get("deprecated") else ""
+            if tag:
+                print(f"{pid:<14}{p['platform']:<12}{'—':>6}{'—':>9}  {tag}（{p.get('note','')}）")
+                continue
+            if err and not any_items:
+                print(f"{pid:<14}{p['platform']:<12}{'ERR':>6}{'—':>9}  "
+                      f"❌ {err}（试浏览器通道交叉验证）")
+                bad += 1
+            elif shape_ok and best_n > 0:
+                print(f"{pid:<14}{p['platform']:<12}{'200':>6}{best_n:>9}  "
+                      f"✅ 最佳探针 {best_lang}（{len(probes)} 语言已试）")
+            elif best_n == 0 and any_items:
+                # 有结果但标题都空 → 结构真的对不上
+                print(f"{pid:<14}{p['platform']:<12}{'200':>6}{best_n:>9}  ⚠️ 标题解析异常")
+                bad += 1
+            elif best_n == 0:
+                # ⚠️ 与上面区分开：这才是真正的"零命中"（可能领域无关）
+                print(f"{pid:<14}{p['platform']:<12}{'200':>6}{best_n:>9}  "
+                      f"⚠️ 结构正常但 {len(probes)} 语言全零命中")
+            else:
+                print(f"{pid:<14}{p['platform']:<12}{'200':>6}{best_n:>9}  ⚠️ 返回非 JSON（疑拦截页）")
+                bad += 1
+    print("-" * 96)
+    print(f"  {len(targets) - bad}/{len(targets)} 个门户端点可用")
+    return 0
 
 
 def main() -> int:
@@ -358,30 +576,45 @@ def main() -> int:
     ap.add_argument("--q", default="battery recycling",
                     help="关键词，逗号分隔可多个")
     ap.add_argument("--concept", default="",
-                    help="概念名（自动展开为 EN/FR/DE 多语言词）："
+                    help="概念名（自动展开为多语言词）："
                          "elv, battery, blackmass, recycling, epr, shredder, waste_shipment")
-    ap.add_argument("--portal", default="all", help="门户 id，或 all")
+    ap.add_argument("--langs", default="",
+                    help=f"限定概念展开的语言，逗号分隔（可用：{','.join(ALL_LANGS)}）；"
+                         "不传则展开全部")
+    ap.add_argument("--portal", default="all", help="门户 id，或逗号分隔多个 / all")
     ap.add_argument("--size", type=int, default=10, help="每个关键词每门户取回条数")
     ap.add_argument("--raw", action="store_true",
                     help="不过滤，输出门户原始结果（看模糊匹配有多离谱时用）")
-    ap.add_argument("--list-portals", action="store_true")
+    ap.add_argument("--list-portals", action="store_true", help="列出所有门户与概念")
+    ap.add_argument("--probe-portals", action="store_true",
+                    help="⭐ 端点体检：逐个验证 API 能不能连、结构对不对")
     args = ap.parse_args()
 
     if args.list_portals:
-        print(f"{'id':<16}{'platform':<11}{'region':<20}name")
-        print("-" * 96)
+        print(f"{'id':<16}{'platform':<12}{'region':<22}name")
+        print("-" * 100)
         for pid, p in PORTALS.items():
-            print(f"{pid:<16}{p['platform']:<11}{p['region']:<20}{p['name']}")
+            print(f"{pid:<16}{p['platform']:<12}{p['region']:<22}{p['name']}")
         print("\n可用概念：" + ", ".join(CONCEPTS))
+        print("可用语言：" + ", ".join(ALL_LANGS))
         return 0
+
+    if args.probe_portals:
+        targets = (list(PORTALS) if args.portal == "all"
+                   else [x.strip() for x in args.portal.split(",") if x.strip()])
+        return probe_portals(targets)
 
     OUT.mkdir(exist_ok=True)
     keywords = [k.strip() for k in args.q.split(",") if k.strip()]
     if args.concept:
         concepts = [c.strip() for c in args.concept.split(",") if c.strip()]
-        expanded = expand_concepts(concepts)
+        langs = (tuple(x.strip() for x in args.langs.split(",") if x.strip())
+                 if args.langs else None)
+        expanded = expand_concepts(concepts, langs)
         unknown = [c for c in concepts if c.lower() not in CONCEPTS]
-        print(f"概念扩展：{', '.join(concepts)} → {len(expanded)} 个多语言词"
+        print(f"概念扩展：{', '.join(concepts)}"
+              + (f"（限 {'/'.join(langs)}）" if langs else "（全语言）")
+              + f" → {len(expanded)} 个多语言词"
               + (f"（未知概念按原词处理：{unknown}）" if unknown else ""))
         keywords = expanded + keywords
         # 去重保序

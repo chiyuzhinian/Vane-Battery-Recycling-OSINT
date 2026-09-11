@@ -155,6 +155,36 @@ SITES: dict[str, dict] = {
             "https://data.ademe.fr/datasets/materiaux-te-t1",
         ],
     },
+    # ============================================================
+    # 荷兰（第二个成员国，验证方案可复制性）
+    # ------------------------------------------------------------
+    # ⭐ 选国方法（由 B 阶段的实测结论修正而来）：
+    #    **看有没有专业机构/结构化 API，而不是"有没有开放数据门户"。**
+    #    通用国家门户（govdata.de / dane.gov.pl）的全文搜索是**单字 OR 匹配**，
+    #    实测搜波兰语"报废车"返回"职业介绍所登记册""法院判决""献血者数据库"
+    #    → 垂直领域检索基本无用。别在这条路上花时间。
+    #
+    #    荷兰的两个可用通道：
+    #      ① Stichting OPEN（原 Stibat）—— 电池/电子生产者责任组织，
+    #         相当于德国 GRS Batterien / stiftung ear。
+    #         其「producenten-importeurs」（生产者-进口商）栏目是竞争情报入口。
+    #         ⚠️ stibat.nl 会 301 到 stichting-open.org
+    #      ② data.overheid.nl —— 国家级 CKAN，实测可用（多语言探针 nl 命中 7）
+    #    ❌ opendata.rdw.nl（车辆管理局 Socrata）：curl 403、浏览器 TimeoutError，
+    #       不可用（与 ECHA 的挂起是同一类"连接层问题"）。
+    # ============================================================
+    "netherlands": {
+        "name": "荷兰 - Stichting OPEN（电池/电子生产者责任）",
+        "region": "EU-MemberState",
+        "hub": "https://www.stichting-open.org/",
+        "extra_hubs": [
+            "https://www.stichting-open.org/producenten-importeurs/",
+            "https://www.stichting-open.org/inzamelpartners-retailers/",
+        ],
+        "doc_pattern": r"batterij|accu|inzamel|recycl|producent|importeur|"
+                       r"rapport|cijfer|verplicht|open|duurzaam|meld",
+        "cluster": "C5_epr_collection",
+    },
 }
 
 
