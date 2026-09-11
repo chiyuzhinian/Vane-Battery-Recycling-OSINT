@@ -329,6 +329,112 @@ us:
     - { id: us_call2recycle, name: Call2Recycle,           url: "https://www.call2recycle.org/",     verified: true, direct_blocked: true, channel: browser_capture, base_credibility: 80, clusters: [C5_epr_collection] }
 
 # ============================================================
+# 开放数据门户（结构化数据层）—— 关键词→数据源定位的成果
+# ------------------------------------------------------------
+# ⭐ 为什么单独开一层：
+#   法规告诉你"要求是什么"，开放数据告诉你"实际发生多少"。
+#   两类数据的获取方式完全不同：法规走 SPARQL/页面，数据走门户 API。
+#
+# ⭐⭐ 核心方法（比逐个站点爬取高一个数量级）：
+#   绝大多数政府开放数据跑在**少数几个平台软件**上，识别出平台
+#   就能用它自己的 API，而不必爬页面。
+#   实测：data.ademe.fr 网页抓取 → 0 条相关（标题是分类名，无电池无车辆词）
+#         识别出是 Data Fair → 调 API → 立即拿到 9 个 REP-VHU 数据集
+#   **同一个站，换个入口，价值天差地别。**
+#
+#   工具：`scripts/discover_sources.py`（支持 datafair / ckan / eu_hub /
+#         socrata / datagouv 五类平台，内含跨语言概念扩展）
+# ============================================================
+open_data_portals:
+  eu_member_state:
+    - id: fr_ademe_portal
+      name: 法国 ADEME 开放数据（Data Fair 平台）
+      url: https://data.ademe.fr/
+      api: https://data.ademe.fr/data-fair/api/v1/datasets
+      verified: true
+      geo_restriction: false         # ⭐ 主站被地域封锁，但开放数据门户**没有**
+      tier: official
+      base_credibility: 95
+      clusters: [C2_elv, C5_epr_collection]
+      key_datasets:
+        - REP - VHU - Tonnages collectés Broyeurs depuis 2018   # ⭐ 破碎厂吨位（黑粉上游）
+        - REP - VHU - Performances cumulées depuis 2018         # ELV 回收绩效
+        - REP - VHU - TRR et TRV des CVHU depuis 2018           # 回收率/再利用率指标
+        - REP - VHU - Liste des producteurs enregistrés à SYDEREP  # ⭐ 生产者名录
+        - Données EO-BATRIBOX / EO-COREPILE-Ecosystem           # 电池回收组织
+      note: 共 936 个数据集，其中 Economie circulaire 类 65 个
+
+    - id: fr_ademe
+      name: 法国 ADEME 主站
+      url: https://www.ademe.fr/
+      verified: false
+      geo_blocked: true              # 🚫 按国家/IP 封锁（实测响应含 Country: JP）
+      tier: official
+      base_credibility: 95
+      clusters: [C2_elv]
+      note: |
+        ⚠️ 实测响应："Access denied ... IP-based restriction, a country
+        restriction, or the use of a VPN. Country: JP"
+        ⭐ **地域封锁 ≠ 反爬**：反爬可换浏览器/等挑战/改指纹（PHMSA/ECHA 都解决了）；
+        地域封锁本机怎么换都没用，只能换出口 IP 或走归档（Wayback 可达）。
+        降级路径：① data.ademe.fr 开放数据门户（无封锁）② web.archive.org
+
+    - id: fr_legifrance
+      name: 法国法律法规门户
+      url: https://www.legifrance.gouv.fr/
+      verified: false
+      blocked: true                  # 🚫 Cloudflare 挑战，有头+45s 也未通过
+      tier: official
+      base_credibility: 100
+      clusters: [C2_elv, C1_eol_battery]
+      note: |
+        ⭐ 正确获取路径不是直连 Légifrance，而是
+        **EUR-Lex 的「成员国转化措施」(national transposition measures)** ——
+        指令的各国转化法条在 EUR-Lex 上可查，且走 SPARQL 不受封锁。
+
+  eu_level:
+    - id: eu_data_portal
+      name: 欧盟开放数据门户
+      url: https://data.europa.eu/
+      api: https://data.europa.eu/api/hub/search/search
+      verified: true
+      platform: eu_hub              # ⚠️ 不是标准 CKAN，title 为 26 语言字典
+      tier: official
+      base_credibility: 92
+      clusters: [C1_eol_battery, C2_elv, C3_black_mass]
+      note: "实测可用；数据集如 Recycling - Batteries and Accumulators、List of Licensed ELV Managers"
+
+  us_level:
+    - id: us_catalog_datagov
+      name: 美国政府开放数据目录（CKAN）
+      url: https://catalog.data.gov/
+      api: https://catalog.data.gov/api/3/action/package_search
+      verified: true
+      platform: ckan
+      tier: official
+      base_credibility: 90
+      clusters: [C1_eol_battery]
+    - id: us_socrata
+      name: Socrata 门户群（州/市级）
+      url: https://api.us.socrata.com/
+      api: https://api.us.socrata.com/api/catalog/v1
+      verified: true
+      platform: socrata
+      tier: official
+      base_credibility: 88
+      clusters: [C5_epr_collection]
+      note: "可按 q= 跨门户搜索；实测可拿 LASAN S.A.F.E. Centers、Annual Waste Volumes 等"
+
+# ⭐⭐ 跨语言术语（欧盟工作的刚需，写进工具 CONCEPTS 表）
+#   同一个东西各成员国叫法完全不同，只用英语检索成员国门户会**全军覆没**：
+#     报废车：EN end-of-life vehicle ｜ FR VHU ｜ DE Altfahrzeug
+#     电池：  EN battery ｜ FR batterie / pile / accumulateur ｜ DE Batterie / Akku
+#     黑粉：  EN black mass ｜ FR masse noire ｜ DE Schwarzmasse
+#     破碎：  EN shredder ｜ FR broyeur ｜ DE Schredder
+#   实测：英语 "battery recycling" 在 ADEME 过滤后 0 条；
+#         法语 "broyeur" 找到 REP-VHU-TRR et TRV des Broyeurs ⭐
+
+# ============================================================
 # 需浏览器接管的站点（直连被拦，但浏览器可通）
 # ------------------------------------------------------------
 # 已实测确实是硬拦截（curl + 浏览器均不可得）：

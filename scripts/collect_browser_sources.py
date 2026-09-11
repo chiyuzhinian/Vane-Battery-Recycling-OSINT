@@ -105,6 +105,34 @@ SITES: dict[str, dict] = {
         "doc_pattern": r"batter|recycl|policy|legislat|state",
         "cluster": "C5_epr_collection",
     },
+    # ============================================================
+    # 欧盟成员国层（法国）—— 补"成员国"这一层缺口
+    # ------------------------------------------------------------
+    # ⚠️ 实测（2026-09-11）：**法国政府站点普遍按国家/IP 封锁**。
+    #    ademe.fr 主站直接回：
+    #      "Access denied ... IP-based restriction, a country restriction,
+    #       or the use of a VPN. Country: JP"
+    #    本机出口 IP 归属地是 JP → 被地域封锁。
+    #
+    #    ⭐ 这与反爬是**完全不同的问题**：
+    #       · 反爬       → 换浏览器/等挑战/改指纹，有解（PHMSA/ECHA 都解决了）
+    #       · 地域封锁   → 本机怎么换都没用，只能换出口 IP 或走归档
+    #    把两者混淆会白白花时间做浏览器对抗（做过，白费）。
+    #
+    #    ✅ 但有个例外：**ADEME 的开放数据门户没有被地域封锁**，
+    #       而且对 OSINT 用途价值更高（结构化数据 > 网页宣传稿）。
+    #    ❌ legifrance.gouv.fr：Cloudflare 挑战，有头+45s 也无法通过。
+    #       法国法律文本的正确获取路径是 **EUR-Lex 的"成员国转化措施"
+    #       (national transposition measures)**，而不是直连 Légifrance。
+    # ============================================================
+    "france": {
+        "name": "法国 ADEME 开放数据（欧盟成员国层）",
+        "region": "EU-MemberState",
+        "hub": "https://data.ademe.fr/",
+        "doc_pattern": r"batter|vhu|v[eé]hicule|vehicule|recycl|d[eé]chet|"
+                       r"economie circulaire|[eé]conomie circulaire|mobilite",
+        "cluster": "C2_elv",
+    },
 }
 
 

@@ -68,6 +68,31 @@ CHALLENGE_MARKERS = [
 ]
 _CHALLENGE_RE = [re.compile(p, re.I) for p in CHALLENGE_MARKERS]
 
+# ============================================================
+# 地域封锁识别
+# ------------------------------------------------------------
+# ⭐ 实测（2026-09-11，ADEME）：
+#   403 也可能是**按国家/IP 封锁**，响应里直接写明：
+#     "Access denied ... blocked due to an IP-based restriction,
+#      a country restriction, or the use of a VPN. Country: JP"
+#
+#   这与反爬是**完全不同的问题**：
+#     · 反爬 → 换浏览器 / 等挑战 / 改指纹，有解
+#     · 地域封锁 → 本机怎么换都没用，只能换出口 IP 或走归档
+#
+#   必须把两者分开，否则会白白花时间做浏览器对抗（做过，白费）。
+# ============================================================
+GEO_BLOCK_MARKERS = [
+    r"country\s+restriction",
+    r"ip-?based\s+restriction",
+    r"blocked\s+due\s+to.{0,40}(country|ip|vpn)",
+    r"acc[eè]s\s+refus[eé]",
+    r"access\s+denied",
+    r"not\s+available\s+in\s+your\s+(country|region|location)",
+    r"geo-?block",
+]
+_GEO_BLOCK_RE = [re.compile(p, re.I) for p in GEO_BLOCK_MARKERS]
+
 
 @dataclass
 class BrowserDoc:
@@ -80,6 +105,13 @@ class BrowserDoc:
     meta: dict[str, Any] = field(default_factory=dict)
     challenge_waited_ms: int = 0     # 为通过人机验证等待了多久
     challenge_failed: bool = False   # True = 等超时仍未通过
+    geo_blocked: bool = False        # True = 按国家/IP 封锁（换浏览器无用）
+
+    @property
+    def usable(self) -> bool:
+        """这份文档能不能当证据用。"""
+        return (not self.challenge_failed and not self.geo_blocked
+                and len(self.text.strip()) >= 300)
 
 
 class BrowserFetcher:
@@ -152,17 +184,28 @@ class BrowserFetcher:
         为什么要单独等：WAF 的挑战页**HTTP 状态码是 403**，
         与真正的"拒绝访问"长得一样。但前者跑完 JS 后会给正常内容，
         后者永远不会。不等就会把可用的源误判为失效。
+
+        ⚠️ 为什么要求「连续两次都干净」才算通过（实测 2026-09-11，Légifrance）：
+        挑战页会**自我重载**。重载那一瞬间 title 为空、body 为空，
+        所有 marker 都不匹配 → 被误判成"挑战已通过"
+        → 然后真正的挑战页又渲染回来，抓到的是 "Just a moment..."。
+        只靠单次检测会掉进这个竞态。
         """
-        waited = 0
-        step = 1000
-        # 先看是不是挑战页（不是就直接返回，零开销）
         if not await self._is_challenge(page):
             return 0, False
+
+        waited = 0
+        step = 1000
+        clean_streak = 0
         while waited < self.challenge_ms:
             await page.wait_for_timeout(step)
             waited += step
-            if not await self._is_challenge(page):
-                return waited, False
+            if await self._is_challenge(page):
+                clean_streak = 0            # 又变回挑战页 → 重新计数
+            else:
+                clean_streak += 1
+                if clean_streak >= 2:       # 连续两次干净 → 认为真的通过了
+                    return waited, False
         return waited, True
 
     @staticmethod
@@ -172,10 +215,16 @@ class BrowserFetcher:
             title = (await page.title()) or ""
             head = (await page.inner_text("body"))[:1500]
         except Exception:  # noqa: BLE001
-            return False
+            # 读不到内容（重载/导航中）→ 当作"仍是挑战"，继续等
+            return True
         hay = f"{title}\n{head}"
-        # 挑战页很短（只有提示语 + 追踪像素），真内容页很长
-        return any(rx.search(hay) for rx in _CHALLENGE_RE)
+        if any(rx.search(hay) for rx in _CHALLENGE_RE):
+            return True
+        # ⚠️ 空壳页（重载瞬间 / 挑战页骨架）：既没有 marker 也没有内容。
+        #    不能当作"通过"——否则会抓到空页，或抓到随后回填的挑战页。
+        if len(hay.strip()) < 200:
+            return True
+        return False
 
     async def fetch_text(self, url: str, wait_selector: str | None = None) -> BrowserDoc:
         assert self._ctx is not None, "必须在 async with 中使用"
@@ -214,11 +263,13 @@ class BrowserFetcher:
                 "a[href$='.pdf'], a[href*='.pdf']", "els => els.map(e => e.href)")
 
             await asyncio.sleep(self.delay_sec)
+            geo = any(rx.search(text[:1200]) for rx in _GEO_BLOCK_RE)
             return BrowserDoc(url=url, title=title, text=text, status=status,
                               publish_date_hint=(m.group(1) if m else None),
                               pdf_links=sorted(set(pdfs or []))[:20],
                               challenge_waited_ms=waited,
-                              challenge_failed=still_blocked)
+                              challenge_failed=still_blocked,
+                              geo_blocked=geo)
         finally:
             await page.close()
 
