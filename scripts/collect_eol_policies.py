@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
@@ -34,8 +35,10 @@ sys.path.insert(0, str(ROOT))
 
 import yaml  # noqa: E402
 
-from app.connectors import get_connector      # noqa: E402
-from app.core.relevance import judge          # noqa: E402
+from app.connectors import get_connector               # noqa: E402
+from app.connectors.base import RawEvidence            # noqa: E402
+from app.core.relevance import RelevanceVerdict, judge  # noqa: E402
+from app.core.relevance_browser import judge_browser    # noqa: E402
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -190,13 +193,91 @@ def _dedupe(items: list) -> list:
 
 
 # ============================================================
+# 浏览器捕获通道接入
+# ------------------------------------------------------------
+# 背景：PHMSA / CalRecycle / BCI / ECHA / ADEME 等站点直连被拦（403），
+#       但走浏览器可得（见 scripts/collect_browser_sources.py）。
+#       它们产出在 outputs/browser_*.jsonl，需并入主采集管线。
+#
+# ⭐ 关键：**不能重新用政策规则判定**。
+#    浏览器抓的是整页渲染文本，全局导航会带来大量同母类噪声
+#    （实测 CalRecycle `/epr/` 把纺织/包装产品线都判成了相关）。
+#    它们的判定已在抓取时用 judge_browser 完成，这里必须**沿用**，
+#    否则一进主管线就把噪声重新引回来。
+# ============================================================
+# 向后兼容：region 字段是 2026-09-11 才加进浏览器记录的。
+# 旧 jsonl 没有该字段 → 回退查这张表（与 collect_browser_sources.SITES 保持一致）。
+# 新增被拦站点时**必须两处都加**，否则区域会归错。
+_BROWSER_REGION_FALLBACK = {
+    "phmsa": "US", "calrecycle": "US", "bci": "US", "call2recycle": "US",
+    "echa": "EU", "france": "EU-MemberState",
+}
+
+
+def load_browser_evidence() -> list:
+    """把 outputs/browser_*.jsonl 转成统一的 RawEvidence。"""
+    files = sorted(OUT.glob("browser_*.jsonl"))
+    if not files:
+        return []
+    out, seen = [], set()
+    for f in files:
+        for line in f.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            eid = hashlib.sha1((r.get("url") or "").encode("utf-8")).hexdigest()[:16]
+            if eid in seen:
+                continue
+            seen.add(eid)
+            sid = r.get("source_id") or "browser_capture"
+            region = (r.get("region")
+                      or _BROWSER_REGION_FALLBACK.get(sid.replace("browser_", ""))
+                      or "EU")
+            out.append(RawEvidence(
+                evidence_id=eid,
+                channel="browser_capture",
+                source_id=sid,
+                source_url=r.get("url"),
+                source_title=r.get("title"),
+                publish_date=None,
+                raw_text=r.get("text") or "",
+                meta={
+                    "region": region,
+                    "cluster_hint": r.get("cluster"),
+                    "publish_date_hint": r.get("publish_date_hint"),
+                    # ⭐ 声明判定场景，让 dump()/top_n() 用 judge_browser 而不是政策规则
+                    "relevance_scenario": "browser",
+                    "rejected_by": r.get("rejected_by"),
+                    "full_text_path": r.get("full_text_path"),
+                    "text_len_full": r.get("text_len_full"),
+                },
+            ))
+    return out
+
+
+# ============================================================
 # 输出
 # ============================================================
+def _judge_evidence(it) -> "RelevanceVerdict":
+    """按证据自己声明的场景选判定规则。
+
+    为什么不能一律用政策规则：浏览器通道抓的是整页渲染文本，
+    全局导航会让政策规则产生大量同母类假阳性（实测 CalRecycle）。
+    """
+    if it.meta.get("relevance_scenario") == "browser":
+        return judge_browser(it.source_title or "", it.source_url or "", it.raw_text)
+    return judge(it.raw_text, it.source_title, scenario="policy")
+
+
 def dump(items: list, path: Path, region: str) -> dict:
     kept = review = rejected = 0
     with path.open("w", encoding="utf-8") as f:
         for it in items:
-            v = judge(it.raw_text, it.source_title, scenario="policy")
+            v = _judge_evidence(it)
             if v.relevant:
                 kept += 1
                 review += 1 if v.needs_human_review else 0
@@ -205,11 +286,13 @@ def dump(items: list, path: Path, region: str) -> dict:
             f.write(json.dumps({
                 "evidence_id": it.evidence_id,
                 "region": region,
+                "channel": it.channel,
                 "source_id": it.source_id,
                 "cluster_hint": it.meta.get("cluster_hint"),
                 "url": it.source_url,
                 "title": it.source_title,
                 "publish_date": it.publish_date.isoformat() if it.publish_date else None,
+                "publish_date_hint": it.meta.get("publish_date_hint"),
                 "relevant": v.relevant,
                 "relevance_score": v.score,
                 "needs_human_review": v.needs_human_review,
@@ -253,12 +336,13 @@ def write_summary(path: Path, stats: dict, samples: dict, plan: dict) -> None:
 def top_n(items: list, n: int = 15) -> list[dict]:
     scored = []
     for it in items:
-        v = judge(it.raw_text, it.source_title, scenario="policy")
+        v = _judge_evidence(it)
         if v.relevant:
             scored.append({
                 "title": it.source_title or "",
                 "url": it.source_url,
-                "publish_date": it.publish_date.isoformat() if it.publish_date else None,
+                "publish_date": (it.publish_date.isoformat() if it.publish_date
+                                 else (it.meta.get("publish_date_hint") or None)),
                 "score": v.score,
             })
     scored.sort(key=lambda r: (r["score"], r["publish_date"] or ""), reverse=True)
@@ -271,6 +355,8 @@ async def main() -> int:
     ap.add_argument("--cluster", help="只采某个关键词簇，如 C3_black_mass")
     ap.add_argument("--since", default="2023-01-01", help="起始日期（默认 2023-01-01，覆盖电池法生效后）")
     ap.add_argument("--dry-run", action="store_true", help="只打印检索计划")
+    ap.add_argument("--include-browser", action="store_true",
+                    help="并入浏览器捕获的被拦站点（PHMSA/CalRecycle/BCI/ECHA/ADEME）")
     args = ap.parse_args()
 
     taxonomy, sources = load_config()
@@ -285,13 +371,28 @@ async def main() -> int:
     stats: dict[str, dict] = {}
     samples: dict[str, list] = {}
 
+    # 浏览器捕获通道（按证据自带的 region 分配到对应区域）
+    # 用前缀匹配而不是精确匹配：region 有 "EU" / "EU-MemberState" / "US" /
+    # "US/State-Local" 等层级写法，精确匹配会漏。
+    browser_by_region: dict[str, list] = {"EU": [], "US": []}
+    if args.include_browser:
+        br = load_browser_evidence()
+        for it in br:
+            reg = (it.meta.get("region") or "EU").upper()
+            bucket = "US" if reg.startswith("US") else "EU"
+            browser_by_region[bucket].append(it)
+        print(f"\n 浏览器捕获通道并入 {len(br)} 条："
+              + " ｜ ".join(f"{k} {len(v)}" for k, v in browser_by_region.items() if v))
+
     if args.region in ("EU", "BOTH"):
         items = await collect_eu(plan, args.since)
+        items += browser_by_region.get("EU", [])
         stats["EU"] = dump(items, OUT / f"eol_EU_{stamp}.jsonl", "EU")
         samples["EU"] = top_n(items)
 
     if args.region in ("US", "BOTH"):
         items = await collect_us(plan, args.since)
+        items += browser_by_region.get("US", [])
         stats["US"] = dump(items, OUT / f"eol_US_{stamp}.jsonl", "US")
         samples["US"] = top_n(items)
 

@@ -115,14 +115,29 @@ SIBLING_STREAM_PATTERNS: list[str] = [
 
 # ============================================================
 # 3) 页面身份锚点 —— 标题或 URL 路径里出现，才认定"这是电池页"
+# ------------------------------------------------------------
+# ⚠️ 必须是多语言的。只认英文会漏掉整个欧盟成员国层：
+#    实测 ADEME（法国）数据集叫 "REP - VHU - TRR et TRV des Broyeurs"，
+#    没有 battery 也没有 vehicle → 只认英文就全部误杀。
+#    法国 VHU = 报废车，broyeur = 破碎机；德国 Altfahrzeug = 报废车。
 # ============================================================
 BROWSER_FOCUS_ANCHORS: list[str] = [
+    # ---- 英文 ----
     r"batter", r"lithium", r"li-?ion", r"lead-?acid",
-    r"black\s+mass", r"cathode", r"anode",
-    r"end-?of-?life\s+vehicle", r"\belv\b",
-    r"electric\s+vehicle", r"\bev\b",
+    r"black\s+mass", r"cathode", r"anode", r"accumulator",
+    r"end-?of-?life\s+vehicle", r"\belv\b", r"\beol\b",
+    r"electric\s+vehicle", r"\bev\b", r"depollut",
     r"damaged[\s,]+defective", r"\bddr\b", r"recalled\s+batter",
     r"\bun\s*3480\b", r"\bun\s*3481\b", r"hazmat.*batter",
+    r"shredd",
+    # ---- 法语（实测 ADEME 必需）----
+    r"\bvhu\b", r"v[eé]hicule\s+hors\s+d'?usage", r"d[eé]pollution",
+    r"batterie", r"\bpiles?\b", r"accumulateur", r"masse\s+noire",
+    r"broyeur", r"broyage", r"d[eé]chet",
+    r"responsabilit[eé]\s+[eé]largie", r"\brep\b",
+    # ---- 德语 ----
+    r"altfahrzeug", r"fahrzeugverwertung", r"schwarzmasse",
+    r"schredder", r"abfallverbringung",
 ]
 
 # 身份里出现这些词 → 明确是"回收/监管"主题（提高分数用）
@@ -131,6 +146,9 @@ BROWSER_POLICY_ANCHORS: list[str] = [
     r"policy", r"legislat", r"regulat", r"guidance", r"compliance",
     r"transport", r"shipment", r"hazard", r"collection",
     r"material\s+recovery", r"circular",
+    # 法语 / 德语
+    r"valorisation", r"collecte", r"fili[eè]re", r"tonnage",
+    r"economie\s+circulaire", r"\bverwertung\b",
 ]
 
 _NOISE_RE = [re.compile(p, re.I) for p in BROWSER_NOISE_PATTERNS]
@@ -268,6 +286,16 @@ _SAMPLES: list[tuple[str, str, str, bool, str]] = [
     ("Azure WAF", "https://echa.europa.eu/legislation",
      "Request blocked ... your request has been blocked ...", False,
      "真阴性-WAF拦截页"),
+    # ---- 跨语言：法语数据集（实测 ADEME，只认英文会全部误杀）----
+    ("REP - VHU - Tonnages collectés Broyeurs depuis 2018",
+     "https://data.ademe.fr/datasets/rep-vhu-tonnages-collectes-broyeurs",
+     "tonnages collectés broyeurs ...", True, "真阳性-法语VHU破碎厂"),
+    ("REP - VHU - Liste des producteurs enregistrés à SYDEREP",
+     "https://data.ademe.fr/datasets/rep-vhu-producteurs-syderep",
+     "producteurs enregistrés ...", True, "真阳性-法语生产者名录"),
+    ("Tableau de bord Acteurs de l'economie circulaire",
+     "https://data.ademe.fr/applications/tableau-de-bord",
+     "economie circulaire ...", False, "真阴性-法语通用目录页"),
 ]
 
 if __name__ == "__main__":

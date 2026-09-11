@@ -130,8 +130,30 @@ SITES: dict[str, dict] = {
         "region": "EU-MemberState",
         "hub": "https://data.ademe.fr/",
         "doc_pattern": r"batter|vhu|v[eé]hicule|vehicule|recycl|d[eé]chet|"
-                       r"economie circulaire|[eé]conomie circulaire|mobilite",
+                       r"economie circulaire|mobilite|broyeur|producteur",
         "cluster": "C2_elv",
+        # ⚠️ ADEME 的目录页是 JS 渲染的，fetch_links 抓不到数据集链接。
+        #    所以用 seed_urls 直接给种子 —— 这些 URL 由 scripts/discover_sources.py
+        #    定位（识别出 Data Fair 平台 → 调 API → 命中 REP-VHU 系列）。
+        # ⚠️ slug 必须从 API 取**真值**，不能靠猜：
+        #       https://data.ademe.fr/data-fair/api/v1/datasets?q=vhu
+        #    猜过一次，5 个种子全部 404（"Page non trouvée"）。
+        # ⭐ 后续更优解：ADEME 有可用的 REST API，应做成 API 连接器
+        #    （`/data-fair/api/v1/datasets/<id>/lines` 可直接取数据行），
+        #    而不是抓页面。浏览器通道是过渡方案。
+        "seed_urls": [
+            # 破碎厂吨位 —— 黑粉上游的直接量化指标 ⭐
+            "https://data.ademe.fr/datasets/rep-vhu-tonnages-collectes-broyeurs-en-2018",
+            # 破碎厂回收率/再利用率（TRR/TRV）⭐
+            "https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-broyeurs-en-2018",
+            "https://data.ademe.fr/datasets/rep-vhu-tonnages-collectes-cvhu-en-2018",
+            "https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-cvhu-en-2018",
+            "https://data.ademe.fr/datasets/rep-vhu-performances-cumulees-en-2018",
+            # 生产者登记名录（竞争情报）⭐
+            "https://data.ademe.fr/datasets/rep-vhu-liste-des-societes-inscrites-a-syderep",
+            # VHU 材料按处理方式分布 ⭐
+            "https://data.ademe.fr/datasets/materiaux-te-t1",
+        ],
     },
 }
 
@@ -169,7 +191,8 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             reason = None
         if reason:
             records.append({
-                "source_id": f"browser_{key}", "cluster": cfg["cluster"],
+                "source_id": f"browser_{key}", "region": cfg["region"],
+                "cluster": cfg["cluster"],
                 "channel": "browser_capture", "kind": kind, "url": url,
                 "title": title, "publish_date_hint": date_hint, "http": status,
                 "text": "", "relevant": False, "score": 0.0,
@@ -197,6 +220,7 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             print(f"    💾 全文落盘 {dest.name[:48]}（{len(text)} 字符）")
         records.append({
             "source_id": f"browser_{key}",
+            "region": cfg["region"],          # 数据自带区域，下游无需维护映射表
             "cluster": cfg["cluster"],
             "channel": "browser_capture",
             "kind": kind,
@@ -234,6 +258,13 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             docs += found
         except Exception as exc:  # noqa: BLE001
             print(f"  ⚠️ {h} 链接发现失败：{type(exc).__name__}")
+
+    # 种子 URL：用于 JS 渲染目录页（如 ADEME Data Fair）——
+    # 链接抓不到，直接给已知的数据集地址。
+    for s in (cfg.get("seed_urls") or []):
+        docs.append({"title": s.rstrip("/").split("/")[-1], "url": s})
+    if cfg.get("seed_urls"):
+        print(f"  种子 URL 注入 {len(cfg['seed_urls'])} 个（目录页 JS 渲染，链接不可发现）")
     # 去重（保序）
     deduped, seen_urls = [], set()
     for d in docs:
@@ -246,7 +277,7 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
         print(f"    · {d['title'][:76]}")
 
     # 逐篇抓取（限量，避免过久）
-    for d in docs[:8]:
+    for d in docs[:12]:
         try:
             doc = await asyncio.wait_for(bf.fetch_text(d["url"]), timeout=FETCH_TIMEOUT)
             pdf_pool.update(doc.pdf_links)          # 收集详情页里的 PDF 直链
