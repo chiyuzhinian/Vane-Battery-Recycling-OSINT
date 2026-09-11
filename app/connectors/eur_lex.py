@@ -1,4 +1,4 @@
-"""欧盟立法连接器 —— 走 Publications Office 官方 SPARQL 端点。
+"""欧盟立法连接器 —— SPARQL 元数据 + EUR-Lex 正文，双通道。
 
 为什么不用 EUR-Lex 网页？
 ------------------------
@@ -10,13 +10,23 @@
     https://publications.europa.eu/webapi/rdf/sparql
         → HTTP 200 application/sparql-results+json  ✅ 官方机器接口，无需鉴权
 
-结论：欧盟侧走 SPARQL。它拿到的字段比网页正文**更结构化**：
-    CELEX 号、ELI、生效日期、存续状态、修订关系、更正版本、官方公报出处、责任机构。
+⭐ **上述结论已在 2026-09-11 被推翻一半 —— 关键是 Accept/UA 协商：**
 
-实测能查到什么？
----------------
-    CELEX 32023R1542（电池法规）+ 6 个更正版本 R(01)/R(02)/R(04)/R(06)
-    → 说明"这部法规被反复更正"本身就是一个有价值的情报信号。
+    EUR-Lex HTML 直连（带浏览器 UA）
+        https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1157
+        → HTTP 200，9.7 MB ✅ **正文可取**
+    Cellar + `Accept: application/xhtml+xml`  → 200，9.7 MB ✅
+    Cellar + `Accept: application/pdf`          → 200，4.7 MB ✅ 官方 PDF
+    Cellar + `Accept: text/html`                → 404 ❌（**Accept 协商是真的**）
+
+    教训：**"被反爬"的结论会过期**。源站会改策略，自己的请求头也会变。
+    判死一个源之前，要重新测一遍 —— 否则会长期绕远路（此前一直靠 SPARQL 拿元数据，
+    代价是**整层欧盟法规只有 CELEX 号、没有条文**）。
+
+双通道分工
+----------
+    SPARQL（默认）—— 元数据：CELEX、ELI、生效日期、修订关系、更正版本
+    EUR-Lex HTML —— 正文：法条原文，存快照到 sources/eurlex-fulltext/
 
 SPARQL 本体字段（实测确认，勿臆造）
 ----------------------------------
@@ -38,10 +48,18 @@ SPARQL 本体字段（实测确认，勿臆造）
 
 from __future__ import annotations
 
+import html
 import re
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from .base import BaseConnector, ConnectorError, ProbeResult, RawEvidence, parse_date
+
+# 正文快照目录：单个法规的 HTML 约 10 MB、纯文本约 40 万字符，
+# **不能进 jsonl**（会把产出文件撑爆），必须落盘。
+ROOT = Path(__file__).resolve().parent.parent.parent
+FULLTEXT_DIR = ROOT / "sources" / "eurlex-fulltext"
 
 SPARQL_ENDPOINT = "https://publications.europa.eu/webapi/rdf/sparql"
 CDM = "http://publications.europa.eu/ontology/cdm#"
@@ -266,6 +284,81 @@ class EurLexConnector(BaseConnector):
                 },
             ))
         return out
+
+    # ---------- 正文（EUR-Lex HTML）----------
+    #
+    # 为什么必须有这条通道：SPARQL 只给元数据。整个欧盟层曾长期"只有 CELEX 号、
+    # 没有条文"，导致报告里只能列出法规清单，无法引用"第 X 条规定了什么"。
+    #
+    # ⚠️ 抓取要点（实测 2026-09-11）：
+    #   · URL 用 .../legal-content/EN/TXT/HTML/?uri=CELEX:<celex>
+    #   · 单个文件约 10 MB HTML / 约 40 万字符纯文本 —— **不要放进 jsonl**，
+    #     必须落盘到 sources/eurlex-fulltext/，jsonl 里只存路径与摘要
+    async def fetch_fulltext(self, celex: str,
+                             save: bool = True) -> tuple[str, Any]:
+        """抓取法规/指令正文，返回 (纯文本, 快照路径)。
+
+        正文提取策略（两层，先精确后兜底）：
+          ① 定位 `id="documentView"` 容器（EUR-Lex 的正文容器）
+          ② 兜底：从"The European Parliament / The Council"起，
+             到"shall be binding"止 —— 掐掉页头导航与页脚
+        """
+        url = (f"https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/"
+               f"?uri=CELEX:{celex}")
+        resp = await self._polite_get(url)
+        text = self._extract_body(resp.text)
+
+        dest = None
+        if save and text:
+            FULLTEXT_DIR.mkdir(parents=True, exist_ok=True)
+            dest = FULLTEXT_DIR / f"{celex}.txt"
+            dest.write_text(
+                f"# CELEX {celex}\n# {self._eurlex_url(celex)}\n"
+                f"# 抓取 {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC}"
+                f"（正文 {len(text)} 字符）\n\n{text}",
+                encoding="utf-8")
+        return text, dest
+
+    @staticmethod
+    def _extract_body(raw_html: str) -> str:
+        """从 EUR-Lex HTML 抽出法条正文（去掉页面框架）。"""
+        if not raw_html:
+            return ""
+        s = raw_html
+
+        # ① 优先用正文容器
+        m = re.search(r'(?is)<div[^>]+id="documentView"[^>]*>(.*?)</div>\s*</div>', s)
+        body = m.group(1) if m else ""
+
+        # ② 兜底：用起止标记夹出正文
+        if len(body) < 5000:
+            starts = [s.find(k) for k in (
+                "THE EUROPEAN PARLIAMENT", "THE COUNCIL OF THE EUROPEAN",
+                "THE EUROPEAN COMMISSION", "THE EUROPEAN CENTRAL BANK")]
+            starts = [i for i in starts if i > 0]
+            if starts:
+                beg = min(starts)
+                ends = [s.find(k, beg) for k in (
+                    "This Regulation shall be binding",
+                    "This Directive shall be binding",
+                    "This Decision shall be binding",
+                    "Done at ")]
+                ends = [i for i in ends if i > beg]
+                body = s[beg:min(ends) + 200] if ends else s[beg:]
+
+        if not body:
+            body = s
+
+        # 去脚本/样式/注释
+        body = re.sub(r"(?is)<(script|style|noscript)[^>]*>.*?</\1>", " ", body)
+        body = re.sub(r"(?s)<!--.*?-->", " ", body)
+        # 块级标签转换行，行内标签去空格
+        body = re.sub(r"(?i)<(br|/p|/div|/tr|/h[1-6]|/li|/td)[^>]*>", "\n", body)
+        body = re.sub(r"<[^>]+>", " ", body)
+        body = html.unescape(body).replace("\u00a0", " ")
+        body = re.sub(r"[ \t]+", " ", body)
+        body = re.sub(r"\n\s*\n+", "\n", body)
+        return body.strip()
 
     async def fetch_relations(self, work_uri: str) -> dict[str, list[str]]:
         """拉取某部法规的修订/废止/合并版本关系图。"""

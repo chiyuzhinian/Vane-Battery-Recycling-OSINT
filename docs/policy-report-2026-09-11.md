@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 02:26 UTC　（数据截止同上）
+生成时间：2026-09-11 02:30 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -16,6 +16,7 @@
 | 　其中高置信（自动判定） | 113 |
 | 　其中待人工复核 | 123 |
 | 覆盖监管层级 | 7 |
+| 欧盟法规全文快照 | **7 部**（可离线核查条文） |
 
 ### 按监管层级分布
 
@@ -130,16 +131,22 @@ _暂未收集到条目（覆盖缺口）_
 
 - **EU legislation CELEX 32023R1542R(14)**
   - 日期 2026-07-28　原文：http://publications.europa.eu/resource/cellar/ab3cbe7e-8a1f-11f1-8e61-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(13)**
   - 日期 2026-04-10　原文：http://publications.europa.eu/resource/cellar/0247a0f6-3476-11f1-be39-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(12)**
   - 日期 2026-02-17　原文：http://publications.europa.eu/resource/cellar/3f4e448f-0ba1-11f1-8870-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(11)**
   - 日期 2025-10-08　原文：http://publications.europa.eu/resource/cellar/8cc766e0-a3e2-11f0-97c8-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(10)**
   - 日期 2025-03-25　原文：http://publications.europa.eu/resource/cellar/ece5f079-0919-11f0-b1a3-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
 - **EU legislation CELEX 32023R1542R(09)**
   - 日期 2025-02-05　原文：http://publications.europa.eu/resource/cellar/94be7ff4-e361-11ef-be2a-01aa75ed71a1
+  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
   - …另有 9 条（共 15 条，见 `outputs/eol_*.jsonl`）
 
 #### 欧盟官方公报（EUR-Lex 关键词检索）（4 条）
@@ -292,7 +299,26 @@ _暂未收集到条目（覆盖缺口）_
 
 ---
 
-## 四、已下载的原始文档（可离线核查）
+## 四、欧盟法规全文库（可离线核查条文）
+
+> 只有链接的报告无法回答「第 X 条规定了什么」。
+> 下面这些法规已把**正文**抓下来存本地，可搜索、可引用、可日后比对修订。
+
+| CELEX | 正文长度 | 本地快照 | 在线原文 |
+|---|---:|---|---|
+| `32000L0053` | 32,106 字符 | `sources/eurlex-fulltext/32000L0053.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000L0053 |
+| `32006L0066` | 45,594 字符 | `sources/eurlex-fulltext/32006L0066.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006L0066 |
+| `32008L0098` | 78,227 字符 | `sources/eurlex-fulltext/32008L0098.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32008L0098 |
+| `32023R1542` | 352,016 字符 | `sources/eurlex-fulltext/32023R1542.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542 |
+| `32024R1157` | 303,332 字符 | `sources/eurlex-fulltext/32024R1157.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157 |
+| `32024R1252` | 221,942 字符 | `sources/eurlex-fulltext/32024R1252.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252 |
+| `52023PC0451` | 236,682 字符 | `sources/eurlex-fulltext/52023PC0451.txt` | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52023PC0451 |
+
+> 更新快照：`py scripts/fetch_eurlex_fulltext.py`（`--terms` 可按关键词扩充）
+
+---
+
+## 五、其他已下载的原始文档
 
 | 文件 | 大小 | 来源站点 |
 |---|---:|---|
@@ -308,7 +334,7 @@ _暂未收集到条目（覆盖缺口）_
 
 ---
 
-## 五、数据源健康度
+## 六、数据源健康度
 
 | 源 | 层级 | 相关条目 | 命中率参考 |
 |---|---|---:|---|
@@ -328,7 +354,7 @@ _暂未收集到条目（覆盖缺口）_
 
 ---
 
-## 六、已知覆盖缺口
+## 七、已知覆盖缺口
 
 | 缺口 | 说明 |
 |---|---|

@@ -52,6 +52,25 @@ from app.core.relevance import (  # noqa: E402
 )
 
 OUT = ROOT / "outputs"
+FULLTEXT_DIR = ROOT / "sources" / "eurlex-fulltext"
+
+
+def fulltext_index() -> dict[str, dict]:
+    """欧盟法规全文快照索引：CELEX → {path, chars}。
+
+    为什么报告要标这个：**只有链接的报告无法回答"第 X 条规定了什么"**。
+    有快照才能离线核查、引用条文、日后比对修订。
+    """
+    idx: dict[str, dict] = {}
+    if not FULLTEXT_DIR.exists():
+        return idx
+    for p in sorted(FULLTEXT_DIR.glob("*.txt")):
+        try:
+            n = len(p.read_text(encoding="utf-8"))
+        except OSError:
+            continue
+        idx[p.stem] = {"path": p.relative_to(ROOT).as_posix(), "chars": n}
+    return idx
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -226,6 +245,7 @@ def render(records: list[dict], sample_n: int) -> str:
     rel = [r for r in records if r.get("relevant")]
     review = [r for r in rel if r.get("needs_human_review")]
     auto = [r for r in rel if not r.get("needs_human_review")]
+    ft = fulltext_index()
 
     by_layer: dict[str, list[dict]] = defaultdict(list)
     for r in rel:
@@ -255,6 +275,7 @@ def render(records: list[dict], sample_n: int) -> str:
         f"| 　其中高置信（自动判定） | {len(auto)} |",
         f"| 　其中待人工复核 | {len(review)} |",
         f"| 覆盖监管层级 | {len(by_layer)} |",
+        f"| 欧盟法规全文快照 | **{len(ft)} 部**（可离线核查条文） |",
         "",
         "### 按监管层级分布",
         "",
@@ -357,16 +378,37 @@ def render(records: list[dict], sample_n: int) -> str:
                 flag_s = f"　`{'、'.join(flags)}`" if flags else ""
                 L.append(f"- **{title}**{flag_s}")
                 L.append(f"  - {'日期 ' + date + '　' if date else ''}原文：{r.get('url')}")
+                # 若这条对应某部已存全文快照的法规，标出来
+                cx = (r.get("meta") or {}).get("celex")
+                if cx:
+                    base = str(cx).split("R(")[0]
+                    if base in ft:
+                        L.append(f"  - 全文快照：`{ft[base]['path']}`"
+                                 f"（{ft[base]['chars']:,} 字符）")
             if len(rows) > sample_n:
                 L.append(f"  - …另有 {len(rows) - sample_n} 条（共 {len(rows)} 条，"
                          f"见 `outputs/eol_*.jsonl`）")
             L.append("")
 
+    # ---------- 欧盟法规全文库 ----------
+    if ft:
+        L += ["---", "", "## 四、欧盟法规全文库（可离线核查条文）", "",
+              "> 只有链接的报告无法回答「第 X 条规定了什么」。",
+              "> 下面这些法规已把**正文**抓下来存本地，可搜索、可引用、可日后比对修订。",
+              "", "| CELEX | 正文长度 | 本地快照 | 在线原文 |", "|---|---:|---|---|"]
+        for celex in sorted(ft):
+            url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+            L.append(f"| `{celex}` | {ft[celex]['chars']:,} 字符 | "
+                     f"`{ft[celex]['path']}` | {url} |")
+        L += ["",
+              "> 更新快照：`py scripts/fetch_eurlex_fulltext.py`"
+              "（`--terms` 可按关键词扩充）", ""]
+
     # ---------- 原始文档 ----------
     captured = sorted((ROOT / "sources" / "browser-captured").rglob("*"))
     files = [p for p in captured if p.is_file()]
     if files:
-        L += ["---", "", "## 四、已下载的原始文档（可离线核查）", "",
+        L += ["---", "", "## 五、其他已下载的原始文档", "",
               "| 文件 | 大小 | 来源站点 |", "|---|---:|---|"]
         for p in sorted(files, key=lambda x: -x.stat().st_size):
             rel_p = p.relative_to(ROOT)
@@ -377,7 +419,7 @@ def render(records: list[dict], sample_n: int) -> str:
         L.append("")
 
     # ---------- 源健康度 ----------
-    L += ["---", "", "## 五、数据源健康度", "",
+    L += ["---", "", "## 六、数据源健康度", "",
           "| 源 | 层级 | 相关条目 | 命中率参考 |", "|---|---|---:|---|"]
     src_stat = Counter(r.get("source_id") for r in rel)
     for sid, n in src_stat.most_common():
@@ -389,7 +431,7 @@ def render(records: list[dict], sample_n: int) -> str:
           "`outputs/eol_summary_*.md`。", ""]
 
     # ---------- 缺口 ----------
-    L += ["---", "", "## 六、已知覆盖缺口", "",
+    L += ["---", "", "## 七、已知覆盖缺口", "",
           "| 缺口 | 说明 |", "|---|---|",
           "| 其他欧盟成员国 | 目前只覆盖德国、法国、荷兰；"
           "西班牙/意大利/波兰/比利时尚未接入 |",
