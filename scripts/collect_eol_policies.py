@@ -172,11 +172,11 @@ async def collect_eu(plan: dict, since: str) -> list:
             try:
                 batch = await conn.fetch_celex_batch(prefixes)
                 print(f"  CELEX 批量取回 {len(batch)} 条"
-                      f"（{len(prefixes)} 个前缀，分 {(len(prefixes) + 7) // 8} 批）")
+                      f"（{len(prefixes)} 个前缀，每批 4 个）")
                 items += batch
             except Exception as exc:  # noqa: BLE001
                 failures.append("celex-batch")
-                print(f"  ⚠️ CELEX 批量失败: {type(exc).__name__}")
+                print(f"  ⚠️ CELEX 批量失败: {type(exc).__name__}: {str(exc)[:200]}")
 
         for kw in plan["eu_keywords"]:
             try:
@@ -186,11 +186,31 @@ async def collect_eu(plan: dict, since: str) -> list:
                 items += batch
             except Exception as exc:  # noqa: BLE001
                 failures.append(f"keyword:{kw}")
-                print(f"  ⚠️ 关键词「{kw}」失败: {type(exc).__name__}")
+                print(f"  ⚠️ 关键词「{kw}」失败: "
+                      f"{type(exc).__name__}: {str(exc)[:200]}")
 
     if failures:
-        print(f"  ⚠️ 失败 {len(failures)} 项（SPARQL 偶发超时，可重跑补齐）")
+        # ⚠️ 不要再写"SPARQL 偶发超时"：2026-09-11 已查实，批次失败是
+        #    `re.escape` 的 `\(` 写进 SPARQL 字符串导致的**非法转义**（HTTP 400），
+        #    **确定性缺陷，重试无用**。已修。此处仅作计数。
+        print(f"  ⚠️ {len(failures)} 项失败（详见上方具体错误消息）")
     return _dedupe(items)
+
+
+async def collect_eu_celex_only(plan: dict) -> list:
+    """只跑 CELEX 精确跟踪（补采用）——不跑关键词、不跑 US。
+
+    用途：修好批量查询缺陷后，把之前整批失败的组（含更正版 CELEX）补回来，
+    而不必重跑全程（关键词阶段耗时很长）。
+    """
+    prefixes = [c["celex"] for c in plan["eu_celex"]]
+    print(f"\n🇪🇺 EU —— 仅 CELEX 精确跟踪（{len(prefixes)} 个前缀）")
+    if not prefixes:
+        return []
+    async with get_connector("eur_lex") as conn:
+        batch = await conn.fetch_celex_batch(prefixes)
+    print(f"  → {len(batch)} 条")
+    return _dedupe(batch)
 
 
 async def collect_us(plan: dict, since: str) -> list:
@@ -205,7 +225,8 @@ async def collect_us(plan: dict, since: str) -> list:
                     print(f"  「{term[:38]}」× {len(agencies)} 机构 → {len(batch)} 条")
                 items += batch
             except Exception as exc:  # noqa: BLE001
-                print(f"  ⚠️ 「{term[:38]}」失败: {type(exc).__name__}")
+                print(f"  ⚠️ 「{term[:38]}」失败: "
+                      f"{type(exc).__name__}: {str(exc)[:200]}")
     return _dedupe(items)
 
 
@@ -473,6 +494,8 @@ async def main() -> int:
                     help="跳过欧盟成员国层（德国法规 XML + 法国 ADEME API）")
     ap.add_argument("--only-member-states", action="store_true",
                     help="只采成员国层（德/荷/西/法），跳过 EU SPARQL 与 US")
+    ap.add_argument("--only-celex", action="store_true",
+                    help="只跑 CELEX 精确跟踪（补采用），跳过关键词/成员国/US")
     args = ap.parse_args()
 
     taxonomy, sources = load_config()
@@ -493,6 +516,14 @@ async def main() -> int:
         if args.include_browser:
             items += load_browser_evidence()
         stats["EU"] = dump(items, OUT / f"eol_EU_{stamp}.jsonl", "EU")
+        samples["EU"] = top_n(items)
+        write_summary(OUT / f"eol_summary_{stamp}.md", stats, samples, plan)
+        return 0
+
+    # 只跑 CELEX 层（补采：修复批量查询缺陷后把失败批次补回来）
+    if args.only_celex:
+        items = await collect_eu_celex_only(plan)
+        stats["EU"] = dump(items, OUT / f"eol_EU_celex_{stamp}.jsonl", "EU")
         samples["EU"] = top_n(items)
         write_summary(OUT / f"eol_summary_{stamp}.md", stats, samples, plan)
         return 0

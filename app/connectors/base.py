@@ -198,7 +198,19 @@ class BaseConnector(ABC):
                 f"{self.source_id}: 源站拦截 HTTP {resp.status_code} ({url})"
             )
         if resp.status_code >= 400:
-            raise ConnectorError(f"{self.source_id}: HTTP {resp.status_code} ({url})")
+            # ⚠️ **必须带上响应体**。400 的原因（SPARQL 语法错、Virtuoso 规划
+            #    失败、参数被拒）**全在 body 里**。只报一句 "HTTP 400" 等于
+            #    把唯一线索丢掉 —— 实测就是因此让「批次 2/4/5/8/9 反复失败」
+            #    悬了很久，最后只能靠单独写探针脚本才看出是 400 而非超时。
+            body = ""
+            try:
+                body = resp.content[:400].decode("utf-8", "replace").strip()
+            except Exception:  # noqa: BLE001 —— 诊断信息不能反过来搞崩请求
+                pass
+            raise ConnectorError(
+                f"{self.source_id}: HTTP {resp.status_code} ({url})"
+                + (f" :: {body}" if body else "")
+            )
         return resp
 
     async def _try_httpx(self, url: str, method: str,

@@ -536,16 +536,33 @@ class EurLexConnector(BaseConnector):
         batches = [prefixes[i:i + chunk] for i in range(0, len(prefixes), chunk)]
         for idx, group in enumerate(batches, 1):
             pattern = "|".join(re.escape(p) for p in group)
+            # ⚠️⚠️ **SPARQL 字符串层转义**（2026-09-11 修复，5 个批次反复失败的唯一根因）
+            #
+            #   re.escape("...R(01)") → "...R\(01\)"。这里的 `\(` 是给 **Python 正则**
+            #   用的转义，直接写进 SPARQL 短字符串就是**非法转义序列**：
+            #     SP030: Bad escape sequence in a short double-quoted string
+            #            at '"^(52025PC0501R\'
+            #   → Virtuoso 拒收 → **HTTP 400**（不是超时，不是抖动）。
+            #
+            #   ⚠️ 表现极具迷惑性：**只有含 `(` 的 CELEX（即更正版 R(01)/R(02)）
+            #      才会触发**。于是“12 批里偏偏那 5 批失败”，看起来像随机抖动，
+            #      实际上完全确定（同一批前缀连续两轮采集失败得一模一样）。
+            #
+            #   SPARQL 里 `\\` 才表示一个反斜杠 → 正则引擎收到的仍是 `\(`，语义不变。
+            safe = pattern.replace("\\", "\\\\")
             rows: list[dict[str, Any]] = []
             last_err = ""
             for attempt in range(1, tries + 1):
                 try:
                     rows = await self._sparql(
-                        Q_CELEX_BATCH.format(pattern=pattern, limit=limit))
+                        Q_CELEX_BATCH.format(pattern=safe, limit=limit))
                     last_err = ""
                     break
                 except Exception as exc:  # noqa: BLE001
-                    last_err = type(exc).__name__
+                    # ⚠️ 必须带消息：只留 `type(exc).__name__` 的话，日志里
+                    #    永远只有「ConnectorError」四个字，分不清是超时、
+                    #    HTTP 状态还是 Virtuoso 规划失败 —— 那等于把线索丢掉。
+                    last_err = f"{type(exc).__name__}: {str(exc)[:300]}"
                     if attempt < tries:
                         await asyncio.sleep(3.0 * attempt)
             if last_err:
