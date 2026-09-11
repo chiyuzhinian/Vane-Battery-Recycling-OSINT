@@ -1,13 +1,15 @@
 /**
  * 后端 API 客户端 + 类型定义。
  *
- * 后端：FastAPI @ 127.0.0.1:8000（见 scripts/serve_panel.py）
+ * 后端：FastAPI @ 127.0.0.1:8010（见 scripts/serve_panel.py）
  * 前端：本应用 @ 3100
  *
  * ⚠️ 不要改成 3000 —— 那是 Vane（本项目的通道 A）的端口。
+ * ⚠️ 不要用 8000 —— 被另一个项目 lithium-intel 占用，且 Windows 上
+ *    `localhost` 优先解析为 `::1`，请求会落到别人那边（接口全 404）。
  */
 
-const API = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8010";
 
 // ---------------------------------------------------------------- 类型
 export type Region = {

@@ -2,11 +2,13 @@
 
 用法
 ----
-    py scripts/serve_panel.py                # 默认 127.0.0.1:8000
+    py scripts/serve_panel.py                # 默认 127.0.0.1:8010
     py scripts/serve_panel.py --port 8100
     py scripts/serve_panel.py --reload       # 开发热重载
 
-⚠️ 端口约定：前端 **3100**、后端 **8000**。
+⚠️ 端口约定：前端 **3100**、后端 **8010**。
+    ⚠️ **不要用 8000** —— 已被另一个项目 lithium-intel（Docker）占用；
+       且 Windows 上 `localhost` 优先解析为 `::1`，请求会落到它那边。
    **不要用 3000** —— 那是 Vane 的端口（本项目的通道 A）。
 """
 from __future__ import annotations
@@ -21,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 def main() -> int:
     ap = argparse.ArgumentParser(description="退役电池回收 OSINT 面板 API")
     ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--port", type=int, default=8010)
     ap.add_argument("--reload", action="store_true", help="开发模式热重载")
     a = ap.parse_args()
 
