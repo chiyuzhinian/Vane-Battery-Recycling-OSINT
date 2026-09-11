@@ -262,6 +262,88 @@ def matched_lines(rec: dict) -> list[str]:
     return line_hits(rec)
 
 
+# ============================================================
+# 法规变更时间线
+# ------------------------------------------------------------
+# ⭐ 为什么"什么时候改了什么"比"现在是什么"更有情报价值：
+#    实测电池法 (EU) 2023/1542 有 **14 个更正版本**（R(01)~R(14)），
+#    持续到 2026 年仍在更正。对做合规的人来说，密集的更正意味着
+#    **条文尚不稳定、执行口径仍在变** —— 这本身就是需要监测的信号。
+# ============================================================
+def build_timeline(records: list[dict]) -> list[dict]:
+    """按法规主体聚合其全部版本（原始 + 更正 + 修订），形成时间线。"""
+    groups: dict[str, dict] = {}
+    for r in records:
+        celex = str(((r.get("meta") or {}).get("celex") or "")).strip()
+        if not celex:
+            continue
+        base = celex.split("R(")[0]
+        g = groups.setdefault(base, {"base": base, "versions": [], "title": ""})
+        is_corr = "R(" in celex
+        kind = "更正" if is_corr else ("修订" if "L0" not in base[:1] else "原始")
+        g["versions"].append({
+            "celex": celex,
+            "kind": "更正" if is_corr else "本体",
+            "date": str(r.get("publish_date") or "")[:10],
+            "title": r.get("title") or "",
+            "url": r.get("url") or "",
+        })
+        if not is_corr and (r.get("title") or ""):
+            g["title"] = r["title"]
+    out = []
+    for g in groups.values():
+        g["versions"].sort(key=lambda v: v["date"] or "")
+        g["n_corr"] = sum(1 for v in g["versions"] if v["kind"] == "更正")
+        out.append(g)
+    out.sort(key=lambda g: (-g["n_corr"], g["base"]))
+    return out
+
+
+# ============================================================
+# 企业情报识别
+# ------------------------------------------------------------
+# ⭐ 为什么必须单独成章：企业侧信息（产能、融资、并购）对竞对分析的价值
+#    **独立于政策**。混在政策清单里，研究者要翻 200 条联邦公报才能找到
+#    一条"某回收商新开分选线"。
+# ============================================================
+COMPANY_SIGNALS: list[tuple[str, str]] = [
+    (r"ouvre|opent|opens|opening|nouvelle\s+ligne|nieuwe\s+lijn|new\s+(production|sorting|recycling)\s+line",
+     "产能扩张"),
+    (r"investi|investering|investissement|Investition|funding|raise[sd]?\b|融资",
+     "投融资"),
+    (r"acquisition|acquires|acquiert|übernimmt|merger|fusión|合并|收购", "并购"),
+    (r"partnership|samenwerking|partenariat|collaborat|cooperat", "合作"),
+    (r"capacity|Kapazität|capacité|capaciteit|tonnes?\s+per\s+year|t/a\b", "产能指标"),
+    (r"expands?|erweitert|agrandit|uitbreid", "扩产"),
+]
+_COMPANY_RE = [(re.compile(p, re.I), label) for p, label in COMPANY_SIGNALS]
+
+
+def company_signals(rec: dict) -> list[str]:
+    """识别企业动态信号。
+
+    ⚠️ **必须排除法条与公报**：法律文本里天然包含 new / capacity / funding
+    这类词，不排除会把《国家有害空气污染物排放标准》当成"投融资动态"。
+    实测误报率极高，所以只对企业/行业/新闻类来源启用。
+
+    企业情报的正确来源是：行业组织动态、企业公告、新闻报道 ——
+    不是法规登记库。
+    """
+    sid = rec.get("source_id") or ""
+    if sid in LEGAL_SOURCES:
+        return []
+    hay = f"{rec.get('title') or ''} {rec.get('text') or ''}"
+    return sorted({label for rx, label in _COMPANY_RE if rx.search(hay)})
+
+
+# 法规登记类来源：这些库里的文本是法条本身，不做企业动态识别。
+LEGAL_SOURCES: set[str] = {
+    "eu_eurlex_battery_reg", "eu_eurlex_keyword", "eu_eurlex",
+    "de_gesetze", "fr_dila", "us_federal_register",
+    "browser_echa", "browser_phmsa", "fr_ademe_opendata",
+}
+
+
 def render(records: list[dict], sample_n: int) -> str:
     rel = [r for r in records if r.get("relevant")]
     review = [r for r in rel if r.get("needs_human_review")]
@@ -443,11 +525,47 @@ def render(records: list[dict], sample_n: int) -> str:
               "> 更新快照：`py scripts/fetch_eurlex_fulltext.py`"
               "（`--terms` 可按关键词扩充）", ""]
 
+    # ---------- 法规变更时间线 ----------
+    timeline = [g for g in build_timeline(records) if g["n_corr"] or len(g["versions"]) > 1]
+    if timeline:
+        L += ["---", "", "## 五、法规变更时间线", "",
+              "> **「什么时候改了什么」比「现在是什么」更有情报价值。**",
+              "> 频繁的更正意味着条文尚不稳定、执行口径仍在变 —— 这本身就是要监测的信号。",
+              ""]
+        for g in timeline[:8]:
+            name = (g["title"] or g["base"])[:96]
+            L += [f"### {name}", "",
+                  f"主体 CELEX `{g['base']}`　共 {len(g['versions'])} 个版本"
+                  f"（更正 {g['n_corr']} 次）", "",
+                  "| 日期 | 版本 | CELEX |", "|---|---|---|"]
+            for v in g["versions"][:14]:
+                L.append(f"| {v['date'] or '—'} | {v['kind']} | `{v['celex']}` |")
+            if len(g["versions"]) > 14:
+                L.append(f"| … | 另有 {len(g['versions']) - 14} 个版本 | |")
+            L += ["",
+                  f"- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/"
+                  f"?uri=CELEX:{g['base']}",
+                  ""]
+
+    # ---------- 企业情报 ----------
+    comp = [(r, company_signals(r)) for r in rel]
+    comp = [(r, s) for r, s in comp if s]
+    if comp:
+        L += ["---", "", "## 六、企业情报（与政策分开看）", "",
+              "> 企业侧信息（产能、投融资、并购）对竞对分析的价值**独立于政策**。",
+              "> 混在政策清单里，要翻几百条公报才能找到一条「某回收商新开分选线」。", "",
+              "| 类型 | 标题 | 原文 |", "|---|---|---|"]
+        for r, sig in sorted(comp, key=lambda x: -(x[0].get("relevance_score") or 0))[:20]:
+            t = (r.get("title") or "")[:84].replace("|", "/")
+            L.append(f"| {'、'.join(sig)} | {t} | {r.get('url')} |")
+        L += ["", f"> 共 {len(comp)} 条含企业动态信号；"
+                  f"识别规则见 `COMPANY_SIGNALS`（可按需扩充）", ""]
+
     # ---------- 原始文档 ----------
     captured = sorted((ROOT / "sources" / "browser-captured").rglob("*"))
     files = [p for p in captured if p.is_file()]
     if files:
-        L += ["---", "", "## 五、其他已下载的原始文档", "",
+        L += ["---", "", "## 七、其他已下载的原始文档", "",
               "| 文件 | 大小 | 来源站点 |", "|---|---:|---|"]
         for p in sorted(files, key=lambda x: -x.stat().st_size):
             rel_p = p.relative_to(ROOT)
@@ -458,7 +576,7 @@ def render(records: list[dict], sample_n: int) -> str:
         L.append("")
 
     # ---------- 源健康度 ----------
-    L += ["---", "", "## 六、数据源健康度", "",
+    L += ["---", "", "## 八、数据源健康度", "",
           "| 源 | 层级 | 相关条目 | 命中率参考 |", "|---|---|---:|---|"]
     src_stat = Counter(r.get("source_id") for r in rel)
     for sid, n in src_stat.most_common():
@@ -470,8 +588,12 @@ def render(records: list[dict], sample_n: int) -> str:
           "`outputs/eol_summary_*.md`。", ""]
 
     # ---------- 缺口 ----------
-    L += ["---", "", "## 七、已知覆盖缺口", "",
+    L += ["---", "", "## 九、已知覆盖缺口", "",
           "| 缺口 | 说明 |", "|---|---|",
+          "| 法国法规正文 | 已通 DILA 开放数据（日增量 0.9~1.8MB，已接入）；"
+          "但 Légifrance 直连被 Cloudflare 拦截 |",
+          "| 荷兰法规正文 | `wetten.overheid.nl` 可达但搜索是 JS 表单；"
+          "需 BWB 编号或 SRU 连接名 |",
           "| 其他欧盟成员国 | 目前只覆盖德国、法国、荷兰；"
           "西班牙/意大利/波兰/比利时尚未接入 |",
           "| 美国州级立法 | 仅加州 CalRecycle；"

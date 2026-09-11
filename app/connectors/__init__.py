@@ -23,6 +23,7 @@ from .base import (
 )
 from .cninfo import CninfoConnector
 from .datafair import DataFairConnector
+from .dila_fr import DilaFrConnector
 from .eia import EiaConnector
 from .eur_lex import EurLexConnector
 from .gesetze_de import GesetzeDeConnector
@@ -30,9 +31,10 @@ from .us_federal import FederalRegisterConnector
 
 REGISTRY: dict[str, Type[BaseConnector]] = {
     # ---- 政策侧 ----
-    "eur_lex": EurLexConnector,        # 欧盟一级立法（SPARQL）
+    "eur_lex": EurLexConnector,        # 欧盟一级立法（SPARQL + EUR-Lex 正文）
     "us_federal": FederalRegisterConnector,
     "de_gesetze": GesetzeDeConnector,  # ⭐ 德国联邦法律（官方 XML，成员国层）
+    "dila_fr": DilaFrConnector,        # ⭐ 法国 DILA 开放数据（Légifrance 原始源）
     "datafair": DataFairConnector,     # ⭐ Data Fair 开放数据平台（法国 ADEME 等）
     # ---- 企业侧 ----
     "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
@@ -53,6 +55,7 @@ __all__ = [
     "RawEvidence",
     "CninfoConnector",
     "DataFairConnector",
+    "DilaFrConnector",
     "EiaConnector",
     "EurLexConnector",
     "FederalRegisterConnector",
