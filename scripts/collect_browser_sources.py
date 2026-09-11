@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -49,6 +50,10 @@ CAPTURED = ROOT / "sources" / "browser-captured"
 SITE_TIMEOUT = 90.0     # 单次页面导航/链接发现上限（秒）
 FETCH_TIMEOUT = 60.0    # 单篇文档 / 单个 PDF 上限（秒）
 
+# 超过这个字符数的相关文档，除了进 jsonl（截断）还要全文落盘。
+# 实测触发案例：ECHA 的电池法规附件/物质限制清单 22.5 万字符。
+BIG_DOC_CHARS = 20000
+
 # ============================================================
 # 站点定义：hub 页面 + 文档发现正则
 # ============================================================
@@ -64,13 +69,17 @@ SITES: dict[str, dict] = {
     "echa": {
         "name": "ECHA - 电池法规相关（黑粉危废定性）",
         "region": "EU",
-        # ⚠️ 实测：ECHA 的 Azure WAF 是**路径级**拦截，不是整站封锁
-        #    /hot-topics/batteries  → 403  （电池专题页被点名拦）
-        #    /legislation           → 200  ✅（法规与实施页，本入口）
-        #    /support/guidance      → 200
-        #    /regulations/batteries-regulation → 404（原本就是死链，不是被拦）
-        "hub": "https://echa.europa.eu/legislation",
-        "extra_hubs": ["https://echa.europa.eu/support/guidance"],
+        # ⚠️ 实测（2026-09-11）：ECHA 的 Azure WAF 是 **JS 人机验证挑战**，
+        #    不是硬拦截 —— 挑战跑完（约 6s）后页面正常加载。
+        #    · /understanding-batteries-regulation → ✅ 电池法规正主页
+        #    · /hot-topics/batteries                → 失效路径（挑战过后跳首页）
+        #    · /regulations/batteries-regulation    → 404（原本就是死链）
+        #    · /legislation                          → 200
+        "hub": "https://echa.europa.eu/understanding-batteries-regulation",
+        "extra_hubs": [
+            "https://echa.europa.eu/legislation",
+            "https://echa.europa.eu/support/guidance",
+        ],
         "doc_pattern": r"batter|waste|recycl|hazard|legislat|regulat|annex",
         "cluster": "C3_black_mass",
     },
@@ -114,24 +123,50 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
           + (f" | 日期线索 {hub.publish_date_hint}" if hub.publish_date_hint else ""))
 
     def add(url: str, title: str, text: str, status: int = 200,
-            date_hint: str | None = None, kind: str = "page") -> None:
+            date_hint: str | None = None, kind: str = "page",
+            challenge_failed: bool = False) -> None:
         # ⚠️ 必须用 judge_browser，不能用 judge_policy：
         #    浏览器抓的是整页渲染文本，全局导航会带来大量同母类噪声
         #    （实测 CalRecycle `/epr/` 把纺织/包装产品线都判成了相关）
         v = judge_browser(title, url, text)
-        # ⚠️ 非 200 一律不作为证据：403/404/5xx 返回的是拦截页或错误页，
-        #    哪怕内容像那么回事也不能入库（实测 ECHA 的 Azure WAF 页
-        #    标题就是 "Azure WAF"，曾被评为"相关"）。
-        if status != 200:
+        # ⚠️ 入库前的真实性门禁。
+        #    不能用 `status != 200` 一刀切：WAF 的人机验证页状态码**也是 403**，
+        #    但挑战通过后内容是真的（实测 ECHA）。
+        #    因此改判「有没有拿到实质内容」，而不是「状态码好不好看」。
+        if challenge_failed:
+            reason = "waf_challenge_timeout"       # 等了但没通过 → 不是证据
+        elif len((text or "").strip()) < 300:
+            reason = f"content_too_short_{len((text or '').strip())}"
+        else:
+            reason = None
+        if reason:
             records.append({
                 "source_id": f"browser_{key}", "cluster": cfg["cluster"],
                 "channel": "browser_capture", "kind": kind, "url": url,
                 "title": title, "publish_date_hint": date_hint, "http": status,
                 "text": "", "relevant": False, "score": 0.0,
                 "needs_human_review": False, "hits": [],
-                "rejected_by": f"http_{status}",
+                "rejected_by": reason,
             })
             return
+
+        # ⭐ 大文档全文落盘。
+        #   为什么必须在**这里**做（而不是循环结束后扫 records）：
+        #   记录里的 text 已经截断到 6000，事后扫永远看不到真实长度。
+        #   实测踩过这个坑：ECHA 的 22.5 万字符物质限制清单被静默裁掉。
+        big_doc_path = None
+        if v.relevant and len(text) >= BIG_DOC_CHARS:
+            slug = re.sub(r"[^A-Za-z0-9._-]+", "-",
+                          url.split("//")[-1].split("?")[0])[:90].strip("-")
+            dest = CAPTURED / key / f"{slug}.txt"
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(
+                f"# {title}\n# {url}\n"
+                f"# 抓取 {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC}"
+                f"（全文 {len(text)} 字符；jsonl 内仅前 6000）\n\n{text}",
+                encoding="utf-8")
+            big_doc_path = str(dest.relative_to(ROOT))
+            print(f"    💾 全文落盘 {dest.name[:48]}（{len(text)} 字符）")
         records.append({
             "source_id": f"browser_{key}",
             "cluster": cfg["cluster"],
@@ -142,6 +177,8 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             "publish_date_hint": date_hint,
             "http": status,
             "text": text[:6000],
+            "text_len_full": len(text),          # 截断前长度，便于发现被裁的文档
+            "full_text_path": big_doc_path,      # 大文档全文落盘位置（无则为 None）
             "relevant": v.relevant,
             "score": v.score,
             "needs_human_review": v.needs_human_review,
@@ -150,7 +187,12 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
         })
 
     add(cfg["hub"], hub.title, hub.text, hub.status,
-        hub.publish_date_hint, kind="hub")
+        hub.publish_date_hint, kind="hub",
+        challenge_failed=hub.challenge_failed)
+    if hub.challenge_waited_ms:
+        print(f"       JS 人机验证：等待 {hub.challenge_waited_ms} ms 后通过"
+              if not hub.challenge_failed else
+              f"       ⚠️ 人机验证等待 {hub.challenge_waited_ms} ms 仍未通过")
     pdf_pool: set[str] = set(hub.pdf_links)
 
     # 发现文档（主 hub + 备用入口，有些站点首页/栏目会改版导致 404）
@@ -183,10 +225,14 @@ async def collect_site(bf: BrowserFetcher, key: str, download_pdfs: bool) -> lis
             if len(doc.text) < 120:
                 continue
             add(d["url"], doc.title or d["title"], doc.text, doc.status,
-                doc.publish_date_hint, kind="document")
+                doc.publish_date_hint, kind="document",
+                challenge_failed=doc.challenge_failed)
             flag = "★" if doc.publish_date_hint else " "
+            chal = (f"  [验证+{doc.challenge_waited_ms}ms]"
+                    if doc.challenge_waited_ms and not doc.challenge_failed else "")
             print(f"    {flag} 抓取 {doc.title[:60]:<62} {len(doc.text):>6} 字符"
-                  + (f"  (PDF×{len(doc.pdf_links)})" if doc.pdf_links else ""))
+                  + (f"  (PDF×{len(doc.pdf_links)})" if doc.pdf_links else "")
+                  + chal)
         except Exception as exc:  # noqa: BLE001
             print(f"    ⚠️ {d['url'][:70]} → {type(exc).__name__}")
 

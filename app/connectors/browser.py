@@ -45,6 +45,29 @@ from .base import USER_AGENT
 
 _TAG_RE = re.compile(r"\s+")
 
+# ============================================================
+# JS 人机验证（WAF challenge）识别
+# ------------------------------------------------------------
+# ⭐ 实测教训（2026-09-11，ECHA）：
+#   403 不一定是硬拦截。ECHA 的 Azure WAF 返回的是**JS 挑战页**
+#   （"One moment, we're checking you're not a bot."），
+#   挑战跑完（约 6 秒）后页面**正常加载**。
+#   首版只等了 1.2 秒 → 抓到的是挑战页 → 误判为"整站反爬"。
+#   **判定一个源不可用之前，必须给它通过挑战的时间。**
+# ============================================================
+CHALLENGE_MARKERS = [
+    r"checking you'?re not a bot",
+    r"just a moment",
+    r"azure\s+waf",
+    r"enable\s+javascript",
+    r"are\s+you\s+a\s+human",
+    r"\bcaptcha\b",
+    r"ddos\s+protection",
+    r"checking your browser",
+    r"verifying\s+you\s+are\s+human",
+]
+_CHALLENGE_RE = [re.compile(p, re.I) for p in CHALLENGE_MARKERS]
+
 
 @dataclass
 class BrowserDoc:
@@ -55,6 +78,8 @@ class BrowserDoc:
     publish_date_hint: str | None = None
     pdf_links: list[str] = field(default_factory=list)
     meta: dict[str, Any] = field(default_factory=dict)
+    challenge_waited_ms: int = 0     # 为通过人机验证等待了多久
+    challenge_failed: bool = False   # True = 等超时仍未通过
 
 
 class BrowserFetcher:
@@ -66,11 +91,13 @@ class BrowserFetcher:
     """
 
     def __init__(self, headless: bool = True, channel: str = "chrome",
-                 delay_sec: float = 2.0, timeout_ms: int = 45000) -> None:
+                 delay_sec: float = 2.0, timeout_ms: int = 45000,
+                 challenge_ms: int = 20000) -> None:
         self.headless = headless
         self.channel = channel
         self.delay_sec = delay_sec          # 每次抓取之间的间隔（采集礼仪）
         self.timeout_ms = timeout_ms
+        self.challenge_ms = challenge_ms    # 等待 JS 人机验证通过的上限
         self._pw = None
         self._browser = None
         self._ctx = None
@@ -117,6 +144,39 @@ class BrowserFetcher:
                 pass
 
     # ---------- 核心能力 ----------
+    async def _await_challenge(self, page) -> tuple[int, bool]:
+        """检测并等待 JS 人机验证通过。
+
+        返回 (等待毫秒数, 是否仍然卡在挑战页)。
+
+        为什么要单独等：WAF 的挑战页**HTTP 状态码是 403**，
+        与真正的"拒绝访问"长得一样。但前者跑完 JS 后会给正常内容，
+        后者永远不会。不等就会把可用的源误判为失效。
+        """
+        waited = 0
+        step = 1000
+        # 先看是不是挑战页（不是就直接返回，零开销）
+        if not await self._is_challenge(page):
+            return 0, False
+        while waited < self.challenge_ms:
+            await page.wait_for_timeout(step)
+            waited += step
+            if not await self._is_challenge(page):
+                return waited, False
+        return waited, True
+
+    @staticmethod
+    async def _is_challenge(page) -> bool:
+        """页面是不是（仍然是）一张人机验证页。"""
+        try:
+            title = (await page.title()) or ""
+            head = (await page.inner_text("body"))[:1500]
+        except Exception:  # noqa: BLE001
+            return False
+        hay = f"{title}\n{head}"
+        # 挑战页很短（只有提示语 + 追踪像素），真内容页很长
+        return any(rx.search(hay) for rx in _CHALLENGE_RE)
+
     async def fetch_text(self, url: str, wait_selector: str | None = None) -> BrowserDoc:
         assert self._ctx is not None, "必须在 async with 中使用"
         page = await self._ctx.new_page()
@@ -124,6 +184,10 @@ class BrowserFetcher:
             resp = await page.goto(url, wait_until="domcontentloaded",
                                    timeout=self.timeout_ms)
             status = resp.status if resp else 0
+
+            # ⭐ 先过 JS 人机验证（WAF 挑战页的状态码也是 403，必须与真拒绝区分）
+            waited, still_blocked = await self._await_challenge(page)
+
             if wait_selector:
                 try:
                     await page.wait_for_selector(wait_selector, timeout=8000)
@@ -152,7 +216,9 @@ class BrowserFetcher:
             await asyncio.sleep(self.delay_sec)
             return BrowserDoc(url=url, title=title, text=text, status=status,
                               publish_date_hint=(m.group(1) if m else None),
-                              pdf_links=sorted(set(pdfs or []))[:20])
+                              pdf_links=sorted(set(pdfs or []))[:20],
+                              challenge_waited_ms=waited,
+                              challenge_failed=still_blocked)
         finally:
             await page.close()
 
@@ -162,6 +228,7 @@ class BrowserFetcher:
         page = await self._ctx.new_page()
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=self.timeout_ms)
+            await self._await_challenge(page)          # 同样要过人机验证
             await page.wait_for_timeout(1200)
             rows = await page.eval_on_selector_all(
                 "a[href]", "els => els.map(e => ({t:(e.innerText||'').trim(), h:e.href}))")

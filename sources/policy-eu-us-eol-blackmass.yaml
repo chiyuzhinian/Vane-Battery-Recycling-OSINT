@@ -118,26 +118,43 @@ eu:
 
     - id: eu_echa_batteries
       name: ECHA - 电池法规相关（化学品与危废定性）
-      url: https://echa.europa.eu/legislation
-      verified: true                  # ✅ 部分可达（浏览器通道）
-      direct_blocked: true            # 🚫 httpx/curl 403
+      url: https://echa.europa.eu/understanding-batteries-regulation
+      verified: true                  # ✅ 完全可达（实测 7/7 相关）
+      direct_blocked: true            # ⚠️ httpx/curl 403；且状态码仍是 403
       channel: browser_capture
+      requires_js_challenge: true     # ⭐ 需等待 JS 人机验证（约 6-9 秒）
       tier: official
       base_credibility: 95
       clusters: [C3_black_mass]
       check_frequency: weekly
+      key_assets:
+        - name: 电池法规物质限制数据库（附件 I + 第 13(5) 条 + 附件 VI）
+          url: "https://echa.europa.eu/eu-batteries_regulation-anx_i_vi_art_13_5"
+          note: |
+            22.5 万字符的 EUCLef 立法清单：汞/镉/铅使用禁令 + 标签要求
+            （含 CLP 法规附录 VI 表 3 的危险物质非穷尽清单）。
+            ⭐ 这是黑粉成分定性的直接依据，已全文落盘。
+        - name: ECHA 在电池法规下的职责
+          url: "https://echa.europa.eu/echas-activities-under-batteries-regulation"
       note: |
-        ⚠️ 实测（2026-09-10）：ECHA 的 Azure WAF 是**路径级**拦截，不是整站封锁。逐个路径实测：
-          /legislation                      200  ✅（法规页，本入口）
-          /about-us                         200  ✅
-          /support/guidance                 200  ✅
-          /hot-topics/batteries             403  🚫（电池专题页被 WAF 点名拦）
-          /regulations/batteries-regulation 404  ❌（原本就是死链，此前误判为"反爬"）
-        教训：**403 与 404 必须分清**——把 404 当反爬会浪费调查方向。
-        替代路径（该专题页拿不到时的降级）：
-          · ECHA 电池相关内容通过 EUR-Lex SPARQL 取（法规正文已在 eu_eurlex_* 覆盖）
-          · 危废定性看 EPA RCRA（us_epa_rcra）
-          · 可重试策略：WAF 为间歇性，同域不同路径结果不同 → 分批+延时重试有效
+        ⭐⭐ 重大误判纠正（2026-09-11）：
+        此前把 ECHA 记为「403 反爬 / 需浏览器接管」，**这是错的**。
+        真相：ECHA 的 Azure WAF 返回的是 **JS 人机验证挑战页**
+        （"One moment, we're checking you're not a bot."），
+        **挑战跑完约 6-9 秒后页面正常加载**。
+        首版浏览器层只等 1.2 秒取正文 → 拿到的就是挑战页 → 误判为整站封锁。
+
+        教训：**403 不等于硬拦截**。
+          · 挑战页与真拒绝页的 HTTP 状态码都是 403，但前者会给内容
+          · 判定一个源失效之前，必须给它通过挑战的时间
+          · 同理，403 与 404 必须分清：`/regulations/batteries-regulation`
+            一直是 **404 死链**，也曾被当成"反爬"浪费调查方向
+
+        已实现的机制：`BrowserFetcher._await_challenge()`
+          · 检测 CHALLENGE_MARKERS（Azure WAF / just a moment / captcha …）
+          · 命中则轮询等待至多 challenge_ms（默认 20s）
+          · 入库门禁改判「有没有拿到实质内容」而非「状态码好不好看」
+          · 单测 `py tests/test_browser_challenge.py` → 10/10
 
   # ---------- 国际公约 ----------
   international:
@@ -312,17 +329,28 @@ us:
     - { id: us_call2recycle, name: Call2Recycle,           url: "https://www.call2recycle.org/",     verified: true, direct_blocked: true, channel: browser_capture, base_credibility: 80, clusters: [C5_epr_collection] }
 
 # ============================================================
-# 需 MCP 浏览器接管的站点（直连被拦）
+# 需浏览器接管的站点（直连被拦，但浏览器可通）
 # ------------------------------------------------------------
-# 已实测 403/202 且 curl 无法绕过：
-#   us_phmsa              403   ⭐ 黑粉运输合规核心
-#   eu_echa_batteries     403
-#   us_state_ca_calrecycle 403
-#   us_bci / us_call2recycle 403
-#   eur-lex.europa.eu HTML 202（但 SPARQL 已覆盖，无需浏览器）
+# 已实测确实是硬拦截（curl + 浏览器均不可得）：
+#   us_call2recycle       403   （尚未接入浏览器通道，待验证）
+#   ademe.fr              403   （待验证）
+# 浏览器通道可达（已验证）：
+#   us_phmsa              403 直连 → 浏览器 200 ✅
+#   us_state_ca_calrecycle 403 直连 → 浏览器 200 ✅
+#   us_bci                403 直连 → 浏览器 200 ✅
+#   eu_echa_batteries     403 直连 → **JS 人机验证**，等待 6-9s 后 200 ✅
+# 无需浏览器：
+#   eur-lex.europa.eu HTML 202 → 但 SPARQL 已覆盖，无需浏览器
+# ------------------------------------------------------------
+# ⭐ 重要认知：403 不等于硬拦截。三类情况必须分开处理：
+#   ① JS 人机验证挑战（状态码 403，但等待后给内容）—— 实测 ECHA
+#   ② 真拒绝（状态码 403，永不妥协）
+#   ③ 死链（状态码 404，与反爬无关）—— 实测 ECHA /regulations/batteries-regulation
 # ============================================================
 browser_required:
-  - { id: us_phmsa,               priority: 1, reason: 黑粉/退役电池运输合规在美国的唯一官方入口 }
-  - { id: us_state_ca_calrecycle, priority: 2, reason: 州级 EPR 样板 }
-  - { id: eu_echa_batteries,      priority: 3, reason: 黑粉危废定性 }
-  - { id: us_bci,                 priority: 4, reason: 州级立法推手 }
+  - { id: us_phmsa,               priority: 1, status: done,  reason: 黑粉/退役电池运输合规在美国的唯一官方入口 }
+  - { id: us_state_ca_calrecycle, priority: 2, status: done,  reason: 州级 EPR 样板 }
+  - { id: eu_echa_batteries,      priority: 3, status: done,  reason: 黑粉危废定性（含 22.5 万字符物质限制清单） }
+  - { id: us_bci,                 priority: 4, status: done,  reason: 州级立法推手 }
+  - { id: us_call2recycle,        priority: 5, status: todo,  reason: 回收网络数据 }
+  - { id: fr_ademe,               priority: 6, status: todo,  reason: 法国循环经济署（欧盟成员国层） }
