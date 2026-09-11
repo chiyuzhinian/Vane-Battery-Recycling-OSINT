@@ -203,13 +203,30 @@ BATTERY_CONTEXT_RE = re.compile(
     re.I)
 
 
+# 同 URL 跨通道去重时的优先级（与 app/api/store.py、audit_collection_coverage.py 同口径）。
+# 实测坑：ADEME 的 7 个数据集 URL 同时被 API 通道与浏览器通道采到，
+# 先到先得会让**信息量更少的那条**胜出 —— 报告里写的机构、内容都跟着偏。
+_CHANNEL_RANK = {"connector": 3, "vane": 2, "browser_capture": 1}
+
+
+def _channel_rank(r: dict) -> int:
+    return _CHANNEL_RANK.get(str(r.get("channel") or ""), 0)
+
+
 def load_records() -> list[dict]:
-    """加载全部证据并按 URL 去重。
+    """加载全部证据并按 URL 去重（同 URL 保留**信息质量更高**的通道）。
 
     ⚠️ 跨文件有重复：浏览器记录同时在 `browser_*.jsonl` 与 `eol_*.jsonl`。
       按 URL 去重是唯一稳妥的口径（浏览器通道的 evidence_id 就是 URL 的 sha1）。
+
+    ⚠️⚠️ 去重**不能"先到先得"**（2026-09-12 实测修正）：
+      同一条数据会被多个通道各采一次。实测 ADEME 的 7 个数据集 URL 同时出现在
+        · API 通道 `fr_ademe_opendata`（connector，带字段与真实数据行）
+        · 浏览器通道 `browser_france`（browser_capture，整页渲染文本、噪声多）
+      先到先得 → 留下的是浏览器版 → 报告的"是什么"一栏会描述成网页而不是数据集。
+      判据：connector > vane > browser_capture。
     """
-    seen: set[str] = set()
+    index: dict[str, int] = {}
     out: list[dict] = []
     files = (sorted(glob.glob(str(OUT / "eol_*.jsonl")))
              + sorted(glob.glob(str(OUT / "browser_*.jsonl")))
@@ -225,10 +242,14 @@ def load_records() -> list[dict]:
             except json.JSONDecodeError:
                 continue
             key = (r.get("url") or r.get("evidence_id") or "").strip()
-            if not key or key in seen:
+            if not key:
                 continue
-            seen.add(key)
-            out.append(r)
+            prev = index.get(key)
+            if prev is None:
+                index[key] = len(out)
+                out.append(r)
+            elif _channel_rank(r) > _channel_rank(out[prev]):
+                out[prev] = r
     return out
 
 
