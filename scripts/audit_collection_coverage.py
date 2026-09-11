@@ -52,8 +52,19 @@ EXPECTED_SOURCES = {
 }
 
 
+# 同 URL 跨通道去重时，保留**信息质量更高**的通道（与 app/api/store.py 同一口径）。
+# 实测坑：ADEME 的数据被 API 通道（fr_ademe_opendata）与浏览器通道
+# （browser_france）各采一次，先到先得会让 API 版被吞 —— 于是审计误报
+# 「fr_ademe_opendata 零产出」，而它其实有 28 条带数据行的记录。
+_CHANNEL_RANK = {"connector": 3, "vane": 2, "browser_capture": 1}
+
+
+def _channel_rank(r: dict) -> int:
+    return _CHANNEL_RANK.get(str(r.get("channel") or ""), 0)
+
+
 def load_records() -> list[dict]:
-    seen: set[str] = set()
+    index: dict[str, int] = {}
     rows: list[dict] = []
     for pat in ("eol_*.jsonl", "browser_*.jsonl"):
         for fp in sorted(glob.glob(str(OUT / pat))):
@@ -70,10 +81,14 @@ def load_records() -> list[dict]:
                 except json.JSONDecodeError:
                     continue
                 key = (r.get("url") or r.get("evidence_id") or "").strip()
-                if not key or key in seen:
+                if not key:
                     continue
-                seen.add(key)
-                rows.append(r)
+                prev = index.get(key)
+                if prev is None:
+                    index[key] = len(rows)
+                    rows.append(r)
+                elif _channel_rank(r) > _channel_rank(rows[prev]):
+                    rows[prev] = r
     return rows
 
 

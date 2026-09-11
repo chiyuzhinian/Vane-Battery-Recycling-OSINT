@@ -26,6 +26,20 @@ from app.core.geo import SOURCE_COUNTRY, unit_of, rollup_parent
 # 与 make_report.load_records() 保持一致的加载顺序
 _PATTERNS = ("eol_*.jsonl", "browser_*.jsonl", "policy_EU_*.jsonl", "policy_US_*.jsonl")
 
+# 同一份数据可能被多个通道各采一次（实测：ADEME 的 Data Fair API 通道
+# `fr_ademe_opendata` 与浏览器通道 `browser_france` 命中了**同一批数据集 URL**）。
+# 按"先到先得"去重会让**结构化 API 版输给页面抓取版**：
+# 现象是源统计里 API 通道「零产出」，而它其实采到了带字段的真数据行。
+# 去重时必须保留**信息质量更高**的那一条：
+#   connector（结构化接口，带字段与数据行）
+#     > vane（通用搜索返回的网页）
+#       > browser_capture（整页渲染文本，导航噪声多）
+_CHANNEL_RANK = {"connector": 3, "vane": 2, "browser_capture": 1}
+
+
+def _channel_rank(r: dict) -> int:
+    return _CHANNEL_RANK.get(str(r.get("channel") or ""), 0)
+
 
 def country_label(code: str) -> str:
     """展示名。
@@ -92,7 +106,7 @@ class DataStore:
             return self._records
 
         self._decisions = self._load_decisions()
-        seen: set[str] = set()
+        index: dict[str, int] = {}       # url/evidence_id → records 下标
         records: list[dict] = []
         for pat in _PATTERNS:
             for fp in sorted(glob.glob(str(self.outputs / pat))):
@@ -109,10 +123,15 @@ class DataStore:
                     except json.JSONDecodeError:
                         continue
                     key = (r.get("url") or r.get("evidence_id") or "").strip()
-                    if not key or key in seen:
+                    if not key:
                         continue
-                    seen.add(key)
-                    records.append(self._enrich(r))
+                    prev = index.get(key)
+                    if prev is None:
+                        index[key] = len(records)
+                        records.append(self._enrich(r))
+                    elif _channel_rank(r) > _channel_rank(records[prev]):
+                        # 同一条数据换了更优的通道 → 换掉旧的
+                        records[prev] = self._enrich(r)
 
         self._records = records
         self._stamp = stamp
