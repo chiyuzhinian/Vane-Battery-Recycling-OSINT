@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 04:55 UTC　（数据截止同上）
+生成时间：2026-09-11 05:53 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -11,10 +11,10 @@
 
 | 指标 | 数量 |
 |---|---:|
-| 去重后的证据条目 | 1616 |
-| 判定为**相关** | **357** |
+| 去重后的证据条目 | 1626 |
+| 判定为**相关** | **358** |
 | 　其中高置信（自动判定） | 158 |
-| 　其中待人工复核 | 199 |
+| 　其中待人工复核 | 200 |
 | 覆盖监管层级 | 7 |
 | 欧盟法规全文快照 | **7 部**（可离线核查条文） |
 
@@ -22,7 +22,7 @@
 
 | 层级 | 条目 | 主要机构 | 最高可信度 |
 |---|---:|---|---:|
-| EU 一级立法 | 49 | 欧盟官方公报（EUR-Lex）、欧盟官方公报（EUR-Lex 关键词检索） | 100 |
+| EU 一级立法 | 50 | 欧盟官方公报（EUR-Lex）、欧盟官方公报（EUR-Lex 关键词检索） | 100 |
 | EU 机构文件 | 6 | 欧洲化学品管理局（ECHA） | 95 |
 | 成员国法 | 28 | 荷兰 KOOP BWB 基础法规库（官方 XML）、西班牙官方公报 BOE（立法整合库 REST API） | 100 |
 | 成员国数据 | 19 | ADEME 开放数据门户、Stichting OPEN（电池/电子生产者责任组织） | 95 |
@@ -146,7 +146,7 @@
   - 日期：`2024-11-26`
   - 原文：https://www.federalregister.gov/documents/2024/11/26/2024-27588/advanced-manufacturing-production-credit-correction
 
-**属该监管领域、但未检出电池线索（10 条）**
+**属该监管领域、但未检出电池线索（11 条）**
 
 > 这些文件在正文里出现该领域的通用表述（如"危险货物法规"样板文字），可能相关也可能无关，需人工判断。
 
@@ -159,7 +159,7 @@
 - **Corrigendum to Regulation (EU) 2024/1252 of the European Parliament and of the Council of 11 April 2024 establishing a f**
   - 日期：`2024-10-01`
   - 原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1252R(02)
-  - …另有 7 条
+  - …另有 8 条
 
 ---
 
@@ -167,7 +167,7 @@
 
 ### EU 一级立法
 
-**机构**：欧盟官方公报（EUR-Lex）　**可信度**：100/100　**条目**：49　
+**机构**：欧盟官方公报（EUR-Lex）　**可信度**：100/100　**条目**：50　
 **内容**：电池与废电池法规 (EU) 2023/1542 及关联立法
 
 #### 欧盟官方公报（EUR-Lex）（42 条）
@@ -204,12 +204,14 @@
   - 全文快照：`sources/eurlex-fulltext/32024R1252.txt`（221,942 字符）
   - …另有 32 条（共 42 条，见 `outputs/eol_*.jsonl`）
 
-#### 欧盟官方公报（EUR-Lex 关键词检索）（7 条）
+#### 欧盟官方公报（EUR-Lex 关键词检索）（8 条）
 
 - **Regulation (EU) 2026/1738 of the European Parliament and of the Council of 8 July 2026 on circularity requirements for vehicle des**
   - 日期 2026-07-08　原文：http://publications.europa.eu/resource/cellar/394bc298-86fd-11f1-bf5e-01aa75ed71a1
 - **Regulation (EU) 2026/1738 of the European Parliament and of the Council of 8 July 2026 on circularity requirements for vehicle des**
   - 日期 2026-07-08　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1738
+- **Commission Implementing Regulation (EU) 2026/1116 of 26 May 2026 listing the products, components and waste streams considered as **　`待复核、黑粉线 ④`
+  - 日期 2026-05-26　原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1116
 - **Commission Implementing Regulation (EU) 2025/2289 of 13 November 2025 laying down rules for the application of Regulation (EU) 202**
   - 日期 2025-11-13　原文：http://publications.europa.eu/resource/cellar/93e152fa-c67b-11f0-8da2-01aa75ed71a1
 - **Commission Implementing Regulation (EU) 2025/2289 of 13 November 2025 laying down rules for the application of Regulation (EU) 202**
@@ -547,6 +549,18 @@
 
 - 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006L0066
 
+### Directive (EU) 2025/1892 of the European Parliament and of the Council of 10 September 2025 amen
+
+主体 CELEX `32025L1892`　共 3 个版本（更正 2 次）
+
+| 日期 | 版本 | CELEX |
+|---|---|---|
+| 2025-10-16 | 本体 | `32025L1892` |
+| 2026-05-21 | 更正 | `32025L1892R(01)` |
+| 2026-06-25 | 更正 | `32025L1892R(02)` |
+
+- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025L1892
+
 ### Commission Implementing Regulation (EU) 2024/1866 of 3 July 2024 imposing a provisional counterv
 
 主体 CELEX `32024R1866`　共 2 个版本（更正 1 次）
@@ -568,17 +582,6 @@
 | 2025-08-19 | 更正 | `32025D0934R(01)` |
 
 - 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025D0934
-
-### Commission Delegated Regulation (EU) 2025/606 of 21 March 2025 supplementing Regulation (EU) 202
-
-主体 CELEX `32025R0606`　共 2 个版本（更正 0 次）
-
-| 日期 | 版本 | CELEX |
-|---|---|---|
-| 2025-03-21 | 本体 | `32025R0606` |
-| 2025-03-21 | 本体 | `32025R0606` |
-
-- 在线原文：https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0606
 
 ---
 
@@ -623,9 +626,9 @@
 | `eu_eurlex_battery_reg` | EU 一级立法 | 欧盟官方公报（EUR-Lex） | 42 |
 | `nl_bwb` | 成员国法 | 荷兰 KOOP BWB 基础法规库（官方 XML） | 17 |
 | `browser_france` | 成员国数据 | ADEME 开放数据门户 | 12 |
+| `eu_eurlex_keyword` | EU 一级立法 | 欧盟官方公报（EUR-Lex 关键词检索） | 8 |
 | `browser_bci` | 美国行业 | Battery Council International（铅电池协会） | 8 |
 | `browser_phmsa` | 美国联邦 | DOT 管道与危险材料安全管理局（PHMSA） | 8 |
-| `eu_eurlex_keyword` | EU 一级立法 | 欧盟官方公报（EUR-Lex 关键词检索） | 7 |
 | `browser_netherlands` | 成员国数据 | Stichting OPEN（电池/电子生产者责任组织） | 7 |
 | `es_boe` | 成员国法 | 西班牙官方公报 BOE（立法整合库 REST API） | 7 |
 | `browser_echa` | EU 机构文件 | 欧洲化学品管理局（ECHA） | 6 |
