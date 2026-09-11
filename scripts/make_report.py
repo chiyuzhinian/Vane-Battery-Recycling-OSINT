@@ -236,6 +236,27 @@ def classify(rec: dict) -> tuple[str, dict]:
                    "what": "未登记的源（建议补进 SOURCE_CATALOG）"}
 
 
+def fulltext_line_hits() -> dict[str, list[str]]:
+    """扫描全文快照库，返回 {黑粉线名: [CELEX, ...]}。
+
+    ⚠️ 为什么必须扫全文而不只看 jsonl：
+       jsonl 里只有元数据摘要（截断到 1200 字符），**不足以判定法规属于哪条线**。
+       实测：黑粉第①条线在 jsonl 上长期为空，而《废物运输条例》全文里
+       "shipments of waste" 出现 84 次。**结论要靠全文，不能靠摘要。**
+    """
+    out: dict[str, list[str]] = {}
+    if not FULLTEXT_DIR.exists():
+        return out
+    for p in sorted(FULLTEXT_DIR.glob("*.txt")):
+        try:
+            txt = p.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for line in black_mass_lines(txt):
+            out.setdefault(line, []).append(p.stem)
+    return out
+
+
 def matched_lines(rec: dict) -> list[str]:
     """判断这条证据命中黑粉监管的哪几条线（复用 relevance.py，单一事实来源）。"""
     return line_hits(rec)
@@ -246,6 +267,7 @@ def render(records: list[dict], sample_n: int) -> str:
     review = [r for r in rel if r.get("needs_human_review")]
     auto = [r for r in rel if not r.get("needs_human_review")]
     ft = fulltext_index()
+    ft_lines = fulltext_line_hits()
 
     by_layer: dict[str, list[dict]] = defaultdict(list)
     for r in rel:
@@ -302,10 +324,27 @@ def render(records: list[dict], sample_n: int) -> str:
           "> 不同的业务问题要引不同的法，下面把已收集的证据按线归位。", ""]
     for line in BLACK_MASS_LINES:
         hits = [r for r in rel if line["name"] in matched_lines(r)]
+        ft_hits = ft_lines.get(line["name"], [])
         L += [f"### {line['name']} —— {line['hint']}", "",
               f"> 为什么归这条线：{line['why']}", ""]
-        if not hits:
+        if ft_hits:
+            L += [f"**法规全文命中（{len(ft_hits)} 部，已存本地快照）**", ""]
+            for celex in ft_hits:
+                info = ft.get(celex, {})
+                src = next((r.get("url") for r in rel
+                            if str(((r.get("meta") or {}).get("celex") or "")
+                                   ).split("R(")[0] == celex), None)
+                L.append(f"- **CELEX {celex}**"
+                         + (f"（{info.get('chars', 0):,} 字符）" if info else ""))
+                if src:
+                    L.append(f"  - 在线原文：{src}")
+                if info.get("path"):
+                    L.append(f"  - 本地快照：`{info['path']}`")
+            L.append("")
+        if not hits and not ft_hits:
             L += ["_暂未收集到条目（覆盖缺口）_", ""]
+            continue
+        if not hits:
             continue
 
         # ⭐ 区分两级：只属该监管领域的 vs 且与电池/黑粉直接相关的。

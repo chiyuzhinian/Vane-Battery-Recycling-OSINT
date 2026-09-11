@@ -1,6 +1,6 @@
 # 退役动力电池 / 报废汽车 / 黑粉 —— 欧美政策法规采集报告
 
-生成时间：2026-09-11 02:30 UTC　（数据截止同上）
+生成时间：2026-09-11 02:31 UTC　（数据截止同上）
 
 > **阅读说明**：本报告只收录**已判定相关**的条目，每条都附原文链接，可直接点开核查。
 > 采集层已剔除：非 200 响应的拦截页、WAF 人机验证页、以及门户模糊匹配产生的噪声。
@@ -41,7 +41,19 @@
 
 > 为什么归这条线：黑粉属于废物，跨境运输受《废物运输条例》(EU) 2024/1157 与巴塞尔公约约束
 
-_暂未收集到条目（覆盖缺口）_
+**法规全文命中（5 部，已存本地快照）**
+
+- **CELEX 32006L0066**（45,594 字符）
+  - 本地快照：`sources/eurlex-fulltext/32006L0066.txt`
+- **CELEX 32008L0098**（78,227 字符）
+  - 本地快照：`sources/eurlex-fulltext/32008L0098.txt`
+- **CELEX 32023R1542**（352,016 字符）
+  - 在线原文：http://publications.europa.eu/resource/cellar/d0065c31-2ce3-11ee-95a2-01aa75ed71a1
+  - 本地快照：`sources/eurlex-fulltext/32023R1542.txt`
+- **CELEX 32024R1157**（303,332 字符）
+  - 本地快照：`sources/eurlex-fulltext/32024R1157.txt`
+- **CELEX 52023PC0451**（236,682 字符）
+  - 本地快照：`sources/eurlex-fulltext/52023PC0451.txt`
 
 ### ②危险货物运输 —— 按 UN 编号运输时的包装、文件与培训要求
 
@@ -88,6 +100,13 @@ _暂未收集到条目（覆盖缺口）_
 ### ④战略价值认定 —— 黑粉作为关键原材料回收能拿到的政策激励
 
 > 为什么归这条线：欧盟关键原材料法 (EU) 2024/1252、美国 IRA 45X 都把回收料计入激励
+
+**法规全文命中（2 部，已存本地快照）**
+
+- **CELEX 32024R1252**（221,942 字符）
+  - 本地快照：`sources/eurlex-fulltext/32024R1252.txt`
+- **CELEX 52023PC0451**（236,682 字符）
+  - 本地快照：`sources/eurlex-fulltext/52023PC0451.txt`
 
 **与电池/黑粉直接相关（4 条）**
 
@@ -144,10 +163,7 @@ _暂未收集到条目（覆盖缺口）_
 - **EU legislation CELEX 32023R1542R(10)**
   - 日期 2025-03-25　原文：http://publications.europa.eu/resource/cellar/ece5f079-0919-11f0-b1a3-01aa75ed71a1
   - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
-- **EU legislation CELEX 32023R1542R(09)**
-  - 日期 2025-02-05　原文：http://publications.europa.eu/resource/cellar/94be7ff4-e361-11ef-be2a-01aa75ed71a1
-  - 全文快照：`sources/eurlex-fulltext/32023R1542.txt`（352,016 字符）
-  - …另有 9 条（共 15 条，见 `outputs/eol_*.jsonl`）
+  - …另有 10 条（共 15 条，见 `outputs/eol_*.jsonl`）
 
 #### 欧盟官方公报（EUR-Lex 关键词检索）（4 条）
 
@@ -175,8 +191,7 @@ _暂未收集到条目（覆盖缺口）_
   - 原文：https://echa.europa.eu/understanding-batteries-regulation
 - **ECHA's activities under Batteries Regulation - ECHA**
   - 原文：https://echa.europa.eu/echas-activities-under-batteries-regulation
-- **EU-BATTERIES_REGULATION-ANX_I_VI_ART_13_5 - ECHA**　`黑粉线 ④`
-  - 原文：https://echa.europa.eu/eu-batteries_regulation-anx_i_vi_art_13_5?p_p_id=eucleflegislationlist_WAR_euclefportlet&p_p_lifecycle=0
+  - …另有 1 条（共 6 条，见 `outputs/eol_*.jsonl`）
 
 ### 成员国法
 
@@ -209,9 +224,7 @@ _暂未收集到条目（覆盖缺口）_
   - 原文：https://data.ademe.fr/datasets/materiaux-te-t1
 - **REP - VHU - TRR et TRV des Broyeurs depuis 2018**
   - 原文：https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-broyeurs-en-2018
-- **REP - VHU - TRR et TRV des CVHU depuis 2018**
-  - 原文：https://data.ademe.fr/datasets/rep-vhu-trr-et-trv-des-cvhu-en-2018
-  - …另有 6 条（共 12 条，见 `outputs/eol_*.jsonl`）
+  - …另有 7 条（共 12 条，见 `outputs/eol_*.jsonl`）
 
 #### Stichting OPEN（电池/电子生产者责任组织）（7 条）
 
@@ -225,9 +238,7 @@ _暂未收集到条目（覆盖缺口）_
   - 原文：https://www.stichting-open.org/onze-organisatie/onzekerntaken/
 - **Peperzeel opent nieuwe sorteerlijn voor batterijen - Stichting OPEN**
   - 原文：https://www.stichting-open.org/2026/07/15/peperzeel-opent-nieuwe-sorteerlijn-voor-batterijen/
-- **Humberto Tan verzorgt aftrap landelijke inlevercampagne batterijen ‘Doe maar apart’ - Stichting OPEN**
-  - 原文：https://www.stichting-open.org/2026/06/16/humberto-tan-verzorgt-aftrap-landelijke-inlevercampagne-batterijen-doe-maar-apart/
-  - …另有 1 条（共 7 条，见 `outputs/eol_*.jsonl`）
+  - …另有 2 条（共 7 条，见 `outputs/eol_*.jsonl`）
 
 ### 美国联邦
 
@@ -246,9 +257,7 @@ _暂未收集到条目（覆盖缺口）_
   - 日期 2026-09-01　原文：https://www.federalregister.gov/documents/2026/09/01/2026-17872/rescission-of-production-incentives-for-cellulosic-biofuels
 - **Nominations Request for the Good Neighbor Environmental Board**　`待复核`
   - 日期 2026-08-20　原文：https://www.federalregister.gov/documents/2026/08/20/2026-16931/nominations-request-for-the-good-neighbor-environmental-board
-- **Secretary of Energy Advisory Board**　`待复核`
-  - 日期 2026-08-18　原文：https://www.federalregister.gov/documents/2026/08/18/2026-16801/secretary-of-energy-advisory-board
-  - …另有 163 条（共 169 条，见 `outputs/eol_*.jsonl`）
+  - …另有 164 条（共 169 条，见 `outputs/eol_*.jsonl`）
 
 #### DOT 管道与危险材料安全管理局（PHMSA）（8 条）
 
@@ -262,9 +271,7 @@ _暂未收集到条目（覆盖缺口）_
   - 原文：https://www.epa.gov/smm/sustainable-materials-management-smm-web-academy-webinar-safe-transportation-lithium-batteries
 - **Used Lithium-Ion Batteries | US EPA**
   - 原文：https://www.epa.gov/recycle/used-lithium-ion-batteries
-- **Used Household Batteries | US EPA**
-  - 原文：https://www.epa.gov/recycle/used-household-batteries
-  - …另有 2 条（共 8 条，见 `outputs/eol_*.jsonl`）
+  - …另有 3 条（共 8 条，见 `outputs/eol_*.jsonl`）
 
 ### 美国州级
 
@@ -293,9 +300,7 @@ _暂未收集到条目（覆盖缺口）_
   - 原文：https://batterycouncil.org/news/critical-mineral-recovery-why-every-lead-battery-matters-to-americas-supply-chain/
 - **Battery Policy & Initiatives | Battery Council International**
   - 原文：https://batterycouncil.org/policy-initiatives/
-- **New Study Confirms Lead Batteries Are America's Most Recycled Consumer Product, With a 98% Recycling Rate**
-  - 原文：https://batterycouncil.org/news/responsible-lead-battery-recycling-growth-through-continuous-improvement/
-  - …另有 2 条（共 8 条，见 `outputs/eol_*.jsonl`）
+  - …另有 3 条（共 8 条，见 `outputs/eol_*.jsonl`）
 
 ---
 
