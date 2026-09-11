@@ -181,8 +181,9 @@ async def collect_eu(plan: dict, since: str) -> list:
         for kw in plan["eu_keywords"]:
             try:
                 batch = await conn.fetch(f"keyword:{kw}", since=since, limit=PER_SOURCE_LIMIT)
-                if batch:
-                    print(f"  关键词「{kw}」→ {len(batch)} 条")
+                # ⚠️ **0 条也要打印**：否则"跑了但没命中"与"根本没跑"在日志里
+                #    长得一模一样，事后无法审计 —— 曾因此误判成"12 个词只跑了 5 个"。
+                print(f"  关键词「{kw}」→ {len(batch)} 条")
                 items += batch
             except Exception as exc:  # noqa: BLE001
                 failures.append(f"keyword:{kw}")
@@ -233,6 +234,29 @@ async def collect_eu_celex_only(plan: dict) -> list:
         batch = await conn.fetch_celex_batch(prefixes)
     print(f"  → {len(batch)} 条")
     return _dedupe(batch)
+
+
+async def collect_eu_keywords_only(plan: dict, since: str,
+                                   keywords: list[str] | None = None) -> list:
+    """只跑关键词发现（补采用）——不跑 CELEX、成员国、US。
+
+    用在：首轮某些词因端点抖动失败/超时，事后单独补采。
+    `keywords` 为空则跑全部配置词。
+    """
+    kws = keywords or list(plan["eu_keywords"])
+    print(f"\n🇪🇺 EU —— 仅关键词发现（{len(kws)} 个）")
+    items: list = []
+    async with get_connector("eur_lex") as conn:
+        for kw in kws:
+            try:
+                batch = await conn.fetch(f"keyword:{kw}", since=since,
+                                         limit=PER_SOURCE_LIMIT)
+                print(f"  关键词「{kw}」→ {len(batch)} 条")
+                items += batch
+            except Exception as exc:  # noqa: BLE001
+                print(f"  ⚠️ 关键词「{kw}」失败: "
+                      f"{type(exc).__name__}: {str(exc)[:200]}")
+    return _dedupe(items)
 
 
 async def collect_us(plan: dict, since: str) -> list:
@@ -518,6 +542,9 @@ async def main() -> int:
                     help="只采成员国层（德/荷/西/法），跳过 EU SPARQL 与 US")
     ap.add_argument("--only-celex", action="store_true",
                     help="只跑 CELEX 精确跟踪（补采用），跳过关键词/成员国/US")
+    ap.add_argument("--only-keywords", default=None,
+                    help="只跑关键词发现（补采用）；逗号分隔指定词，"
+                         "给空串则跑全部配置词")
     args = ap.parse_args()
 
     taxonomy, sources = load_config()
@@ -546,6 +573,15 @@ async def main() -> int:
     if args.only_celex:
         items = await collect_eu_celex_only(plan)
         stats["EU"] = dump(items, OUT / f"eol_EU_celex_{stamp}.jsonl", "EU")
+        samples["EU"] = top_n(items)
+        write_summary(OUT / f"eol_summary_{stamp}.md", stats, samples, plan)
+        return 0
+
+    # 只跑关键词层（补采：首轮端点抖动导致失败的词）
+    if args.only_keywords is not None:
+        kws = [k.strip() for k in args.only_keywords.split(",") if k.strip()]
+        items = await collect_eu_keywords_only(plan, args.since, kws or None)
+        stats["EU"] = dump(items, OUT / f"eol_EU_kw_{stamp}.jsonl", "EU")
         samples["EU"] = top_n(items)
         write_summary(OUT / f"eol_summary_{stamp}.md", stats, samples, plan)
         return 0
