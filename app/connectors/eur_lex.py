@@ -50,7 +50,7 @@ CDM = "http://publications.europa.eu/ontology/cdm#"
 
 Q_CELEX = """
 PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
-SELECT DISTINCT ?work ?celex ?eli ?type ?entryForce ?inForce ?date
+SELECT DISTINCT ?work ?celex ?eli ?type ?entryForce ?inForce ?date ?title
 WHERE {{
   ?work cdm:resource_legal_id_celex ?celex .
   FILTER(STRSTARTS(STR(?celex), "{prefix}"))
@@ -59,6 +59,16 @@ WHERE {{
   OPTIONAL {{ ?work cdm:resource_legal_date_entry-into-force ?entryForce }}
   OPTIONAL {{ ?work cdm:resource_legal_in-force ?inForce }}
   OPTIONAL {{ ?work cdm:work_date_document ?date }}
+  # ⚠️ 标题是必需的，不是可选的装饰（2026-09-11 修复）：
+  #   首版漏掉了这个 join，导致 CELEX 精确跟踪的法规**只有元数据、没有标题**，
+  #   raw_text 里只有一个占位符 "EU legislation CELEX 32024R1157"。
+  #   后果：黑粉第①条线「废物跨境转移」(EU) 2024/1157 被相关性判定默默丢弃——
+  #   不是规则错，而是**根本没内容可判**。
+  OPTIONAL {{
+    ?expr cdm:expression_belongs_to_work ?work .
+    ?expr cdm:expression_title ?title .
+    FILTER(LANG(?title) = "en")
+  }}
 }}
 LIMIT {limit}
 """
@@ -184,18 +194,23 @@ class EurLexConnector(BaseConnector):
                 continue
             seen.add(celex)
             work = self._val(b, "work")
+            title = self._val(b, "title") or ""
             out.append(RawEvidence(
                 evidence_id=f"eu_{celex}",
                 channel="connector",
                 source_id="eu_eurlex_battery_reg",
-                source_url=work,
-                source_title=f"EU legislation CELEX {celex}",
+                # ⭐ 用可读的 EUR-Lex 链接，不用 Cellar 的不透明 UUID：
+                #    研究者要能一眼看出这是哪部法规、点开就能读。
+                source_url=self._eurlex_url(celex),
+                source_title=(f"{title} [CELEX {celex}]" if title
+                              else f"EU legislation CELEX {celex}"),
                 publish_date=parse_date(
                     self._val(b, "entryForce") or self._val(b, "date")
                 ),
                 raw_text=self._render(celex, b),
                 meta={
                     "celex": celex,
+                    "title_en": title,
                     "eli": self._val(b, "eli"),
                     "type": self._val(b, "type"),
                     "in_force": self._val(b, "inForce"),
@@ -237,12 +252,13 @@ class EurLexConnector(BaseConnector):
                 evidence_id=f"eu_{celex}",
                 channel="connector",
                 source_id="eu_eurlex_keyword",
-                source_url=work,
+                source_url=self._eurlex_url(celex),
                 source_title=title,
                 publish_date=parse_date(self._val(b, "date")),
                 raw_text=title,
                 meta={
                     "celex": celex,
+                    "title_en": title,
                     "lang": lang,
                     "discovered_by": keyword,
                     "work": work,
@@ -290,16 +306,32 @@ class EurLexConnector(BaseConnector):
 
     # ---------- 工具 ----------
     @staticmethod
+    def _eurlex_url(celex: str) -> str:
+        """CELEX → 人类可读的 EUR-Lex 链接。
+
+        为什么不直接用 Cellar 的 work URI：
+            那些 URI 形如 publications.europa.eu/resource/cellar/d0065c31-2ce3-11ee-…
+            是**不透明的 UUID**，研究者无法从中判断这是哪部法规。
+            EUR-Lex 的 CELEX 链接点开直接就是法规正文，且带语言与格式选项。
+        """
+        return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+    @staticmethod
     def _render(celex: str, b: dict[str, Any]) -> str:
         """把结构化字段渲染成可读文本，便于后续抽取与人工核阅。"""
         get = lambda k: (b.get(k) or {}).get("value")  # noqa: E731
-        lines = [f"CELEX: {celex}"]
+        lines: list[str] = []
+        title = get("title")
+        if title:
+            lines.append(f"标题: {title}")
+        lines.append(f"CELEX: {celex}")
         for label, key in (
             ("类型", "type"), ("生效", "entryForce"), ("现行有效", "inForce"),
             ("ELI", "eli"), ("文件日期", "date"),
         ):
             if get(key):
                 lines.append(f"{label}: {get(key)}")
+        lines.append("原文链接: " + EurLexConnector._eurlex_url(celex))
         return "\n".join(lines)
 
     @staticmethod

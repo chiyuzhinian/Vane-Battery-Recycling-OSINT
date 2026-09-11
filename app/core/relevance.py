@@ -111,8 +111,71 @@ POLICY_MAYBE_TERMS: list[str] = [
     r"lithium[- ]ion batter", r"battery manufacturing", r"battery production",
 ]
 
-REJECT_IF_MATCH: list[str] = [
-    # ⚠️ 实测假阳性来源
+# ============================================================
+# 黑粉监管四条线 —— 专题识别模式
+# ------------------------------------------------------------
+# ⭐ 为什么单列一组：**黑粉的监管不在电池法里**，而是分散在四条独立线上。
+#    通用强模式（要求"电池+回收"共现）会把这些法规**全部漏掉** ——
+#    实测 (EU) 2024/1157「废物跨境转移条例」因标题里没有 battery 被判"不相关"，
+#    导致黑粉第①条线整个缺失。
+#
+# ⚠️ 这些模式命中后**一律转人工复核**，不自动判为相关：
+#    因为它们描述的是"监管领域"，不必然与电池相关
+#    （如"危险废物"可以指任何废物）。宁可多一条待审，不可漏一条法规。
+#
+# ⚠️⚠️ 线名是**跨模块契约**：报告生成器按线名聚合，必须与此处完全一致。
+#      曾经踩过：报告里写 "① 废物跨境转移"（带空格），此处是 "①废物跨境转移"（无空格）
+#      → 四条线全部显示"未收集到条目"，而实际有命中。
+#      所以线名统一由本模块导出，消费端 **import，不要自己抄一份**。
+# ============================================================
+LINE_EOL_SHIPMENT = "①废物跨境转移"
+LINE_DANGEROUS_GOODS = "②危险货物运输"
+LINE_HAZWASTE = "③危废定性"
+LINE_STRATEGIC = "④战略价值认定"
+
+BLACK_MASS_LINE_PATTERNS: list[tuple[str, str]] = [
+    # ---- ① 废物跨境转移 ----
+    (r"shipments?\s+of\s+waste", LINE_EOL_SHIPMENT),
+    (r"waste\s+shipments?", LINE_EOL_SHIPMENT),
+    (r"\b2024/1157\b", LINE_EOL_SHIPMENT),          # 新废物运输条例
+    (r"\b1257/2013\b", LINE_EOL_SHIPMENT),          # 旧废物运输条例
+    (r"\bbasel\s+convention\b", LINE_EOL_SHIPMENT),
+    (r"transboundary\s+movements?", LINE_EOL_SHIPMENT),
+    (r"abfallverbringung", LINE_EOL_SHIPMENT),
+    (r"transfert\s+de\s+d[eé]chets", LINE_EOL_SHIPMENT),
+    # ---- ② 危险货物运输 ----
+    # ⚠️ 不要加 `shippers?`：每份危险货物文件都会出现 "shipper"，
+    #    实测导致 64 条命中里绝大多数是 "Notice of Actions on Special Permits"
+    #    这类许可通告，与电池/黑粉无关。**宁可漏，不要泛。**
+    (r"\bun\s*348[01]\b", LINE_DANGEROUS_GOODS),          # 锂电池 UN 编号
+    (r"damaged[,\s]+defective", LINE_DANGEROUS_GOODS),     # DDR 电池
+    (r"\b49\s*cfr\s*(17[0-9]|100)", LINE_DANGEROUS_GOODS),
+    (r"hazardous\s+materials?\s+regulations?\b", LINE_DANGEROUS_GOODS),
+    (r"lithium\s+batter\w*\s+(transport|shipment)", LINE_DANGEROUS_GOODS),
+    (r"\bADR\b.*\bbatter", LINE_DANGEROUS_GOODS),
+    # ---- ③ 危废定性 ----
+    (r"\brcra\b", LINE_HAZWASTE),
+    (r"abfallverzeichnis", LINE_HAZWASTE),
+    (r"avfallsf[oö]rordning", LINE_HAZWASTE),
+    # ---- ④ 战略价值认定 ----
+    (r"\b2024/1252\b", LINE_STRATEGIC),             # 关键原材料法
+    (r"critical\s+raw\s+materials?\s+act", LINE_STRATEGIC),
+    (r"\b45x\b", LINE_STRATEGIC),
+]
+_LINE_RE = [(re.compile(p, re.I), name) for p, name in BLACK_MASS_LINE_PATTERNS]
+
+
+def black_mass_lines(text: str, title: str = "") -> list[str]:
+    """返回文本命中的黑粉监管线名称（可能多条）。
+
+    抽成公开函数供报告复用：报告与采集判定用**同一套模式**，
+    避免"报告里显示的线和采集时判的线不一致"。
+    """
+    hay = f"{title}\n{text}"
+    return sorted({name for rx, name in _LINE_RE if rx.search(hay)})
+
+
+REJECT_IF_MATCH: list[str] = [    # ⚠️ 实测假阳性来源
     "battery-powered", "battery operated", "batteridrevne", "battery charger",
     "纽扣电池", "电池供电", "电池充电器",
     # 非目标行业
@@ -321,6 +384,21 @@ def judge_policy(text: str, title: str | None = None) -> RelevanceVerdict:
                 needs_human_review=True,
                 review_reason="税优/能源条款类，可能涉及电池供应链，需人工裁决",
             )
+
+    # ---- 4b) 黑粉监管四条线 → 人工复核（不自动相关）----
+    #   为什么放在最后一道：这四类法规**标题里常常没有 battery**，
+    #   但它们是黑粉监管的实际依据。不接收 → 整条线缺失（实测过）。
+    #   为什么只标人工：模式描述的是"监管领域"，不必然与电池相关。
+    if not hits:
+        lines = black_mass_lines(haystack)
+        if lines:
+            return RelevanceVerdict(
+                relevant=True, score=0.5,
+                hits=[f"line:{n}" for n in lines],
+                needs_human_review=True,
+                review_reason=f"命中黑粉监管线「{'、'.join(lines)}」，"
+                              f"需人工确认与电池/黑粉的关联",
+            )
         return RelevanceVerdict(relevant=False, score=0.0)
 
     # ---- 打分 ----
@@ -382,6 +460,12 @@ if __name__ == "__main__":
         ("REP - VHU - Tonnages collectés Broyeurs depuis 2018 —— "
          "Nombre_de_carcasses_prises_en_charge", "真阳性-法国破碎厂数据(法语)"),
         ("Masse noire issue du broyage des véhicules hors d'usage", "真阳性-法语黑粉"),
+        # ---- 黑粉监管四条线（应转人工复核，不自动相关）----
+        ("Regulation (EU) 2024/1157 of 11 April 2024 on shipments of waste, "
+         "amending Regulations (EU) No 1257/2013 and (EU) 2020/1056",
+         "人工复核-①废物跨境转移"),
+        ("Critical Raw Materials Act (EU) 2024/1252 — strategic projects list",
+         "人工复核-④战略价值认定"),
     ]
     for text, label in policy_samples:
         print(f"  {label:26s} → {judge(text, scenario='policy')}")
