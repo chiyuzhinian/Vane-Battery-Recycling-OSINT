@@ -23,7 +23,9 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
+from app.api.review import ReviewStore, VALID_TARGETS, VALID_VERDICTS
 from app.api.store import DataStore
 from app.core.geo import GEO_UNITS, ISO_TO_MAP_NAME, known_units
 
@@ -31,6 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 OUTPUTS = ROOT / "outputs"
 
 store = DataStore(OUTPUTS)
+review_store = ReviewStore(OUTPUTS / "review_decisions.jsonl")
 
 app = FastAPI(
     title="退役电池回收 OSINT 面板 API",
@@ -117,6 +120,70 @@ def record_detail(evidence_id: str) -> dict[str, Any]:
     if not r:
         raise HTTPException(404, "未找到该记录")
     return r
+
+
+# ============================================================ 人工审核
+#
+# ⭐ 只写 `review_decisions.jsonl`，**不碰** `outputs/*.jsonl`。
+#    每次写入后调 `store.load(refresh=True)` 使后续查询立即看到新决定。
+
+
+class DecisionIn(BaseModel):
+    target_type: str = Field(..., description="record | source")
+    target_id: str = Field(..., description="record 用 evidence_id；source 用 source_id")
+    verdict: str = Field(..., description="relevant | irrelevant | uncertain")
+    reason: str = ""
+    country: str | None = None
+
+
+class ReviewIn(BaseModel):
+    decisions: list[DecisionIn]
+
+
+class RevokeIn(BaseModel):
+    decision_ids: list[str]
+
+
+class UndoLastIn(BaseModel):
+    n: int = Field(1, ge=1, le=500)
+
+
+@app.get("/api/review/schema", summary="审核取值域（前端渲染按钮用）")
+def review_schema() -> dict[str, Any]:
+    return {"verdicts": list(VALID_VERDICTS), "targets": list(VALID_TARGETS)}
+
+
+@app.post("/api/review", summary="提交人工审核（单条或批量）")
+def submit_review(body: ReviewIn) -> dict[str, Any]:
+    try:
+        rows = review_store.submit([d.model_dump() for d in body.decisions])
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    store.load(refresh=True)
+    return {"saved": len(rows), "decisions": rows}
+
+
+@app.post("/api/review/revoke", summary="按 decision_id 撤销")
+def revoke_review(body: RevokeIn) -> dict[str, Any]:
+    n = review_store.revoke(body.decision_ids)
+    store.load(refresh=True)
+    return {"removed": n}
+
+
+@app.post("/api/review/undo-last", summary="撤销最近 N 条（UI 的「撤销上一批」）")
+def undo_last(body: UndoLastIn) -> dict[str, Any]:
+    ids = review_store.revoke_last(body.n)
+    store.load(refresh=True)
+    return {"removed": len(ids), "decision_ids": ids}
+
+
+@app.get("/api/review/stats", summary="审核进度")
+def review_stats() -> dict[str, Any]:
+    s = review_store.stats()
+    rows = store.load()
+    s["records_total"] = len(rows)
+    s["records_reviewed"] = sum(1 for r in rows if r.get("reviewed"))
+    return s
 
 
 # ============================================================ 未归类告警

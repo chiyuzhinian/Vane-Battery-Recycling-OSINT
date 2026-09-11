@@ -283,6 +283,9 @@ class DataStore:
             "review_verdict": r.get("review_verdict"),
             "hits": (r.get("hits") or [])[:5],
             "rejected_by": r.get("rejected_by"),
+            # ⭐ 展开阅读用：用户要求「逐个查看之后判定是不是」，
+            #    列表就带上正文摘要，避免展开时再发一次请求（交互有延迟）
+            "text": (r.get("text") or "")[:900],
         }
 
     def record_detail(self, evidence_id: str) -> dict | None:

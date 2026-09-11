@@ -1,299 +1,154 @@
 "use client";
 
 /**
- * 主页面 —— 世界地图 + 国家详情 + 记录列表。
+ * 主页面 —— 全屏地图 + 浮层抽屉 + 撤销提示。
  *
- * 交互链路：
- *   地图点国家 → 拉 /api/country/{code} 看画像（源分布/相关率/关键词簇）
- *              → 拉 /api/records?country={code} 看记录列表
- *              → （后续阶段）在列表里做审核
+ * 布局要点（对应「页面没撑满 / 地图太小」的修复）：
+ *   · `h-screen flex flex-col` —— 撑满视口，**不做 max-w-7xl 限宽**
+ *   · 地图容器 `flex-1 min-h-0` —— 占满顶栏之外的**全部**空间
+ *     （`min-h-0` 必需，否则 flex 子项不会收缩，地图会被内容撑破）
+ *   · 详情改为**浮层抽屉**，不再永久占用横向空间
  */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import CountryDrawer from "@/components/CountryDrawer";
 import WorldMap from "@/components/WorldMap";
-import {
-  api,
-  type CountryDetail,
-  type Facets,
-  type RecordBrief,
-  type Region,
-} from "@/lib/api";
+import { api, type Facets, type Region } from "@/lib/api";
 
 export default function Home() {
   const [regions, setRegions] = useState<Region[]>([]);
   const [facets, setFacets] = useState<Facets | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const [detail, setDetail] = useState<CountryDetail | null>(null);
-  const [records, setRecords] = useState<RecordBrief[]>([]);
-  const [onlyRelevant, setOnlyRelevant] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; undo?: () => void } | null>(
+    null,
+  );
   const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const timer = useRef<number | null>(null);
 
-  // ---- 初始化：地图数据 + 全局统计
-  useEffect(() => {
-    (async () => {
-      try {
-        const [m, f] = await Promise.all([api.map(), api.facets()]);
-        setRegions(m.regions);
-        setFacets(f);
-      } catch (e) {
-        setErr(`无法连接后端 API（${String(e)}）。请先运行：py scripts/serve_panel.py`);
-      } finally {
-        setLoading(false);
-      }
-    })();
+  const loadMap = useCallback(async () => {
+    try {
+      const [m, f] = await Promise.all([api.map(), api.facets()]);
+      setRegions(m.regions);
+      setFacets(f);
+      setErr(null);
+    } catch (e) {
+      setErr(
+        `无法连接后端 API（${String(e)}）。请确认已运行：py scripts/serve_panel.py`,
+      );
+    }
   }, []);
 
-  // ---- 选中国家后拉详情 + 记录
-  const loadCountry = useCallback(
-    async (code: string | null, rel: boolean) => {
-      if (!code) {
-        setDetail(null);
-        setRecords([]);
-        return;
-      }
-      try {
-        const [d, r] = await Promise.all([
-          api.country(code),
-          api.records({
-            country: code,
-            relevant: rel ? true : undefined,
-            page_size: 50,
-            sort: "score",
-          }),
-        ]);
-        setDetail(d);
-        setRecords(r.items);
-      } catch (e) {
-        setErr(String(e));
-      }
-    },
-    [],
-  );
-
   useEffect(() => {
-    void loadCountry(selected, onlyRelevant);
-  }, [selected, onlyRelevant, loadCountry]);
+    void loadMap();
+  }, [loadMap]);
+
+  const showToast = useCallback((msg: string, undo?: () => void) => {
+    setToast({ msg, undo });
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setToast(null), 7000);
+  }, []);
+
+  const closeToast = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    setToast(null);
+  };
 
   return (
-    <main className="mx-auto max-w-7xl p-6">
-      {/* 标题 */}
-      <header className="mb-6 flex items-baseline justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
+    <main className="flex h-screen w-full flex-col overflow-hidden bg-slate-950">
+      {/* ---------------- 顶栏 ---------------- */}
+      <header className="flex shrink-0 items-center gap-4 border-b border-slate-800 bg-slate-900/50 px-4 py-2.5">
+        <div className="flex items-baseline gap-2">
+          <h1 className="text-sm font-semibold tracking-tight">
             退役电池回收 OSINT 面板
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            全球采集地图 · 点击国家查看采集情况与记录
-          </p>
+          <span className="hidden text-[11px] text-slate-500 sm:inline">
+            全球采集地图
+          </span>
         </div>
-        <div className="text-right text-xs text-slate-500">
-          {facets && (
-            <>
-              <div>
-                共 <span className="text-slate-300">{facets.counts.total}</span> 条
-                · 相关{" "}
-                <span className="text-sky-400">{facets.counts.relevant}</span>
-              </div>
-              <div>待复核 {facets.counts.needs_review}</div>
-            </>
-          )}
+
+        {facets && (
+          <div className="hidden items-center gap-4 text-[11px] text-slate-400 md:flex">
+            <span>
+              共 <b className="text-slate-200">{facets.counts.total}</b> 条
+            </span>
+            <span>
+              相关 <b className="text-sky-400">{facets.counts.relevant}</b>
+            </span>
+            <span>
+              待复核{" "}
+              <b className="text-amber-400">{facets.counts.needs_review}</b>
+            </span>
+            <span>
+              已审核 <b className="text-emerald-400">{facets.counts.reviewed}</b>
+            </span>
+          </div>
+        )}
+
+        {/* 区域快捷入口：地图上小国家不好点中，这里补一条 */}
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5">
+          {regions.map((r) => (
+            <button
+              key={r.code}
+              onClick={() => setSelected(selected === r.code ? null : r.code)}
+              className={`rounded border px-2 py-1 text-[11px] transition ${
+                selected === r.code
+                  ? "border-sky-500 bg-sky-950 text-sky-300"
+                  : "border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+              }`}
+              title={`相关 ${r.relevant} / 共 ${r.total}（${Math.round(
+                r.relevance_rate * 100,
+              )}%）`}
+            >
+              {r.name}
+              <span className="ml-1 text-slate-500">{r.relevant}</span>
+            </button>
+          ))}
         </div>
       </header>
 
       {err && (
-        <div className="mb-4 rounded-lg border border-red-800 bg-red-950/50 px-4 py-3 text-sm text-red-300">
+        <div className="shrink-0 border-b border-red-900 bg-red-950/50 px-4 py-2 text-[11px] text-red-300">
           {err}
         </div>
       )}
 
-      {loading && (
-        <div className="py-20 text-center text-sm text-slate-500">加载中…</div>
-      )}
+      {/* ---------------- 地图（占满剩余空间）---------------- */}
+      <div className="relative min-h-0 flex-1">
+        <WorldMap regions={regions} selected={selected} onSelect={setSelected} />
+      </div>
 
-      {!loading && !err && (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_420px]">
-          {/* 左：地图 */}
-          <section>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-              <WorldMap
-                regions={regions}
-                selected={selected}
-                onSelect={setSelected}
-              />
-            </div>
+      {/* ---------------- 详情抽屉 ---------------- */}
+      <CountryDrawer
+        code={selected}
+        onClose={() => setSelected(null)}
+        onToast={showToast}
+        onDataChanged={loadMap}
+      />
 
-            {/* 区域概览卡片 */}
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {regions.map((r) => (
-                <button
-                  key={r.code}
-                  onClick={() =>
-                    setSelected(selected === r.code ? null : r.code)
-                  }
-                  className={`rounded-lg border p-3 text-left transition ${
-                    selected === r.code
-                      ? "border-sky-600 bg-sky-950/40"
-                      : "border-slate-800 bg-slate-900/40 hover:border-slate-700"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{r.name}</span>
-                    <span className="font-mono text-xs text-slate-500">
-                      {r.code}
-                    </span>
-                  </div>
-                  <div className="mt-2 text-xs text-slate-400">
-                    相关 <span className="text-sky-400">{r.relevant}</span> /{" "}
-                    {r.total}
-                    <span className="ml-1">
-                      ({Math.round(r.relevance_rate * 100)}%)
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* 右：详情抽屉 */}
-          <aside className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:overflow-y-auto">
-            {!selected && (
-              <div className="rounded-xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
-                点击地图上的国家或左侧卡片
-                <br />
-                查看该区域的采集详情
-              </div>
-            )}
-
-            {selected && detail?.found && (
-              <div className="space-y-4">
-                {/* 概览 */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                  <h2 className="text-lg font-semibold">{detail.name}</h2>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                    <Stat label="总条数" value={detail.total} />
-                    <Stat label="相关" value={detail.relevant} accent />
-                    <Stat label="待复核" value={detail.needs_review} />
-                    <Stat label="已审核" value={detail.reviewed} />
-                  </div>
-                  {detail.children.length > 0 && (
-                    <div className="mt-3 text-xs text-slate-400">
-                      子区域：
-                      {detail.children.map((c) => (
-                        <span key={c.code} className="ml-1 rounded bg-slate-800 px-1.5 py-0.5">
-                          {c.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 源分布（批量审核的入口） */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                  <h3 className="mb-2 text-sm font-medium text-slate-300">
-                    数据源分布
-                    <span className="ml-2 text-xs font-normal text-slate-500">
-                      （下一步：在这里按源批量审核）
-                    </span>
-                  </h3>
-                  <div className="space-y-1.5">
-                    {detail.sources.map((s) => (
-                      <div
-                        key={s.source_id}
-                        className="flex items-center justify-between rounded bg-slate-950/60 px-2.5 py-1.5 text-xs"
-                      >
-                        <span className="font-mono text-slate-300">
-                          {s.source_id}
-                        </span>
-                        <span className="text-slate-400">
-                          {s.relevant}/{s.total}
-                          <span className="ml-2 text-slate-500">
-                            {Math.round(s.relevance_rate * 100)}%
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 记录列表 */}
-                <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-slate-300">
-                      记录（{records.length}）
-                    </h3>
-                    <label className="flex cursor-pointer items-center gap-1.5 text-xs text-slate-400">
-                      <input
-                        type="checkbox"
-                        checked={onlyRelevant}
-                        onChange={(e) => setOnlyRelevant(e.target.checked)}
-                        className="accent-sky-500"
-                      />
-                      只看相关
-                    </label>
-                  </div>
-                  <ul className="space-y-2">
-                    {records.map((r) => (
-                      <li
-                        key={r.evidence_id}
-                        className="rounded border border-slate-800 bg-slate-950/50 p-2.5"
-                      >
-                        <div className="flex items-start gap-2">
-                          <span
-                            className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px] ${
-                              r.effective_relevant
-                                ? "bg-sky-900/70 text-sky-300"
-                                : "bg-slate-800 text-slate-500"
-                            }`}
-                          >
-                            {r.effective_relevant ? "相关" : "拒绝"}
-                          </span>
-                          <div className="min-w-0">
-                            <a
-                              href={r.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="line-clamp-2 text-xs text-slate-200 hover:text-sky-400"
-                            >
-                              {r.title || r.url}
-                            </a>
-                            <div className="mt-1 flex flex-wrap gap-x-2 text-[10px] text-slate-500">
-                              <span className="font-mono">{r.source_id}</span>
-                              {r.publish_date && <span>{r.publish_date}</span>}
-                              {r.cluster_hint && <span>{r.cluster_hint}</span>}
-                              <span>分 {r.relevance_score}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-          </aside>
+      {/* ---------------- 撤销提示 ---------------- */}
+      {toast && (
+        <div className="fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/95 px-4 py-2.5 text-xs shadow-2xl backdrop-blur">
+          <span className="text-slate-200">{toast.msg}</span>
+          {toast.undo && (
+            <button
+              onClick={async () => {
+                await toast.undo?.();
+                closeToast();
+                showToast("已撤销");
+              }}
+              className="rounded border border-amber-700 px-2 py-0.5 text-amber-400 hover:bg-amber-950"
+            >
+              撤销
+            </button>
+          )}
+          <button
+            onClick={closeToast}
+            className="text-slate-500 hover:text-slate-300"
+            aria-label="关闭提示"
+          >
+            ✕
+          </button>
         </div>
       )}
     </main>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: number;
-  accent?: boolean;
-}) {
-  return (
-    <div className="rounded bg-slate-950/60 px-2.5 py-2">
-      <div className="text-[11px] text-slate-500">{label}</div>
-      <div
-        className={`text-lg font-semibold ${accent ? "text-sky-400" : "text-slate-200"}`}
-      >
-        {value}
-      </div>
-    </div>
   );
 }

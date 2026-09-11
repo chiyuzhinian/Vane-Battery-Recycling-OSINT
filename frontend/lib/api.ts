@@ -49,6 +49,7 @@ export type RecordBrief = {
   review_verdict: string | null;
   hits: string[];
   rejected_by: string | null;
+  text: string;              // 正文摘要（供展开阅读后判定）
 };
 
 export type RecordPage = {
@@ -92,11 +93,54 @@ export type Facets = {
   };
 };
 
+// ---------------------------------------------------------------- 审核
+export type Verdict = "relevant" | "irrelevant" | "uncertain";
+
+export type DecisionIn = {
+  target_type: "record" | "source";
+  target_id: string;
+  verdict: Verdict;
+  reason?: string;
+  country?: string | null;
+};
+
+export type Decision = Required<DecisionIn> & {
+  decision_id: string;
+  reviewer: string;
+  decided_at: string;
+};
+
+export type ReviewStats = {
+  total: number;
+  by_verdict: Record<Verdict, number>;
+  by_target: Record<string, number>;
+  records_total: number;
+  records_reviewed: number;
+};
+
 // ---------------------------------------------------------------- 请求
 async function get<T>(path: string): Promise<T> {
   const r = await fetch(`${API}${path}`, { cache: "no-store" });
   if (!r.ok) {
     throw new Error(`${r.status} ${r.statusText} — ${path}`);
+  }
+  return (await r.json()) as T;
+}
+
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const r = await fetch(`${API}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) {
+    let detail = "";
+    try {
+      detail = ((await r.json()) as { detail?: string }).detail ?? "";
+    } catch {
+      /* 保持空 */
+    }
+    throw new Error(detail || `${r.status} ${r.statusText} — ${path}`);
   }
   return (await r.json()) as T;
 }
@@ -133,4 +177,15 @@ export const api = {
     get<{ has_unmapped: boolean; sources: { source_id: string; count: number }[]; hint: string }>(
       "/api/unmapped",
     ),
+
+  // ---- 审核（写入独立文件，不动原始数据）----
+  review: {
+    stats: () => get<ReviewStats>("/api/review/stats"),
+    submit: (decisions: DecisionIn[]) =>
+      post<{ saved: number; decisions: Decision[] }>("/api/review", { decisions }),
+    revoke: (decision_ids: string[]) =>
+      post<{ removed: number }>("/api/review/revoke", { decision_ids }),
+    undoLast: (n = 1) =>
+      post<{ removed: number; decision_ids: string[] }>("/api/review/undo-last", { n }),
+  },
 };

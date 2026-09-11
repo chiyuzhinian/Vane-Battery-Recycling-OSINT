@@ -10,13 +10,13 @@
  *
  * 地图数据用本地文件（已从 world-atlas 复制到 public/），不依赖 CDN。
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import type { Region } from "@/lib/api";
 
 const GEO_URL = "/countries-110m.json";
 
-/** world-atlas 里的国家名 → 本项目的地理码 */
+/** world-atlas 里的国家名 → 本项目的地理码（与 geo.py 的 ISO_TO_MAP_NAME 对应） */
 const NAME_TO_CODE: Record<string, string> = {
   "United States of America": "US",
   Germany: "DE",
@@ -28,6 +28,15 @@ const NAME_TO_CODE: Record<string, string> = {
 const COLOR_EMPTY = "#1e293b"; // 无数据
 const COLOR_BASE = "#0c4a6e"; // 有数据但相关=0
 
+/**
+ * geoEqualEarth 下，宽度 W px 对应的合理 scale。
+ *
+ * 拟合：scale=145 时世界图约占 900px 宽 → 约 0.161×W；上限 420 防超宽屏失真。
+ */
+function scaleForWidth(w: number): number {
+  return Math.max(90, Math.min(w * 0.161, 420));
+}
+
 type Props = {
   regions: Region[];
   selected: string | null;
@@ -35,9 +44,23 @@ type Props = {
 };
 
 export default function WorldMap({ regions, selected, onSelect }: Props) {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 1000, h: 460 });
   const [hover, setHover] = useState<{ x: number; y: number; r: Region } | null>(
     null,
   );
+
+  // ⭐ 容器尺寸自适应：固定 scale 会在容器变宽后让地图缩在中间、四周留白
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const apply = () =>
+      setSize({ w: el.clientWidth || 1000, h: el.clientHeight || 460 });
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const byCode = useMemo(() => {
     const m = new Map<string, Region>();
@@ -51,6 +74,8 @@ export default function WorldMap({ regions, selected, onSelect }: Props) {
     [regions],
   );
 
+  const scale = useMemo(() => scaleForWidth(size.w), [size.w]);
+
   function color(rel: number): string {
     if (rel <= 0) return COLOR_BASE;
     const t = Math.log1p(rel) / Math.log1p(maxRel); // 0..1
@@ -61,13 +86,13 @@ export default function WorldMap({ regions, selected, onSelect }: Props) {
   }
 
   return (
-    <div className="relative">
+    <div ref={boxRef} className="relative h-full w-full overflow-hidden">
       <ComposableMap
         projection="geoEqualEarth"
-        projectionConfig={{ scale: 165 }}
-        width={900}
-        height={460}
-        style={{ width: "100%", height: "auto" }}
+        projectionConfig={{ scale, center: [12, 8] }}
+        width={size.w}
+        height={size.h}
+        style={{ width: "100%", height: "100%", display: "block" }}
       >
         <Geographies geography={GEO_URL}>
           {({ geographies }) =>
@@ -144,22 +169,24 @@ export default function WorldMap({ regions, selected, onSelect }: Props) {
         </div>
       )}
 
-      {/* 图例 */}
-      <div className="mt-2 flex items-center gap-4 text-[11px] text-slate-400">
-        <span>相关条数：</span>
+      {/* 图例（浮在左下角，不占地图高度） */}
+      <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-950/80 px-3 py-1.5 text-[11px] text-slate-400 backdrop-blur">
+        <span>相关条数</span>
         <span className="flex items-center gap-1">
-          <i className="inline-block h-3 w-5 rounded-sm" style={{ background: COLOR_EMPTY }} />
+          <i
+            className="inline-block h-3 w-5 rounded-sm"
+            style={{ background: COLOR_EMPTY }}
+          />
           0
         </span>
         {["#0c4a6e", "#0369a1", "#0284c7", "#38bdf8"].map((c) => (
-          <span key={c} className="flex items-center gap-1">
-            <i className="inline-block h-3 w-5 rounded-sm" style={{ background: c }} />
-          </span>
+          <i
+            key={c}
+            className="inline-block h-3 w-5 rounded-sm"
+            style={{ background: c }}
+          />
         ))}
         <span>{maxRel}</span>
-        <span className="ml-3 text-slate-500">
-          点击国家查看详情（当前阶段只有 EU / US 有数据）
-        </span>
       </div>
     </div>
   );
