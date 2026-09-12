@@ -1,0 +1,24 @@
+# ============================================================
+# Jurisdiction Sources —— US-CA（Step 4b）
+# ============================================================
+version: 1
+jurisdiction_id: US-CA
+language: en
+link_keywords: "battery|recycl|solid waste|hazardous|stewardship"
+link_include: ["billTextClient", "billStatusClient", "codes_displaySection"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_ca_leginfo
+    official_owner: "California Legislative Information（Legislature）"
+    official_domain: leginfo.legislature.ca.gov
+    access_method: html
+    entry_url: "https://leginfo.legislature.ca.gov/"
+    search_attempts:
+      - "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PRC&tocTitle=+Public+Resources+Code+-+PRC"
+      - "https://leginfo.legislature.ca.gov/faces/billSearchClient.xhtml?session_year=20212022&house=Both&author=All&lawCode=All&chapter=All&search_terms=battery"
+    samples_known:
+      - "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202120220AB2440"
+      - "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202120220AB2440"
+      - "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=42451"
+    note: "AB 2440（责任电池回收）为加州电池 EPR 主法；CalRecycle 门户 403（浏览器通道已有）"

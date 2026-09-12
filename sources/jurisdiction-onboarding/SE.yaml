@@ -25,7 +25,7 @@ official_channel_map:
       official_url: "https://rkrattsbaser.gov.se/"
       access_method: html
       status: ACCESSIBLE
-      note: "Source Proof✅：检索+枚举+元数据+全文（样本 4/4，含 SFS 2008:834/2007:185/2020:614）；collector 待 Step 5"
+      note: "Source Proof✅：全文+元数据（样本 3/3：SFS 2008:834/2007:185/2020:614）；检索接口（fritext）未过主题核验 → Step 5 适配/官方 API"
   MS_OFFICIAL_GAZETTE:
     - source_id: eu_nim_se
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"

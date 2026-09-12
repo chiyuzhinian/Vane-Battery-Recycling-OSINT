@@ -1,0 +1,21 @@
+# ============================================================
+# Jurisdiction Sources —— US-KY（Step 4b）
+# ============================================================
+version: 1
+jurisdiction_id: US-KY
+language: en
+link_keywords: "waste|battery|recycl|solid|hazardous"
+link_include: ["ch.aspx?chap=", "statute.aspx?id="]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_ky_krs
+    official_owner: "Kentucky Legislative Research Commission（KRS 官方库）"
+    official_domain: apps.legislature.ky.gov
+    access_method: html
+    entry_url: "https://apps.legislature.ky.gov/law/statutes/"
+    search_attempts:
+      - "https://apps.legislature.ky.gov/law/statutes/ch.aspx?chap=224"
+      - "https://apps.legislature.ky.gov/law/statutes/ch.aspx?chap=109"
+    samples_known: []
+    note: "Chapter 224=环境（废物条款主栖息地）；109=地方环境"

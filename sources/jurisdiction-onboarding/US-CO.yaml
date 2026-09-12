@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-CO（Pilot，Step 4b）
+# Source Proof：outputs/audit/source_proofs/US-CO.json
+# ============================================================
+version: 1
+jurisdiction_id: US-CO
+jurisdiction_name: {zh: 科罗拉多, en: Colorado}
+level: state
+official_languages: [en]
+legal_system_type: common_law
+
+mandatory_source_roles:
+  - STATE_LEGISLATURE
+  - STATE_STATUTES
+  - STATE_ADMIN_CODE
+  - STATE_REGISTER
+  - STATE_ENVIRONMENT_AGENCY
+  - STATE_WASTE_PROGRAM
+  - STATE_BATTERY_EPR_OR_STEWARDSHIP
+  - STATE_TRANSPORT_HAZMAT
+optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
+
+official_channel_map:
+  STATE_LEGISLATURE:
+    - source_id: us_co_leg
+      official_url: "https://leg.colorado.gov/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "入口可达；检索页为 JS 列表（未过主题核验，如实记录）→ Step 5 适配官方检索/浏览器"
+
+known_gaps:
+  STATE_STATUTES: "CRS 法典通道未接入"
+  STATE_ADMIN_CODE: "CCR（科州行政法规）通道未接入"
+  STATE_REGISTER: "州公报通道未接入"
+  STATE_ENVIRONMENT_AGENCY: "CDPHE 通道可达未接入（Step 5）"
+  STATE_WASTE_PROGRAM: "废物项目通道未接入"
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: "电池 EPR 立法文档未采集（已知立法信号，待 Step 5 定位）"
+  STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
+
+collector_strategy:
+  STATE_LEGISLATURE: browser_pending（检索 JS）
+  STATE_STATUTES: pending_probe
+  STATE_ADMIN_CODE: pending_probe
+  STATE_REGISTER: pending_probe
+  STATE_ENVIRONMENT_AGENCY: pending_probe（CDPHE 可达）
+  STATE_WASTE_PROGRAM: pending_probe
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: pending_probe
+  STATE_TRANSPORT_HAZMAT: pending_probe
+identity_strategy:
+  pattern: "US-CO:HB:{session}:{bill_number}"
+  enrich_fields: [session_law_number, status]
+status_strategy: "官方 bill 状态（Signed/Postponed）"
+legal_relation_strategy: "bill → session law → CRS（州法修订链）"
+notes: "Pilot（优先度 0.595；电池 EPR 立法州）。"

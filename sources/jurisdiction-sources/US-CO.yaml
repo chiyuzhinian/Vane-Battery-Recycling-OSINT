@@ -1,0 +1,21 @@
+# ============================================================
+# Jurisdiction Sources —— US-CO（Step 4b）
+# ============================================================
+version: 1
+jurisdiction_id: US-CO
+language: en
+link_keywords: "battery|recycl|solid waste|hazardous|stewardship|producer"
+link_include: ["/bills/"]
+
+sources:
+  - source_role: STATE_LEGISLATURE
+    source_id: us_co_leg
+    official_owner: "Colorado General Assembly"
+    official_domain: leg.colorado.gov
+    access_method: html
+    entry_url: "https://leg.colorado.gov/"
+    search_attempts:
+      - "https://leg.colorado.gov/bills?search_api_fulltext=battery"
+      - "https://leg.colorado.gov/bills?search_api_fulltext=battery+recycling"
+    samples_known: []
+    note: "电池 EPR 立法州（registry 标注）"

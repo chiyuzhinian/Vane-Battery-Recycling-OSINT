@@ -63,6 +63,7 @@ class SearchEvidence(BaseModel):
     status: int | None = None
     bytes: int = 0
     links_extracted: int = 0
+    keyword_matched: bool = False   # 提取链接是否经关键词上下文核验（防导航链接假阳性）
     error: str = ""
     sample_links: list[str] = Field(default_factory=list)
 
@@ -93,7 +94,9 @@ def derive_capabilities(searches: list[SearchEvidence],
     fulltext = any(s.status == 200 and s.bytes > MIN_FULLTEXT_BYTES
                    for s in samples)
     metadata = any(s.title for s in ok_samples)
-    search = any(s.status == 200 and s.links_extracted > 0 for s in searches)
+    # search 需「有链接 + 主题核验通过」——防止把导航/最新法案列表当检索能力
+    search = any(s.status == 200 and s.links_extracted > 0
+                 and s.keyword_matched for s in searches)
     enumeration = search or entry_links > 0
     return {
         "search_available": search,
@@ -114,6 +117,8 @@ def build_limitations(searches: list[SearchEvidence],
             out.append(f"检索尝试 HTTP {s.status}：{s.url}")
         elif s.links_extracted == 0:
             out.append(f"检索页无可解析文书链接（可能 JS 渲染/参数错误）：{s.url}")
+        elif not s.keyword_matched:
+            out.append(f"检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：{s.url}")
     for s in samples:
         if s.error:
             out.append(f"样本抓取失败（{s.error}）：{s.url}")

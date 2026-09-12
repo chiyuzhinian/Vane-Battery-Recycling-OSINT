@@ -1,0 +1,21 @@
+# ============================================================
+# Jurisdiction Sources —— US-MN（Step 4b）
+# ============================================================
+version: 1
+jurisdiction_id: US-MN
+language: en
+link_keywords: "battery|recycl|solid waste|hazardous|stewardship"
+link_include: ["/statutes/cite/", "/laws/", "/statutes/"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_mn_revisor
+    official_owner: "Minnesota Revisor of Statutes（官方库）"
+    official_domain: revisor.mn.gov
+    access_method: html
+    entry_url: "https://www.revisor.mn.gov/"
+    search_attempts:
+      - "https://www.revisor.mn.gov/search/?q=battery+recycling"
+      - "https://www.revisor.mn.gov/statutes/search/?query=battery"
+    samples_known: []
+    note: "电池 EPR 法州（registry 标注）；MPCA 通道可达（Step 5 接入）"

@@ -62,19 +62,22 @@ def test_contract_registry_has_no_errors():
     got = {c["jurisdiction_id"] for c in reg["contracts"]}
     assert set(REFERENCE) <= got
     for c in reg["contracts"]:
-        assert c["mandatory_roles"] == 7
-        assert 0 <= c["covered_roles"] <= 7
+        expected = 7 if c["level"] == "member_state" else 8
+        assert c["mandatory_roles"] == expected
+        assert 0 <= c["covered_roles"] <= expected
 
 
 def test_all_contracts_load_and_validate():
-    """Step 4a 后：4 参考 + 5 pilot = 9 份契约全部可通过（fail-fast 口径）。"""
+    """Step 4 后：4 参考 + 5 EU pilot + 6 US 州 pilot = 15 份契约全部可通过。"""
     ids = list_contracts()
-    assert len(ids) >= 9
+    assert len(ids) >= 15
     assert {"SE", "PL", "BE", "FI", "EE"} <= set(ids)
+    assert {"US-CA", "US-CO", "US-GA", "US-KY", "US-MN", "US-WA"} <= set(ids)
     reg = build_contract_registry()
     assert reg["errors"] == []
     for c in reg["contracts"]:
-        assert c["mandatory_roles"] == 7
+        expected = 7 if c["level"] == "member_state" else 8
+        assert c["mandatory_roles"] == expected
 
 
 def test_missing_standard_role_fails_fast():

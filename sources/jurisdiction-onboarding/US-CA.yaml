@@ -1,0 +1,69 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-CA（Pilot，Step 4b）
+# Source Proof：outputs/audit/source_proofs/US-CA.json
+# ============================================================
+version: 1
+jurisdiction_id: US-CA
+jurisdiction_name: {zh: 加利福尼亚, en: California}
+level: state
+official_languages: [en]
+legal_system_type: common_law
+
+mandatory_source_roles:
+  - STATE_LEGISLATURE
+  - STATE_STATUTES
+  - STATE_ADMIN_CODE
+  - STATE_REGISTER
+  - STATE_ENVIRONMENT_AGENCY
+  - STATE_WASTE_PROGRAM
+  - STATE_BATTERY_EPR_OR_STEWARDSHIP
+  - STATE_TRANSPORT_HAZMAT
+optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
+
+official_channel_map:
+  STATE_LEGISLATURE:
+    - source_id: us_ca_leginfo
+      official_url: "https://leginfo.legislature.ca.gov/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "Source Proof✅：AB-2440 全文+状态页（样本 3/3）；检索表单为 JS（需 POST/浏览器）"
+  STATE_STATUTES:
+    - source_id: us_ca_leginfo
+      official_url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml"
+      access_method: html
+      status: ACCESSIBLE
+      note: "PRC 42451 条款页已验证（AB 2440 编入 Public Resources Code）"
+  STATE_ENVIRONMENT_AGENCY:
+    - source_id: browser_calrecycle
+      official_url: "https://calrecycle.ca.gov/"
+      access_method: browser
+      status: PARTIAL
+      note: "CalRecycle 主站 403（Cloudflare）→ Phase 4B-1 浏览器通道已有语料（33 条）"
+  STATE_BATTERY_EPR_OR_STEWARDSHIP:
+    - source_id: browser_calrecycle
+      official_url: "https://calrecycle.ca.gov/"
+      access_method: browser
+      status: PARTIAL
+      note: "AB 2440 负责任电池回收计划文档已收（Phase 4B-1）"
+
+known_gaps:
+  STATE_ADMIN_CODE: "CCR（加州行政法规）通道未接入"
+  STATE_REGISTER: "加州公报（ZERO/NR）通道未接入"
+  STATE_WASTE_PROGRAM: "废物项目专项通道未接入"
+  STATE_TRANSPORT_HAZMAT: "Caltrans/危货运输通道未接入"
+
+collector_strategy:
+  STATE_LEGISLATURE: connector（leginfo billText/codes_displaySection 直链，Step 5）
+  STATE_STATUTES: connector
+  STATE_ENVIRONMENT_AGENCY: browser_channel（现有）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: browser_channel（现有）
+  STATE_ADMIN_CODE: pending_probe
+  STATE_REGISTER: pending_probe
+  STATE_WASTE_PROGRAM: pending_probe
+  STATE_TRANSPORT_HAZMAT: pending_probe
+identity_strategy:
+  pattern: "US-CA:AB:{session}:{bill_number}"
+  enrich_fields: [chaptered_law, code_section, status_date]
+status_strategy: "leginfo bill status（Chaptered/Vetoed）"
+legal_relation_strategy: "bill → chapter → code section（州法修订链）"
+notes: "Pilot（优先度 0.780；A1 栖息地）。"

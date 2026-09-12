@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-KY（Pilot，Step 4b）
+# Source Proof：outputs/audit/source_proofs/US-KY.json
+# ============================================================
+version: 1
+jurisdiction_id: US-KY
+jurisdiction_name: {zh: 肯塔基, en: Kentucky}
+level: state
+official_languages: [en]
+legal_system_type: common_law
+
+mandatory_source_roles:
+  - STATE_LEGISLATURE
+  - STATE_STATUTES
+  - STATE_ADMIN_CODE
+  - STATE_REGISTER
+  - STATE_ENVIRONMENT_AGENCY
+  - STATE_WASTE_PROGRAM
+  - STATE_BATTERY_EPR_OR_STEWARDSHIP
+  - STATE_TRANSPORT_HAZMAT
+optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
+
+official_channel_map:
+  STATE_STATUTES:
+    - source_id: us_ky_krs
+      official_url: "https://apps.legislature.ky.gov/law/statutes/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "入口可达；章节页未解析出文书链接（Source Proof 记录）→ Step 5 适配章节直链"
+
+known_gaps:
+  STATE_LEGISLATURE: "KY legislature bill 通道未接入"
+  STATE_ADMIN_CODE: "KAR 行政法规通道未接入"
+  STATE_REGISTER: "州公报通道未接入"
+  STATE_ENVIRONMENT_AGENCY: "DEP 通道未接入"
+  STATE_WASTE_PROGRAM: "废物项目通道未接入"
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: "无电池 EPR 立法信号（制造型州）"
+  STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
+
+collector_strategy:
+  STATE_STATUTES: connector_pending（KRS 章节直链适配）
+  STATE_LEGISLATURE: pending_probe
+  STATE_ADMIN_CODE: pending_probe
+  STATE_REGISTER: pending_probe
+  STATE_ENVIRONMENT_AGENCY: pending_probe
+  STATE_WASTE_PROGRAM: pending_probe
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: not_applicable（无立法信号）
+  STATE_TRANSPORT_HAZMAT: pending_probe
+identity_strategy:
+  pattern: "US-KY:KRS:{chapter}.{section}"
+  enrich_fields: [title, effective_date]
+status_strategy: "KRS 元数据"
+legal_relation_strategy: "bill → act → KRS（待通道）"
+notes: "Pilot（优先度 0.595；BlueOval SK 电池园区）。"

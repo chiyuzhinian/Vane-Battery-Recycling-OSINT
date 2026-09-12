@@ -1,0 +1,22 @@
+# ============================================================
+# Jurisdiction Sources —— US-WA（Step 4b）
+# ============================================================
+version: 1
+jurisdiction_id: US-WA
+language: en
+link_keywords: "battery|recycl|solid waste|hazardous|stewardship"
+link_include: ["default.aspx?cite=", "/RCW/"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_wa_rcw
+    official_owner: "Washington State Legislature（RCW 官方库）"
+    official_domain: app.leg.wa.gov
+    access_method: html
+    entry_url: "https://app.leg.wa.gov/rcw/"
+    search_attempts:
+      - "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.555"
+      - "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.200"
+    samples_known:
+      - "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.555"
+    note: "RCW 70A.555=电池 stewardship 专章（待样本核验）；Ecology 通道可达"

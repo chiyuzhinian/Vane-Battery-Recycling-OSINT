@@ -55,7 +55,13 @@ def _abs(base: str, link: str) -> str:
     return base.rstrip("/") + "/" + link
 
 
-def extract_doc_links(html: str, base_url: str, cfg: JurisdictionSources) -> list[str]:
+def extract_doc_links(html: str, base_url: str,
+                      cfg: JurisdictionSources) -> tuple[list[str], bool]:
+    """→ (链接列表, 是否经关键词上下文核验)。
+
+    关键词过滤命中 → (filtered, True)；否则回退全量 (out, False)
+    （回退仅为样本抓取便利；**不得用于声称检索能力**）。
+    """
     kw = re.compile(cfg.link_keywords, re.I)
     out: list[str] = []
     for m in HREF_RE.finditer(html):
@@ -64,9 +70,8 @@ def extract_doc_links(html: str, base_url: str, cfg: JurisdictionSources) -> lis
             absu = _abs(base_url, link)
             if absu not in out:
                 out.append(absu)
-    # 关键词过滤：优先带关键词上下文的链接（HTML 粗粒度：链接自身或邻近 80 字符）
-    if kw and out:
-        filtered = []
+    if kw:
+        filtered: list[str] = []
         for m in HREF_RE.finditer(html):
             link = m.group(1)
             if not any(pat in link for pat in cfg.link_include):
@@ -76,16 +81,23 @@ def extract_doc_links(html: str, base_url: str, cfg: JurisdictionSources) -> lis
                 absu = _abs(base_url, link)
                 if absu not in filtered:
                     filtered.append(absu)
-        out = filtered or out
-    return out
+        if filtered:
+            return filtered, True
+    return out, False
 
 
 async def fetch(client: httpx.AsyncClient, url: str) -> tuple[httpx.Response | None, str]:
+    """GET + 瞬态重试 1 次（退避 2s）。"""
     try:
         r = await client.get(url, headers=UA, timeout=25, follow_redirects=True)
         return r, ""
     except Exception as exc:  # noqa: BLE001
-        return None, type(exc).__name__
+        await asyncio.sleep(2)
+        try:
+            r = await client.get(url, headers=UA, timeout=25, follow_redirects=True)
+            return r, ""
+        except Exception as exc2:  # noqa: BLE001
+            return None, type(exc2).__name__
 
 
 def title_of(html: str) -> str:
@@ -108,7 +120,8 @@ async def build_source_proof(client: httpx.AsyncClient,
             proof.probe = {"status": r.status_code, "bytes": len(r.content),
                            "content_type": r.headers.get("content-type", "")[:60],
                            "title": title_of(r.text)}
-            entry_links = len(extract_doc_links(r.text, str(r.url), cfg))
+            links, _matched = extract_doc_links(r.text, str(r.url), cfg)
+            entry_links = len(links)
             proof.probe["doc_links"] = entry_links
         else:
             proof.probe = {"error": err}
@@ -118,11 +131,13 @@ async def build_source_proof(client: httpx.AsyncClient,
         if r is None:
             proof.searches.append(SearchEvidence(url=url, error=err))
             continue
-        links = extract_doc_links(r.text, str(r.url), cfg)
+        links, matched = extract_doc_links(r.text, str(r.url), cfg)
         proof.searches.append(SearchEvidence(
             url=url, status=r.status_code, bytes=len(r.content),
-            links_extracted=len(links), sample_links=links[:3]))
-        extracted += links
+            links_extracted=len(links), keyword_matched=matched,
+            sample_links=links[:3]))
+        if matched:
+            extracted += links
     # 样本：检索提取优先 → samples_known 补充 → 去重
     picked: list[tuple[str, str]] = [(u, "extracted") for u in extracted[:3]]
     for u in sc.samples_known:

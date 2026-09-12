@@ -1,0 +1,59 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-WA（Pilot，Step 4b）
+# Source Proof：outputs/audit/source_proofs/US-WA.json
+# ============================================================
+version: 1
+jurisdiction_id: US-WA
+jurisdiction_name: {zh: 华盛顿州, en: Washington}
+level: state
+official_languages: [en]
+legal_system_type: common_law
+
+mandatory_source_roles:
+  - STATE_LEGISLATURE
+  - STATE_STATUTES
+  - STATE_ADMIN_CODE
+  - STATE_REGISTER
+  - STATE_ENVIRONMENT_AGENCY
+  - STATE_WASTE_PROGRAM
+  - STATE_BATTERY_EPR_OR_STEWARDSHIP
+  - STATE_TRANSPORT_HAZMAT
+optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
+
+official_channel_map:
+  STATE_STATUTES:
+    - source_id: us_wa_rcw
+      official_url: "https://app.leg.wa.gov/rcw/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "Source Proof✅：RCW 70A.555（电池 stewardship 专章）全文已验证；检索参数待 Step 5 适配"
+  STATE_BATTERY_EPR_OR_STEWARDSHIP:
+    - source_id: us_wa_rcw
+      official_url: "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.555"
+      access_method: html
+      status: ACCESSIBLE
+      note: "70A.555 = 电池管理专章（官方章节页已抓取）"
+
+known_gaps:
+  STATE_LEGISLATURE: "WA legislature bill 通道未接入"
+  STATE_ADMIN_CODE: "WAC 行政法规通道未接入"
+  STATE_REGISTER: "州公报通道未接入"
+  STATE_ENVIRONMENT_AGENCY: "Ecology 通道可达未接入（Step 5）"
+  STATE_WASTE_PROGRAM: "废物项目通道未接入"
+  STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
+
+collector_strategy:
+  STATE_STATUTES: connector_pending（RCW 直链）
+  STATE_LEGISLATURE: pending_probe
+  STATE_ADMIN_CODE: pending_probe
+  STATE_REGISTER: pending_probe
+  STATE_ENVIRONMENT_AGENCY: pending_probe（Ecology 可达）
+  STATE_WASTE_PROGRAM: pending_probe
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: connector_pending（70A.555）
+  STATE_TRANSPORT_HAZMAT: pending_probe
+identity_strategy:
+  pattern: "US-WA:RCW:{chapter}.{section}"
+  enrich_fields: [title, session_law, effective_date]
+status_strategy: "RCW 元数据"
+legal_relation_strategy: "bill → session law → RCW（州法修订链）"
+notes: "Pilot（优先度 0.575；政策活跃 + RCW/Ecology 双通道）。"

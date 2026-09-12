@@ -1,0 +1,20 @@
+# ============================================================
+# Jurisdiction Sources —— US-GA（Step 4b；SPA 挑战样本）
+# ============================================================
+version: 1
+jurisdiction_id: US-GA
+language: en
+link_keywords: "battery|recycl|solid waste|hazardous"
+link_include: ["/legislation/", "/laws/"]
+
+sources:
+  - source_role: STATE_LEGISLATURE
+    source_id: us_ga_leg
+    official_owner: "Georgia General Assembly"
+    official_domain: legis.ga.gov
+    access_method: html
+    entry_url: "https://www.legis.ga.gov/"
+    search_attempts:
+      - "https://www.legis.ga.gov/legislation?search=battery"
+    samples_known: []
+    note: "官方站点为 JS 渲染（SPA）——框架的异常分支验证对象"

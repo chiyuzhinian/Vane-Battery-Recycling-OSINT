@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-GA（Pilot，Step 4b；SPA 挑战样本）
+# Source Proof：outputs/audit/source_proofs/US-GA.json
+# ============================================================
+version: 1
+jurisdiction_id: US-GA
+jurisdiction_name: {zh: 佐治亚, en: Georgia}
+level: state
+official_languages: [en]
+legal_system_type: common_law
+
+mandatory_source_roles:
+  - STATE_LEGISLATURE
+  - STATE_STATUTES
+  - STATE_ADMIN_CODE
+  - STATE_REGISTER
+  - STATE_ENVIRONMENT_AGENCY
+  - STATE_WASTE_PROGRAM
+  - STATE_BATTERY_EPR_OR_STEWARDSHIP
+  - STATE_TRANSPORT_HAZMAT
+optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
+
+official_channel_map:
+  STATE_LEGISLATURE:
+    - source_id: us_ga_leg
+      official_url: "https://www.legis.ga.gov/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "官方站点为 JS 渲染 SPA（Source Proof 记录限制）→ 浏览器通道候选（Step 5 决策）"
+
+known_gaps:
+  STATE_STATUTES: "O.C.G.A. 法典通道未接入"
+  STATE_ADMIN_CODE: "GA 行政法规通道未接入"
+  STATE_REGISTER: "州公报通道未接入"
+  STATE_ENVIRONMENT_AGENCY: "EPD 通道未接入"
+  STATE_WASTE_PROGRAM: "废物项目通道未接入"
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: "无电池 EPR 立法信号（制造业型州）"
+  STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
+
+collector_strategy:
+  STATE_LEGISLATURE: browser_pending（SPA）
+  STATE_STATUTES: pending_probe
+  STATE_ADMIN_CODE: pending_probe
+  STATE_REGISTER: pending_probe
+  STATE_ENVIRONMENT_AGENCY: pending_probe
+  STATE_WASTE_PROGRAM: pending_probe
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: not_applicable（无立法信号）
+  STATE_TRANSPORT_HAZMAT: pending_probe
+identity_strategy:
+  pattern: "US-GA:SB|HB:{session}:{number}"
+  enrich_fields: [act_number, status]
+status_strategy: "官方 act 状态"
+legal_relation_strategy: "bill → act → O.C.G.A.（待通道）"
+notes: "Pilot（优先度 0.635；电池制造集群；SPA 异常分支验证）。"

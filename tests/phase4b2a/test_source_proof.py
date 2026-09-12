@@ -41,9 +41,14 @@ def test_metadata_requires_title():
 
 def test_search_requires_extracted_links():
     empty = [SearchEvidence(url="s", status=200, links_extracted=0)]
-    found = [SearchEvidence(url="s", status=200, links_extracted=3)]
+    found = [SearchEvidence(url="s", status=200, links_extracted=3,
+                            keyword_matched=True)]
+    nav_only = [SearchEvidence(url="s", status=200, links_extracted=3,
+                               keyword_matched=False)]
     assert derive_capabilities(empty, [])["search_available"] is False
     assert derive_capabilities(found, [])["search_available"] is True
+    # 链接存在但未过主题核验（导航/列表）→ 不得计检索能力
+    assert derive_capabilities(nav_only, [])["search_available"] is False
 
 
 def test_enumeration_from_entry_links():
@@ -65,7 +70,9 @@ def test_limitations_record_failures_and_empty_searches():
 
 
 def test_no_failure_means_no_limitations():
-    lim = build_limitations([SearchEvidence(url="s", status=200, links_extracted=5)],
+    lim = build_limitations([SearchEvidence(url="s", status=200,
+                                            links_extracted=5,
+                                            keyword_matched=True)],
                             [SampleEvidence(url="d", status=200, bytes=9000)])
     assert lim == []
 
@@ -77,8 +84,11 @@ def test_pilot_proof_artifacts():
         pytest.skip(f"需先运行 onboard_jurisdiction_sources.py：缺 {missing}")
     se = json.loads((PROOFS / "SE.json").read_text(encoding="utf-8"))
     src = se["sources"][0]
-    assert src["capabilities"]["search_available"] is True      # SFST fritext 可检索
-    assert src["capabilities"]["fulltext_available"] is True    # 样本 4/4
+    # 收紧后：SFST 检索未过主题核验（如实），但全文/元数据成立
+    assert src["capabilities"]["fulltext_available"] is True
+    assert src["capabilities"]["metadata_available"] is True
+    assert src["capabilities"]["search_available"] is False
+    assert any("主题核验" in x for x in src["known_limitations"])
     ok = [s for s in src["samples"] if s.get("status") == 200]
     assert len(ok) >= 3
     pl = json.loads((PROOFS / "PL.json").read_text(encoding="utf-8"))["sources"][0]
@@ -88,3 +98,31 @@ def test_pilot_proof_artifacts():
     assert be["known_limitations"]                              # 限制必须记录
     ee = json.loads((PROOFS / "EE.json").read_text(encoding="utf-8"))["sources"][0]
     assert ee["known_limitations"]                              # RT 检索受限记录
+
+
+US_PILOTS = ("US-CA", "US-CO", "US-GA", "US-KY", "US-MN", "US-WA")
+
+
+def test_us_state_proof_artifacts():
+    missing = [j for j in US_PILOTS if not (PROOFS / f"{j}.json").exists()]
+    if missing:
+        import pytest
+        pytest.skip(f"需先运行 onboard_jurisdiction_sources.py：缺 {missing}")
+    ca = json.loads((PROOFS / "US-CA.json").read_text(encoding="utf-8"))["sources"][0]
+    assert ca["capabilities"]["fulltext_available"] is True
+    titles = " ".join(s.get("title", "") for s in ca["samples"])
+    assert "AB-2440" in titles                     # 真实法案文本证据
+    wa = json.loads((PROOFS / "US-WA.json").read_text(encoding="utf-8"))["sources"][0]
+    assert wa["capabilities"]["fulltext_available"] is True
+    assert any("70A.555" in (s.get("title") or "") + s.get("url", "")
+               for s in wa["samples"])
+    # CO/MN：检索链接未过主题核验 → 不计检索能力（防导航链接假阳性）
+    for jid in ("US-CO", "US-MN"):
+        p = json.loads((PROOFS / f"{jid}.json").read_text(encoding="utf-8"))["sources"][0]
+        assert p["capabilities"]["search_available"] is False
+        assert p["known_limitations"]
+    ga = json.loads((PROOFS / "US-GA.json").read_text(encoding="utf-8"))["sources"][0]
+    assert ga["capabilities"]["fulltext_available"] is False
+    assert any("SPA" in x or "JS" in x for x in ga["known_limitations"])
+    ky = json.loads((PROOFS / "US-KY.json").read_text(encoding="utf-8"))["sources"][0]
+    assert ky["known_limitations"]
