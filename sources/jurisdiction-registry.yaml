@@ -157,9 +157,9 @@ jurisdictions:
       - role: CFR_ECFR
         critical: true
         expected: true
-        sources: [us_federal_register]
-        status: PARTIAL
-        note: FR 记录含 CFR 引用；eCFR 结构化抓取未接入 — P1
+        sources: [us_federal_register, us_ecfr]
+        status: CONNECTED
+        note: "eCFR 三通道（titles/search/full-xml）已接入；20 个 part 落盘（Step 3）；FR→CFR codified_in 链接 34/184 已官方核验"
       - role: AGENCY_RULES
         critical: true
         expected: true

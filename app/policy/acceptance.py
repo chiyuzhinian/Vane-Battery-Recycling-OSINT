@@ -144,7 +144,13 @@ def classify_record(record: dict) -> PolicyAcceptanceResult:
                 else "DEMOTED_PROCEDURAL")
         return PolicyAcceptanceResult("D", False, 0.9, [], [code], [])
     if not record.get("relevant"):
-        return PolicyAcceptanceResult("D", False, 0.7, [], ["NO_THEME"], [])
+        # ⚠️ 语义修正（Step 3，2026-09-12）：
+        #   旧行为把「字段缺失」与「被判不相关」一律当 D，
+        #   导致新采集器（eCFR 等不会预置 relevant 的记录）直接早退。
+        #   现在：仅**显式 False**（旧判定器真的拒了）才早退；
+        #   字段缺失 → 交给内容分类（主题/对象/证据）自行判定。
+        if "relevant" in record:
+            return PolicyAcceptanceResult("D", False, 0.7, [], ["NO_THEME"], [])
 
     # ---- 1/2) 文书类型闸门 ----
     inst = detect_instrument(title, text)
