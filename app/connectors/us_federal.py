@@ -113,11 +113,15 @@ class FederalRegisterConnector(BaseConnector):
     ) -> list[RawEvidence]:
         out: list[RawEvidence] = []
         page = 1
-        # ⚠️ 关于 conditions[term] 的两次实测教训（2026-09-10）：
-        #   ① 它是**模糊匹配**（按词 OR）。搜 "black mass" 返回 100 条，
-        #      因为命中大量含 "Massachusetts"（mass）的文件，精确率 0%。
-        #   ② 给它加英文双引号想做短语匹配 → **多词查询全部返回 0 条**。
-        #      该 API 不支持引号短语语法。
+        # ⚠️ 关于 conditions[term] 的实测（2026-09-10 初测 / 2026-09-12 复测更正）：
+        #   ① 它是**模糊匹配**（按词 OR）。搜 "black mass"（不带引号）返回 2407 条，
+        #      因为命中大量含 "mass" 的文件（Massachusetts / Mass Balance…）。
+        #   ② ⭐ 复测更正：**英文双引号短语语法现在可用**！
+        #      实测同一查询：不带引号 2407 条 → 带引号 `"black mass"` **5 条**
+        #      （且 3 条是真正相关的贸易/关键矿产文书）。
+        #      2026-09-10 曾记"引号返回 0 条"——已过时（或当时查询构造有误）。
+        #      → 边界短语一律加引号（见 sources/policy-eu-us-eol-blackmass.yaml 的
+        #        `"black mass"` 写法）。
         #   最终方案：不改造查询，改为**后置整短语过滤**（见 _phrase_ok）。
         #      这样既能压掉 Massachusetts 这类假阳性，又不破坏 API 行为。
         while page <= max_pages:

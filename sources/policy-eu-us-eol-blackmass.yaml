@@ -270,7 +270,7 @@ us:
     # ⚠️ 每个词 = 1 次 API 调用（1 req/s 限速），所以词表不是越长越好，
     #    但要覆盖全部 8 个簇 —— 此前 C4/C5/C8 没有专属词，走的是兜底。
     terms_by_cluster:
-      C3_black_mass:            ["black mass", "shredded lithium",
+      C3_black_mass:            ["\"black mass\"", "shredded lithium",
                                  "hazardous secondary material", "battery recycling",
                                  "shredder residue", "battery shredding"]
       C1_eol_battery:           ["waste battery", "spent lithium",
