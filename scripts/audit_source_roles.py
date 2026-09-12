@@ -34,8 +34,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.stdout.reconfigure(encoding="utf-8")
 
-from app.policy.config import load_endpoints, load_registry  # noqa: E402
-from app.policy.source_access import derive_role_status  # noqa: E402
+from app.policy.config import load_aliases, load_endpoints, load_registry  # noqa: E402
+from app.policy.source_access import derive_role_status, expand_role_sources  # noqa: E402
 from app.policy.source_universe import evidence_counts, has_collector  # noqa: E402
 
 AUDIT = ROOT / "outputs" / "audit"
@@ -70,8 +70,8 @@ COLUMNS = [
     "source_name", "official_domain", "configured", "reachable",
     "collector_available", "enumeration_available", "fulltext_available",
     "metadata_available", "last_checked", "status", "block_reason",
-    "evidence_count", "declared_status", "usable_endpoints",
-    "blocked_endpoints",
+    "evidence_count", "evidence_sources", "declared_status",
+    "usable_endpoints", "blocked_endpoints",
 ]
 
 
@@ -95,6 +95,8 @@ def build_rows() -> tuple[list[dict], dict]:
     eps_by_role = endpoint_cfg.by_role()
     _, probe_by_role, probe_note = _load_probe()
     ev = evidence_counts()
+    known = sorted(ev.keys())
+    alias_map = {k: v.model_dump() for k, v in load_aliases().aliases.items()}
     rows: list[dict] = []
 
     for j in registry.jurisdictions:
@@ -104,9 +106,12 @@ def build_rows() -> tuple[list[dict], dict]:
             rc = eps_by_role.get(role.role)
             probe_rows = probe_by_role.get(role.role, [])
             sources = list(role.sources)
-            configured = bool(sources)
-            collector = any(has_collector(s) for s in sources)
-            evidence = sum(ev.get(s, 0) for s in sources)
+            # ★ 别名对账（Step 2）：逻辑源名 → 真实 source_id
+            resolved = expand_role_sources(sources, alias_map, known)
+            configured = bool(resolved)
+            collector = any(has_collector(s) for s in resolved)
+            evidence = sum(ev.get(s, 0) for s in resolved)
+            evidence_sources = ";".join(f"{s}:{ev[s]}" for s in resolved if ev.get(s))
             st = derive_role_status(
                 declared_status=role.status, sources_configured=configured,
                 has_collector=collector, evidence_count=evidence,
@@ -128,7 +133,8 @@ def build_rows() -> tuple[list[dict], dict]:
                 "metadata_available": st.metadata_available,
                 "last_checked": st.last_checked, "status": st.status,
                 "block_reason": st.block_reason,
-                "evidence_count": evidence, "declared_status": role.status,
+                "evidence_count": evidence, "evidence_sources": evidence_sources,
+                "declared_status": role.status,
                 "usable_endpoints": ";".join(st.usable_endpoints),
                 "blocked_endpoints": ";".join(st.blocked_endpoints),
             })
@@ -156,6 +162,7 @@ def build_rows() -> tuple[list[dict], dict]:
                 "metadata_available": False, "last_checked": "",
                 "status": st.status, "block_reason": st.block_reason,
                 "evidence_count": evidence,
+                "evidence_sources": ";".join(f"{s}:{ev[s]}" for s in srcs if ev.get(s)),
                 "declared_status": entry.get("status", "NOT_ONBOARDED"),
                 "usable_endpoints": "", "blocked_endpoints": "",
             })
@@ -235,7 +242,7 @@ def main() -> int:
         return 0
 
     s = summary
-    print("=== Source Role Gap Matrix（Phase 4B-1 Step 1）===")
+    print("=== Source Role Gap Matrix（Phase 4B-1）===")
     print(f"行数 {s['total_rows']}")
     if s["probe_note"]:
         print(f"⚠️ {s['probe_note']}")

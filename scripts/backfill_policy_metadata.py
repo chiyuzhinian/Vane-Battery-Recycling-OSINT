@@ -1,126 +1,116 @@
 # -*- coding: utf-8 -*-
-"""backfill_policy_metadata.py —— Phase 4A 新字段回填（兼容旧数据）。
+"""backfill_policy_metadata.py —— Phase 4B-1 Step 2 升级版（薄封装 app.policy.backfill）。
 
-设计（规格 §14：旧 evidence 不允许直接覆盖）：
-    不修改 outputs/*.jsonl（不可变快照），而是写**叠加层**：
-        outputs/policy_metadata_overlay.jsonl
-        {evidence_id, acceptance_class, relevant, confidence, topic_ids,
-         reasons, evidence_quotes, instrument_type, binding_force,
-         legal_identity: {...}, backfilled_at, backfill_version}
-    消费方（audit CLI / 未来 store）自行 merge。
+设计（规格 §12 + §14）：
+    · 不修改 outputs/*.jsonl（不可变快照）→ 写叠加层 outputs/policy_metadata_overlay.jsonl
+    · 默认 --dry-run；--apply 才落盘；落盘为**增量合并**（保留旧行）
+    · 若存在 outputs/fr_identity_overlay.jsonl（enrich_us_identity.py 产物），
+      自动并入 legal_identity（canonical_id/official_identifier/issuer/status）
+      并附加 identity_us 块（RIN / cfr_references / citation / action …）
 
 用法：
-    py scripts/backfill_policy_metadata.py              # dry-run（默认）
-    py scripts/backfill_policy_metadata.py --apply      # 写 overlay
-    py scripts/backfill_policy_metadata.py --apply --only eu_  # 只回填 EU 记录
+    py scripts/backfill_policy_metadata.py                        # 全部 dry-run
+    py scripts/backfill_policy_metadata.py --region US --only-missing --limit 100
+    py scripts/backfill_policy_metadata.py --region US --source-role FEDERAL_REGISTER
+    py scripts/backfill_policy_metadata.py --apply --region EU
+    py scripts/backfill_policy_metadata.py --json
 """
 from __future__ import annotations
 
 import argparse
-import glob
 import json
 import sys
-from datetime import datetime, timezone
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.stdout.reconfigure(encoding="utf-8")
 
-from app.policy.acceptance import classify_record  # noqa: E402
-from app.policy.legal_identity import resolve_identity  # noqa: E402
+from app.policy.backfill import (  # noqa: E402
+    backfill_report, build_overlay_row, filter_records, load_jsonl,
+    load_records, merge_rows_into_overlay, record_completeness, write_overlay,
+)
+from app.policy.config import load_aliases  # noqa: E402
+from app.policy.source_universe import evidence_counts  # noqa: E402
 
 OUT = ROOT / "outputs"
 OVERLAY = OUT / "policy_metadata_overlay.jsonl"
-BACKFILL_VERSION = "phase4a.v1"
+FR_OVERLAY = OUT / "fr_identity_overlay.jsonl"
 
 
-def load_records() -> list[dict]:
-    rows: dict[str, dict] = {}
-    for fp in glob.glob(str(OUT / "*.jsonl")):
-        name = Path(fp).name
-        if name.startswith(("_", "review", "policy_metadata_overlay")):
-            continue
-        for line in Path(fp).read_text(encoding="utf-8", errors="replace").splitlines():
-            if not line.strip():
-                continue
-            try:
-                r = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            eid = r.get("evidence_id")
-            if eid and eid not in rows:
-                rows[eid] = r
-    return list(rows.values())
-
-
-def build_overlay_row(record: dict) -> dict:
-    res = classify_record(record)
-    idn = resolve_identity(record)
-    return {
-        "evidence_id": record.get("evidence_id"),
-        "acceptance_class": res.classification,
-        "acceptance_relevant": res.relevant,
-        "acceptance_confidence": round(res.confidence, 3),
-        "topic_ids": res.topic_ids,
-        "acceptance_reasons": res.reason_codes,
-        "evidence_quotes": res.evidence_quotes[:3],
-        "acceptance_review": res.requires_human_review,
-        "instrument_type": idn.instrument_type,
-        "binding_force": idn.binding_force,
-        "legal_status": idn.status,
-        "legal_identity": {
-            "canonical_id": idn.canonical_id,
-            "jurisdiction": idn.jurisdiction,
-            "issuer": idn.issuer,
-            "official_identifier": idn.official_identifier,
-            "language": idn.language,
-            "missing_fields": idn.missing_fields,
-        },
-        "backfill_version": BACKFILL_VERSION,
-        "backfilled_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    }
+def _fr_identity_map() -> dict[str, dict]:
+    rows = load_jsonl(FR_OVERLAY)
+    return {eid: row["fr_identity"] for eid, row in rows.items()
+            if row.get("fr_identity")}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="写 overlay（默认 dry-run）")
     ap.add_argument("--only", default="", help="只处理 evidence_id 前缀匹配的记录")
+    ap.add_argument("--region", default="", help="US / EU / 空=全部")
+    ap.add_argument("--source-role", default="", help="按角色过滤（经别名展开）")
+    ap.add_argument("--only-missing", action="store_true",
+                    help="只处理身份不完整（missing_fields>2）的记录")
+    ap.add_argument("--limit", type=int, default=0, help="最多处理 N 条")
+    ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
-    records = load_records()
-    if args.only:
-        records = [r for r in records
-                   if str(r.get("evidence_id") or "").startswith(args.only)]
-    print(f"记录 {len(records)} 条（{'APPLY' if args.apply else 'DRY-RUN'}）")
+    records = load_records(ROOT)
+    alias_map = {k: v.model_dump() for k, v in load_aliases().aliases.items()}
+    known = sorted(evidence_counts().keys())
+    selected = filter_records(records, region=args.region,
+                              source_role=args.source_role,
+                              only_missing=args.only_missing,
+                              limit=args.limit, alias_map=alias_map,
+                              known_source_ids=known,
+                              evidence_prefix=args.only)
 
-    rows = [build_overlay_row(r) for r in records]
-    from collections import Counter
-    dist = Counter(r["acceptance_class"] for r in rows)
-    inst = Counter(r["instrument_type"] for r in rows)
-    print(f"分类分布: {dict(dist)}")
-    print(f"文书类型: {dict(inst.most_common(8))}")
+    fr_map = _fr_identity_map()
+    rows = [build_overlay_row(r, fr_identity=fr_map.get(r.get("evidence_id")))
+            for r in selected]
+    before = record_completeness(selected)
+    after = record_completeness(selected, fr_identities=fr_map)
+
+    # failed / ambiguous / human review（来自 FR 富化产物）
+    fr_rows = load_jsonl(FR_OVERLAY)
+    scoped = {r["evidence_id"] for r in selected}
+    failed = sum(1 for eid in fr_rows if eid in scoped and not fr_rows[eid].get("fr_identity"))
+    ambiguous = sum(1 for eid, row in fr_rows.items()
+                    if eid in scoped and row.get("fr_ambiguous"))
+    human_review = sum(1 for r in rows if r.get("acceptance_review"))
+    report = backfill_report(before, after, failed=failed, ambiguous=ambiguous,
+                             human_review_required=human_review)
+
+    if args.json:
+        print(json.dumps({"selected": len(selected), "region": args.region,
+                          "source_role": args.source_role,
+                          "report": report,
+                          "acceptance_dist": dict(Counter(
+                              r["acceptance_class"] for r in rows)),
+                          "instrument_dist": dict(Counter(
+                              r["instrument_type"] for r in rows).most_common(10))},
+                         ensure_ascii=False, indent=2))
+    else:
+        print(f"记录 {len(selected)} 条（{'APPLY' if args.apply else 'DRY-RUN'}"
+              f"；region={args.region or 'ALL'} role={args.source_role or 'ALL'}"
+              f"{' only-missing' if args.only_missing else ''}）")
+        print(f"分类分布: {dict(Counter(r['acceptance_class'] for r in rows))}")
+        print(f"文书类型: {dict(Counter(r['instrument_type'] for r in rows).most_common(8))}")
+        print(f"富化来源: fr_identity_overlay={len(fr_rows)} 行 ｜ 本次命中 {sum(1 for r in selected if r.get('evidence_id') in fr_map)}")
+        print(f"身份完整度 before={before['complete']}/{before['total']} ({before['pct']}%)"
+              f"  →  after={after['complete']}/{after['total']} ({after['pct']}%)"
+              f"  Δ{report['delta_pct']}%")
+        print(f"failed={failed} ambiguous={ambiguous} human_review_required={human_review}")
 
     if not args.apply:
         print("\n（dry-run —— 加 --apply 写 overlay；原始 evidence 不会被修改）")
         return 0
 
-    # 合并写：保留 overlay 中不在本次处理范围的旧行（增量更新）
-    keep: dict[str, dict] = {}
-    if OVERLAY.exists():
-        for line in OVERLAY.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                try:
-                    old = json.loads(line)
-                    keep[old["evidence_id"]] = old
-                except json.JSONDecodeError:
-                    pass
-    for r in rows:
-        keep[r["evidence_id"]] = r
-    with OVERLAY.open("w", encoding="utf-8") as f:
-        for r in keep.values():
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    print(f"\n→ 已写 {OVERLAY.name}（{len(keep)} 行）")
+    merged = merge_rows_into_overlay(load_jsonl(OVERLAY), rows)
+    write_overlay(OVERLAY, merged)
+    print(f"\n→ 已写 {OVERLAY.name}（{len(merged)} 行；本次 +{len(rows)}）")
     return 0
 
 

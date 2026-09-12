@@ -1,0 +1,27 @@
+# ============================================================
+# Source Role Aliases —— 逻辑源名 → 库内真实 source_id 对账
+# ------------------------------------------------------------
+# 归属：Phase 4B-1 Step 2 ｜ 运行时：app/policy/config.py::load_aliases()
+#                                    app/policy/source_access.py::expand_role_sources()
+# ------------------------------------------------------------
+# 背景（2026-09-12 对账）：
+#   jurisdiction-registry.yaml 里角色登记的 sources 是**逻辑源名**；
+#   库内 outputs/*.jsonl 的 source_id 是**真实落盘 id**。二者历史上有漂移，
+#   导致部分角色 evidence_count 误记为 0（如 eu_nim / eu_eurlex_waste_shipment）。
+# 语义：
+#   · pattern 支持 `*` 后缀通配（只在末尾）
+#   · 一个逻辑源可映射到多个真实源（同通道不同锚点=共享数据，不重复造数）
+#   · 该映射只影响 **统计与路由**，不改变任何原始证据
+# ============================================================
+version: 1
+
+aliases:
+
+  eu_nim:
+    patterns: ["eu_nim_*"]
+    note: "NIM 索引按国别落盘（eu_nim_cz / eu_nim_be …）"
+
+  eu_eurlex_waste_shipment:
+    patterns: ["eu_eurlex_battery_reg", "eu_eurlex_keyword"]
+    note: "WSR 家族与电池法同通道（EUR-Lex 锚点不同）；2026-09-12 实测标题含 2024/1157 者 62 条在 battery_reg"
+

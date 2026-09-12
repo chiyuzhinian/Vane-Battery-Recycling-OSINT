@@ -425,6 +425,47 @@ def has_usable_endpoint(endpoint_results: list[dict] | None) -> bool:
                for e in (endpoint_results or []))
 
 
+# ============================================================ 5) 源别名展开
+
+def expand_source_patterns(patterns: list[str],
+                           known_source_ids: list[str] | set[str]) -> list[str]:
+    """把“逻辑源 patterns”展开为库内真实 source_id 列表（支持末尾 `*`）。"""
+    known = list(known_source_ids)
+    out: list[str] = []
+    for p in patterns or []:
+        if not p:
+            continue
+        if p.endswith("*"):
+            prefix = p[:-1]
+            out += [s for s in known if s.startswith(prefix)]
+        elif p in known or not known:
+            out.append(p)
+    # 去重保序
+    seen: set[str] = set()
+    return [s for s in out if not (s in seen or seen.add(s))]
+
+
+def expand_role_sources(role_sources: list[str],
+                        alias_map: dict,
+                        known_source_ids: list[str] | set[str]) -> list[str]:
+    """角色 sources（含逻辑名）→ 完整真实 source_id 列表。
+
+    alias_map: {logical_name: {"patterns": [...], ...}} 或 {logical_name: AliasEntry}
+    未登记别名的直接原样保留（不猜）。
+    """
+    known = list(known_source_ids)
+    out: list[str] = []
+    for sid in role_sources or []:
+        entry = alias_map.get(sid)
+        if entry is None:
+            out.append(sid)
+            continue
+        patterns = entry["patterns"] if isinstance(entry, dict) else entry.patterns
+        out += expand_source_patterns(list(patterns), known)
+    seen: set[str] = set()
+    return [s for s in out if not (s in seen or seen.add(s))]
+
+
 _WS = re.compile(r"\s+")
 
 

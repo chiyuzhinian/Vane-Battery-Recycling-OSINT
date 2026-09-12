@@ -1,0 +1,142 @@
+{
+  "abstract": "PHMSA issues this interim final rule (IFR) to revise the Hazardous Materials Regulations for lithium cells and batteries transported by aircraft. This IFR prohibits the transport of lithium ion cells and batteries as cargo on passenger aircraft; requires lithium ion cells and batteries to be shipped at not more than a 30 percent state of charge aboard cargo-only aircraft when not packed with or contained in equipment; and limits the use of alternative provisions for small lithium cell or battery shipments to one package per consignment. This IFR does not restrict passengers or crew members from bringing personal items or electronic devices containing lithium cells or batteries aboard aircraft, or restrict cargo-only aircraft from transporting lithium ion cells or batteries at a state of charge exceeding 30 percent when packed with or contained in equipment or devices.",
+  "action": "Interim final rule (IFR).",
+  "agencies": [
+    {
+      "raw_name": "DEPARTMENT OF TRANSPORTATION",
+      "name": "Transportation Department",
+      "id": 492,
+      "url": "https://www.federalregister.gov/agencies/transportation-department",
+      "json_url": "https://www.federalregister.gov/api/v1/agencies/492",
+      "parent_id": null,
+      "slug": "transportation-department"
+    },
+    {
+      "raw_name": "Pipeline and Hazardous Materials Safety Administration",
+      "name": "Pipeline and Hazardous Materials Safety Administration",
+      "id": 408,
+      "url": "https://www.federalregister.gov/agencies/pipeline-and-hazardous-materials-safety-administration",
+      "json_url": "https://www.federalregister.gov/api/v1/agencies/408",
+      "parent_id": 492,
+      "slug": "pipeline-and-hazardous-materials-safety-administration"
+    }
+  ],
+  "body_html_url": "https://www.federalregister.gov/documents/full_text/html/2019/03/06/2019-03812.html",
+  "cfr_references": [
+    {
+      "chapter": null,
+      "citation_url": null,
+      "part": 172,
+      "title": 49
+    },
+    {
+      "chapter": null,
+      "citation_url": null,
+      "part": 173,
+      "title": 49
+    }
+  ],
+  "citation": "84 FR 8006",
+  "comment_url": null,
+  "comments_close_on": null,
+  "correction_of": null,
+  "corrections": [],
+  "dates": "Effective date: This interim final rule is effective on March 6, 2019.",
+  "disposition_notes": null,
+  "docket_ids": [
+    "Docket No. PHMSA-2016-0014 (HM-224I)"
+  ],
+  "dockets": [
+    {
+      "supporting_documents": [],
+      "agency_name": "PHMSA",
+      "documents": [
+        {
+          "comment_count": 20,
+          "comment_start_date": "2019-03-06",
+          "updated_at": "2023-03-01T14:40:13.779-05:00",
+          "comment_url": "https://www.regulations.gov/commenton/PHMSA-2016-0014-0008",
+          "allow_late_comments": null,
+          "id": "PHMSA-2016-0014-0008",
+          "comment_end_date": "2019-05-07",
+          "regulations_dot_gov_open_for_comment": false
+        }
+      ],
+      "supporting_documents_count": 0,
+      "id": "PHMSA-2016-0014",
+      "title": "Revised Lithium Battery Provisions"
+    }
+  ],
+  "document_number": "2019-03812",
+  "effective_on": "2019-03-06",
+  "end_page": 8028,
+  "executive_order_notes": null,
+  "executive_order_number": null,
+  "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2019/03/06/2019-03812.xml",
+  "html_url": "https://www.federalregister.gov/documents/2019/03/06/2019-03812/hazardous-materials-enhanced-safety-provisions-for-lithium-batteries-transported-by-aircraft-faa",
+  "images": {},
+  "images_metadata": {},
+  "json_url": "https://www.federalregister.gov/api/v1/documents/2019-03812?publication_date=2019-03-06",
+  "mods_url": "https://www.govinfo.gov/metadata/granule/FR-2019-03-06/2019-03812/mods.xml",
+  "not_received_for_publication": null,
+  "page_length": 23,
+  "page_views": {
+    "count": 6676,
+    "last_updated": "2026-09-12 08:15:03 -0400"
+  },
+  "pdf_url": "https://www.govinfo.gov/content/pkg/FR-2019-03-06/pdf/2019-03812.pdf",
+  "presidential_document_number": null,
+  "proclamation_number": null,
+  "public_inspection_pdf_url": "https://public-inspection.federalregister.gov/2019-03812.pdf?1551793515",
+  "publication_date": "2019-03-06",
+  "raw_text_url": "https://www.federalregister.gov/documents/full_text/text/2019/03/06/2019-03812.txt",
+  "regulation_id_number_info": {
+    "2137-AF20": {
+      "issue": "202210",
+      "html_url": "https://www.federalregister.gov/regulations/2137-AF20/hazardous-materials-enhanced-safety-provisions-for-lithium-batteries-transported-by-aircraft-faa-rea",
+      "title": "Hazardous Materials: Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft (FAA Reauthorization Act of 2018)",
+      "xml_url": "http://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202210&RIN=2137-AF20&operation=OPERATION_EXPORT_XML",
+      "priority_category": "Other Significant"
+    }
+  },
+  "regulation_id_numbers": [
+    "2137-AF20"
+  ],
+  "regulations_dot_gov_info": {
+    "supporting_documents": [],
+    "regulatory_plan": {
+      "html_url": "https://www.federalregister.gov/regulations/2137-AF20/hazardous-materials-enhanced-safety-provisions-for-lithium-batteries-transported-by-aircraft-faa-rea",
+      "title": "Hazardous Materials: Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft (FAA Reauthorization Act of 2018)"
+    },
+    "comments_count": 20,
+    "agency_id": "PHMSA",
+    "comments_url": "https://www.regulations.gov/docketBrowser?rpp=50&so=DESC&sb=postedDate&po=0&dct=PS&D=PHMSA-2016-0014",
+    "supporting_documents_count": 0,
+    "docket_id": "PHMSA-2016-0014",
+    "document_id": "PHMSA-2016-0014-0008",
+    "regulation_id_number": "2137-AF20",
+    "title": "Revised Lithium Battery Provisions",
+    "checked_regulationsdotgov_at": "2023-03-01T19:40:12Z"
+  },
+  "regulations_dot_gov_url": null,
+  "significant": true,
+  "signing_date": null,
+  "start_page": 8006,
+  "subtype": null,
+  "title": "Hazardous Materials: Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft (FAA Reauthorization Act of 2018)",
+  "toc_doc": "Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft",
+  "toc_subject": "Hazardous Materials:",
+  "topics": [
+    "Education",
+    "Hazardous materials transportation",
+    "Hazardous waste",
+    "Incorporation by reference",
+    "Labeling",
+    "Packaging and containers",
+    "Radioactive materials",
+    "Reporting and recordkeeping requirements",
+    "Uranium"
+  ],
+  "type": "Rule",
+  "volume": 84
+}

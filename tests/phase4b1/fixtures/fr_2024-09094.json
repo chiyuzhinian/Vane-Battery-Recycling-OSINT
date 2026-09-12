@@ -1,0 +1,146 @@
+{
+  "abstract": "This document contains final regulations regarding Federal income tax credits under the Inflation Reduction Act of 2022 (IRA) for the purchase of qualifying new and previously-owned clean vehicles, including new and previously-owned plug-in electric vehicles powered by an electric battery meeting certain requirements and new qualified fuel cell motor vehicles. In addition, the final regulations provide guidance for taxpayers who purchase qualifying vehicles and intend to transfer the amount of any previously-owned clean vehicle credit or new clean vehicle credit to dealers that are entities eligible to receive advance payments of either credit. The final regulations also provide guidance for dealers to become eligible entities to receive advance payments of previously-owned clean vehicle credits or new clean vehicle credits, and rules regarding recapture of the credits. Finally, the final regulations provide guidance on the meaning of three new definitions added to the exclusive list of mathematical or clerical errors relating to certain assessments of tax without a notice of deficiency.",
+  "action": "Final regulations.",
+  "agencies": [
+    {
+      "raw_name": "DEPARTMENT OF THE TREASURY",
+      "name": "Treasury Department",
+      "id": 497,
+      "url": "https://www.federalregister.gov/agencies/treasury-department",
+      "json_url": "https://www.federalregister.gov/api/v1/agencies/497",
+      "parent_id": null,
+      "slug": "treasury-department"
+    },
+    {
+      "raw_name": "Internal Revenue Service",
+      "name": "Internal Revenue Service",
+      "id": 254,
+      "url": "https://www.federalregister.gov/agencies/internal-revenue-service",
+      "json_url": "https://www.federalregister.gov/api/v1/agencies/254",
+      "parent_id": 497,
+      "slug": "internal-revenue-service"
+    }
+  ],
+  "body_html_url": "https://www.federalregister.gov/documents/full_text/html/2024/05/06/2024-09094.html",
+  "cfr_references": [
+    {
+      "chapter": null,
+      "citation_url": null,
+      "part": "1",
+      "title": 26
+    },
+    {
+      "chapter": null,
+      "citation_url": null,
+      "part": "301",
+      "title": 26
+    }
+  ],
+  "citation": "89 FR 37706",
+  "comment_url": null,
+  "comments_close_on": null,
+  "correction_of": null,
+  "corrections": [],
+  "dates": "Effective date: These regulations are effective on July 5, 2024.",
+  "disposition_notes": null,
+  "docket_ids": [
+    "TD 9995"
+  ],
+  "dockets": [
+    {
+      "supporting_documents": [],
+      "agency_name": "IRS",
+      "documents": [
+        {
+          "comment_count": 0,
+          "comment_start_date": "2024-05-06",
+          "updated_at": "2024-09-03T16:57:37.095-04:00",
+          "comment_url": "https://www.regulations.gov/commenton/IRS_FRDOC_0001-2209",
+          "allow_late_comments": false,
+          "id": "IRS_FRDOC_0001-2209",
+          "comment_end_date": null,
+          "regulations_dot_gov_open_for_comment": false
+        }
+      ],
+      "supporting_documents_count": 0,
+      "id": "IRS_FRDOC_0001",
+      "title": "Agreements for Payment of Tax Liabilities in Installments."
+    }
+  ],
+  "document_number": "2024-09094",
+  "effective_on": "2024-07-05",
+  "end_page": 37775,
+  "executive_order_notes": null,
+  "executive_order_number": null,
+  "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2024/05/06/2024-09094.xml",
+  "html_url": "https://www.federalregister.gov/documents/2024/05/06/2024-09094/clean-vehicle-credits-under-sections-25e-and-30d-transfer-of-credits-critical-minerals-and-battery",
+  "images": {},
+  "images_metadata": {},
+  "json_url": "https://www.federalregister.gov/api/v1/documents/2024-09094?publication_date=2024-05-06",
+  "mods_url": "https://www.govinfo.gov/metadata/granule/FR-2024-05-06/2024-09094/mods.xml",
+  "not_received_for_publication": null,
+  "page_length": 70,
+  "page_views": {
+    "count": 27336,
+    "last_updated": "2026-09-12 08:15:03 -0400"
+  },
+  "pdf_url": "https://www.govinfo.gov/content/pkg/FR-2024-05-06/pdf/2024-09094.pdf",
+  "presidential_document_number": null,
+  "proclamation_number": null,
+  "public_inspection_pdf_url": "https://public-inspection.federalregister.gov/2024-09094.pdf?1714740316",
+  "publication_date": "2024-05-06",
+  "raw_text_url": "https://www.federalregister.gov/documents/full_text/text/2024/05/06/2024-09094.txt",
+  "regulation_id_number_info": {
+    "1545-BQ86": {
+      "issue": "202310",
+      "html_url": "https://www.federalregister.gov/regulations/1545-BQ86/transfer-provisions-of-sections-30d-and-25e",
+      "title": "Transfer Provisions of Sections 30D and 25E",
+      "xml_url": "http://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202310&RIN=1545-BQ86&operation=OPERATION_EXPORT_XML",
+      "priority_category": "Substantive, Nonsignificant"
+    },
+    "1545-BQ52": {
+      "issue": "202310",
+      "html_url": "https://www.federalregister.gov/regulations/1545-BQ52/section-30d-clean-vehicle-credit-regulations",
+      "title": "Section 30D Clean Vehicle Credit Regulations",
+      "xml_url": "http://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202310&RIN=1545-BQ52&operation=OPERATION_EXPORT_XML",
+      "priority_category": "Other Significant"
+    },
+    "1545-BQ99": null
+  },
+  "regulation_id_numbers": [
+    "1545-BQ52",
+    "1545-BQ86",
+    "1545-BQ99"
+  ],
+  "regulations_dot_gov_info": {
+    "supporting_documents": [],
+    "comments_count": 0,
+    "agency_id": "IRS",
+    "comments_url": "https://www.regulations.gov/docketBrowser?rpp=50&so=DESC&sb=postedDate&po=0&dct=PS&D=IRS_FRDOC_0001",
+    "supporting_documents_count": 0,
+    "docket_id": "IRS_FRDOC_0001",
+    "document_id": "IRS_FRDOC_0001-2209",
+    "regulation_id_number": null,
+    "title": "Agreements for Payment of Tax Liabilities in Installments.",
+    "checked_regulationsdotgov_at": "2024-05-07T12:00:14Z"
+  },
+  "regulations_dot_gov_url": null,
+  "significant": true,
+  "signing_date": null,
+  "start_page": 37706,
+  "subtype": null,
+  "title": "Clean Vehicle Credits Under Sections 25E and 30D; Transfer of Credits; Critical Minerals and Battery Components; Foreign Entities of Concern",
+  "toc_doc": "Transfer of Credits, Critical Minerals and Battery Components, and Foreign Entities of Concern",
+  "toc_subject": "Clean Vehicle Credits:\n",
+  "topics": [
+    "Employment taxes",
+    "Estate taxes",
+    "Excise taxes",
+    "Gift taxes",
+    "Income taxes",
+    "Penalties",
+    "Reporting and recordkeeping requirements"
+  ],
+  "type": "Rule",
+  "volume": 89
+}

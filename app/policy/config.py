@@ -178,6 +178,18 @@ class EndpointsConfig(BaseModel):
         return {r.role: r for r in self.roles}
 
 
+# ============================================================ 源别名（逻辑名→真实 source_id）
+
+class AliasEntry(BaseModel):
+    patterns: list[str] = Field(default_factory=list)
+    note: str = ""
+
+
+class AliasConfig(BaseModel):
+    version: int
+    aliases: dict[str, AliasEntry] = Field(default_factory=dict)
+
+
 # ============================================================ 验收规则
 
 class AcceptanceClassDef(BaseModel):
@@ -245,6 +257,12 @@ def load_endpoints() -> EndpointsConfig:
 
 
 @lru_cache(maxsize=1)
+def load_aliases() -> AliasConfig:
+    return AliasConfig.model_validate(
+        _load_yaml(SOURCES / "source-role-aliases.yaml"))
+
+
+@lru_cache(maxsize=1)
 def compiled_topics() -> dict[str, tuple[list[re.Pattern], list[re.Pattern]]]:
     """topic_id → (include_re, exclude_re)，进程内编译一次。"""
     out: dict[str, tuple[list[re.Pattern], list[re.Pattern]]] = {}
@@ -261,7 +279,7 @@ def config_status() -> dict:
     status: dict = {"ok": True, "errors": []}
     for name, fn in (("topics", load_topics), ("instruments", load_instruments),
                      ("registry", load_registry), ("acceptance", load_acceptance),
-                     ("endpoints", load_endpoints)):
+                     ("endpoints", load_endpoints), ("aliases", load_aliases)):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001
