@@ -167,9 +167,9 @@ export default function RecordItem({
               )}
               <div className="flex flex-wrap gap-1 pt-0.5">
                 {r.hits.length ? (
-                  r.hits.map((h) => (
+                  r.hits.map((h, i) => (
                     <code
-                      key={h}
+                      key={`${h}-${i}`}
                       className="rounded bg-sky-950/60 px-1.5 py-0.5 text-[10px] text-sky-300"
                     >
                       {h}

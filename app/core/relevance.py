@@ -683,14 +683,22 @@ def _portal_disposal_hits(hay: str) -> list[str]:
 
     只做"位置剔除"不做"语义理解"：命中点前后 40 字符里若出现
     grants/programs/applicants 等资助语境，就认为这是在讲**项目**而非**处置**。
+
+    ⚠️ 去重（2026-09-12 实测）：多个正则命中同一词时（如
+    "accumulateur" 被两个法语模式各收一次），hits 会出现重复项 ——
+    UI 上用 h 做 React key 会告警，数据层也不应含重复证据。
     """
     out: list[str] = []
+    seen: set[str] = set()
     for rx in _PORTAL_DISP_RE:
         for m in rx.finditer(hay):
             snippet = hay[max(0, m.start() - 40): m.end() + 40]
             if any(f.search(snippet) for f in _PORTAL_FIN_RE):
                 continue                      # 财政工具语境 —— 不是处置证据
-            out.append(m.group(0)[:44])
+            hit = m.group(0)[:44]
+            if hit not in seen:
+                seen.add(hit)
+                out.append(hit)
     return out
 
 
