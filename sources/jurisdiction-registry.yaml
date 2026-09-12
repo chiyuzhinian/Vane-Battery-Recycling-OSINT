@@ -73,21 +73,21 @@ jurisdictions:
       - role: STANDARDS
         critical: true
         expected: true
-        sources: []
-        status: NOT_ONBOARDED
-        gap_reason: CEN/CENELEC 标准未接入（EN 标准是回收效率核算的引用层）— P1
+        sources: [int_standards_ref]
+        status: CONNECTED
+        note: "EU 官方引用（OJ/JRC metadata，open_access_status=official_metadata_only）；CEN/ISO 直连为 SPA/bot 拦截 → 角色 ceiling=PARTIAL"
       - role: BASEL
         critical: true
         expected: true
-        sources: []
-        status: NOT_ONBOARDED
-        gap_reason: 巴塞尔公约文本/会议文件未接入 — P1（用户待确认方向）
+        sources: [int_basel]
+        status: CONNECTED
+        note: "技术导则/出版物页（服务端渲染）+ 官方 PDF（仅元数据）；draft ≠ binding（测试锁定）"
       - role: OECD
         critical: true
         expected: true
         sources: []
-        status: NOT_ONBOARDED
-        gap_reason: OECD 回收料跨境规则未接入 — P1
+        status: PARTIAL
+        note: "2026-09-12 实测：legalinstruments 为 JS 渲染 SPA（HTTP 200 但无静态内容）；主站 403 → 需浏览器通道/官方 API（role=PARTIAL，非 BLOCKED）"
 
   # ------------------------------------------------------------
   # 二、欧盟 27 成员国（schema 统一 + 每国状态）

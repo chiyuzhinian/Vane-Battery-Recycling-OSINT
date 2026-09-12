@@ -131,6 +131,7 @@ class EndpointProbeCfg(BaseModel):
     expect_keys: list[str] = Field(default_factory=list)
     no_results_key: str = ""
     timeout_s: int = 25
+    detect_spa: bool = False          # 检测 JS 渲染（SPA）：可达但不可抽取
 
 
 class EndpointCfg(BaseModel):

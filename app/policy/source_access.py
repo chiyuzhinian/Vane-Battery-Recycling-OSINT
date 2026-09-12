@@ -26,6 +26,7 @@ SOURCE_FAILURES = (
     "TIMEOUT", "DNS_FAILURE", "TLS_FAILURE", "CONNECTION_ERROR",
     "CAPTCHA", "API_KEY_REQUIRED", "AUTH_REQUIRED", "ROBOTS_RESTRICTED",
     "PAYWALL_CONFIRMED", "PARSER_FAILURE", "SCHEMA_DRIFT", "UNSUPPORTED_FORMAT",
+    "SPA_JS_RENDERED",
 )
 #: 非失败标记
 NON_FAILURES = ("NONE", "NO_RESULTS")
@@ -207,6 +208,7 @@ def evaluate_probe_response(
     json_parsed: bool | None = None,
     payload_empty_for: str | None = None,
     metadata_source_type: str = "",
+    detect_spa: bool = False,
 ) -> EndpointResult:
     """把一次探测的原始素材判定为 EndpointResult（纯函数，测试可达）。
 
@@ -259,6 +261,23 @@ def evaluate_probe_response(
         res.metadata_available = bool(caps.get("metadata"))
         res.fulltext_available = False
         return res
+
+    # --- SPA（JS 渲染）检测：可达但内容不可抽取 ---
+    #   实测：legalinstruments.oecd.org、standards.cencenelec.eu、CROSS 检索页
+    if detect_spa and content_kind == "html":
+        low = (body or "").lower()
+        spa_markers = ("data-beasties", "ng-version", "id=\"app-root\"",
+                       "id=\"root\">", "window.location.href = \"https://",
+                       "window.location.hostname", "window.location.replace",
+                       "<app-root", "__next", "vue.js", "instrument-wrapper")
+        if len(body or "") < 12000 and any(m in low for m in spa_markers):
+            res.failure_type = "SPA_JS_RENDERED"
+            res.failure_detail = ("端点为 JS 渲染应用（SPA）：HTTP 可达但无静态内容，"
+                                  "需浏览器通道或官方结构化 API")
+            res.endpoint_status = "PARTIAL"
+            res.metadata_available = False
+            res.fulltext_available = False
+            return res
 
     # --- JSON 结构校验 ---
     if content_kind == "json":
@@ -321,6 +340,7 @@ class RoleStatus:
     block_reason: str = ""
     blocked_endpoints: list[str] = field(default_factory=list)
     usable_endpoints: list[str] = field(default_factory=list)
+    spa_endpoints: list[str] = field(default_factory=list)
     enumeration_available: bool = False
     metadata_available: bool = False
     fulltext_available: bool = False
@@ -345,13 +365,16 @@ def derive_role_status(
       · ★ 单端点失败不得把角色判死（blocked 端点只进 blocked_endpoints 清单）
     """
     eps = list(endpoint_results or [])
+    spas = [e for e in eps if e.get("failure_type") == "SPA_JS_RENDERED"]
     usable = [e for e in eps
-              if e.get("endpoint_status") in ("ACCESSIBLE", "PARTIAL")]
+              if e.get("endpoint_status") in ("ACCESSIBLE", "PARTIAL")
+              and e.get("failure_type") != "SPA_JS_RENDERED"]
     blocked = [e for e in eps if e.get("endpoint_status") == "BLOCKED"]
 
     out = RoleStatus(status=declared_status, reachable="UNVERIFIED")
     out.blocked_endpoints = [e.get("endpoint_id", "") for e in blocked if e.get("endpoint_id")]
     out.usable_endpoints = [e.get("endpoint_id", "") for e in usable if e.get("endpoint_id")]
+    out.spa_endpoints = [e.get("endpoint_id", "") for e in spas if e.get("endpoint_id")]
     if eps:
         out.last_checked = max((e.get("checked_at") or "") for e in eps) or ""
         out.reachable = "yes" if usable else ("no" if blocked else "UNVERIFIED")
@@ -372,7 +395,17 @@ def derive_role_status(
             status = "PARTIAL"
         out.status = status
     else:
-        if not usable and blocked:
+        if not usable and spas:
+            # ★ 仅剩 SPA（JS 渲染）/或 SPA+失败混合：可达但不可结构化抽取 —— 判 PARTIAL
+            out.status = "PARTIAL"
+            out.block_reason = (
+                "端点为 JS 渲染应用（SPA），无结构化通道："
+                + "；".join(e.get("endpoint_id", "") for e in spas)
+                + "（需浏览器通道或官方 API）")
+            if blocked:
+                out.block_reason += "；另有 blocked：" + "；".join(
+                    f"{e.get('endpoint_id')}={e.get('failure_type')}" for e in blocked)
+        elif not usable and blocked:
             # ★ 直连端点全被阻：若有替代采集通道且有真实数据 → 不判死
             #   例：CalRecycle/ECHA 直连 403(CAPTCHA)，但浏览器通道已采集入库
             if has_collector and evidence_count > 0:
@@ -388,6 +421,13 @@ def derive_role_status(
                 reasons = [f"{e.get('endpoint_id')}={e.get('failure_type')}"
                            for e in blocked]
                 out.block_reason = "；".join(reasons)
+        elif not usable and spas:
+            # ★ 仅剩 SPA（JS 渲染）：可达但不可结构化抽取 —— 判 PARTIAL
+            out.status = "PARTIAL"
+            out.block_reason = (
+                "端点为 JS 渲染应用（SPA），无结构化通道："
+                + "；".join(e.get("endpoint_id", "") for e in spas)
+                + "（需浏览器通道或官方 API）")
         elif usable:
             if has_collector and evidence_count > 0:
                 out.status = ("COMPLETE"

@@ -91,6 +91,7 @@ async def probe_endpoint(
         if ep.probe.kind == "json_api" else None,
         payload_empty_for=(ep.probe.no_results_key or None),
         metadata_source_type=ep.metadata_source_type,
+        detect_spa=bool(ep.probe.detect_spa),
     )
     d = res.as_dict()
     d["probe_kind"] = ep.probe.kind

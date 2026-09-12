@@ -193,7 +193,8 @@ roles:
         role_method: page
         metadata_source_type: OFFICIAL_PUBLISHER
         capabilities: {enumeration: true, metadata: true, fulltext: false}
-        notes: "标准门户（Oracle APEX；2026-09-12 探测为 500，记录为真实失败）"
+        probe: {kind: html_page, detect_spa: true}
+        notes: "Oracle APEX + JS 重定向（SPA）；深层 f?p= 页面历史上 500"
       - id: iso_catalogue
         official_url: "https://www.iso.org/standards.html"
         official_domain: iso.org
@@ -230,7 +231,14 @@ roles:
         content_kind: html
         role_method: page
         capabilities: {enumeration: true, metadata: true, fulltext: true}
-        notes: "技术导则清单页；draft ≠ final ≠ binding"
+        notes: "技术导则清单页（服务端渲染，可解析）；draft ≠ final ≠ binding"
+      - id: basel_publications
+        official_url: "https://www.basel.int/Implementation/Publications/TechnicalGuidelines/tabid/2362/Default.aspx"
+        official_domain: basel.int
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "技术导则出版物页（2026-09-12 从官方文档内引用发现）"
       - id: basel_document_download
         official_url: "https://www.basel.int/Portals/4/download.aspx?d=UNEP-CHW.14-7-Add.1.English.pdf"
         official_domain: basel.int
@@ -255,6 +263,8 @@ roles:
         role_method: page
         metadata_source_type: OFFICIAL_PUBLISHER
         capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: html_page, detect_spa: true}
+        notes: "2026-09-12 实测：HTTP 200 但为 JS 渲染 SPA（需浏览器通道/官方 API）"
       - id: oecd_main_waste
         official_url: "https://www.oecd.org/env/waste/"
         official_domain: oecd.org
@@ -463,7 +473,8 @@ roles:
         content_kind: html
         role_method: page
         capabilities: {enumeration: true, metadata: true, fulltext: false}
-        notes: "CROSS 检索页；裁定详情解析 Step 5 验证（ruling ≠ regulation）"
+        probe: {kind: html_page, detect_spa: true}
+        notes: "检索页为 SPA；实际采集走 /api/search（cbp_cross 连接器）；裁定 ≠ regulation"
       - id: fr_agency_cbp
         official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=u-s-customs-and-border-protection&per_page=1"
         official_domain: federalregister.gov

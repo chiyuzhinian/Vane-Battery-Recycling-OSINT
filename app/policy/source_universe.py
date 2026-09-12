@@ -31,7 +31,8 @@ _KNOWN_COLLECTORS = {
 
 def has_collector(source_id: str) -> bool:
     """source_id 是否有专用采集通道（连接器/浏览器/NIM 解析器）。"""
-    if source_id.startswith(("eu_nim_", "browser_", "us_", "fr_", "nl_", "de_", "es_")):
+    if source_id.startswith(("eu_nim_", "browser_", "us_", "fr_", "nl_", "de_",
+                             "es_", "int_", "cbp_cross", "eur_lex")):
         return True
     return source_id in _KNOWN_COLLECTORS
 
