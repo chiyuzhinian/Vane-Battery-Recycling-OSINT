@@ -1,0 +1,60 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— DE（参考管辖地，Step 2）
+# ------------------------------------------------------------
+# 纪律：本文件只描述「已有/缺失通道」，不重写既有 connector；
+#       框架校验见 app/policy/jurisdiction_onboarding.py（fail-fast）
+# ============================================================
+version: 1
+jurisdiction_id: DE
+jurisdiction_name: {zh: 德国, en: Germany}
+level: member_state
+official_languages: [de]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: de_gesetze
+      official_url: "https://www.gesetze-im-internet.de/"
+      access_method: xml_api
+      status: CONNECTED
+      connector: gesetze_de
+      note: "官方 XML 专线（Altfahrzeug-Verordnung / BattDG 已验证）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: eu_nim_de
+      official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
+      access_method: nim_index
+      status: DISCOVERED
+      discovery_layer_only: true
+      note: "NIM 提供公报引用线索（5 条）；BGBl 公报本体未独立接入"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "UBA（Umweltbundesamt）通道未接入"
+  MS_WASTE_REGULATOR: "废物监管机构通道未接入（KrWG 经立法库覆盖文本）"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "GGVSEB/ADR 主管通道未接入"
+  MS_CUSTOMS_OR_TRADE: "Zoll（海关）通道未接入"
+  MS_STANDARDS_METADATA: "DIN/ISO 直连未接入（标准层 metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector
+  MS_OFFICIAL_GAZETTE: nim_discovery
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: manual_review
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "DE:GG:{abk}"
+  enrich_fields: [juris_abbreviation, version_date, official_url, title]
+status_strategy: "gesetze-im-internet XML 元数据（Stand/版本日期）"
+legal_relation_strategy: "nim_transposition（NIM 索引 ↔ EU 家族）"
+notes: "参考管辖地（Phase 4B-1 既有专线）——本阶段只做契约映射，不扩采集。"

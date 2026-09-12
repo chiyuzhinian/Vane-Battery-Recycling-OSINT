@@ -1,0 +1,62 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— FR（参考管辖地，Step 2）
+# ============================================================
+version: 1
+jurisdiction_id: FR
+jurisdiction_name: {zh: 法国, en: France}
+level: member_state
+official_languages: [fr]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: fr_dila
+      official_url: "https://www.legifrance.gouv.fr/"
+      access_method: xml_api
+      status: CONNECTED
+      connector: dila_fr
+      note: "DILA 官方 XML 专线（日增量抓取；VHU/电池条款已验证）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: fr_dila
+      official_url: "https://www.legifrance.gouv.fr/jorf/"
+      access_method: xml_api
+      status: PARTIAL
+      note: "JORF 经 DILA 通道覆盖（部分）；公报专线未独立建模"
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY:
+    - source_id: fr_ademe_opendata
+      official_url: "https://data.ademe.fr/"
+      access_method: api
+      status: PARTIAL
+      connector: datafair
+      note: "ADEME 官方开放数据（回收/废物辅助证据）；非监管文书本体"
+
+known_gaps:
+  MS_WASTE_REGULATOR: "废物监管主管（DGPR）通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "ADR 主管通道未接入"
+  MS_CUSTOMS_OR_TRADE: "Douanes 通道未接入"
+  MS_STANDARDS_METADATA: "AFNOR/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector
+  MS_OFFICIAL_GAZETTE: partial_portal
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: opendata_api
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "FR:JORF:{jorf_id}"
+  enrich_fields: [title, publish_date, official_url, nature]
+status_strategy: "DILA XML 元数据（en vigueur/版本）"
+legal_relation_strategy: "nim_transposition"
+notes: "参考管辖地（Phase 4B-1 既有专线；Legifrance 主站 CAPTCHA → 走 DILA 官方通道）。"

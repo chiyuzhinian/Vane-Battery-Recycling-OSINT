@@ -1,0 +1,56 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— NL（参考管辖地，Step 2）
+# ============================================================
+version: 1
+jurisdiction_id: NL
+jurisdiction_name: {zh: 荷兰, en: Netherlands}
+level: member_state
+official_languages: [nl]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: nl_bwb
+      official_url: "https://wetten.overheid.nl/"
+      access_method: xml_api
+      status: CONNECTED
+      connector: bwb_nl
+      note: "KOOP BWB 官方 XML 专线（Besluit beheer autowrakken / batterij 相关已验证）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: nl_bwb
+      official_url: "https://www.officielebekendmakingen.nl/"
+      access_method: html
+      status: PARTIAL
+      note: "Staatscourant 未独立接入（BWB 覆盖大部立法文本）"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "RIVM/IenW 通道未接入"
+  MS_WASTE_REGULATOR: "废物流监管（Afval）通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "ILT/ADR 主管通道未接入"
+  MS_CUSTOMS_OR_TRADE: "Douane 通道未接入"
+  MS_STANDARDS_METADATA: "NEN/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector
+  MS_OFFICIAL_GAZETTE: partial_portal
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "NL:BWB:{bwbr_id}"
+  enrich_fields: [title, version_date, official_url]
+status_strategy: "BWB XML 元数据（in-force/版本）"
+legal_relation_strategy: "nim_transposition"
+notes: "参考管辖地；browser_netherlands 通道保留为补充。"

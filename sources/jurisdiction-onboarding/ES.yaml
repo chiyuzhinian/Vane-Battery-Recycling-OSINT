@@ -1,0 +1,56 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— ES（参考管辖地，Step 2）
+# ============================================================
+version: 1
+jurisdiction_id: ES
+jurisdiction_name: {zh: 西班牙, en: Spain}
+level: member_state
+official_languages: [es]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: es_boe
+      official_url: "https://www.boe.es/"
+      access_method: api
+      status: CONNECTED
+      connector: boe_es
+      note: "BOE 官方 API 专线（目录 + 全文）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: es_boe
+      official_url: "https://www.boe.es/diario_boe/"
+      access_method: html
+      status: PARTIAL
+      note: "BOE Diario 与立法库同域；日刊轮转频道未独立建模"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "MITECO 通道未接入"
+  MS_WASTE_REGULATOR: "废物主管（MITERD）通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "DGT/ADR 主管通道未接入"
+  MS_CUSTOMS_OR_TRADE: "Aduanas（海关）通道未接入"
+  MS_STANDARDS_METADATA: "UNE/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector
+  MS_OFFICIAL_GAZETTE: partial_portal
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "ES:BOE:{boe_id}"
+  enrich_fields: [title, publish_date, official_url]
+status_strategy: "BOE 元数据（vigencia/状态）"
+legal_relation_strategy: "nim_transposition"
+notes: "参考管辖地（Phase 4B-1 既有专线）。"
