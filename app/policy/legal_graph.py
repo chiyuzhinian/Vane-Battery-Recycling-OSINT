@@ -56,6 +56,36 @@ class FamilyStatus:
     family_completeness: float = 0.0
     members_total: int = 0
     national_transpositions: int = 0
+    # ---- Step 7：官方关系（Cellar SPARQL）----
+    official_relations: dict = field(default_factory=dict)
+    resolved_official: list[str] = field(default_factory=list)
+    absent_official: list[str] = field(default_factory=list)
+
+
+OFFICIAL_FILE = AUDIT_DIR / "legal_family_official.json"
+
+
+def load_official_relations(path: Path | None = None) -> dict:
+    """读 outputs/audit/legal_family_official.json（refresh_legal_family.py 产物）。
+
+    返回 {root_celex: {RELATION: [{celex,date,uri}]}}；文件缺失时返回空 dict（向后兼容）。
+    """
+    fp = path or OFFICIAL_FILE
+    if not fp.exists():
+        return {}
+    try:
+        data = json.loads(fp.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    roots = data.get("roots") or {}
+    # 文件结构：{root: {work, relations:{REL:[...]}}} → 规整为 {root: {REL:[...]}}
+    out: dict[str, dict] = {}
+    for root, entry in roots.items():
+        if isinstance(entry, dict) and "relations" in entry:
+            out[root] = entry.get("relations") or {}
+        elif isinstance(entry, dict):
+            out[root] = entry
+    return out
 
 
 def _load_records() -> list[dict]:
@@ -97,7 +127,11 @@ def _mentions_root(record: dict, root_celex: str) -> bool:
     return False
 
 
-def build_family_status() -> list[FamilyStatus]:
+def build_family_status(official: dict | None = None) -> list[FamilyStatus]:
+    # Step 7：官方关系（Cellar）—— 未传入时自动读取审计产物（缺失则不合并）
+    if official is None:
+        official = load_official_relations()
+    from app.policy.family_official import merge_family
     records = _load_records()
     out: list[FamilyStatus] = []
     for root, info in P0_ROOTS.items():
@@ -126,11 +160,17 @@ def build_family_status() -> list[FamilyStatus]:
                     r.get("evidence_id") or title[:40])
         st.national_transpositions = transpositions
         st.found_relations = {k: v[:8] for k, v in found.items()}
-        st.unresolved_relations = [e for e in st.expected_relation_types
-                                   if e not in found]
-        present = len(st.expected_relation_types) - len(st.unresolved_relations)
-        st.family_completeness = round(present / len(st.expected_relation_types), 3) \
-            if st.expected_relation_types else 1.0
+        # ---- Step 7：官方关系合并 ----
+        root_official = (official or {}).get(root, {})
+        st.official_relations = {
+            rel: (rows or [])[:12] for rel, rows in root_official.items()}
+        merge = merge_family(expected=list(st.expected_relation_types),
+                             corpus_found=set(found.keys()),
+                             official=root_official)
+        st.resolved_official = merge["resolved_official"]
+        st.absent_official = merge["absent_official"]
+        st.unresolved_relations = merge["unresolved"]
+        st.family_completeness = merge["completeness"]
         out.append(st)
     return out
 
