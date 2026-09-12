@@ -1,0 +1,21 @@
+# ============================================================
+# Jurisdiction Sources —— EE（Step 4a：Source Proof 候选，stretch pilot）
+# ============================================================
+version: 1
+jurisdiction_id: EE
+language: et
+link_keywords: "aku|patarei|jäätme|sõiduk|ringlus"
+link_include: ["/akt/", "riigiteataja.ee/akt"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: ee_riigiteataja
+    official_owner: "Riigi Teataja（官方公报+立法库，同一系统）"
+    official_domain: riigiteataja.ee
+    access_method: html
+    entry_url: "https://www.riigiteataja.ee/"
+    search_attempts:
+      - "https://www.riigiteataja.ee/otsing/1?q=aku"
+      - "https://www.riigiteataja.ee/avaandmed"
+    samples_known: []
+    note: "RT 同时承担官方公报职能；官方 XML/API 已知（Step 5 接入）"

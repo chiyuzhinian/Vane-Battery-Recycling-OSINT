@@ -1,0 +1,57 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— BE（Pilot，Step 4a 追加）
+# Source Proof：outputs/audit/source_proofs/BE.json（2026-09-13）
+# ============================================================
+version: 1
+jurisdiction_id: BE
+jurisdiction_name: {zh: 比利时, en: Belgium}
+level: member_state
+official_languages: [fr, nl, de]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: be_ejustice
+      official_url: "https://www.ejustice.just.fgov.be/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "入口可达，但检索 CGI 机器不可读（Source Proof 记录 limitation）；拟走浏览器通道（Step 5 决策）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: eu_nim_be
+      official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
+      access_method: nim_index
+      status: DISCOVERED
+      discovery_layer_only: true
+      note: "NIM 公报引用线索（34 条，联邦+大区多层）"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "SPW/OVAM 大区环境机构通道未接入（双层结构）"
+  MS_WASTE_REGULATOR: "大区废物监管通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "FPS Mobility/ADR 通道未接入"
+  MS_CUSTOMS_OR_TRADE: "FPS Finances 通道未接入"
+  MS_STANDARDS_METADATA: "NBN/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: browser_pending（CGI 检索受限）
+  MS_OFFICIAL_GAZETTE: nim_discovery
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "BE:NUmac:{numac}"
+  enrich_fields: [title, publish_date, language_variant]
+status_strategy: "eJustice 元数据（numac/版本）"
+legal_relation_strategy: "nim_transposition（联邦层转置；大区层待建）"
+notes: "Pilot（优先度 0.680；Umicore 黑粉精炼 + 双层结构多样性）。"

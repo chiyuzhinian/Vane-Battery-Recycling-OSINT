@@ -1,0 +1,24 @@
+# ============================================================
+# Jurisdiction Sources —— FI（Step 4a：Source Proof 候选）
+# ============================================================
+version: 1
+jurisdiction_id: FI
+language: fi
+link_keywords: "akku|paristo|jäte|ajoneuvo|kierrätys"
+link_include: ["/laki/", "/fi/laki"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: fi_finlex
+    official_owner: "Oikeusministeriö（Finlex 官方立法库）"
+    official_domain: finlex.fi
+    access_method: html
+    entry_url: "https://www.finlex.fi/fi/laki/ajantasa/2011/20110646"
+    search_attempts:
+      - "https://www.finlex.fi/fi/haku?q=akku"
+      - "https://www.finlex.fi/fi/haku?q=paristo"
+    samples_known:
+      - "https://www.finlex.fi/fi/laki/ajantasa/2011/20110646"
+      - "https://www.finlex.fi/fi/laki/ajantasa/2014/20140527"
+      - "https://www.finlex.fi/fi/laki/ajantasa/2021/20210978"
+    note: "Finlex 官方 API/开放数据已知（本阶段先验 HTML 通道）"

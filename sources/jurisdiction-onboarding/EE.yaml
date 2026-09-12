@@ -1,0 +1,56 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— EE（stretch pilot，Step 4a 追加）
+# Source Proof：outputs/audit/source_proofs/EE.json（2026-09-13）
+# ============================================================
+version: 1
+jurisdiction_id: EE
+jurisdiction_name: {zh: 爱沙尼亚, en: Estonia}
+level: member_state
+official_languages: [et]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: ee_riigiteataja
+      official_url: "https://www.riigiteataja.ee/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "入口可达；检索/开放数据页均无可解析链接（疑 JS）→ Step 5 走 RT 官方 XML/API；限制已入 source proof"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: ee_riigiteataja
+      official_url: "https://www.riigiteataja.ee/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "RT 同时承担官方公报职能（立法库与公报同系统）"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "Keskkonnaamet/KOTKAS 通道未接入"
+  MS_WASTE_REGULATOR: "废物监管通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "Transpordiamet/ADR 通道未接入"
+  MS_CUSTOMS_OR_TRADE: "MTA（税务海关）通道未接入"
+  MS_STANDARDS_METADATA: "EVS/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: api_pending（RT XML/API，Step 5）
+  MS_OFFICIAL_GAZETTE: api_pending
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "EE:RT:{akt_id}"
+  enrich_fields: [title, publish_date, official_url]
+status_strategy: "RT 元数据（kehtiv/版本）"
+legal_relation_strategy: "nim_transposition"
+notes: "Stretch pilot（diversity=1.0；官方 API 验证价值）。"

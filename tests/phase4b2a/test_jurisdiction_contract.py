@@ -66,6 +66,17 @@ def test_contract_registry_has_no_errors():
         assert 0 <= c["covered_roles"] <= 7
 
 
+def test_all_contracts_load_and_validate():
+    """Step 4a 后：4 参考 + 5 pilot = 9 份契约全部可通过（fail-fast 口径）。"""
+    ids = list_contracts()
+    assert len(ids) >= 9
+    assert {"SE", "PL", "BE", "FI", "EE"} <= set(ids)
+    reg = build_contract_registry()
+    assert reg["errors"] == []
+    for c in reg["contracts"]:
+        assert c["mandatory_roles"] == 7
+
+
 def test_missing_standard_role_fails_fast():
     src = Path(ROOT / "sources/jurisdiction-onboarding/DE.yaml").read_text(
         encoding="utf-8")

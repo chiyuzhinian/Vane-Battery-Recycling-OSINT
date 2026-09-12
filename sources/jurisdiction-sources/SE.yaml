@@ -1,0 +1,24 @@
+# ============================================================
+# Jurisdiction Sources —— SE（Step 4a：Source Proof 候选）
+# ============================================================
+version: 1
+jurisdiction_id: SE
+language: sv
+link_keywords: "batteri|avfall|fordon|producentansvar|återvinning"
+link_include: ["bet=", "sfsr", "/sv/", "download"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: se_sfst
+    official_owner: "Regeringskansliet（Svensk författningssamling）"
+    official_domain: rkrattsbaser.gov.se
+    access_method: html
+    entry_url: "https://rkrattsbaser.gov.se/sfst?bet=2008:834"
+    search_attempts:
+      - "https://rkrattsbaser.gov.se/sfst?fritext=batteri"
+      - "https://rkrattsbaser.gov.se/sfst?fritext=producentansvar+batterier"
+    samples_known:
+      - "https://rkrattsbaser.gov.se/sfst?bet=2008:834"
+      - "https://rkrattsbaser.gov.se/sfst?bet=2007:185"
+      - "https://rkrattsbaser.gov.se/sfst?bet=2020:614"
+    note: "SFST = 官方瑞典法典库（也承载官方公报职能）"

@@ -1,0 +1,57 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— FI（Pilot，Step 4a 追加）
+# Source Proof：outputs/audit/source_proofs/FI.json（2026-09-13）
+# ============================================================
+version: 1
+jurisdiction_id: FI
+jurisdiction_name: {zh: 芬兰, en: Finland}
+level: member_state
+official_languages: [fi, sv]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: fi_finlex
+      official_url: "https://www.finlex.fi/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "Source Proof✅：全文+元数据（样本 3/3，Jätelaki 646/2011 等）；检索接口待适配（官方 API 已知，Step 5 接入）"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: eu_nim_fi
+      official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
+      access_method: nim_index
+      status: DISCOVERED
+      discovery_layer_only: true
+      note: "NIM 公报引用线索（27 条，含 Åland 备注）"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "YM/SYKE 通道未接入"
+  MS_WASTE_REGULATOR: "废物监管（SYKE/Pirkanmaa ELY）通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "Traficom/ADR 通道未接入"
+  MS_CUSTOMS_OR_TRADE: "Tulli 通道未接入"
+  MS_STANDARDS_METADATA: "SFS/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector（Finlex HTML/官方 API，Step 5）
+  MS_OFFICIAL_GAZETTE: nim_discovery
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "FI:SDK:{year}/{number}"
+  enrich_fields: [title, publish_date, official_url, language_variant]
+status_strategy: "Finlex 元数据（säädösnumero/版本）"
+legal_relation_strategy: "nim_transposition"
+notes: "Pilot（优先度 0.660；电池材料+Fortum 回收生态）。"

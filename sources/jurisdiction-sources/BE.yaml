@@ -1,0 +1,23 @@
+# ============================================================
+# Jurisdiction Sources —— BE（Step 4a：Source Proof 候选）
+# ============================================================
+version: 1
+jurisdiction_id: BE
+language: fr,nl
+link_keywords: "pile|batterie|accumulateur|déchet|afval|batterij"
+link_include: ["/cgi_loi/", "/eli/", "justel"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: be_ejustice
+    official_owner: "SPF Justice（eJustice / Moniteur belge 官方库）"
+    official_domain: ejustice.just.fgov.be
+    access_method: html
+    entry_url: "https://www.ejustice.just.fgov.be/cgi_loi/loi_a.pl?language=fr&la=F"
+    search_attempts:
+      - "https://www.ejustice.just.fgov.be/cgi_loi/rech.pl?language=fr&la=F&cn=batterie"
+      - "https://www.ejustice.just.fgov.be/cgi_loi/loi_a.pl?language=nl&la=N"
+    samples_known: []
+    note: >-
+      eJustice 为官方立法库+公报（Moniteur）；检索接口为经典 CGI，
+      机器可读性待验证；若失败走浏览器通道（Step 5 决策）。

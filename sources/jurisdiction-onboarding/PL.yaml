@@ -1,0 +1,57 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— PL（Pilot，Step 4a 追加）
+# Source Proof：outputs/audit/source_proofs/PL.json（2026-09-13）
+# ============================================================
+version: 1
+jurisdiction_id: PL
+jurisdiction_name: {zh: 波兰, en: Poland}
+level: member_state
+official_languages: [pl]
+legal_system_type: civil_law
+
+mandatory_source_roles:
+  - MS_LEGISLATION_DATABASE
+  - MS_OFFICIAL_GAZETTE
+  - MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+  - MS_WASTE_REGULATOR
+  - MS_TRANSPORT_OR_DANGEROUS_GOODS
+  - MS_CUSTOMS_OR_TRADE
+  - MS_STANDARDS_METADATA
+optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
+
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+    - source_id: pl_isap
+      official_url: "https://isap.sejm.gov.pl/"
+      access_method: html
+      status: ACCESSIBLE
+      note: "Source Proof✅：文书直链+全文（样本 3/3，含 Dz.U. 2009/79/666 电池法）；检索接口（search.xsp）需 Step 5 适配"
+  MS_OFFICIAL_GAZETTE:
+    - source_id: eu_nim_pl
+      official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
+      access_method: nim_index
+      status: DISCOVERED
+      discovery_layer_only: true
+      note: "NIM 公报引用线索（24 条）；Dz.U. 公报本体待接入"
+
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "KOBiZE/GIOŚ 通道未接入"
+  MS_WASTE_REGULATOR: "废物监管（BDO 体系）通道未接入"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: "TDT/ADR 主管通道未接入"
+  MS_CUSTOMS_OR_TRADE: "KAS（海关）通道未接入"
+  MS_STANDARDS_METADATA: "PKN/ISO 直连未接入（metadata-only 口径）"
+
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector（ISAP HTML 解析 + 检索适配，Step 5）
+  MS_OFFICIAL_GAZETTE: nim_discovery
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
+  MS_WASTE_REGULATOR: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_CUSTOMS_OR_TRADE: pending_probe
+  MS_STANDARDS_METADATA: metadata_only
+identity_strategy:
+  pattern: "PL:DZU:{year}:{nr}:{poz}"
+  enrich_fields: [title, publish_date, official_url]
+status_strategy: "ISAP 元数据（obowiązujący/uchylony）"
+legal_relation_strategy: "nim_transposition"
+notes: "Pilot（优先度 0.700；电池制造重镇）。"

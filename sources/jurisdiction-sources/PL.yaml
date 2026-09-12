@@ -1,0 +1,24 @@
+# ============================================================
+# Jurisdiction Sources —— PL（Step 4a：Source Proof 候选）
+# ============================================================
+version: 1
+jurisdiction_id: PL
+language: pl
+link_keywords: "bateri|akumulator|odpad|pojazd|recykling"
+link_include: ["DocDetails", "isap.nsf"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: pl_isap
+    official_owner: "Sejm RP（ISAP 官方立法数据库）"
+    official_domain: isap.sejm.gov.pl
+    access_method: html
+    entry_url: "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20090790666"
+    search_attempts:
+      - "https://isap.sejm.gov.pl/isap.nsf/search.xsp?keyword=baterie"
+      - "https://isap.sejm.gov.pl/isap.nsf/search.xsp?keyword=akumulatory"
+    samples_known:
+      - "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20090790666"
+      - "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20050250202"
+      - "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20120000021"
+    note: "ISAP = 官方法律文书信息系统（Dz.U. 全量索引）"
