@@ -153,6 +153,69 @@ CASES = [
         "for transportation of defective lithium ion batteries.",
         "special permits 的每个变体都要覆盖",
     ),
+    # ============================================================
+    # 以下用例来自**用户在面板上的第二轮审核**（2026-09-12）——
+    # 用户的审核就是最权威的标准，必须固化成断言。
+    # ============================================================
+    (
+        "EU 授权法规：supplementing 电池法（用户✅）", "relevant",
+        "Commission Delegated Regulation (EU) 2025/606 of 21 March 2025 "
+        "supplementing Regulation (EU) 2023/1542 by establishing the "
+        "methodology for calculating and verifying the carbon footprint of "
+        "batteries",
+        "This Regulation establishes the methodology for calculating the "
+        "carbon footprint of electric vehicle batteries and industrial "
+        "batteries.",
+        "授权法案是义务所在 —— 2025/606 碳足迹方法",
+    ),
+    (
+        "EU 立法提案：电池法提案（用户✅）", "relevant",
+        "Proposal for a REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE "
+        "COUNCIL concerning batteries and waste batteries, repealing "
+        "Directive 2006/66/EC",
+        "The Commission proposes a Regulation on batteries and waste "
+        "batteries covering sustainability, performance and collection "
+        "targets.",
+        "提案也收（修正了早前「不含提案」的假设）",
+    ),
+    (
+        "EU 修订指令：ELV/电池指令（用户✅）", "relevant",
+        "Directive (EU) 2018/849 of the European Parliament and of the "
+        "Council of 30 May 2018 amending Directives 2000/53/EC on "
+        "end-of-life vehicles, 2006/66/EC on batteries and accumulators",
+        "Amendments aligning waste management provisions of the ELV and "
+        "batteries directives with the Waste Framework Directive.",
+        "ELV 与退役车用电池强相关",
+    ),
+    (
+        "EU 附件技术修订：amending Annex（用户🟡 uncertain）", "review",
+        "Commission Delegated Directive (EU) 2020/362 of 17 December 2019 "
+        "amending Annex II to Directive 2000/53/EC on end-of-life vehicles",
+        "This Delegated Directive amends the technical annex listing "
+        "materials and components.",
+        "附件级技术修订 → 待人工（用户自己也标了 uncertain）",
+    ),
+    (
+        "EU 泛产品母法：ESPR（用户🟡 uncertain）", "review",
+        "Regulation (EU) 2024/1781 establishing a framework for the setting "
+        "of ecodesign requirements for sustainable products",
+        "This Regulation establishes a framework for ecodesign requirements "
+        "for sustainable products, repealing Directive 2009/125/EC.",
+        "泛产品母法（电池只是其一） → 待人工",
+    ),
+    (
+        "消费类电池：应排除（用户首轮口径）", "irrelevant",
+        "Used Household Batteries | US EPA",
+        "Managing used household batteries: alkaline, button cells and "
+        "other consumer batteries.",
+        "消费类/家用电池不在边界内",
+    ),
+    (
+        "铅酸电池：应排除（用户首轮口径）", "irrelevant",
+        "Lead Battery Recycling | Battery Council International",
+        "The lead battery industry achieves a 99% recycling rate.",
+        "铅酸不在边界内（只要 EV 动力+储能退役+黑粉）",
+    ),
 ]
 def main() -> int:
     print("门户类判定 —— 标准样本测试")

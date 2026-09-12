@@ -62,6 +62,12 @@ EN_TITLE = re.compile(
 # corrigendum 后缀：32023R1542R(01) → base=32023R1542, suf=R(01)
 CORRIG = re.compile(r"^([0-9]{4}[A-Z]?[0-9]+)(R\(\d+\))$")
 
+# D2. Cellar UUID 旧链 → eurlex 可读链
+#   实测：同一法规（如 32025R0606）在 7 个采集文件里各有记录，其中 2 条用
+#   Cellar UUID、其余用 eurlex 可读链 —— **URL 不同导致去重失效，面板重复显示**。
+CELLAR = re.compile(r"publications\.europa\.eu/resource/cellar", re.I)
+EURLEX_TPL = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{}"
+
 
 def load_decided() -> set[str]:
     p = OUT / "review_decisions.jsonl"
@@ -153,11 +159,25 @@ def main() -> int:
 
     for r in all_rows:
         ev = r.get("evidence_id") or ""
-        if ev in decided:
-            continue
         title = (r.get("title") or "").strip()
         text = r.get("text") or ""
         change: dict = {}
+
+        # D2. EU 记录的 Cellar UUID 链接 → eurlex 可读链（治面板重复）
+        #   ⚠️ 必须放在 `decided` 检查**之前** —— URL 规范化是**纯数据清理**，
+        #      与人工判定无关。踩过的坑：eu_32025R0606 是用户已审核记录，
+        #      被 `if ev in decided: continue` 整体跳过 → Cellar 链接残留 →
+        #      面板上同一法规显示 2 条，用户把同一条审了 3 次。
+        #   ⚠️ 也要放在 E（空内容）之前：E 分支带 continue 会短路它。
+        if ev.startswith("eu_") and CELLAR.search(r.get("url") or ""):
+            change["_url"] = EURLEX_TPL.format(ev[3:])
+            stats["D2.Cellar链接归一化"] += 1
+
+        if ev in decided:
+            # 人工判定优先，但**数据规范化照做**
+            if change:
+                plans[id(r)] = change
+            continue
 
         # A. 错误页
         if DEAD_PAGE.search(title) or DEAD_PAGE.search(text[:200]):
@@ -215,6 +235,8 @@ def main() -> int:
             change["needs_human_review"] = True
             change["review_reason"] = "正文极短（<120 字符），无法据内容判断相关性"
             stats["E.空内容→待人工"] += 1
+
+        if change:
             plans[id(r)] = change
 
     print("清洗计划：")

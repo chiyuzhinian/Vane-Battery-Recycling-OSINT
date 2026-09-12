@@ -543,6 +543,9 @@ PORTAL_DISPOSAL_PATTERNS = [
     # 报废车侧
     r"end[- ]of[- ]life\s+vehicle", r"\belvs?\b", r"\baltfahrzeug",
     r"v[eé]hicule\s+hors", r"\bvhu\b", r"autowrak",
+    # EU 法规号（跨语言硬信号 —— 成员国实施法常直接引用这个号；
+    # 匈牙利语/芬兰语的 corrigendum 标题里也有它）
+    r"\b2023/1542\b", r"\b2006/66\b", r"\b2000/53\b",
 ]
 
 # 财政工具框架 —— "回收/处置"出现在这里时**不算处置证据**（08913 的判例）
@@ -582,10 +585,77 @@ PORTAL_DOMAIN_ANCHORS = [
     r"电池", r"车辆",
 ]
 
+# ============================================================
+# 判定 2.0 —— 对象边界与关系类型（2026-09-12，用户判例驱动）
+# ------------------------------------------------------------
+# 用户两轮确认的口径：
+#   ✅ 只要：**EV 动力电池**（整包/模组/电芯）· **储能电池退役** · **黑粉**
+#   ✅ ELV/报废车辆一并收 —— 退役车用电池与 ELV 拆解强相关
+#      （用户把 2018/849「修订 ELV 指令」、2026/1738「车辆循环性」都标了 relevant）
+#   ✅ **授权/实施法规**收 —— 2025/606（碳足迹方法）✅、2025/2289 ✅
+#   ✅ **立法提案**收 —— 52020PC0798（电池法提案）✅※修正了早前"不含提案"的假设
+#   ❌ **消费类电池、铅酸**不收 —— 首轮明确排除
+#   🟡 **附件技术修订**（amending ... Annex）与 **泛产品母法**（ESPR/ecodesign）
+#      —— 用户标 uncertain → 统一落「待人工」（不丢，但也不自动进相关）
+# ============================================================
+
+# 正锚点：标题命中即视为"对象在范围内"
+V2_IN_SCOPE = [
+    r"traction batter", r"vehicle batter", r"automotive batter",
+    r"electric vehicle batter", r"\bev batter", r"motive batter",
+    r"动力电池", r"新能源汽车.{0,10}电池", r"车用.{0,6}电池",
+    r"energy storage batter", r"stationary batter", r"grid.{0,3}(scale )?batter",
+    r"储能(锂离子|锂)?电池",
+    r"black mass", r"masse noire", r"schwarzmasse", r"zwarte massa",
+    r"masa negra", r"黑粉",
+    r"end[- ]of[- ]life vehicle", r"\belvs?\b", r"altfahrzeug", r"autowrak",
+    r"v[eé]hicule\s+hors", r"\bvhu\b", r"报废(机动)?车",
+]
+
+# 排除锚点：命中且**无**正锚点时排除（消费类 / 铅酸 / 一次性）
+V2_OFF_SCOPE = [
+    r"consumer (electronic|product|batter)", r"household batter",
+    r"portable batter", r"button cell", r"hearing aid", r"aa\b.{0,3}\baaa\b",
+    r"lead[- ](acid|batter)", r"铅酸", r"碱性电池", r"锌锰",
+]
+
+# 电池法的授权/实施法规（欧盟）：supplementing/implementing 指向电池或相关法规号
+_V2_SUP_RE = re.compile(
+    r"\b(supplementing|implementing)\b.{0,120}?"
+    r"(batter|2023/1542|2006/66|2000/53|waste batter|end-of-life vehicle)",
+    re.I)
+
+# 待人工类型：附件技术修订 / 泛产品母法
+V2_REVIEW_TYPES = [
+    r"amending\s+.{0,60}?annex",
+    r"\bESPR\b|ecodesign|2024/1781",
+]
+
+_V2_IN_RE = [re.compile(p, re.I) for p in V2_IN_SCOPE]
+_V2_OFF_RE = [re.compile(p, re.I) for p in V2_OFF_SCOPE]
+_V2_REVIEW_RE = [re.compile(p, re.I) for p in V2_REVIEW_TYPES]
+
 # 身份区长度：标题之后的摘要通常落在前 900 字符内
 _PORTAL_IDENTITY_CHARS = 900
 
-_PORTAL_DISP_RE = [re.compile(p, re.I) for p in PORTAL_DISPOSAL_PATTERNS]
+_PORTAL_MEMBER_EXTRA = [
+    # ⚠️ 剔除 `batterie`：它是法语词，但**拼写与英语复数 "Batteries" 的前缀完全相同**
+    #    （法语 "batteries" 与英语 "batteries" 同形），无法用词形区分。
+    #    实测后果：航空适航特条件 "...Non-Rechargeable Lithium Batteries..."
+    #    被它当成处置证据直接判相关（回归测试报错）。
+    #    → 法语层由 `accumulateur` / `pile usagée` / `broyeur` 等**英语中不存在**的词承担。
+    #    德国实施法那条靠 `2023/1542` 法规号召回（已在处置链里）。
+    # ⚠️ `batterij`（荷兰语）与 `bater[ií]a`（西语）**保留** —— 它们在英语文本中
+    #    不可能出现，不会误伤。
+    p for p in MEMBER_STATE_PATTERNS if p != r"batterie"
+]
+
+_PORTAL_DISP_RE = [re.compile(p, re.I)
+                   # ⚠️⚠️ 必须并入成员国语言模式（德/法/荷/西）！
+                   #   踩过的坑（2026-09-12）：portal 处置链最初只有英语模式
+                   #   → 成员国层被**整体误杀**：德国实施法、荷兰电池管理令、
+                   #   西班牙电池法全被排除。判定看着“正常”，实际丢了一整层。
+                   for p in PORTAL_DISPOSAL_PATTERNS + _PORTAL_MEMBER_EXTRA]
 _PORTAL_FIN_RE = [re.compile(p, re.I) for p in PORTAL_FINANCIAL_FRAME]
 _PORTAL_MAT_RE = [re.compile(p, re.I) for p in PORTAL_MATERIAL_ANCHORS]
 _PORTAL_PROC_RE = [re.compile(p, re.I) for p in PORTAL_PROCEDURAL_TITLES]
@@ -644,6 +714,34 @@ def judge_portal_policy(text: str, title: str | None = None) -> RelevanceVerdict
         if m:
             return RelevanceVerdict(relevant=False, score=0.0,
                                     rejected_by=f"procedural:{m.group(0)[:30]}")
+
+    # ---- 0c) 判定 2.0：对象边界 —— 消费类/铅酸（无车用语境）→ 排除 ----
+    in_scope = any(rx.search(title_text) for rx in _V2_IN_RE)
+    off = next((m for rx in _V2_OFF_RE if (m := rx.search(title_text))), None)
+    if off and not in_scope:
+        return RelevanceVerdict(relevant=False, score=0.0,
+                                rejected_by=f"off_scope:{off.group(0)[:24]}")
+
+    # ---- 0d) 判定 2.0：待人工类型（附件技术修订 / 泛产品母法）----
+    rev = next((m for rx in _V2_REVIEW_RE if (m := rx.search(title_text))), None)
+    if rev:
+        return RelevanceVerdict(
+            relevant=True, score=0.5,
+            hits=[f"review-type:{rev.group(0)[:30]}"],
+            needs_human_review=True,
+            review_reason="技术附件修订 / 泛产品母法类 —— "
+                          "需人工确认与退役电池处置的关联",
+        )
+
+    # ---- 0e) 判定 2.0：电池法的授权/实施法规 → 直接相关 ----
+    #   （用户把 2025/606 碳足迹方法、2025/2289 都判为 relevant：
+    #     "知道有法规"还不够，**依据它的授权/实施法案才是义务所在**）
+    sup = _V2_SUP_RE.search(title_text)
+    if sup:
+        return RelevanceVerdict(
+            relevant=True, score=0.9,
+            hits=[f"supplementing:{sup.group(0)[:44]}"],
+        )
 
     # ---- 1) 标题命中处置链 → 强相关 ----
     title_hits = _portal_disposal_hits(title_text)

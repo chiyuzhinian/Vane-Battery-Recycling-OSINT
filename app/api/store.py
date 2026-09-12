@@ -125,6 +125,13 @@ class DataStore:
                     key = (r.get("url") or r.get("evidence_id") or "").strip()
                     if not key:
                         continue
+                    # ⚠️ EU 记录改用 **evidence_id** 作去重键：
+                    #    同一法规历史上存过两种链接（Cellar UUID 与 eurlex 可读链），
+                    #    仅按 URL 去重会让同一部法规在面板上出现两次（实测：
+                    #    eu_32025R0606 显示 2 条，用户重复审核）。
+                    ev = (r.get("evidence_id") or "").strip()
+                    if ev.startswith("eu_"):
+                        key = ev
                     prev = index.get(key)
                     if prev is None:
                         index[key] = len(records)
