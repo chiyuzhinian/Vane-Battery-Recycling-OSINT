@@ -56,15 +56,41 @@ def _load_records() -> list[dict]:
 
 
 def _novelty_stats() -> dict:
-    """从 feedback_state.json / iteration_log 读边际新颖度。"""
+    """SG8 边际新颖度。
+
+    Step 10 口径（用户修正 2026-09-12）：
+      · 主判据 = LIVE 轮次的 **accepted_novelty_rate**（新入选 / (新入选+重复入选)）
+      · raw_yield（new/raw）仅作检索效率，**不得单独证明饱和**
+      · 含 source_failure 的轮次不得作为收敛证据（见 rounds.convergence_status）
+      · 回退：旧 feedback_state（round_novel/round_raw，保留不覆盖）
+    """
+    idx = OUT / "audit" / "discovery_rounds.json"
+    if idx.exists():
+        try:
+            data = json.loads(idx.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            data = {}
+        rounds = data.get("rounds") or []
+        if rounds:
+            conv = data.get("convergence") or {}
+            last = rounds[-1].get("accepted_novelty_rate")
+            return {"available": True, "novel_rate": last,
+                    "consecutive_rounds": conv.get("streak", 0),
+                    "total_rounds": len(rounds),
+                    "metric": "accepted_novelty_rate",
+                    "evidence_rounds": conv.get("evidence_rounds", []),
+                    "last_raw_yield": rounds[-1].get("raw_yield")}
+    # 回退：旧引擎状态
     state = OUT / "feedback_state.json"
     if not state.exists():
-        return {"available": False, "novel_rate": None, "consecutive_rounds": 0}
+        return {"available": False, "novel_rate": None, "consecutive_rounds": 0,
+                "metric": "round_novel/round_raw(fallback)"}
     try:
         data = json.loads(state.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
-        return {"available": False, "novel_rate": None, "consecutive_rounds": 0}
-    rounds = data.get("rounds") or []
+        return {"available": False, "novel_rate": None, "consecutive_rounds": 0,
+                "metric": "round_novel/round_raw(fallback)"}
+    rounds = data.get("rounds") or data.get("history") or []
     consec = 0
     for rnd in reversed(rounds):
         nr = rnd.get("novel_rate")
@@ -74,7 +100,8 @@ def _novelty_stats() -> dict:
             break
     last = rounds[-1].get("novel_rate") if rounds else None
     return {"available": bool(rounds), "novel_rate": last,
-            "consecutive_rounds": consec, "total_rounds": len(rounds)}
+            "consecutive_rounds": consec, "total_rounds": len(rounds),
+            "metric": "round_novel/round_raw(fallback)"}
 
 
 def _discovery_routes(records: list[dict], families) -> dict:
