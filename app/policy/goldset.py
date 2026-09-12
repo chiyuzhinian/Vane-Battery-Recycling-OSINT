@@ -77,6 +77,7 @@ def evaluate(include_holdout: bool = True) -> dict:
     inst_ok = inst_total = 0
     status_ok = status_total = 0
     found_cases = 0
+    inst_mismatches: list[dict] = []
     details: list[dict] = []
 
     for c in cases:
@@ -113,6 +114,16 @@ def evaluate(include_holdout: bool = True) -> dict:
             idn = resolve_identity(r)
             if idn.instrument_type == e_it:
                 inst_ok += 1
+            else:
+                inst_mismatches.append({
+                    "id": c["id"], "expected_instrument": e_it,
+                    "actual_instrument": idn.instrument_type,
+                    "matched": idn.instrument_type,
+                    "source_id": r.get("source_id", ""),
+                    "title": (r.get("title") or "")[:120],
+                    "meta_keys": sorted((r.get("meta") or {}).keys())[:12],
+                    "holdout": c.get("holdout", False),
+                })
         e_st = c.get("expected_status")
         if e_st:
             status_total += 1
@@ -147,6 +158,9 @@ def evaluate(include_holdout: bool = True) -> dict:
         "false_positive_rate": round(fp / (fp + tn), 4) if (fp + tn) else 0.0,
         "false_negative_rate": round(fn / (tp + fn), 4) if (tp + fn) else 0.0,
         "instrument_type_accuracy": round(inst_ok / inst_total, 4) if inst_total else None,
+        "instrument_total": inst_total,
+        "instrument_ok": inst_ok,
+        "instrument_mismatches": inst_mismatches,
         "legal_status_accuracy": round(status_ok / status_total, 4) if status_total else None,
         "details": details,
     }

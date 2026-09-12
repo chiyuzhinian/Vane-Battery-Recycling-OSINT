@@ -102,7 +102,8 @@ def _detect_jurisdiction(record: dict) -> str:
 def resolve_identity(record: dict) -> LegalIdentity:
     title = record.get("title") or ""
     meta = record.get("meta") or {}
-    inst = detect_instrument(title, record.get("text") or "")
+    # Step 8：metadata-first（官方 type / CELEX）
+    inst = detect_instrument(title, record.get("text") or "", meta)
 
     celex = str(meta.get("celex") or "")
     nim = str(meta.get("nim_id") or "")

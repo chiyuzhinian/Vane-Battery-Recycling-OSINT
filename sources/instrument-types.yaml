@@ -82,14 +82,15 @@ instrument_types:
     detect_patterns: ["press\\s+release", "\\bnews\\b", "webinar"]
 
 # ------------------------------------------------------------
-# 判定优先级（语义序：先判"提案/草案"等弱形态，再判强约束——
-# 因为 "Proposal for a REGULATION" 同时含 proposal 与 regulation 字样，
-# 必须 proposal 先命中，否则会把提案冒充成已生效法规）
-# corrigendum 特殊处理：剥离 "Corrigendum to" 后按母法判定并继承类型。
+# 判定优先级（Step 8 调整）：
+#   · 弱形态（提案/草案/征求意见）与**官方指引类**先行 ——
+#     实测："Commission Notice – Commission guidelines … Regulation (EU) 2023/1542"
+#     含 "Regulation (EU) 2023/1542" 字样，若 regulation 先行会被误判成条例。
+#   · corrigendum 特殊处理：剥离 "Corrigendum to" 后按母法判定并继承类型。
 # ------------------------------------------------------------
-priority: [proposal, draft, consultation, statute, delegated_act,
-           implementing_act, regulation, directive, administrative_rule,
-           standard, official_guidance, advisory, information_page, news]
+priority: [proposal, draft, consultation, official_guidance, advisory,
+           statute, delegated_act, implementing_act, regulation, directive,
+           administrative_rule, standard, information_page, news]
 
 # ------------------------------------------------------------
 # 已知判例映射（回归锚点，不得违反）

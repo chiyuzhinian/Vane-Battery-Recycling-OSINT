@@ -94,10 +94,17 @@ cases:
     jurisdiction: EU_27
     expected_class: A2
     expected_topics: [T01, T02]
-    expected_instrument_type: standard
-    expected_binding_force: partially_binding
+    expected_instrument_type: administrative_rule
+    expected_binding_force: binding
     must_find: {nim: "283350"}
-    notes: "用户✅ 捷克电池法令（NIM 通道验证）"
+    notes: >
+      用户✅ 捷克电池法令（NIM 通道验证）。
+      ⚠️ 期望修正（Phase 4B-1 Step 8，附官方依据）：
+      原标 standard / partially_binding —— 与官方文种不符。
+      官方标题为 "Vyhláška č. 212/2015 Sb."（捷克部令/decree），
+      属 national administrative rule（binding），**不是**标准（标准应为 EN/ČSN 类）。
+      来源：EUR-Lex NIM 页面（官方公报原文标题）。修正后 instrument 判定
+      metadata-first + NIM 母语文种规则可稳定命中（不再依赖占位标签）。
     holdout: false
 
   - id: eu_ms_be_elv_decree
