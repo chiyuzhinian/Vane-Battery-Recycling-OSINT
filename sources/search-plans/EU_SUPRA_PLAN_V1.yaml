@@ -1,0 +1,58 @@
+# ============================================================
+# Search Plan —— EU_SUPRA_PLAN_V1（冻结基线，Phase 4B-2A Step 1）
+# ------------------------------------------------------------
+# 备注：Phase 4B-1 的 R3 曾扩张 CELEX 年段（32026R/32026L → 更大窗口），
+#       导致 novel=0.15 回升却仍被纳入同一 streak —— 这正是本协议要根因消除的问题。
+#       本 plan 冻结如下年段与词表；任何扩张必须新开 V2/V3（并 reset）。
+# ============================================================
+version: 1
+plan_id: EU_SUPRA_PLAN_V1
+jurisdiction: EU
+scope: EU_SUPRANATIONAL
+
+source_roles:
+  - {role: EURLEX_PRIMARY, critical: true}
+  - {role: EURLEX_DELEGATED_IMPLEMENTING, critical: true}
+  - {role: BASEL, critical: true}
+
+source_endpoints:
+  - eurlex_celex_1542
+  - eurlex_celex_606
+  - cellar_sparql
+  - basel_tech_guidelines
+  - basel_publications
+
+critical_sources:
+  - eur_lex
+  - basel
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies: []
+  fr_terms: []
+  eu_keywords:
+    - black mass
+    - waste battery
+    - battery recycling
+    - traction battery
+    - battery repurposing
+    - recycled content
+    - battery passport
+    - due diligence battery
+    - end-of-life vehicle
+  cross_terms: []
+  basel_publications: true
+
+language_set: [en, fr, de]
+time_window: {from: "2024-01-01", to: "2026-12-31"}
+year_segments: ["32024R", "32024L", "32025R", "32025L", "32026R", "32026L"]
+
+discovery_routes: [A, B, C, D]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  冻结基线：CELEX 年段六前缀 + 九个英文关键词 + Basel 出版物通道。
+  R3 的"年段扩张"在 V1 下成为非法操作（必须新 plan + reset），
+  4B-1 三轮保持 legacy 身份（只读重标记见 outputs/audit/convergence_recheck.json）。
+created_at: "2026-09-13"

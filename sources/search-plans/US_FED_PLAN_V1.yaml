@@ -1,0 +1,78 @@
+# ============================================================
+# Search Plan —— US_FED_PLAN_V1（冻结基线，Phase 4B-2A Step 1）
+# ------------------------------------------------------------
+# 运行时：app/policy/search_plan.py::load_plan()（Pydantic fail-fast）
+# 纪律（用户修正 2026-09-13）：
+#   · plan_hash 覆盖 11 类语义字段（见 search_plan.semantic_payload）
+#   · 搜索空间任何变化必须新建 plan（V2…），禁止改本文件而不换 plan_id
+#   · 只有 plan_hash 一致的 MODE B（convergence_validation）轮次可组 streak
+# 备注：Phase 4B-1 的 R1/R2/R3 使用三套不同词组 + 无 plan 绑定
+#       → 全部记为 legacy，不参与新协议 streak（见 convergence_recheck.json）
+# ============================================================
+version: 1
+plan_id: US_FED_PLAN_V1
+jurisdiction: US
+scope: US_FEDERAL
+
+source_roles:
+  - {role: FEDERAL_REGISTER, critical: true}
+  - {role: AGENCY_RULES, critical: true}
+  - {role: CBP, critical: true}
+  - {role: BIS, critical: true}
+  - {role: EURLEX_PRIMARY, critical: false}    # 法律关系扩张通道（官方家族回采）
+
+source_endpoints:
+  - fr_documents_api
+  - fr_single_doc_api
+  - cross_search
+  - fr_agency_cbp
+  - fr_agency_bis
+  - cellar_sparql
+
+# source_id 级 criticality（失效判定用；与 source_roles.critical 对应）
+critical_sources:
+  - us_federal_register
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:
+    - environmental-protection-agency
+    - energy-department
+    - pipeline-and-hazardous-materials-safety-administration
+    - u-s-customs-and-border-protection
+    - industry-and-security-bureau
+  fr_terms:
+    - '"black mass"'
+    - '"battery recycling"'
+    - '"lithium battery"'
+    - '"battery waste"'
+    - '"electric vehicle battery"'
+    - '"used batteries"'
+    - '"battery materials"'
+    - '"lithium-ion"'
+    - '"batteries"'
+    - '"critical minerals"'
+  eu_keywords: []
+  cross_terms:
+    - black mass
+    - battery waste
+    - battery recycling
+    - lithium-ion
+    - battery materials
+    - cathode
+    - battery packs
+  basel_publications: false
+
+language_set: [en]
+time_window: {from: "2024-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B, C, D]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  冻结基线：query_set 为 Phase 4B-1 三轮词组并集（R1–R3 短语/术语全部纳入），
+  自 V1 起每轮使用完全相同的词表与源集合。route C 目前经 Cellar 官方家族回采
+  （跨源法律关系）；US 本地关系图路线（州↔联邦）列入 4B-2B。
+created_at: "2026-09-13"

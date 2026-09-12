@@ -111,7 +111,13 @@ def scope_routes(records: list[dict], scope: str) -> dict:
 
 
 def scope_novelty(scope: str) -> dict:
-    """SG8：该 scope 的轮次收敛状态（accepted_novelty_rate 主判据）。"""
+    """SG8：该 scope 的轮次收敛状态。
+
+    Phase 4B-2A 协议：优先按 **plan 绑定** 计算——
+    同一 plan_hash 的 MODE B（convergence_validation）+ FULL 轮次才可计数；
+    无任何 plan 绑定的轮次（如 4B-1 历史）退化为 legacy 视图并显式标记
+    `plan_bound=False`（不得伪称已按新协议验证）。
+    """
     from app.policy.rounds import convergence_status
     idx = OUT / "audit" / "discovery_rounds.json"
     if not idx.exists():
@@ -124,10 +130,30 @@ def scope_novelty(scope: str) -> dict:
               if r.get("scope_level") == scope]
     if not rounds:
         return {"available": False, "novel_rate": None, "consecutive_rounds": 0}
+    plan_rounds = [r for r in rounds if r.get("plan_hash")]
+    if plan_rounds:
+        latest_hash = plan_rounds[-1].get("plan_hash")
+        conv = convergence_status(rounds, plan_hash=latest_hash,
+                                  mode_required="convergence_validation")
+        last = [r for r in rounds if r.get("plan_hash") == latest_hash][-1]
+        return {"available": True, "novel_rate": last.get("accepted_novelty_rate"),
+                "consecutive_rounds": conv["streak"], "total_rounds": len(rounds),
+                "plan_rounds": len([r for r in rounds
+                                    if r.get("plan_hash") == latest_hash]),
+                "converged": conv["converged"],
+                "blocked_by_high_value": conv["blocked_by_high_value"],
+                "blocked_reason": conv.get("blocked_reason", ""),
+                "plan_id": last.get("plan_id", ""),
+                "plan_hash": (latest_hash or "")[:12],
+                "plan_bound": True,
+                "raw_yield": last.get("raw_yield"),
+                "metric": "accepted_novelty_rate"}
+    # legacy 视图（4B-1 历史：无 plan 绑定，如实标记）
     conv = convergence_status(rounds)
     return {"available": True, "novel_rate": rounds[-1].get("accepted_novelty_rate"),
             "consecutive_rounds": conv["streak"], "total_rounds": len(rounds),
-            "converged": conv["converged"], "raw_yield": rounds[-1].get("raw_yield"),
+            "converged": conv["converged"], "plan_bound": False,
+            "raw_yield": rounds[-1].get("raw_yield"),
             "metric": "accepted_novelty_rate"}
 
 
