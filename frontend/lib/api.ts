@@ -49,6 +49,8 @@ export type RecordBrief = {
   needs_human_review: boolean;
   reviewed: boolean;
   review_verdict: string | null;
+  review_note: string | null;      // 人工填写的备注（拒绝原因 / 收录理由）
+  review_reason: string | null;    // 机器「待复核」的原因（judge 的 review_reason）
   hits: string[];
   rejected_by: string | null;
   text: string;              // 正文摘要（供展开阅读后判定）

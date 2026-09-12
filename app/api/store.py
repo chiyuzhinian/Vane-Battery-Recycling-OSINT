@@ -160,6 +160,10 @@ class DataStore:
         dec = self._decisions.get(r.get("evidence_id") or "")
         r["reviewed"] = bool(dec)
         r["review_verdict"] = (dec or {}).get("verdict")
+        # ⭐ 人工填写的备注（拒绝原因/收录理由）—— 用户要求「可以填写拒绝原因，
+        #    后端收到后可调整」。原样透传，供 UI 展示与规则校准。
+        r["review_note"] = (dec or {}).get("reason") or None
+        r["review_decided_at"] = (dec or {}).get("decided_at")
         raw_rel = bool(r.get("relevant"))
         if dec and dec.get("verdict") in ("relevant", "irrelevant"):
             r["effective_relevant"] = dec["verdict"] == "relevant"
@@ -310,8 +314,11 @@ class DataStore:
             "needs_human_review": r.get("needs_human_review"),
             "reviewed": r.get("reviewed"),
             "review_verdict": r.get("review_verdict"),
+            "review_note": r.get("review_note"),
             "hits": (r.get("hits") or [])[:5],
             "rejected_by": r.get("rejected_by"),
+            # 机器“待复核”的原因（judge 的 review_reason）—— UI 的「收录原因」用
+            "review_reason": r.get("review_reason"),
             # ⭐ 展开阅读用：用户要求「逐个查看之后判定是不是」，
             #    列表就带上正文摘要，避免展开时再发一次请求（交互有延迟）
             "text": (r.get("text") or "")[:900],

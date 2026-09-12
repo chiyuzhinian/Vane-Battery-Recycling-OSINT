@@ -8,11 +8,15 @@
  *    列表密集时行内按钮极易误点，而且无法做到「看完再判」。
  *    所以行内只显示状态与摘要，**展开后才能裁决**。
  *
- * 展开区给的三样东西，正是人工判断所需的最小信息集：
- *   · 正文摘要（text）      —— 看内容本身对不对
- *   · 命中模式 / 拒绝原因    —— 看机器为什么这么判（hits / rejected_by）
- *   · 原文链接              —— 需要深读时跳出去
+ * 展开区给的东西，正是人工判断所需的最小信息集：
+ *   · 收录原因（为什么机器收了它）    —— 用户要求「点开附上收录的原因」
+ *   · 正文摘要（text）              —— 看内容本身对不对
+ *   · 命中模式 / 拒绝原因 / 待复核说明 —— 看机器的完整判据
+ *   · 备注输入框                    —— 用户要求「可以填写拒绝原因」，
+ *     随裁决一起提交到 review_decisions.jsonl，后端据此校准规则
+ *   · 原文链接                      —— 需要深读时跳出去
  */
+import { useState } from "react";
 import type { RecordBrief, Verdict } from "@/lib/api";
 
 type Props = {
@@ -21,7 +25,7 @@ type Props = {
   checked: boolean;
   onToggle: () => void;
   onCheck: (checked: boolean) => void;
-  onVerdict: (evidenceId: string, verdict: Verdict) => void;
+  onVerdict: (evidenceId: string, verdict: Verdict, note?: string) => void;
 };
 
 const VERDICT_BTNS: {
@@ -59,6 +63,10 @@ export default function RecordItem({
   onVerdict,
 }: Props) {
   const verdict = (r.review_verdict ?? null) as Verdict | null;
+  // ⭐ 备注（拒绝原因 / 收录理由）—— 组件按 evidence_id 挂 key，
+  //    故初始值取自已保存的审核备注即可。
+  const [note, setNote] = useState<string>(r.review_note ?? "");
+  const noteDirty = note.trim() !== (r.review_note ?? "");
 
   return (
     <li
@@ -122,23 +130,42 @@ export default function RecordItem({
       {/* ---------- 展开区：看完再判 ---------- */}
       {expanded && (
         <div className="space-y-3 border-t border-slate-800 px-3 pb-3 pt-3">
-          {/* 正文摘要 */}
-          <div>
+          {/* ⭐ 收录原因 —— 用户要求「点开附上收录的原因」 */}
+          <div className="rounded border border-slate-800 bg-slate-900/40 p-2.5">
             <div className="mb-1 text-[10px] uppercase tracking-wide text-slate-500">
-              正文摘要
+              收录原因（机器判据）
             </div>
-            <p className="max-h-48 overflow-y-auto whitespace-pre-wrap text-[11px] leading-relaxed text-slate-300">
-              {r.text || "（该记录没有正文文本）"}
-            </p>
-          </div>
-
-          {/* 判定依据 */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wide text-slate-500">
-                命中模式
+            <div className="space-y-1 text-[11px] leading-relaxed">
+              <div className="text-slate-300">
+                {r.machine_relevant ? (
+                  <>
+                    机器判定 <span className="text-sky-400">相关</span>
+                    （分 {r.relevance_score}）
+                    {r.channel && (
+                      <span className="text-slate-500"> · 通道 {r.channel}</span>
+                    )}
+                    {r.needs_human_review && (
+                      <span className="text-amber-500"> · 标记待复核</span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    机器判定 <span className="text-slate-500">拒绝</span>
+                    （分 {r.relevance_score}）
+                  </>
+                )}
               </div>
-              <div className="flex flex-wrap gap-1">
+              {r.rejected_by && (
+                <div className="text-[10px] text-red-300/90">
+                  拒绝词：{r.rejected_by}
+                </div>
+              )}
+              {r.review_reason && (
+                <div className="text-[10px] text-amber-400/90">
+                  待复核说明：{r.review_reason}
+                </div>
+              )}
+              <div className="flex flex-wrap gap-1 pt-0.5">
                 {r.hits.length ? (
                   r.hits.map((h) => (
                     <code
@@ -149,46 +176,77 @@ export default function RecordItem({
                     </code>
                   ))
                 ) : (
-                  <span className="text-[10px] text-slate-600">—</span>
+                  <span className="text-[10px] text-slate-600">无命中模式</span>
                 )}
               </div>
             </div>
-            <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wide text-slate-500">
-                拒绝原因
-              </div>
-              {r.rejected_by ? (
-                <code className="rounded bg-red-950/50 px-1.5 py-0.5 text-[10px] text-red-300">
-                  {r.rejected_by}
-                </code>
-              ) : (
-                <span className="text-[10px] text-slate-600">—</span>
-              )}
-            </div>
           </div>
 
-          {/* 三态裁决 */}
-          <div className="flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3">
-            <span className="text-[11px] text-slate-500">我的裁决：</span>
-            {VERDICT_BTNS.map((b) => (
-              <button
-                key={b.v}
-                onClick={() => onVerdict(r.evidence_id, b.v)}
-                className={`rounded border px-2.5 py-1 text-[11px] transition ${
-                  verdict === b.v ? b.active : b.idle
-                }`}
+          {/* 正文摘要 */}
+          <div>
+            <div className="mb-1 text-[10px] uppercase tracking-wide text-slate-500">
+              正文摘要
+            </div>
+            <p className="max-h-48 overflow-y-auto whitespace-pre-wrap text-[11px] leading-relaxed text-slate-300">
+              {r.text || "（该记录没有正文文本）"}
+            </p>
+          </div>
+
+          {/* 三态裁决 + 备注（拒绝原因） */}
+          <div className="space-y-2 border-t border-slate-800 pt-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] text-slate-500">我的裁决：</span>
+              {VERDICT_BTNS.map((b) => (
+                <button
+                  key={b.v}
+                  onClick={() => onVerdict(r.evidence_id, b.v,
+                                          note.trim() || undefined)}
+                  className={`rounded border px-2.5 py-1 text-[11px] transition ${
+                    verdict === b.v ? b.active : b.idle
+                  }`}
+                >
+                  {b.label}
+                </button>
+              ))}
+              <a
+                href={r.url}
+                target="_blank"
+                rel="noreferrer"
+                className="ml-auto text-[11px] text-slate-400 hover:text-sky-400"
               >
-                {b.label}
-              </button>
-            ))}
-            <a
-              href={r.url}
-              target="_blank"
-              rel="noreferrer"
-              className="ml-auto text-[11px] text-slate-400 hover:text-sky-400"
-            >
-              打开原文 ↗
-            </a>
+                打开原文 ↗
+              </a>
+            </div>
+            {/* 备注：随下一次点击裁决一起提交 */}
+            <div className="flex items-center gap-2">
+              <input
+                value={note}
+                maxLength={200}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="备注（可选）：拒绝原因 / 收录理由 —— 例：科普页而非政策法规"
+                className="w-full rounded border border-slate-800 bg-slate-950 px-2 py-1 text-[11px] text-slate-200 placeholder:text-slate-600 focus:border-sky-700 focus:outline-none"
+              />
+              {note && (
+                <span className="shrink-0 text-[10px] text-slate-600">
+                  {note.length}/200
+                </span>
+              )}
+            </div>
+            {r.reviewed && r.review_note && !noteDirty && (
+              <div className="text-[10px] text-slate-500">
+                已记录备注：{r.review_note}
+              </div>
+            )}
+            {r.reviewed && noteDirty && (
+              <div className="text-[10px] text-amber-500/80">
+                备注已修改 —— 点任一裁决按钮重新提交
+              </div>
+            )}
+            {!r.reviewed && note.trim() && (
+              <div className="text-[10px] text-slate-600">
+                备注将随裁决一起提交
+              </div>
+            )}
           </div>
         </div>
       )}

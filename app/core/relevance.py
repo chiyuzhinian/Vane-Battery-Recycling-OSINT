@@ -88,7 +88,9 @@ MEMBER_STATE_PATTERNS: list[str] = [
     r"r[uü]cknahmepflicht",      # 回收义务
     # ---- 法语（法国 REP / VHU 体系）----
     r"\bvhu\b",                  # 报废车（véhicule hors d'usage）
-    r"v[eé]hicule\s+hors\s+d'?usage",
+    # ⚠️ 复数修正（2026-09-12）：法语标题普遍写 véhicules（复数），
+    #    旧模式只匹配单数 → 比利时 NIM 重判预览被整批误杀。
+    r"v[eé]hicules?\s+hors\s+d'?usage",
     r"masse\s+noire",            # 黑粉（法语）
     r"broyeur",                  # 破碎机 —— 实测这个查出英文找不到的数据集
     r"d[eé]pollution",           # 去除污染（报废车预处理）
@@ -542,7 +544,10 @@ PORTAL_DISPOSAL_PATTERNS = [
     r"\bun\s*348[01]\b", r"\b49\s+cfr\s+17",
     # 报废车侧
     r"end[- ]of[- ]life\s+vehicle", r"\belvs?\b", r"\baltfahrzeug",
-    r"v[eé]hicule\s+hors", r"\bvhu\b", r"autowrak",
+    # ⚠️ 法语必须允许**复数**（2026-09-12 实测）：比利时/法国法规标题普遍用
+    #    「véhicules hors d'usage」（复数），旧模式只匹配单数 —— 预览重判时
+    #    整批比利时 NIM 记录被误杀。
+    r"v[eé]hicules?\s+hors", r"\bvhu\b", r"autowrak",
     # EU 法规号（跨语言硬信号 —— 成员国实施法常直接引用这个号；
     # 匈牙利语/芬兰语的 corrigendum 标题里也有它）
     r"\b2023/1542\b", r"\b2006/66\b", r"\b2000/53\b",

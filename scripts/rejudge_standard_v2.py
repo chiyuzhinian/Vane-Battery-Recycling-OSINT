@@ -38,6 +38,7 @@ sys.path.insert(0, str(ROOT))
 
 from app.core.relevance import (  # noqa: E402
     judge_portal_policy, V2_IN_SCOPE, V2_OFF_SCOPE)
+from app.core.relevance_browser import judge_browser  # noqa: E402
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -72,6 +73,19 @@ def is_browser(r: dict) -> bool:
             or r.get("channel") == "browser_capture")
 
 
+def is_nim(r: dict) -> bool:
+    """NIM（成员国转化措施）层 —— 由采集器自治，重判**不碰**。
+
+    ⚠️ 踩过的坑（2026-09-12，预览当场拦住）：NIM 标题是多语言的，
+    而 judge_portal_policy 的成员国语词表不覆盖（立陶宛/波兰/匈牙利…），
+    把它当普通 portal 记录重判会**整层误杀**（rel→irr 361 条，含比利时
+    报废车法令这类核心法规）。
+    NIM 记录的判定权威 = collect_member_states_nim.py 的多语言分层；
+    改善那层规则 → 重跑采集器（仅 2 次页面请求），而不是改重判。
+    """
+    return str(r.get("source_id") or "").startswith("eu_nim_")
+
+
 def off_scope(title: str) -> str | None:
     """对象边界：消费类/铅酸（无车用/储能/黑粉语境）→ 返回命中的排除锚点。"""
     if any(rx.search(title) for rx in _V2_IN_RE):
@@ -86,13 +100,26 @@ def off_scope(title: str) -> str | None:
 def new_verdict(r: dict) -> dict | None:
     """返回要写入的字段；None = 不改。"""
     title = r.get("title") or ""
-    if is_browser(r):
-        # browser 通道：只做对象边界过滤
-        off = off_scope(title)
-        if off and r.get("relevant"):
-            return {"relevant": False, "needs_human_review": False,
-                    "rejected_by": f"off_scope:{off}"}
+    if is_nim(r):
         return None
+    if is_browser(r):
+        # ⚠️ 2026-09-12 升级：浏览器记录从「只查对象边界」改为**完整重判**。
+        #    原因：用户第 3 批审核给出信息页判例（科普/行业文章 → 无关），
+        #    judge_browser 新增 info_page 规则，必须整层重新应用。
+        v = judge_browser(title, r.get("url") or "", r.get("text") or "")
+        if v.relevant:
+            off = off_scope(title)
+            if off:
+                return {"relevant": False, "needs_human_review": False,
+                        "rejected_by": f"off_scope:{off}"}
+        return {
+            "relevant": bool(v.relevant),
+            "relevance_score": round(float(v.score), 3),
+            "hits": v.hits,
+            "rejected_by": v.rejected_by,
+            "needs_human_review": bool(v.needs_human_review),
+            "review_reason": v.review_reason,
+        }
     v = judge_portal_policy(r.get("text") or "", title)
     return {
         "relevant": bool(v.relevant),

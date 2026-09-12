@@ -90,7 +90,10 @@ export default function CountryDrawer({
   const open = !!code;
 
   // ---------- ① 单条裁决（乐观更新）----------
-  async function handleVerdict(evidenceId: string, verdict: Verdict) {
+  // note: 备注（拒绝原因 / 收录理由）—— 可选，随裁决写入 review_decisions.jsonl，
+  //       后端据此校准判定规则（用户要求："你收到这些后端可以调整"）
+  async function handleVerdict(evidenceId: string, verdict: Verdict,
+                               note?: string) {
     if (!evidenceId) return;
     const prev = records;
     setRecords((rs) =>
@@ -100,6 +103,7 @@ export default function CountryDrawer({
               ...r,
               reviewed: true,
               review_verdict: verdict,
+              review_note: note ?? r.review_note ?? null,
               effective_relevant: verdict === "relevant",
             }
           : r,
@@ -107,10 +111,13 @@ export default function CountryDrawer({
     );
     try {
       const res = await api.review.submit([
-        { target_type: "record", target_id: evidenceId, verdict, country: code },
+        {
+          target_type: "record", target_id: evidenceId, verdict,
+          reason: note ?? "", country: code,
+        },
       ]);
       const ids = res.decisions.map((d) => d.decision_id);
-      onToast(`已标记为「${verdictLabel(verdict)}」`, async () => {
+      onToast(`已标记为「${verdictLabel(verdict)}」${note ? "（含备注）" : ""}`, async () => {
         await api.review.revoke(ids);
         setRecords(prev);
         onDataChanged();

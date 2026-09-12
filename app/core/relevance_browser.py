@@ -50,13 +50,19 @@ BROWSER_NOISE_PATTERNS: list[str] = [
     r"contact\s+us", r"careers?", r"newsletter",
     r"subscribe", r"sign\s+in", r"log\s+in", r"site\s+map",
     r"^untitled", r"page\s+not\s+found", r"\b404\b",
+    # ⚠️ 法语死链（2026-09-12 实测）：ADEME 的失效数据集页标题是
+    #    「Page non trouvée」，重判预览中因 URL 路径含 rep-vhu 锚点被
+    #    翻回相关 —— 死链页永远不是证据，必须按**标题**拦掉。
+    r"page\s+non\s+trouv[eé]e", r"pagina\s+no\s+encontrada", r"seite\s+nicht\s+gefunden",
     # ⚠️ 只匹配真正的招聘页，不能用 \bjobs?\b 泛匹配：
-    #    实测误杀 PHMSA 的「Green Job Hazards - Recycling: Batteries | OSHA」
-    #    ——那是真相关的（电池回收职业危害）。
+    #    实测误杀 PHMSA 的「Green Job Hazards - Recycling: Batteries | OSHA」。
     #    两层保护：
     #      ① 用**复数** \bjobs\b（「Green Job Hazards」是单数，不命中）
     #      ② 排除 "green jobs"（OSHA 的 URL 是 /green-jobs/recycling/batteries，
     #         路径里连字符转空格后变成 "green jobs"，会误命中）
+    # ⚠️⭐ 2026-09-12 用户审核翻案：OSHA 该页被判**无关**（信息页，非政策法规）。
+    #    保护仍保留（不由 jobs 噪声杀），改由下方「信息页」规则统一排除 ——
+    #    语义单一：排除理由是 info_page 而不是 jobs。
     r"(?<!green[-\s])\bjobs\b", r"^job\s+opportunit",
     r"\bjob\s+(openings?|opportunities|listings?|search)\b",
     # ⭐⭐ WAF/人机验证页 —— **拦截页伪装成内容，是最危险的一类假阳性**。
@@ -151,11 +157,43 @@ BROWSER_POLICY_ANCHORS: list[str] = [
     r"economie\s+circulaire", r"\bverwertung\b",
 ]
 
+# ============================================================
+# 1c) 信息/科普型页面 —— **不是政策法规**（用户第 3 批审核，2026-09-12）
+# ------------------------------------------------------------
+# 用户判例（同一站点，两种命运）：
+#   ✅ 收："Safety Advisory Notice for ... Disposal or Recycling"（官方通告，法律文书）
+#   ❌ 弃："Understanding the Risks of DDR Lithium Batteries"（科普页）
+#   ❌ 弃："Green Job Hazards - Recycling: Batteries | OSHA"（信息页）
+#   ❌ 弃："Battery Safety is a Global Issue..."（行业文章）
+# 判据 = **科普措辞 且 无法律文书标志**（联合判断 —— 防误杀含 safety 的官方文书）。
+# 用户原话："验收标准主要是基于中国清单参考以及一些审核过的"
+#   —— 中国清单里只有政策/法规/标准，没有科普页。
+# ============================================================
+BROWSER_INFO_PAGE_PATTERNS: list[str] = [
+    r"\bunderstanding\b", r"\bhazards?\b", r"global\s+issue",
+    r"\brisks?\s+of\b", r"\bfaq\b", r"frequently\s+asked",
+    r"how\s+to\b", r"\btips\b", r"best\s+practices",
+    r"\bblog\b", r"\bpodcast\b", r"press\s+release",
+    r"\bwebinars?\b", r"\btutorials?\b",
+]
+
+# 出现任一 → 是法律文书，不做信息页排除（含 PHMSA 通告的标准样本）
+BROWSER_LEGAL_MARKERS: list[str] = [
+    r"regulation", r"directive", r"\brules?\b", r"\bacts?\b",
+    r"\blaw\b", r"decree", r"\bnotices?\b", r"advisory",
+    r"\bstandards?\b", r"\borders?\b", r"amendment", r"statute",
+    r"ordinance", r"\bbill\b", r"\bcodes?\b", r"federal\s+register",
+    r"\bcfr\b", r"verordnung", r"d[eé]cret", r"besluit",
+    r"\bdecision\b", r"\bwet\b",
+]
+
 _NOISE_RE = [re.compile(p, re.I) for p in BROWSER_NOISE_PATTERNS]
 _NAV_RE = [re.compile(p, re.I) for p in BROWSER_NAV_PATTERNS]
 _SIBLING_RE = [re.compile(p, re.I) for p in SIBLING_STREAM_PATTERNS]
 _FOCUS_RE = [re.compile(p, re.I) for p in BROWSER_FOCUS_ANCHORS]
 _POLICY_RE = [re.compile(p, re.I) for p in BROWSER_POLICY_ANCHORS]
+_INFO_RE = [re.compile(p, re.I) for p in BROWSER_INFO_PAGE_PATTERNS]
+_LEGAL_RE = [re.compile(p, re.I) for p in BROWSER_LEGAL_MARKERS]
 
 
 def _page_identity(title: str, url: str) -> str:
@@ -183,6 +221,15 @@ def judge_browser(title: str, url: str = "", text: str = "") -> RelevanceVerdict
         if m:
             return RelevanceVerdict(relevant=False, score=0.0,
                                     rejected_by=f"browser_noise:{m.group(0)[:24]}")
+
+    # ---- 1c) 信息/科普型页面 → 排除（用户审核判例，2026-09-12）----
+    #    信号只看**标题**（"Understanding the Risks" 这类措辞在标题里）；
+    #    法律标志看 identity（标题 + URL 路径）。
+    info = next((m.group(0) for rx in _INFO_RE
+                 if (m := rx.search(_strip_site_suffix(title)))), None)
+    if info and not any(rx.search(identity) for rx in _LEGAL_RE):
+        return RelevanceVerdict(relevant=False, score=0.0,
+                                rejected_by=f"info_page:{info[:24]}")
 
     # ---- 2) 同母类其他产品线（必须排在电池锚点之前做联合判断）----
     sibling = next((m.group(0) for rx in _SIBLING_RE if (m := rx.search(identity))), None)
@@ -252,8 +299,8 @@ _SAMPLES: list[tuple[str, str, str, bool, str]] = [
      "98 percent recycling rate ...", True, "真阳性-铅电池回收"),
     ("Understanding the Risks of Damaged, Defective, or Recalled (DDR) "
      "Lithium Batteries",
-     "https://www.phmsa.dot.gov/lithiumbatteries/ddr", "DDR battery risks ...", True,
-     "真阳性-DDR"),
+     "https://www.phmsa.dot.gov/lithiumbatteries/ddr", "DDR battery risks ...", False,
+     "真阴性-科普页（2026-09-12 用户审核翻案：判定无关）"),
     # ---- 以下为实测泄漏，必须被拒 ----
     ("Textiles - CalRecycle Home Page", "https://calrecycle.ca.gov/epr/textiles/",
      "recycl ... battery ... extended producer responsibility ...", False,
@@ -275,9 +322,15 @@ _SAMPLES: list[tuple[str, str, str, bool, str]] = [
      "https://batterycouncil.org/privacy-policy/",
      "battery recycl ...", False, "真阴性-隐私政策"),
     # ---- 以下两条是实测误杀，必须修正：规则不能比数据还粗 ----
+    # ⚠️⭐ 2026-09-12 用户审核翻案（第三批）：OSHA 该页被判**无关** ——
+    #    「信息页 ≠ 政策法规」（同站 PHMSA 通告仍收）。期望值已改为 False。
     ("Green Job Hazards - Recycling: Batteries | Occupational Safety and Health "
      "Administration", "https://www.osha.gov/green-jobs/recycling/batteries",
-     "battery recycling hazards ...", True, "真阳性-OSHA（含Job字样）"),
+     "battery recycling hazards ...", False, "真阴性-信息页（用户审核翻案）"),
+    ("Battery Safety is a Global Issue that Doesn't Stop at the Border",
+     "https://batterycouncil.org/battery-safety-global-issue/",
+     "industry article on battery safety standards across borders ...", False,
+     "真阴性-行业文章（用户第 3 批判无关）"),
     ("Product Stewardship and Extended Producer Responsibility (EPR) - CalRecycle "
      "Home Page", "https://calrecycle.ca.gov/epr/",
      "battery stewardship program ... recycl battery ...", True,
