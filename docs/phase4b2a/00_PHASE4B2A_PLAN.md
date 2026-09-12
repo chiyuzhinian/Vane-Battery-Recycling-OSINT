@@ -318,16 +318,24 @@ STATE_TRANSPORT_HAZMAT 州危货运输
 
 **选择原则**：业务价值高 **+** 结构/语言/数据形态互不相同 **+** 可验证；**不是**挑最容易的。
 
-### 5.2 提名（基于 §0.2 预探测 + 业务信号；Step 3 用正式分数复核后锁定）
+### 5.2 Pilot 锁定（Step 3 实测评分产出，`jurisdiction_priority.csv`）
 
-| 组 | Pilot | 选择理由（多样性 + 价值） |
+**评分口径**：8 维加权（battery 0.25 / EV 0.15 / recycling 0.10 / policy 0.20 /
+gap-risk 0.10 / accessibility 0.10 / diversity 0.05 / reuse 0.05）；
+约束：accessibility < 0.5 → 只能 RESERVE；US 州至少 2 个 policy_signal ≥ 4（A1 栖息地）。
+
+**真实二轮带重试探测（2026-09-13）**：EU 21/22 达 200（PL 修正 URL 后 200）；
+US 9/20 达 200（MI/IL/TN/TX/OH/OR/VT 本环境超时；NV/NY/NC 403 Cloudflare）；
+HU 重试后仍 RemoteProtocolError、AT 503 → 均按**端点级**记录（不判死源）。
+
+| 组 | 锁定 Pilot | 依据（分数/多样性/可达性） |
 |---|---|---|
-| EU 参考（4） | **DE / NL / ES / FR** | 既有专线；契约映射验证对象 |
-| EU 新增（4，目标 ≥2） | **BE**（三语+联邦/大区双层；Umicore 黑粉精炼）｜ **SE**（北欧立法库可解析；Northvolt 生态）｜ **IT**（大国、Normattiva 可抽取）｜ **EE**（数字政府+官方 API 最强） | 语言 [fr/nl/de, sv, it, et]、结构 [双层联邦, 单一制, CGI/XML/API]、编码互不相同 |
-| EU 多样性加测（1，stretch） | **CY**（希腊语+windows-1253 旧编码） | 边界条件压力测试 |
-| EU 高价值备选（登记，不承诺） | **PL / HU**（LG/CATL/Samsung 电池基地；探测需修正/重试） | Step 3 二轮探测通过则升级为 pilot |
-| US 州（6，目标 ≥5） | **CA / CO / ME / MN / WA / MI** | 5 个电池 EPR/管理法信号州（✅可达）+ MI（电池法+回收产业；403 hard case，验证浏览器通道策略） |
-| US 备选（登记） | IL / GA / NY（timeout / SPA / Cloudflare 三类挑战样本） | 用于验证框架的异常分支 |
+| EU 参考（4） | **DE / NL / ES / FR** | 既有专线；契约映射验证对象（不参与新选） |
+| EU 新增（4） | **SE**（0.790；Nordic+生产者责任成熟）｜**PL**（0.700；LGES/Umicore 产业重镇，立法库可达）｜**BE**（0.680；三语+联邦/大区双层+Umicore 黑粉精炼）｜**FI**（0.660；电池材料+Fortum 回收） | 语言 [sv, pl, fr/nl/de, fi]、结构 [单一制/大区双层/官方 API]、编码互不相同 |
+| EU stretch（1） | **EE**（diversity 1.0；Uralic+数字政府 API 最强） | 框架泛化压力测试 |
+| EU 备选（RESERVE） | IT / SK / CZ / DK ｜ **HU / AT**（access<0.5：HU 协议错误、AT 503 → 需先修复通道） | 保持登记，通道修复后升格 |
+| US 州（6） | **CA**（0.780；AB 2440+CalRecycle）｜**GA**（0.635；SK On/Hyundai 集群，SPA 挑战）｜**CO**（0.595；电池 EPR 法）｜**KY**（0.595；BlueOval SK）｜**MN**（0.585；EPR 法+MPCA 双通道）｜**WA**（0.575；政策活跃+RCW/Ecology 双通道） | 4 个 policy≥4（CA/CO/MN/WA）；制造带（GA/KY）与法规型州并重 |
+| US 备选（RESERVE） | AZ / IN / SC / ME ｜ **MI / IL / NY**（access<0.5：403/超时 → 浏览器通道课题） | ME 保留（EPR 法州，通道可用待 Step 4 复核） |
 
 ---
 

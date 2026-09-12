@@ -1,0 +1,148 @@
+# ============================================================
+# Jurisdiction Priority Signals（Phase 4B-2A Step 3）
+# ------------------------------------------------------------
+# 用途：jurisdiction_priority_score 的业务维度输入（0–5 分制）。
+# ⚠️ 声明：本文件是**内部启发式排序信号**（不是事实断言库）；
+#    正式判定以 Step 4 Source Proof / 真实采样为准。
+#    数据来源：公开产业格局 + jurisdiction-registry.yaml 已知信号 + 人工整理。
+# 字段：battery_industry（电池制造）/ ev_market（EV 市场）/
+#       recycling_industry（回收/精炼产业）/ policy_signal（已知政策信号）
+# ============================================================
+version: 1
+
+eu_member_states:
+  AT: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  BE: {battery_industry: 3, ev_market: 4, recycling_industry: 5, policy_signal: 4, confidence: high, note: "Umicore Hoboken 黑粉精炼（欧洲最大）；联邦+大区双层结构"}
+  BG: {battery_industry: 1, ev_market: 1, recycling_industry: 2, policy_signal: 2, confidence: low}
+  CY: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 2, confidence: low}
+  CZ: {battery_industry: 3, ev_market: 4, recycling_industry: 3, policy_signal: 2, confidence: medium, note: "NIM 29 条已人工抽检✅"}
+  DE: {battery_industry: 5, ev_market: 5, recycling_industry: 5, policy_signal: 4, confidence: high, note: "BattDG/Altfahrzeug-Verordnung 已验证"}
+  DK: {battery_industry: 1, ev_market: 4, recycling_industry: 2, policy_signal: 3, confidence: medium}
+  EE: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 2, confidence: medium, note: "Riigi Teataja 官方 API 强（框架验证价值）"}
+  ES: {battery_industry: 4, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  FI: {battery_industry: 4, ev_market: 4, recycling_industry: 4, policy_signal: 3, confidence: high, note: "Keliber/Terrafame/Fortum Harjavalta"}
+  FR: {battery_industry: 4, ev_market: 5, recycling_industry: 4, policy_signal: 4, confidence: high}
+  GR: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 2, confidence: low}
+  HR: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 2, confidence: low}
+  HU: {battery_industry: 5, ev_market: 4, recycling_industry: 3, policy_signal: 2, confidence: high, note: "CATL Debrecen + Samsung SDI Göd + SK On（电池制造重镇）"}
+  IE: {battery_industry: 0, ev_market: 3, recycling_industry: 1, policy_signal: 2, confidence: low}
+  IT: {battery_industry: 3, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  LT: {battery_industry: 2, ev_market: 3, recycling_industry: 2, policy_signal: 2, confidence: low}
+  LU: {battery_industry: 0, ev_market: 3, recycling_industry: 1, policy_signal: 2, confidence: low}
+  LV: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 2, confidence: low}
+  MT: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 1, confidence: low}
+  NL: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  PL: {battery_industry: 5, ev_market: 4, recycling_industry: 4, policy_signal: 3, confidence: high, note: "LG Energy Solution Wrocław + Umicore Nysa（正极材料）"}
+  PT: {battery_industry: 1, ev_market: 3, recycling_industry: 2, policy_signal: 2, confidence: low}
+  RO: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 2, confidence: low}
+  SE: {battery_industry: 4, ev_market: 5, recycling_industry: 5, policy_signal: 5, confidence: high, note: "Northvolt 生态 + 生产者责任体系成熟"}
+  SI: {battery_industry: 1, ev_market: 3, recycling_industry: 2, policy_signal: 2, confidence: low}
+  SK: {battery_industry: 4, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: medium, note: "Gotion InoBat（规划）；NIM 均为泛废物层"}
+
+us_states:
+  US-AL: {battery_industry: 2, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-AK: {battery_industry: 0, ev_market: 1, recycling_industry: 1, policy_signal: 1, confidence: low}
+  US-AZ: {battery_industry: 4, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: medium}
+  US-AR: {battery_industry: 2, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-CA: {battery_industry: 4, ev_market: 5, recycling_industry: 5, policy_signal: 5, confidence: high, note: "AB 2440 责任电池回收 + CalRecycle（浏览器通道已有）"}
+  US-CO: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 5, confidence: high, note: "电池 EPR 立法州（registry 标注）"}
+  US-CT: {battery_industry: 1, ev_market: 4, recycling_industry: 2, policy_signal: 2, confidence: low}
+  US-DC: {battery_industry: 0, ev_market: 3, recycling_industry: 1, policy_signal: 3, confidence: medium, note: "联邦特区（政策信号来源；无州法体系，仅作对照）"}
+  US-DE: {battery_industry: 1, ev_market: 3, recycling_industry: 2, policy_signal: 2, confidence: low}
+  US-FL: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 2, confidence: low}
+  US-GA: {battery_industry: 5, ev_market: 3, recycling_industry: 3, policy_signal: 3, confidence: high, note: "SK On/Hyundai 电池制造集群"}
+  US-HI: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 2, confidence: low}
+  US-ID: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-IL: {battery_industry: 3, ev_market: 4, recycling_industry: 4, policy_signal: 4, confidence: medium, note: "registry 标注已知电池管理法"}
+  US-IN: {battery_industry: 4, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: medium}
+  US-IA: {battery_industry: 2, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-KS: {battery_industry: 2, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-KY: {battery_industry: 5, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: high, note: "Ford BlueOval SK 电池园区"}
+  US-LA: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-ME: {battery_industry: 1, ev_market: 2, recycling_industry: 3, policy_signal: 5, confidence: high, note: "电池 EPR 法州（registry 标注）"}
+  US-MD: {battery_industry: 1, ev_market: 4, recycling_industry: 2, policy_signal: 2, confidence: low}
+  US-MA: {battery_industry: 1, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  US-MI: {battery_industry: 5, ev_market: 4, recycling_industry: 4, policy_signal: 4, confidence: high, note: "Ford/GM 电池制造 + 回收产业；门户 403（hard case）"}
+  US-MN: {battery_industry: 2, ev_market: 3, recycling_industry: 4, policy_signal: 5, confidence: high, note: "电池 EPR 法州（registry 标注）+ MPCA 通道可达"}
+  US-MS: {battery_industry: 2, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-MO: {battery_industry: 2, ev_market: 3, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-MT: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-NE: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-NV: {battery_industry: 4, ev_market: 3, recycling_industry: 4, policy_signal: 3, confidence: high, note: "Tesla Giga Nevada + Redwood Materials"}
+  US-NH: {battery_industry: 0, ev_market: 3, recycling_industry: 1, policy_signal: 2, confidence: low}
+  US-NJ: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 2, confidence: low}
+  US-NM: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 2, confidence: low}
+  US-NY: {battery_industry: 3, ev_market: 4, recycling_industry: 4, policy_signal: 3, confidence: medium}
+  US-NC: {battery_industry: 3, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: medium}
+  US-ND: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 1, confidence: low}
+  US-OH: {battery_industry: 4, ev_market: 3, recycling_industry: 4, policy_signal: 3, confidence: medium}
+  US-OK: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-OR: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium}
+  US-PA: {battery_industry: 2, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: low}
+  US-RI: {battery_industry: 0, ev_market: 3, recycling_industry: 1, policy_signal: 2, confidence: low}
+  US-SC: {battery_industry: 4, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: medium}
+  US-SD: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 1, confidence: low}
+  US-TN: {battery_industry: 5, ev_market: 3, recycling_industry: 4, policy_signal: 2, confidence: high, note: "LGES Clarksville + Ford BlueOval City"}
+  US-TX: {battery_industry: 4, ev_market: 4, recycling_industry: 3, policy_signal: 3, confidence: medium, note: "Tesla 总部 + 电池产业带"}
+  US-UT: {battery_industry: 2, ev_market: 3, recycling_industry: 2, policy_signal: 2, confidence: low}
+  US-VT: {battery_industry: 0, ev_market: 3, recycling_industry: 2, policy_signal: 4, confidence: medium, note: "主电池 stewardship 先行州（待 Step 4 核实）"}
+  US-VA: {battery_industry: 2, ev_market: 4, recycling_industry: 3, policy_signal: 2, confidence: low}
+  US-WA: {battery_industry: 2, ev_market: 4, recycling_industry: 4, policy_signal: 4, confidence: medium, note: "电池 stewardship 政策活跃（待 Step 4 核实）；Ecology/RCW 通道可达"}
+  US-WV: {battery_industry: 1, ev_market: 2, recycling_industry: 2, policy_signal: 1, confidence: low}
+  US-WI: {battery_industry: 2, ev_market: 3, recycling_industry: 3, policy_signal: 2, confidence: low}
+  US-WY: {battery_industry: 0, ev_market: 2, recycling_industry: 1, policy_signal: 1, confidence: low}
+
+#: 多样性权重（legal_system_diversity 维度）：与已接入参考集（DE/NL/ES/FR）差异越大越高
+diversity_scores:
+  EU: {DE: 0.0, NL: 0.0, ES: 0.0, FR: 0.0, BE: 1.0, SE: 0.8, FI: 0.8, EE: 1.0,
+       HU: 0.8, PL: 0.6, CZ: 0.5, SK: 0.5, SI: 0.6, HR: 0.6, BG: 0.6, RO: 0.6,
+       LT: 0.7, LV: 0.7, GR: 0.7, CY: 0.8, MT: 0.7, IT: 0.5, PT: 0.4, AT: 0.3,
+       DK: 0.6, LU: 0.3, IE: 0.4}
+  US: {_default: 0.3}
+
+#: 候选探测端点（第二轮带重试）；EU 一国一入口、US 每州立法入口
+probe_targets:
+  EU:
+    AT: "https://www.ris.bka.gv.at/"
+    BE: "https://www.ejustice.just.fgov.be/cgi_loi/loi_a.pl"
+    CY: "http://www.cylaw.org/"
+    EE: "https://www.riigiteataja.ee/"
+    FI: "https://www.finlex.fi/fi/"
+    HU: "https://njt.hu/"
+    IT: "https://www.normattiva.it/"
+    PL: "https://isap.sejm.gov.pl/isap.nsf/"
+    SE: "https://rkrattsbaser.gov.se/sfst?bet=2022:1278"
+    DK: "https://www.retsinformation.dk/"
+    HR: "https://narodne-novine.nn.hr/"
+    LV: "https://likumi.lv/"
+    GR: "https://www.et.gr/"
+    SI: "https://pisrs.si/"
+    SK: "https://www.slov-lex.sk/"
+    RO: "https://monitoruloficial.ro/"
+    LT: "https://e-seimas.lrs.lt/portal/"
+    BG: "https://dv.parliament.bg/"
+    IE: "https://www.irishstatutebook.ie/"
+    MT: "https://legislation.mt/"
+    PT: "https://diariodarepublica.pt/dr/home"
+    LU: "https://legilux.public.lu/"
+  US:
+    US-CA: "https://leginfo.legislature.ca.gov/"
+    US-CO: "https://leg.colorado.gov/"
+    US-ME: "https://legislature.maine.gov/"
+    US-MN: "https://www.revisor.mn.gov/"
+    US-WA: "https://app.leg.wa.gov/rcw/"
+    US-MI: "https://www.legislature.mi.gov/"
+    US-GA: "https://www.legis.ga.gov/"
+    US-TX: "https://capitol.texas.gov/"
+    US-TN: "https://www.capitol.tn.gov/"
+    US-NV: "https://www.leg.state.nv.us/"
+    US-OH: "https://www.legislature.ohio.gov/"
+    US-KY: "https://apps.legislature.ky.gov/law/statutes/"
+    US-IL: "https://www.ilga.gov/"
+    US-NY: "https://www.nysenate.gov/"
+    US-AZ: "https://www.azleg.gov/"
+    US-IN: "https://iga.in.gov/laws/"
+    US-SC: "https://www.scstatehouse.gov/code/statmast.php"
+    US-NC: "https://www.ncleg.gov/Laws/GeneralStatutes"
+    US-OR: "https://www.oregonlegislature.gov/bills_laws/ors/"
+    US-VT: "https://legislature.vermont.gov/statutes/"
