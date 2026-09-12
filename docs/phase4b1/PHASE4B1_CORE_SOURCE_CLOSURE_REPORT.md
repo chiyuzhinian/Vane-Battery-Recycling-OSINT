@@ -275,15 +275,18 @@ app/ 24 ｜ tests/ 28 ｜ scripts/ 16 ｜ sources/ 5 ｜ docs/ 10
 
 ---
 
-## 15. Commits（Step 0–10，共 12 个）
+## 15. Commits（Step 0–10，共 13 个）
 
 ```
 1d0e69d（基线·Phase 4A）
 +f2cde47 Step 0 计划 ｜ 3a23db6 Step 1 矩阵+探测 ｜ 5680ca5 Step 2 身份+别名
 +6cc12d8 Step 3 eCFR ｜ aec195a Step 4 USC/PL ｜ f0fed8a Step 5 CBP/BIS
 +c412497 Step 6 Basel/OECD/标准 ｜ ffc34ee Step 7 家族关闭 ｜ f8bfc0b Step 8 精度 1.0
-+bba4b31 Step 9 A1 搜证 ｜ <Step10a> 轮次/scope/黑粉工程 ｜ <本提交> Step 10 收尾+报告
++bba4b31 Step 9 A1 搜证 ｜ c5201d4 Step 10a 轮次/scope/黑粉工程 ｜ 278db2b Step 10 收尾+报告
++（本次）§15 哈希同步 —— 仅文档变更，无行为变更
 ```
+
+> 截至 `278db2b` 共 **12 个功能提交**（Step 0–10）；本次为第 13 个，仅把上表哈希写入本报告。
 
 ---
 
