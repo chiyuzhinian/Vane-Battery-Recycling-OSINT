@@ -223,15 +223,17 @@ CASES = [
     (
         # 实测案例：52025XC00214（委员会指南——便携/LMT 电池可拆卸性）。
         # 对象是便携类（边界外），但它是 2023/1542 的官方适用指南。
-        # 直接排除会让"依法适用政策文件"整类静默丢失 → 改判待人工。
-        "电池法适用指南：对象为便携类但引电池法（待人工而非排除）", "review",
+        # ⭐ 用户裁决（2026-09-12）：「按照中国清单为准 我可能看摘要误判了」
+        #    —— 中国清单含「依法适用政策文件」类（指南/公告/技术政策），
+        #    本指南即其欧盟对应物 → **应收**（0.75，非自动 0.9）。
+        "电池法适用指南：对象为便携类但引电池法（按中国清单应收）", "relevant",
         "Commission Notice – Commission guidelines to facilitate the "
         "harmonised application of provisions on the removability and "
         "replaceability of portable batteries and LMT batteries in "
         "Regulation (EU) 2023/1542",
         "These guidelines clarify the application of the removability and "
         "replaceability requirements.",
-        "对象边界外的法规适用文件 —— 不静默排除，交用户裁决",
+        "适用文件类 —— 中国清单「依法适用政策文件」的欧盟对应物",
     ),
     (
         # 实测案例：52025SC0501（中小企业简化包 SWD）。

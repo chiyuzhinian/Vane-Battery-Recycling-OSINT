@@ -61,6 +61,17 @@ SOURCE_COUNTRY: dict[str, str] = {
     "browser_calrecycle": "US-CA",      # 加州 CalRecycle（负责任电池回收计划）
 }
 
+# ---- 成员国·NIM 通道（欧委会「成员国转化措施」统一索引）----
+#   ⭐ 为什么值得单列：23 个小国没有官方 XML/API 通道，逐个建连接器成本极高；
+#      而 EUR-Lex 的 NIM 页**一次覆盖全部 27 国**的转化措施索引
+#      （标题 + 公报引用 + NIM 详情页），是 27 国重扫的主入口。
+#   source_id 约定：eu_nim_{iso2小写}（如 eu_nim_be → BE）
+for _cc in ("AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI",
+            "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU",
+            "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"):
+    SOURCE_COUNTRY.setdefault(f"eu_nim_{_cc.lower()}", _cc)
+del _cc
+
 
 # ============================================================
 # 地理单元元数据（地图渲染与 UI 展示用）
@@ -85,9 +96,33 @@ class GeoUnit:
 
 GEO_UNITS: dict[str, GeoUnit] = {
     "EU":    GeoUnit("EU", "欧盟", "European Union", "supranational"),
+    # ---- 27 国（NIM 通道全量登记；原有 4 国通道继续使用）----
+    "AT":    GeoUnit("AT", "奥地利", "Austria", "country"),
+    "BE":    GeoUnit("BE", "比利时", "Belgium", "country"),
+    "BG":    GeoUnit("BG", "保加利亚", "Bulgaria", "country"),
+    "HR":    GeoUnit("HR", "克罗地亚", "Croatia", "country"),
+    "CY":    GeoUnit("CY", "塞浦路斯", "Cyprus", "country"),
+    "CZ":    GeoUnit("CZ", "捷克", "Czechia", "country"),
+    "DK":    GeoUnit("DK", "丹麦", "Denmark", "country"),
+    "EE":    GeoUnit("EE", "爱沙尼亚", "Estonia", "country"),
+    "FI":    GeoUnit("FI", "芬兰", "Finland", "country"),
     "DE":    GeoUnit("DE", "德国", "Germany", "country"),
+    "GR":    GeoUnit("GR", "希腊", "Greece", "country"),
+    "HU":    GeoUnit("HU", "匈牙利", "Hungary", "country"),
+    "IE":    GeoUnit("IE", "爱尔兰", "Ireland", "country"),
+    "IT":    GeoUnit("IT", "意大利", "Italy", "country"),
+    "LV":    GeoUnit("LV", "拉脱维亚", "Latvia", "country"),
+    "LT":    GeoUnit("LT", "立陶宛", "Lithuania", "country"),
+    "LU":    GeoUnit("LU", "卢森堡", "Luxembourg", "country"),
+    "MT":    GeoUnit("MT", "马耳他", "Malta", "country"),
     "NL":    GeoUnit("NL", "荷兰", "Netherlands", "country"),
+    "PL":    GeoUnit("PL", "波兰", "Poland", "country"),
+    "PT":    GeoUnit("PT", "葡萄牙", "Portugal", "country"),
+    "RO":    GeoUnit("RO", "罗马尼亚", "Romania", "country"),
+    "SK":    GeoUnit("SK", "斯洛伐克", "Slovakia", "country"),
+    "SI":    GeoUnit("SI", "斯洛文尼亚", "Slovenia", "country"),
     "ES":    GeoUnit("ES", "西班牙", "Spain", "country"),
+    "SE":    GeoUnit("SE", "瑞典", "Sweden", "country"),
     "FR":    GeoUnit("FR", "法国", "France", "country"),
     "US":    GeoUnit("US", "美国", "United States", "country"),
     "US-CA": GeoUnit("US-CA", "美国·加利福尼亚州", "United States · California",
@@ -99,10 +134,13 @@ GEO_UNITS: dict[str, GeoUnit] = {
 # ISO alpha-2 → 地图 GeoJSON 里的名称（世界地图数据多用英文名做 id）
 # 仅供前端匹配用；渲染时以 code 为准
 ISO_TO_MAP_NAME: dict[str, str] = {
-    "DE": "Germany",
-    "NL": "Netherlands",
-    "ES": "Spain",
-    "FR": "France",
+    "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "HR": "Croatia",
+    "CY": "Cyprus", "CZ": "Czechia", "DK": "Denmark", "EE": "Estonia",
+    "FI": "Finland", "FR": "France", "DE": "Germany", "GR": "Greece",
+    "HU": "Hungary", "IE": "Ireland", "IT": "Italy", "LV": "Latvia",
+    "LT": "Lithuania", "LU": "Luxembourg", "MT": "Malta",
+    "NL": "Netherlands", "PL": "Poland", "PT": "Portugal", "RO": "Romania",
+    "SK": "Slovakia", "SI": "Slovenia", "ES": "Spain", "SE": "Sweden",
     "US": "United States of America",
 }
 

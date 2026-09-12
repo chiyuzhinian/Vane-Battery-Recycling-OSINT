@@ -730,18 +730,16 @@ def judge_portal_policy(text: str, title: str | None = None) -> RelevanceVerdict
     in_scope = any(rx.search(title_text) for rx in _V2_IN_RE)
     off = next((m for rx in _V2_OFF_RE if (m := rx.search(title_text))), None)
     if off and not in_scope:
-        # ⚠️ 例外（2026-09-12 实测）：**《电池法规》的适用文件**是合法家族成员。
-        #    案例 52025XC00214（委员会指南——便携/LMT 电池可拆卸性）：
-        #    对象是便携类（边界外），但它是 2023/1542 的官方适用指南 ——
-        #    与中国清单的「依法适用政策文件」同类。直接排除 = 静默丢失，
-        #    改判「待人工」交用户裁决（ESPR 先例：用户自己也标了 uncertain）。
+        # ⚠️ 例外（2026-09-12 用户裁决：**按中国清单为准**）：
+        #    《电池法规》的适用文件是合法家族成员。案例 52025XC00214
+        #    （委员会指南——便携/LMT 电池可拆卸性）：对象是便携类，
+        #    但它是 2023/1542 的官方适用指南 —— 与中国清单的
+        #    「依法适用政策文件」类（公告/通知/技术政策/指南）同类，
+        #    清单**应收**。用户原话：「按照中国清单为准 我可能看摘要误判了」。
         if _V2_REGREF_RE.search(title_text):
             return RelevanceVerdict(
-                relevant=True, score=0.5,
-                hits=[f"off_scope+regref:{off.group(0)[:20]}"],
-                needs_human_review=True,
-                review_reason="对象为消费/便携类，但引用《电池法规》——"
-                              "需人工确认是否涉及退役电池处置条款",
+                relevant=True, score=0.75,
+                hits=[f"applicable-doc:{off.group(0)[:20]}"],
             )
         return RelevanceVerdict(relevant=False, score=0.0,
                                 rejected_by=f"off_scope:{off.group(0)[:24]}")
