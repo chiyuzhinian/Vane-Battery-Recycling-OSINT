@@ -29,13 +29,18 @@ _KNOWN_COLLECTORS = {
 }
 
 
-def _has_collector(source_id: str) -> bool:
+def has_collector(source_id: str) -> bool:
+    """source_id 是否有专用采集通道（连接器/浏览器/NIM 解析器）。"""
     if source_id.startswith(("eu_nim_", "browser_", "us_", "fr_", "nl_", "de_", "es_")):
         return True
     return source_id in _KNOWN_COLLECTORS
 
 
-def _live_sources() -> dict[str, int]:
+# 向后兼容的私有别名（旧调用方/测试使用）
+_has_collector = has_collector
+
+
+def evidence_counts() -> dict[str, int]:
     """source_id → 记录条数（从 outputs 快照统计）。"""
     counts: dict[str, int] = {}
     for fp in glob.glob(str(OUT / "*.jsonl")):
@@ -51,6 +56,10 @@ def _live_sources() -> dict[str, int]:
             if sid:
                 counts[sid] = counts.get(sid, 0) + 1
     return counts
+
+
+# 向后兼容的私有别名
+_live_sources = evidence_counts
 
 
 @dataclass

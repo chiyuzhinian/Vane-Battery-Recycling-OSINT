@@ -87,6 +87,7 @@ class InstrumentConfig(BaseModel):
 
 class SourceRole(BaseModel):
     role: str
+    critical: bool = False
     expected: bool = True
     sources: list[str] = Field(default_factory=list)
     status: str = "NOT_ONBOARDED"
@@ -110,6 +111,71 @@ class Jurisdiction(BaseModel):
 class RegistryConfig(BaseModel):
     version: int
     jurisdictions: list[Jurisdiction]
+
+
+# ============================================================ 官方端点注册表
+
+_CONTENT_KINDS = ("html", "json", "xml", "pdf")
+_METADATA_SOURCE_TYPES = ("OFFICIAL_PUBLISHER", "EU_OFFICIAL_REFERENCE",
+                          "JRC_REFERENCE", "OTHER_OFFICIAL_REFERENCE", "")
+
+
+class EndpointCapabilities(BaseModel):
+    enumeration: bool = False
+    metadata: bool = False
+    fulltext: bool = False
+
+
+class EndpointProbeCfg(BaseModel):
+    kind: str = "http_ping"          # http_ping | json_api | html_page | download_head
+    expect_keys: list[str] = Field(default_factory=list)
+    no_results_key: str = ""
+    timeout_s: int = 25
+
+
+class EndpointCfg(BaseModel):
+    id: str
+    official_url: str
+    official_domain: str = ""
+    content_kind: str = "html"
+    role_method: str = "page"        # api | page | sparql | bulk | download
+    capabilities: EndpointCapabilities = Field(default_factory=EndpointCapabilities)
+    metadata_source_type: str = ""   # 仅标准层使用
+    probe: EndpointProbeCfg = Field(default_factory=EndpointProbeCfg)
+    notes: str = ""
+
+    @field_validator("content_kind")
+    @classmethod
+    def _kind_ok(cls, v: str) -> str:
+        if v not in _CONTENT_KINDS:
+            raise ValueError(f"content_kind 非法: {v!r}（允许 {_CONTENT_KINDS}）")
+        return v
+
+    @field_validator("metadata_source_type")
+    @classmethod
+    def _mst_ok(cls, v: str) -> str:
+        if v not in _METADATA_SOURCE_TYPES:
+            raise ValueError(f"metadata_source_type 非法: {v!r}")
+        return v
+
+
+class RoleEndpoints(BaseModel):
+    role: str
+    jurisdiction: str = ""
+    source_name: str = ""
+    official_domain: str = ""
+    status_ceiling: str = ""        # 角色状态封顶（如 STANDARDS → PARTIAL）
+    notes: str = ""
+    endpoints: list[EndpointCfg] = Field(default_factory=list)
+
+
+class EndpointsConfig(BaseModel):
+    version: int
+    defaults: dict = Field(default_factory=dict)
+    roles: list[RoleEndpoints] = Field(default_factory=list)
+
+    def by_role(self) -> dict[str, RoleEndpoints]:
+        return {r.role: r for r in self.roles}
 
 
 # ============================================================ 验收规则
@@ -173,6 +239,12 @@ def load_acceptance() -> AcceptanceConfig:
 
 
 @lru_cache(maxsize=1)
+def load_endpoints() -> EndpointsConfig:
+    return EndpointsConfig.model_validate(
+        _load_yaml(SOURCES / "source-endpoints.yaml"))
+
+
+@lru_cache(maxsize=1)
 def compiled_topics() -> dict[str, tuple[list[re.Pattern], list[re.Pattern]]]:
     """topic_id → (include_re, exclude_re)，进程内编译一次。"""
     out: dict[str, tuple[list[re.Pattern], list[re.Pattern]]] = {}
@@ -188,7 +260,8 @@ def config_status() -> dict:
     """供 audit CLI / 测试查看配置健康度。"""
     status: dict = {"ok": True, "errors": []}
     for name, fn in (("topics", load_topics), ("instruments", load_instruments),
-                     ("registry", load_registry), ("acceptance", load_acceptance)):
+                     ("registry", load_registry), ("acceptance", load_acceptance),
+                     ("endpoints", load_endpoints)):
         try:
             fn()
         except Exception as exc:  # noqa: BLE001

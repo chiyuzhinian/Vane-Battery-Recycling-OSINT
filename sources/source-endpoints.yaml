@@ -1,0 +1,500 @@
+# ============================================================
+# Source Endpoints Registry —— Source Role × 官方端点
+# ------------------------------------------------------------
+# 归属：Phase 4B-1 Step 1 ｜ 运行时：app/policy/config.py::load_endpoints()
+#                                              app/policy/source_probe.py（探测）
+#                                              scripts/audit_source_roles.py（矩阵）
+# ------------------------------------------------------------
+# 核心模型（用户口径 2026-09-12 修正）：
+#   1) endpoint_status ≠ source role status
+#      「一个入口坏了 ≠ 整个官方源不可用」
+#      → 角色状态由**全部可用端点**综合判定（见 source_access.derive_role_status）
+#   2) HTTP 403 / 500 ≠ paywalled_known
+#      只有明确付费机制证据才可记 PAYWALL_CONFIRMED；
+#      ISO 403 只能记 endpoint_status=BLOCKED + failure_type=HTTP_403
+#   3) Standards 五概念分离：
+#      metadata_available / fulltext_available / open_access_status
+#      / metadata_source_type / endpoint_status
+#      · EU OJ/JRC 引用 → metadata_source_type=EU_OFFICIAL_REFERENCE
+#        只能证明「被官方引用」，**不得**标记角色 COMPLETE（status_ceiling: PARTIAL）
+# ============================================================
+version: 1
+
+defaults:
+  timeout_s: 25
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+  parsers: [html, json, xml]        # 可解析的内容类型（pdf 未启用 → UNSUPPORTED_FORMAT）
+
+roles:
+
+  # ---------------------------------------------------------- EU 超国家
+  - role: EU_OFFICIAL_JOURNAL
+    jurisdiction: EU
+    source_name: "EU Official Journal (via EUR-Lex)"
+    official_domain: eur-lex.europa.eu
+    notes: "OJ 与 EUR-Lex 同库；经 CELEX 覆盖，无需独立连接器"
+    endpoints:
+      - id: eurlex_home
+        official_url: "https://eur-lex.europa.eu/homepage.html"
+        official_domain: eur-lex.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "OJ 电子版与 EUR-Lex 同库（CELEX 可检索 OJ 系列）"
+
+  - role: EURLEX_PRIMARY
+    jurisdiction: EU
+    source_name: "EUR-Lex 主库"
+    official_domain: eur-lex.europa.eu
+    endpoints:
+      - id: eurlex_celex_1542
+        official_url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1542"
+        official_domain: eur-lex.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "电池法本体页（锚点判定的基准样本）"
+      - id: cellar_sparql
+        official_url: "https://publications.europa.eu/webapi/rdf/sparql?query=ASK%7B%3Fs%20%3Fp%20%3Fo%7D&format=application%2Fsparql-results%2Bjson"
+        official_domain: publications.europa.eu
+        content_kind: json
+        role_method: sparql
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        probe: {kind: json_api, expect_keys: [head, boolean]}
+        notes: "Cellar 官方关系图谱（家族扩张/修订废除关系的官方证据源）"
+
+  - role: EURLEX_DELEGATED_IMPLEMENTING
+    jurisdiction: EU
+    source_name: "EUR-Lex 授权/实施法案"
+    official_domain: eur-lex.europa.eu
+    endpoints:
+      - id: eurlex_celex_606
+        official_url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0606"
+        official_domain: eur-lex.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "授权法案样本（回收效率核算方法）；类型判定须走 metadata-first"
+
+  - role: EURLEX_NIM
+    jurisdiction: EU
+    source_name: "EUR-Lex NIM 成员国转化措施索引"
+    official_domain: eur-lex.europa.eu
+    endpoints:
+      - id: eurlex_nim_1542
+        official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
+        official_domain: eur-lex.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "NIM ≠ 成员国法律全集（Phase 4A 已裁定）"
+
+  - role: MEMBER_STATE_LEGISLATION
+    jurisdiction: EU_27
+    source_name: "成员国立法（专线 4 国 + NIM 索引）"
+    official_domain: ""            # 多域名
+    notes: "本阶段冻结；扩量属 Phase 4B-2"
+    endpoints:
+      - id: de_gesetze
+        official_url: "https://www.gesetze-im-internet.de/"
+        official_domain: gesetze-im-internet.de
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: nl_bwb
+        official_url: "https://wetten.overheid.nl/"
+        official_domain: wetten.overheid.nl
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: es_boe
+        official_url: "https://www.boe.es/"
+        official_domain: boe.es
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: fr_legifrance
+        official_url: "https://www.legifrance.gouv.fr/"
+        official_domain: legifrance.gouv.fr
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+
+  - role: MEMBER_STATE_OFFICIAL_GAZETTE
+    jurisdiction: EU_27
+    source_name: "成员国官方公报"
+    notes: "公报可达性逐国验证属 Phase 4B-2"
+    endpoints:
+      - id: es_boe_diario
+        official_url: "https://www.boe.es/diario_boe/"
+        official_domain: boe.es
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: nl_officielebekendmakingen
+        official_url: "https://www.officielebekendmakingen.nl/"
+        official_domain: officielebekendmakingen.nl
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: de_bgbl
+        official_url: "https://www.bgbl.de/"
+        official_domain: bgbl.de
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+
+  - role: ENVIRONMENT_AGENCY
+    jurisdiction: EU
+    source_name: "ECHA（欧盟环境/化学品署）"
+    official_domain: echa.europa.eu
+    endpoints:
+      - id: echa_home
+        official_url: "https://echa.europa.eu/"
+        official_domain: echa.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+
+  - role: CUSTOMS_TRADE
+    jurisdiction: EU
+    source_name: "WSR 废物运输条例家族（黑粉跨境载体）"
+    official_domain: eur-lex.europa.eu
+    endpoints:
+      - id: eurlex_wsr_1157
+        official_url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1157"
+        official_domain: eur-lex.europa.eu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "TARIC 关税层未接入（P2，本阶段不设卡）"
+
+  - role: STANDARDS
+    jurisdiction: EU
+    source_name: "标准层（CEN/ISO 元数据 + EU 官方引用）"
+    status_ceiling: PARTIAL          # ★ 用户裁定：EU 官方引用 ≠ 标准库接入完成
+    notes: >
+      全文不可得时不得生成条款级证据；EU OJ/JRC 引用只能证明「被官方引用/关联」。
+      open_access_status 四值：open_fulltext / official_metadata_only /
+      paywalled_known / unavailable —— HTTP 403/500 不得推断 paywalled。
+    endpoints:
+      - id: cencenelec_home
+        official_url: "https://www.cencenelec.eu/"
+        official_domain: cencenelec.eu
+        content_kind: html
+        role_method: page
+        metadata_source_type: OFFICIAL_PUBLISHER
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "CEN/CENELEC 主站（元数据层）；标准全文多为付费"
+      - id: cencenelec_standards_portal
+        official_url: "https://standards.cencenelec.eu/"
+        official_domain: standards.cencenelec.eu
+        content_kind: html
+        role_method: page
+        metadata_source_type: OFFICIAL_PUBLISHER
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "标准门户（Oracle APEX；2026-09-12 探测为 500，记录为真实失败）"
+      - id: iso_catalogue
+        official_url: "https://www.iso.org/standards.html"
+        official_domain: iso.org
+        content_kind: html
+        role_method: page
+        metadata_source_type: OFFICIAL_PUBLISHER
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "ISO 目录（bot 防护；403 记 HTTP_403，不得推断付费墙）"
+      - id: eu_harmonised_standards_ref
+        official_url: "https://single-market-economy.ec.europa.eu/single-market/european-standards/harmonised-standards_en"
+        official_domain: single-market-economy.ec.europa.eu
+        content_kind: html
+        role_method: page
+        metadata_source_type: EU_OFFICIAL_REFERENCE
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "EU 官方调和标准引用（OJ 实施决定的入口）"
+      - id: jrc_repository
+        official_url: "https://publications.jrc.ec.europa.eu/repository/"
+        official_domain: publications.jrc.ec.europa.eu
+        content_kind: html
+        role_method: page
+        metadata_source_type: JRC_REFERENCE
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "JRC 出版物库（end-of-waste / 回收效率方法学）"
+
+  - role: BASEL
+    jurisdiction: EU
+    source_name: "Basel Convention（越境转移）"
+    official_domain: basel.int
+    endpoints:
+      - id: basel_tech_guidelines
+        official_url: "https://www.basel.int/Implementation/TechnicalMatters/DevelopmentofTechnicalGuidelines/tabid/8025/Default.aspx"
+        official_domain: basel.int
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "技术导则清单页；draft ≠ final ≠ binding"
+      - id: basel_document_download
+        official_url: "https://www.basel.int/Portals/4/download.aspx?d=UNEP-CHW.14-7-Add.1.English.pdf"
+        official_domain: basel.int
+        content_kind: pdf
+        role_method: download
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        probe: {kind: download_head}
+        notes: "官方 PDF 可下载；本阶段无 PDF 解析器 → fulltext_available=false（UNSUPPORTED_FORMAT）"
+
+  - role: OECD
+    jurisdiction: EU
+    source_name: "OECD 法律文书（跨境回收料）"
+    official_domain: legalinstruments.oecd.org
+    notes: >
+      oecd.org 主站 403 → 记 blocked_endpoints（endpoint 级失败），
+      角色级状态由 legalinstruments 子域可达性判定（入口坏了 ≠ 整个源不可用）。
+    endpoints:
+      - id: oecd_legalinstruments
+        official_url: "https://legalinstruments.oecd.org/en/instruments"
+        official_domain: legalinstruments.oecd.org
+        content_kind: html
+        role_method: page
+        metadata_source_type: OFFICIAL_PUBLISHER
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+      - id: oecd_main_waste
+        official_url: "https://www.oecd.org/env/waste/"
+        official_domain: oecd.org
+        content_kind: html
+        role_method: page
+        metadata_source_type: OFFICIAL_PUBLISHER
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "2026-09-12 探测 403（bot 防护）→ blocked endpoint（非整个角色）"
+
+  # ---------------------------------------------------------- US 联邦
+  - role: FEDERAL_REGISTER
+    jurisdiction: US
+    source_name: "Federal Register API"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_documents_api
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results], no_results_key: results}
+        notes: "无需 API Key（官方声明）；fulltext 经 html_url 获取"
+      - id: fr_single_doc_api
+        official_url: "https://www.federalregister.gov/api/v1/documents/2019-03812.json"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [document_number]}
+        notes: "身份富化通道：RIN / cfr_references / action / citation / dates"
+
+  - role: CFR_ECFR
+    jurisdiction: US
+    source_name: "eCFR（Electronic Code of Federal Regulations）"
+    official_domain: ecfr.gov
+    endpoints:
+      - id: ecfr_titles
+        official_url: "https://www.ecfr.gov/api/versioner/v1/titles.json"
+        official_domain: ecfr.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        probe: {kind: json_api, expect_keys: [titles]}
+      - id: ecfr_search
+        official_url: "https://www.ecfr.gov/api/search/v1/results?query=battery+recycling&per_page=1"
+        official_domain: ecfr.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results], no_results_key: results}
+      - id: ecfr_full_xml
+        official_url: "https://www.ecfr.gov/api/versioner/v1/full/2026-09-01/title-40.xml?part=273"
+        official_domain: ecfr.gov
+        content_kind: xml
+        role_method: api
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "2026-09-12 GET 探测 406（需 Accept 头）；Step 3 验证后启用"
+
+  - role: US_CODE
+    jurisdiction: US
+    source_name: "U.S. Code（govinfo 官方通道）"
+    official_domain: www.govinfo.gov
+    endpoints:
+      - id: govinfo_wssearch_uscode
+        official_url: "https://www.govinfo.gov/wssearch/rb/uscode"
+        official_domain: www.govinfo.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        probe: {kind: json_api, expect_keys: [books]}
+      - id: govinfo_bulk_uscode
+        official_url: "https://www.govinfo.gov/bulkdata/USCODE"
+        official_domain: www.govinfo.gov
+        content_kind: html
+        role_method: bulk
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "bulkdata 为 SPA 外壳（真实文件路径 Step 4 固定样本验证）"
+      - id: uscode_house
+        official_url: "https://uscode.house.gov/download/download.shtml"
+        official_domain: uscode.house.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "2026-09-12 探测超时 → BLOCKED endpoint（角色仍可由 govinfo 支撑）"
+
+  - role: PUBLIC_LAW
+    jurisdiction: US
+    source_name: "Public Law（govinfo 官方通道）"
+    official_domain: www.govinfo.gov
+    endpoints:
+      - id: govinfo_wssearch_plaw
+        official_url: "https://www.govinfo.gov/wssearch/rb/plaw"
+        official_domain: www.govinfo.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        probe: {kind: json_api, expect_keys: [books]}
+      - id: govinfo_bulk_plaw
+        official_url: "https://www.govinfo.gov/bulkdata/PLAW"
+        official_domain: www.govinfo.gov
+        content_kind: html
+        role_method: bulk
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+      - id: congress_api
+        official_url: "https://api.congress.gov/v3/bill?limit=1"
+        official_domain: api.congress.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        probe: {kind: json_api, expect_keys: [bills]}
+        notes: "403 已知（缺 API Key）→ API_KEY_REQUIRED/BLOCKED；官方替代=govinfo"
+
+  - role: AGENCY_RULES
+    jurisdiction: US
+    source_name: "联邦机构规则（经 FR）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_rules_api
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Btype%5D%5B%5D=RULE&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: EPA
+    jurisdiction: US
+    source_name: "US EPA（经 FR 机构通道）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_epa
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=environmental-protection-agency&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: PHMSA
+    jurisdiction: US
+    source_name: "PHMSA（经 FR 机构通道）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_phmsa
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=pipeline-and-hazardous-materials-safety-administration&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: DOE
+    jurisdiction: US
+    source_name: "US DOE（经 FR 机构通道）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_doe
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=energy-department&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: IRS
+    jurisdiction: US
+    source_name: "US IRS（经 FR 机构通道）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_irs
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=internal-revenue-service&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: BIS
+    jurisdiction: US
+    source_name: "BIS（工业与安全局：出口管制/关键矿产）"
+    official_domain: bis.doc.gov
+    endpoints:
+      - id: fr_agency_bis
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=industry-and-security-bureau&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+      - id: bis_ear_page
+        official_url: "https://www.bis.doc.gov/index.php/regulations/export-administration-regulations-ear"
+        official_domain: bis.doc.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+
+  - role: CBP
+    jurisdiction: US
+    source_name: "CBP（海关：裁定/归类/进出口）"
+    official_domain: rulings.cbp.gov
+    endpoints:
+      - id: cross_search
+        official_url: "https://rulings.cbp.gov/search?term=battery"
+        official_domain: rulings.cbp.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "CROSS 检索页；裁定详情解析 Step 5 验证（ruling ≠ regulation）"
+      - id: fr_agency_cbp
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=u-s-customs-and-border-protection&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  - role: STATE_DEPARTMENT
+    jurisdiction: US
+    source_name: "US State Department（经 FR 机构通道）"
+    official_domain: federalregister.gov
+    endpoints:
+      - id: fr_agency_state
+        official_url: "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=state-department&per_page=1"
+        official_domain: federalregister.gov
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        probe: {kind: json_api, expect_keys: [results]}
+
+  # ---------------------------------------------------------- US 州级（本阶段仅 CA 挂接）
+  - role: STATE_ENVIRONMENT_AGENCY
+    jurisdiction: US_STATES
+    source_name: "州环境署（当前仅 CA CalRecycle）"
+    official_domain: calrecycle.ca.gov
+    notes: "50 州全面接入属 Phase 4B-2；本阶段保持既有单通道"
+    endpoints:
+      - id: calrecycle_home
+        official_url: "https://calrecycle.ca.gov/"
+        official_domain: calrecycle.ca.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}

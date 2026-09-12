@@ -21,16 +21,19 @@ jurisdictions:
     level: supranational
     source_roles:
       - role: EU_OFFICIAL_JOURNAL
+        critical: true
         expected: true
         sources: [eu_eurlex_battery_reg]      # 经 EUR-Lex 间接覆盖（OJ 同库）
         status: CONNECTED
         note: OJ 与 EUR-Lex 同源；无需独立连接器
       - role: EURLEX_PRIMARY
+        critical: true
         expected: true
         sources: [eu_eurlex_battery_reg]
         status: COMPLETE
         note: ~46 部核心法案精确跟踪 + 锚点发现闭环
       - role: EURLEX_DELEGATED_IMPLEMENTING
+        critical: true
         expected: true
         sources: [eu_eurlex_battery_reg]
         status: CONNECTED
@@ -51,6 +54,7 @@ jurisdictions:
         status: PARTIAL
         note: 德/荷/西/法有公报渠道；其余 23 国仅 NIM 元数据（含公报引用）
       - role: ENVIRONMENT_AGENCY
+        critical: true
         expected: true
         sources: [browser_echa]
         status: PARTIAL
@@ -61,21 +65,25 @@ jurisdictions:
         status: NOT_ONBOARDED
         gap_reason: 欧盟层面由成员国主管（运输规则在 EU 由 WSR/ADR 覆盖）
       - role: CUSTOMS_TRADE
+        critical: true
         expected: true
         sources: [eu_eurlex_waste_shipment]
         status: CONNECTED
         note: WSR 2024/1157 家族=黑粉跨境载体；TARIC 未单独接入
       - role: STANDARDS
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
         gap_reason: CEN/CENELEC 标准未接入（EN 标准是回收效率核算的引用层）— P1
       - role: BASEL
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
         gap_reason: 巴塞尔公约文本/会议文件未接入 — P1（用户待确认方向）
       - role: OECD
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
@@ -129,35 +137,42 @@ jurisdictions:
     level: federal
     source_roles:
       - role: PUBLIC_LAW
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
         gap_reason: congress.gov 403（缺 API Key）；联邦层面由 FR/CFR 间接覆盖 — P1
       - role: US_CODE
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
         gap_reason: uscode.house.gov 未接入 — P1
       - role: FEDERAL_REGISTER
+        critical: true
         expected: true
         sources: [us_federal_register]
         status: COMPLETE
         note: 8 簇×机构 37 组合 + 边界短语扫描 + "black mass" 精确短语
       - role: CFR_ECFR
+        critical: true
         expected: true
         sources: [us_federal_register]
         status: PARTIAL
         note: FR 记录含 CFR 引用；eCFR 结构化抓取未接入 — P1
       - role: AGENCY_RULES
+        critical: true
         expected: true
         sources: [us_federal_register]
         status: CONNECTED
         note: 20+ 机构经 FR 覆盖
       - role: EPA
+        critical: true
         expected: true
         sources: [us_federal_register, browser_calrecycle]
         status: CONNECTED
       - role: PHMSA
+        critical: true
         expected: true
         sources: [us_federal_register, browser_phmsa]
         status: COMPLETE
@@ -171,11 +186,13 @@ jurisdictions:
         sources: [us_federal_register]
         status: CONNECTED
       - role: BIS
+        critical: true
         expected: true
         sources: [us_federal_register]
         status: PARTIAL
         note: BIS 记录经 FR 覆盖；出口管制专项未建 — 用户待确认方向
       - role: CBP
+        critical: true
         expected: true
         sources: []
         status: NOT_ONBOARDED
