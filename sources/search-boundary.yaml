@@ -288,3 +288,44 @@ coverage_rules:
     schedule: weekly
     channel: dingtalk
     include: [summary_matrix, top_gaps, root_cause, suggested_actions]
+
+# ============================================================
+# 【Phase 4A·v2】政策语料搜索边界（新模型 —— 取代上方 36 个月/双语言/固定网格）
+# ------------------------------------------------------------
+# 为什么单列 v2：上方 09-10 模型对**政策语料**有三处根本错误：
+#   1. policy 36 个月窗口 —— 当前有效法规可能 20 年前发布（ELV 2000/53）；
+#   2. languages [zh,en] —— 把检索语言与分析语言混为一谈
+#      （成员国法律原文是母语：只搜英文=系统性漏采，NIM 教训）；
+#   3. source×topic 固定网格 —— 应按 Source Role 验收（见 jurisdiction-registry.yaml）。
+# 运行时消费者：app/policy/config.py::load_boundary_v2()
+# ============================================================
+policy_v2:
+  version: 1
+
+  time_model:
+    current_corpus:
+      description: 所有**当前有效**法规（不限发布时间）
+      selector: "status in {effective, not_yet_effective, amended}"
+    historical_lineage:
+      description: 与现行法规存在 repeal/replace/amend/predecessor 关系的历史法规
+      selector: "status in {repealed, replaced} or relation in {REPEALS, REPLACED_BY, AMENDED_BY}"
+    forward_tracker:
+      description: proposal / draft / consultation / planned standard
+      selector: "status in {proposal, draft} or instrument in {proposal, draft, consultation}"
+
+  language_model:
+    retrieval_language:
+      native_language_required: true
+      note: "母语原文 = 检索真值；任何以'英文找不到'证明'不存在'的推断无效"
+    analysis_language: [en, zh]
+    note: "en/zh = 翻译与分析层；可见于展示与报告，不得反向约束检索"
+
+  acceptance_ref:
+    rules: sources/policy-acceptance-rules.yaml
+    topics: sources/regulatory-topics.yaml
+    instruments: sources/instrument-types.yaml
+    jurisdiction: sources/jurisdiction-registry.yaml
+
+  saturation_ref:
+    gate_module: app/policy/saturation.py
+    novelty_gate: "novel_rate < 2% 连续 >= 2 轮（保留原闸门，仅作为一个条件）"

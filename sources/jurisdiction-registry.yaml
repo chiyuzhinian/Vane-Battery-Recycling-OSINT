@@ -1,0 +1,267 @@
+# ============================================================
+# Jurisdiction Source Universe —— 管辖区 × 源角色 覆盖注册表
+# ------------------------------------------------------------
+# 归属：Phase 4A ｜ 运行时：app/policy/source_universe.py
+# 核心原则：**"URL 存在" ≠ source coverage complete**
+#   每个管辖区必须逐 **Source Role** 回答：
+#     expected / configured / reachable / collector_available
+#     / last_verified / status / gap_reason
+# 状态机：NOT_ONBOARDED → DISCOVERED → ACCESSIBLE → CONNECTED
+#         → PARTIAL → COMPLETE ｜ BLOCKED
+# ============================================================
+version: 1
+
+# ------------------------------------------------------------
+# 一、欧盟（超国家）
+# ------------------------------------------------------------
+jurisdictions:
+
+  - code: EU
+    name_zh: 欧盟
+    level: supranational
+    source_roles:
+      - role: EU_OFFICIAL_JOURNAL
+        expected: true
+        sources: [eu_eurlex_battery_reg]      # 经 EUR-Lex 间接覆盖（OJ 同库）
+        status: CONNECTED
+        note: OJ 与 EUR-Lex 同源；无需独立连接器
+      - role: EURLEX_PRIMARY
+        expected: true
+        sources: [eu_eurlex_battery_reg]
+        status: COMPLETE
+        note: ~46 部核心法案精确跟踪 + 锚点发现闭环
+      - role: EURLEX_DELEGATED_IMPLEMENTING
+        expected: true
+        sources: [eu_eurlex_battery_reg]
+        status: CONNECTED
+        note: supplementing/implementing 判定 0e + 锚点扫描覆盖
+      - role: EURLEX_NIM
+        expected: true
+        sources: [eu_nim]
+        status: CONNECTED
+        note: NIM 索引 27 国 566 条→396 落盘；⚠️ NIM ≠ 成员国法律全集（见 SG 检查）
+      - role: MEMBER_STATE_LEGISLATION
+        expected: true
+        sources: [de_gesetze, nl_bwb, es_boe, fr_dila, eu_nim]
+        status: PARTIAL
+        note: 专线 4 国（DE/NL/ES/FR）+ NIM 全 27 国索引
+      - role: MEMBER_STATE_OFFICIAL_GAZETTE
+        expected: true
+        sources: [nl_bwb, es_boe, fr_dila]
+        status: PARTIAL
+        note: 德/荷/西/法有公报渠道；其余 23 国仅 NIM 元数据（含公报引用）
+      - role: ENVIRONMENT_AGENCY
+        expected: true
+        sources: [browser_echa]
+        status: PARTIAL
+        note: ECHA 浏览器层；各国环保署未逐一接入
+      - role: TRANSPORT_AUTHORITY
+        expected: false
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: 欧盟层面由成员国主管（运输规则在 EU 由 WSR/ADR 覆盖）
+      - role: CUSTOMS_TRADE
+        expected: true
+        sources: [eu_eurlex_waste_shipment]
+        status: CONNECTED
+        note: WSR 2024/1157 家族=黑粉跨境载体；TARIC 未单独接入
+      - role: STANDARDS
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: CEN/CENELEC 标准未接入（EN 标准是回收效率核算的引用层）— P1
+      - role: BASEL
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: 巴塞尔公约文本/会议文件未接入 — P1（用户待确认方向）
+      - role: OECD
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: OECD 回收料跨境规则未接入 — P1
+
+  # ------------------------------------------------------------
+  # 二、欧盟 27 成员国（schema 统一 + 每国状态）
+  # ------------------------------------------------------------
+  - code: EU_27
+    name_zh: 欧盟 27 成员国
+    level: member_states
+    role_schema: [MEMBER_STATE_LEGISLATION, MEMBER_STATE_OFFICIAL_GAZETTE,
+                  ENVIRONMENT_AGENCY, TRANSPORT_AUTHORITY, CUSTOMS_TRADE, STANDARDS]
+    note: >
+      NIM 通道提供全 27 国转化措施索引（标题+公报引用）；
+      MEMBER_STATE_LEGISLATION 的完整合格判定 = NIM 索引 + 官方公报可达性。
+    countries:
+      - {code: AT, name: 奥地利, status: PARTIAL, sources: [eu_nim_at], note: NIM 8 条}
+      - {code: BE, name: 比利时, status: PARTIAL, sources: [eu_nim_be], note: NIM 34 条（联邦+大区多层）}
+      - {code: BG, name: 保加利亚, status: PARTIAL, sources: [eu_nim_bg], note: NIM 11 条}
+      - {code: CY, name: 塞浦路斯, status: PARTIAL, sources: [eu_nim_cy], note: NIM 2 条}
+      - {code: CZ, name: 捷克, status: PARTIAL, sources: [eu_nim_cz], note: NIM 29 条；用户抽检✅}
+      - {code: DE, name: 德国, status: CONNECTED, sources: [de_gesetze, eu_nim_de], note: 官方 XML 专线（Altfahrzeug-Verordnung/BattDG 已验证）}
+      - {code: DK, name: 丹麦, status: PARTIAL, sources: [eu_nim_dk], note: NIM 17 条（bilskrotning 系列）}
+      - {code: EE, name: 爱沙尼亚, status: PARTIAL, sources: [eu_nim_ee], note: NIM 15 条}
+      - {code: ES, name: 西班牙, status: CONNECTED, sources: [es_boe, eu_nim_es], note: BOE 官方 API 专线}
+      - {code: FI, name: 芬兰, status: PARTIAL, sources: [eu_nim_fi], note: NIM 27 条（含 Åland·瑞典语）}
+      - {code: FR, name: 法国, status: CONNECTED, sources: [fr_dila, fr_ademe_opendata, eu_nim_fr], note: DILA 日增量 + ADEME 数据集}
+      - {code: GR, name: 希腊, status: PARTIAL, sources: [eu_nim_gr], note: NIM 4 条（含编号式标题转人工）}
+      - {code: HR, name: 克罗地亚, status: PARTIAL, sources: [eu_nim_hr], note: NIM 22 条}
+      - {code: HU, name: 匈牙利, status: PARTIAL, sources: [eu_nim_hu], note: NIM 27 条}
+      - {code: IE, name: 爱尔兰, status: PARTIAL, sources: [eu_nim_ie], note: NIM 6 条}
+      - {code: IT, name: 意大利, status: PARTIAL, sources: [eu_nim_it], note: NIM 6 条}
+      - {code: LT, name: 立陶宛, status: PARTIAL, sources: [eu_nim_lt], note: NIM 27 条}
+      - {code: LU, name: 卢森堡, status: PARTIAL, sources: [eu_nim_lu], note: NIM 5 条}
+      - {code: LV, name: 拉脱维亚, status: PARTIAL, sources: [eu_nim_lv], note: NIM 14 条}
+      - {code: MT, name: 马耳他, status: PARTIAL, sources: [eu_nim_mt], note: NIM 6 条}
+      - {code: NL, name: 荷兰, status: CONNECTED, sources: [nl_bwb, browser_netherlands, eu_nim_nl], note: KOOP BWB 官方 XML 专线}
+      - {code: PL, name: 波兰, status: PARTIAL, sources: [eu_nim_pl], note: NIM 24 条}
+      - {code: PT, name: 葡萄牙, status: PARTIAL, sources: [eu_nim_pt], note: NIM 2 条}
+      - {code: RO, name: 罗马尼亚, status: PARTIAL, sources: [eu_nim_ro], note: NIM 12 条}
+      - {code: SE, name: 瑞典, status: PARTIAL, sources: [eu_nim_se], note: NIM 15 条（bilskrotning 系列）}
+      - {code: SI, name: 斯洛文尼亚, status: PARTIAL, sources: [eu_nim_si], note: NIM 15 条}
+      - {code: SK, name: 斯洛伐克, status: PARTIAL, sources: [eu_nim_sk], note: NIM 12 条（均为泛废物层，无电池专条）}
+
+  # ------------------------------------------------------------
+  # 三、美国联邦
+  # ------------------------------------------------------------
+  - code: US
+    name_zh: 美国联邦
+    level: federal
+    source_roles:
+      - role: PUBLIC_LAW
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: congress.gov 403（缺 API Key）；联邦层面由 FR/CFR 间接覆盖 — P1
+      - role: US_CODE
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: uscode.house.gov 未接入 — P1
+      - role: FEDERAL_REGISTER
+        expected: true
+        sources: [us_federal_register]
+        status: COMPLETE
+        note: 8 簇×机构 37 组合 + 边界短语扫描 + "black mass" 精确短语
+      - role: CFR_ECFR
+        expected: true
+        sources: [us_federal_register]
+        status: PARTIAL
+        note: FR 记录含 CFR 引用；eCFR 结构化抓取未接入 — P1
+      - role: AGENCY_RULES
+        expected: true
+        sources: [us_federal_register]
+        status: CONNECTED
+        note: 20+ 机构经 FR 覆盖
+      - role: EPA
+        expected: true
+        sources: [us_federal_register, browser_calrecycle]
+        status: CONNECTED
+      - role: PHMSA
+        expected: true
+        sources: [us_federal_register, browser_phmsa]
+        status: COMPLETE
+        note: 用户标准样本所在渠道（通告+IFR 均入库）
+      - role: DOE
+        expected: true
+        sources: [us_federal_register]
+        status: CONNECTED
+      - role: IRS
+        expected: true
+        sources: [us_federal_register]
+        status: CONNECTED
+      - role: BIS
+        expected: true
+        sources: [us_federal_register]
+        status: PARTIAL
+        note: BIS 记录经 FR 覆盖；出口管制专项未建 — 用户待确认方向
+      - role: CBP
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: 海关归类/贸易救济内容未专项接入 — P2
+      - role: STATE_DEPARTMENT
+        expected: true
+        sources: [us_federal_register]
+        status: CONNECTED
+      - role: STATE_LEGISLATION
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: 50 州立法库未接入 — 见 us_states（用户待确认是否启动）
+      - role: STATE_ADMIN_RULES
+        expected: true
+        sources: []
+        status: NOT_ONBOARDED
+        gap_reason: 州行政法规未接入 — 见 us_states
+      - role: STATE_ENVIRONMENT_AGENCY
+        expected: true
+        sources: [browser_calrecycle]
+        status: PARTIAL
+        note: 仅加州 CalRecycle 一条通道
+      - role: STATE_EPR_PROGRAM
+        expected: true
+        sources: [browser_calrecycle]
+        status: PARTIAL
+        note: 加州负责任电池回收计划（AB 2440）已收
+
+  # ------------------------------------------------------------
+  # 四、美国 50 州 + DC（schema + 逐州状态；本阶段**只建schema**）
+  # ------------------------------------------------------------
+  - code: US_STATES
+    name_zh: 美国州级
+    level: states
+    role_schema: [STATE_LEGISLATION, STATE_ADMIN_RULES, STATE_ENVIRONMENT_AGENCY, STATE_EPR_PROGRAM]
+    note: 本阶段只建 schema 与状态机；除加州外均为 NOT_ONBOARDED（用户战略待定）
+    states:
+      - {code: US-CA, name: 加利福尼亚, status: PARTIAL, sources: [browser_calrecycle], note: AB 2440 负责任电池回收 + SB 212 体系}
+      - {code: US-AL, name: 阿拉巴马, status: NOT_ONBOARDED}
+      - {code: US-AK, name: 阿拉斯加, status: NOT_ONBOARDED}
+      - {code: US-AZ, name: 亚利桑那, status: NOT_ONBOARDED}
+      - {code: US-AR, name: 阿肯色, status: NOT_ONBOARDED}
+      - {code: US-CO, name: 科罗拉多, status: NOT_ONBOARDED, note: "已知存在电池 EPR 立法（待采集）"}
+      - {code: US-CT, name: 康涅狄格, status: NOT_ONBOARDED}
+      - {code: US-DE, name: 特拉华, status: NOT_ONBOARDED}
+      - {code: US-FL, name: 佛罗里达, status: NOT_ONBOARDED}
+      - {code: US-GA, name: 佐治亚, status: NOT_ONBOARDED}
+      - {code: US-HI, name: 夏威夷, status: NOT_ONBOARDED}
+      - {code: US-ID, name: 爱达荷, status: NOT_ONBOARDED}
+      - {code: US-IL, name: 伊利诺伊, status: NOT_ONBOARDED, note: "已知存在电池管理法（待采集）"}
+      - {code: US-IN, name: 印第安纳, status: NOT_ONBOARDED}
+      - {code: US-IA, name: 艾奥瓦, status: NOT_ONBOARDED}
+      - {code: US-KS, name: 堪萨斯, status: NOT_ONBOARDED}
+      - {code: US-KY, name: 肯塔基, status: NOT_ONBOARDED}
+      - {code: US-LA, name: 路易斯安那, status: NOT_ONBOARDED}
+      - {code: US-ME, name: 缅因, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-MD, name: 马里兰, status: NOT_ONBOARDED}
+      - {code: US-MA, name: 马萨诸塞, status: NOT_ONBOARDED}
+      - {code: US-MI, name: 密歇根, status: NOT_ONBOARDED}
+      - {code: US-MN, name: 明尼苏达, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-MS, name: 密西西比, status: NOT_ONBOARDED}
+      - {code: US-MO, name: 密苏里, status: NOT_ONBOARDED}
+      - {code: US-MT, name: 蒙大拿, status: NOT_ONBOARDED}
+      - {code: US-NE, name: 内布拉斯加, status: NOT_ONBOARDED}
+      - {code: US-NV, name: 内华达, status: NOT_ONBOARDED}
+      - {code: US-NH, name: 新罕布什尔, status: NOT_ONBOARDED}
+      - {code: US-NJ, name: 新泽西, status: NOT_ONBOARDED}
+      - {code: US-NM, name: 新墨西哥, status: NOT_ONBOARDED}
+      - {code: US-NY, name: 纽约, status: NOT_ONBOARDED}
+      - {code: US-NC, name: 北卡罗来纳, status: NOT_ONBOARDED}
+      - {code: US-ND, name: 北达科他, status: NOT_ONBOARDED}
+      - {code: US-OH, name: 俄亥俄, status: NOT_ONBOARDED}
+      - {code: US-OK, name: 俄克拉何马, status: NOT_ONBOARDED}
+      - {code: US-OR, name: 俄勒冈, status: NOT_ONBOARDED}
+      - {code: US-PA, name: 宾夕法尼亚, status: NOT_ONBOARDED}
+      - {code: US-RI, name: 罗得岛, status: NOT_ONBOARDED}
+      - {code: US-SC, name: 南卡罗来纳, status: NOT_ONBOARDED}
+      - {code: US-SD, name: 南达科他, status: NOT_ONBOARDED}
+      - {code: US-TN, name: 田纳西, status: NOT_ONBOARDED}
+      - {code: US-TX, name: 得克萨斯, status: NOT_ONBOARDED}
+      - {code: US-UT, name: 犹他, status: NOT_ONBOARDED}
+      - {code: US-VT, name: 佛蒙特, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-VA, name: 弗吉尼亚, status: NOT_ONBOARDED}
+      - {code: US-WA, name: 华盛顿州, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-WV, name: 西弗吉尼亚, status: NOT_ONBOARDED}
+      - {code: US-WI, name: 威斯康星, status: NOT_ONBOARDED}
+      - {code: US-WY, name: 怀俄明, status: NOT_ONBOARDED}
+      - {code: US-DC, name: 哥伦比亚特区, status: NOT_ONBOARDED}

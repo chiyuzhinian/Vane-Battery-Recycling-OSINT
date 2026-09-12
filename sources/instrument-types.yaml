@@ -1,0 +1,113 @@
+# ============================================================
+# Instrument Types & Binding Force
+# ------------------------------------------------------------
+# 归属：Phase 4A ｜ 运行时：app/policy/instruments.py
+# 判例锚点：
+#   · PHMSA Safety Advisory → advisory / non_binding（不得冒充 regulation）
+#   · Information/FAQ → information_page（不得进入政策主库）
+#   · Corrigendum → 继承母法类型（corrigendum_of 关系）
+# ============================================================
+version: 1
+
+instrument_types:
+
+  - id: statute
+    name_zh: 议会立法/法律
+    binding_force: binding
+    detect_patterns: ["\\bact\\b.*\\bof\\b.*(parliament|congress)", "public\\s+law", "\\bU\\.?S\\.?C\\.?\\b"]
+
+  - id: regulation
+    name_zh: 法规（直接适用）
+    binding_force: binding
+    detect_patterns: ["\\bregulation\\s*\\(EU\\)", "\\bregulation\\b\\s*\\(EC\\)", "\\bCFR\\b"]
+
+  - id: directive
+    name_zh: 指令（需转化）
+    binding_force: binding
+    detect_patterns: ["\\bdirective\\s*\\(EU\\)", "\\bdirective\\s*\\d{4}/\\d+"]
+
+  - id: delegated_act
+    name_zh: 授权法案
+    binding_force: binding
+    detect_patterns: ["delegated\\s+regulation", "delegated\\s+directive", "delegated\\s+decision"]
+
+  - id: implementing_act
+    name_zh: 实施法案
+    binding_force: binding
+    detect_patterns: ["implementing\\s+regulation", "implementing\\s+directive", "implementing\\s+decision"]
+
+  - id: administrative_rule
+    name_zh: 部门规章/行政规则
+    binding_force: binding
+    detect_patterns: ["\\brule\\s+making", "administrative\\s+(rule|regulation)", "notice\\s+of\\s+proposed\\s+rule", "\\bfinal\\s+rule", "interim\\s+final\\s+rule"]
+
+  - id: standard
+    name_zh: 标准
+    binding_force: partially_binding   # 强制性标准按引用才强制；推荐性不强制
+    detect_patterns: ["\\bEN\\s?\\d", "\\bISO\\s?\\d", "\\bGB/?T?\\s?\\d", "\\bstandard\\b"]
+
+  - id: official_guidance
+    name_zh: 官方指南/适用文件
+    binding_force: non_binding
+    detect_patterns: ["guidelines?", "guidance", "commission\\s+notice", "practical\\s+guide"]
+
+  - id: advisory
+    name_zh: 安全通告/建议
+    binding_force: non_binding
+    detect_patterns: ["safety\\s+advisory", "advisory\\s+notice", "\\badvisory\\b"]
+
+  - id: proposal
+    name_zh: 立法提案
+    binding_force: proposal
+    detect_patterns: ["proposal\\s+for\\s+a", "\\bCOM\\(\\d{4}\\)", "\\b\\d{4}PC\\d+", "\\b520\\d{2}PC"]
+
+  - id: draft
+    name_zh: 草案
+    binding_force: proposal
+    detect_patterns: ["\\bdraft\\b"]
+
+  - id: consultation
+    name_zh: 征求意见
+    binding_force: informational
+    detect_patterns: ["consultation", "call\\s+for\\s+evidence", "request\\s+for\\s+(comments|information)"]
+
+  - id: information_page
+    name_zh: 信息页/科普
+    binding_force: informational
+    detect_patterns: ["understanding", "\\bFAQ\\b", "how\\s+to", "\\bhazards?\\b", "\\bguide\\s+for\\b", "global\\s+issue"]
+
+  - id: news
+    name_zh: 新闻/行业文章
+    binding_force: informational
+    detect_patterns: ["press\\s+release", "\\bnews\\b", "webinar"]
+
+# ------------------------------------------------------------
+# 判定优先级（语义序：先判"提案/草案"等弱形态，再判强约束——
+# 因为 "Proposal for a REGULATION" 同时含 proposal 与 regulation 字样，
+# 必须 proposal 先命中，否则会把提案冒充成已生效法规）
+# corrigendum 特殊处理：剥离 "Corrigendum to" 后按母法判定并继承类型。
+# ------------------------------------------------------------
+priority: [proposal, draft, consultation, statute, delegated_act,
+           implementing_act, regulation, directive, administrative_rule,
+           standard, official_guidance, advisory, information_page, news]
+
+# ------------------------------------------------------------
+# 已知判例映射（回归锚点，不得违反）
+# ------------------------------------------------------------
+known_cases:
+  - match: "Safety Advisory Notice for the Transportation of Lithium Batteries"
+    instrument_type: advisory
+    binding_force: non_binding
+    note: "用户标准样本：内容重要，但类型是 advisory（用户✅相关保留）"
+  - match: "Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft"
+    instrument_type: administrative_rule
+    binding_force: binding
+    note: "final rule / IFR（用户✅）"
+  - match: "Commission Guidelines … removability and replaceability"
+    instrument_type: official_guidance
+    binding_force: non_binding
+    note: "52025XC00214（用户：按中国清单收）"
+  - match: "Proposal for a REGULATION … batteries and waste batteries"
+    instrument_type: proposal
+    binding_force: proposal
+    note: "52020PC0798（用户✅）"

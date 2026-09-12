@@ -1,0 +1,149 @@
+# ============================================================
+# Policy Acceptance Classification Rules —— A1/A2/B/C/D
+# ------------------------------------------------------------
+# 归属：Phase 4A ｜ 运行时：app/policy/acceptance.py（Pydantic 加载）
+# ------------------------------------------------------------
+# 设计原则（用户口径 2026-09-12）：
+#   政策法规主要是「车用动力电池回收利用」+「黑粉进出贸易」相关的
+#   1. 分类不推翻现有 relevant 判定，而是**对其加分辨率**
+#   2. B 类必须满足「具体条款证据存在」（不能只凭主题关联）
+#   3. AI 可辅助，但不得作为唯一 acceptance gate
+# ============================================================
+version: 1
+
+classes:
+
+  A1:
+    name_en: Core-specific
+    name_zh: 核心垂直（车用动力电池专项）
+    description: >
+      明确针对车用动力电池退役、回收、梯次利用、再生、黑粉的
+      法规/标准/正式文书。
+    gates:
+      object: EV_TRACT[ION]_BATTERY | BLACK_MASS          # 对象锚点
+      theme_required: true                                # 须命中 T01-T14 至少 1 个
+      hard_specificity: title_or_first_900                # 具体性证据须出现在标题/身份区
+    positive_examples:
+      - "Regulation (EU) 2023/1542 concerning batteries and waste batteries"   # 用户✅
+      - "Commission Delegated Regulation (EU) 2025/606 … recycling efficiency" # 回收效率核算
+      - "Vyhlaska o bateriich a akumulatorech (CZ NIM battery decree)"          # 用户✅
+    negative_guard:
+      - "Household batteries collection"     # 消费类 → 非 A1（对象边界外）
+    relevant: true
+    corpus: business_policy
+
+  A2:
+    name_en: Core-horizontal
+    name_zh: 核心横向（电池法体系层）
+    description: >
+      不只针对车用动力电池，但法规正文直接覆盖废锂电池/工业电池/EV 电池回收
+      的框架性法规及其授权/实施法案（EU 电池法体系、WSR 体系、ELV 法规）。
+    gates:
+      object: WASTE_BATTERY | ELV | BATTERY_REGULATION_SYSTEM
+      theme_required: true
+      system_anchor: true      # 须是已跟踪/可识别的法规体系成员（家族成员）
+    positive_examples:
+      - "Directive (EU) 2018/849 amending … 2006/66/EC on batteries"  # 用户✅
+      - "Regulation (EU) 2026/1738 … end-of-life vehicles"            # 用户✅
+      - "Commission Implementing Regulation (EU) 2025/2289 … collection and treatment of waste batteries" # 用户✅
+    negative_guard:
+      - "Regulation (EU) 2024/1781 ESPR"     # 泛产品母法 → C/B 待议（用户🟡）
+    relevant: true
+    corpus: business_policy
+
+  B:
+    name_en: Direct-support
+    name_zh: 直接支撑（条款级约束回收企业）
+    description: >
+      标题可能完全不写 battery，但具体条款直接约束动力电池回收企业的
+      活动：危废、危货运输、废物跨境、ELV 电池拆卸、海关、许可、废物分类。
+      **必须满足「具体条款证据存在」**（evidence_quotes 非空）。
+    required_any_topics: [T05, T09, T10, T12, T13, T03, T14]
+    clause_evidence_required: true
+    positive_examples:
+      - "Hazardous Materials: Enhanced Safety Provisions for Lithium Batteries Transported by Aircraft" # 用户✅（T05 条款级）
+      - "DPAS Directive … Recoverable Critical Minerals and Materials"      # T13 条款级（待人工）
+      - "State hazardous waste program … battery recycler"                   # T09/T10
+    negative_guard:
+      - "Section 232 … imports of processed critical minerals"  # 无电池/黑粉条款证据 → C
+    relevant: true
+    corpus: business_policy
+
+  C:
+    name_en: Background
+    name_zh: 背景语料（战略/产业/上游）
+    description: >
+      产业背景、战略规划、关键矿产上游、泛循环经济——无直接回收企业义务。
+      进入 background corpus，不进业务主库。
+    positive_examples:
+      - "Final 2025 List of Critical Minerals"
+      - "National recycling strategy (general)"
+    relevant: false
+    corpus: background
+
+  D:
+    name_en: Excluded
+    name_zh: 排除
+    description: 新闻、科普、消费电池、无关产业信息、程序性文书、死链页。
+    positive_examples:
+      - "Understanding the Risks of DDR Lithium Batteries | PHMSA"  # 用户❌
+      - "Green Job Hazards … | OSHA"                                # 用户❌
+      - "Battery Safety is a Global Issue …"                        # 用户❌
+    relevant: false
+    corpus: rejected
+
+# ------------------------------------------------------------
+# 判定顺序（拒绝优先；与现有判定器串联而非替换）
+# ------------------------------------------------------------
+decision_order:
+  - step: 0
+    rule: existing_judge_rejects     # 现有三层判定任何一层已拒 → D
+    action: D
+  - step: 1
+    rule: information_page_flag      # judge_browser 的 info_page → D
+    action: D
+  - step: 2
+    rule: instrument_is_info_like    # instrument_type ∈ {information_page, news} → D
+    action: D
+  - step: 3
+    rule: object_out_of_scope        # 消费/铅酸且无 2023/1542 系引用 → D
+    action: D
+  - step: 4
+    rule: A1_gates                   # 全部满足 → A1
+    action: A1
+  - step: 5
+    rule: A2_gates                   # 全部满足 → A2
+    action: A2
+  - step: 6
+    rule: B_gates                    # 主题+条款证据 → B
+    action: B
+  - step: 7
+    rule: theme_hit_no_clause        # 命中 T 主题但无条款证据 → C
+    action: C
+  - step: 8
+    rule: default                    # 其余
+    action: D
+
+# ------------------------------------------------------------
+# 背景路由（无主题命中时归 C 背景而非 D 排除）
+# ------------------------------------------------------------
+background_routes:
+  - "\\bESPR\\b|ecodesign|2024/1781"
+  - "critical\\s+minerals?"
+  - "amending\\s+.{0,60}?annex"
+
+# ------------------------------------------------------------
+# 拒绝码（reason_codes）——便于统计与回溯
+# ------------------------------------------------------------
+reason_codes:
+  DEMOTED_INFO_PAGE: 信息页/新闻类文书
+  DEMOTED_OUT_OF_SCOPE_OBJECT: 对象边界外（消费/铅酸）
+  DEMOTED_PROCEDURAL: 程序性文书
+  DEMOTED_FINANCIAL_FRAME: 财政工具框架（仅作项目名出现）
+  A1_EV_OR_BLACKMASS: A1 对象命中
+  A2_BATTERY_SYSTEM: A2 体系成员
+  B_CLAUSE_EVIDENCE: B 条款证据存在
+  C_THEME_ONLY: 仅主题关联（背景）
+  C_OMNIBUS_PACKAGE: 综合立法包（非电池专主题，归背景）
+  NO_THEME: 无主题命中
+  LOW_CONFIDENCE_REVIEW: 低置信度转人工

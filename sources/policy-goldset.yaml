@@ -1,0 +1,219 @@
+# ============================================================
+# Policy Gold Set —— 可重复的政策验收基准（Phase 4A §9）
+# ------------------------------------------------------------
+# 纪律：
+#   · holdout: true 的案例 → **开发规则时不得写死内容**（只用于验收）
+#   · must_find 用标识匹配（evidence_id / celex / nim / title_contains）
+#   · 预期来自用户真实判例（2026-09-11/12 共 25 条决策）+ 衍生负例
+# ============================================================
+version: 1
+
+cases:
+
+  # ---------------- eu_core ----------------
+  - id: eu_battery_reg_1542
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T02, T07]
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {celex: "32023R1542"}
+    notes: "用户✅ 电池法本体"
+    holdout: false
+
+  - id: eu_delegated_0606
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T07, T08]
+    expected_instrument_type: delegated_act
+    expected_binding_force: binding
+    must_find: {celex: "32025R0606"}
+    notes: "回收效率核算方法；用户最新标🟡（文档 §10.1 请复核）"
+    holdout: true
+
+  - id: eu_implementing_2289
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T02, T07]
+    expected_instrument_type: implementing_act
+    expected_binding_force: binding
+    must_find: {celex: "32025R2289"}
+    notes: "用户✅ 废电池收集处理规则"
+    holdout: false
+
+  - id: eu_amending_2018_849
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T03, T07]
+    expected_instrument_type: directive
+    expected_binding_force: binding
+    must_find: {celex: "32018L0849"}
+    notes: "用户✅ ELV+电池修订指令"
+    holdout: false
+
+  - id: eu_elv_reg_2026_1738
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T03]
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {celex: "32026R1738"}
+    notes: "用户✅ 车辆循环性法规"
+    holdout: false
+
+  - id: eu_proposal_0798
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: []
+    expected_instrument_type: proposal
+    expected_binding_force: proposal
+    must_find: {celex: "52020PC0798"}
+    notes: "用户✅ 电池法提案（proposal 不得冒充 effective）"
+    holdout: false
+
+  - id: eu_guidance_xc00214
+    jurisdiction: EU
+    expected_class: A2
+    expected_instrument_type: official_guidance
+    expected_binding_force: non_binding
+    must_find: {title_contains: "removability and replaceability of portable batteries"}
+    notes: "用户裁决按中国清单收；guidance 不得冒充 binding"
+    holdout: true
+
+  - id: eu_report_dc0166
+    jurisdiction: EU
+    expected_class: A2
+    expected_instrument_type: unknown
+    expected_binding_force: unknown
+    must_find: {title_contains: "implementation and the impact on the environment"}
+    notes: "用户✅ 2006/66 实施评估报告"
+    holdout: false
+
+  # ---------------- eu_member_state ----------------
+  - id: eu_ms_cz_battery_decree
+    jurisdiction: EU_27
+    expected_class: A2
+    expected_topics: [T01, T02]
+    expected_instrument_type: standard
+    expected_binding_force: partially_binding
+    must_find: {nim: "283350"}
+    notes: "用户✅ 捷克电池法令（NIM 通道验证）"
+    holdout: false
+
+  - id: eu_ms_be_elv_decree
+    jurisdiction: EU_27
+    expected_class: A2
+    expected_topics: [T03]
+    expected_instrument_type: unknown
+    expected_binding_force: unknown
+    must_find: {nim: "28881"}
+    notes: "比利时瓦隆报废车管理办法（规格§5：ELV 拆除走体系/B 域 → A2）"
+    holdout: true
+
+  # ---------------- us_federal ----------------
+  - id: us_phmsa_advisory
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T05]
+    expected_instrument_type: advisory
+    expected_binding_force: non_binding
+    must_find: {title_contains: "Safety Advisory Notice"}
+    notes: "用户标准样本：advisory 类型保留"
+    holdout: false
+
+  - id: us_air_ifr
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T05]
+    expected_instrument_type: administrative_rule
+    expected_binding_force: binding
+    must_find: {document_number: "2019-03812"}
+    notes: "用户✅ 联邦规则"
+    holdout: false
+
+  - id: us_clean_credit_09094
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T14]
+    expected_instrument_type: administrative_rule
+    expected_binding_force: binding
+    must_find: {document_number: "2024-09094"}
+    notes: "用户✅ 清洁车辆抵免（财税→B）"
+    holdout: true
+
+  # ---------------- black_mass ----------------
+  - id: bm_wsr_main
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T13]
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {celex: "32024R1157"}
+    notes: "黑粉跨境贸易主法规"
+    holdout: false
+
+  - id: bm_wsr_delegated
+    jurisdiction: EU
+    expected_class: A2
+    expected_topics: [T13]
+    expected_instrument_type: delegated_act
+    expected_binding_force: binding
+    must_find: {title_contains: "supplementing Regulation (EU) 2024/1157"}
+    notes: "WSR 授权法案族"
+    holdout: false
+
+  - id: bm_dpas_us
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T13]
+    expected_instrument_type: unknown
+    expected_binding_force: unknown
+    must_find: {document_number: "2026-16078"}
+    notes: "DPAS 回收关键矿产指令（black mass 正文命中）"
+    holdout: true
+
+  # ---------------- hard_negative ----------------
+  - id: neg_feoc_08913
+    jurisdiction: US
+    expected_class: D
+    must_find: {document_number: "2024-08913"}
+    notes: "用户❌ FEOC（recycling 仅拨款名）"
+    holdout: false
+
+  - id: neg_ddr_page
+    jurisdiction: US
+    expected_class: D
+    must_find: {title_contains: "Understanding the Risks"}
+    notes: "用户❌ 科普页"
+    holdout: false
+
+  - id: neg_osha_page
+    jurisdiction: US
+    expected_class: D
+    must_find: {title_contains: "Green Job Hazards"}
+    notes: "用户❌ 信息页"
+    holdout: true
+
+  - id: neg_bci_article
+    jurisdiction: US
+    expected_class: D
+    must_find: {title_contains: "Global Issue"}
+    notes: "用户❌ 行业文章"
+    holdout: true
+
+  # ---------------- background ----------------
+  - id: bg_espr
+    jurisdiction: EU
+    expected_class: C
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {celex: "32024R1781"}
+    notes: "ESPR 泛产品母法（用户🟡；acceptance=C/背景）"
+    holdout: true
+
+  - id: bg_critical_minerals_list
+    jurisdiction: US
+    expected_class: C
+    must_find: {title_contains: "List of Critical Minerals"}
+    notes: "关键矿产清单=背景语料"
+    holdout: false

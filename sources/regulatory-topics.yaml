@@ -1,0 +1,275 @@
+# ============================================================
+# 统一 Policy Scope Ontology —— T01–T14
+# ------------------------------------------------------------
+# 归属：Phase 4A（Policy Corpus Acceptance & Saturation）
+# 作用：政策语料库的主题本体。所有"这条文件讲的是什么"的判断
+#       都必须落到这里的 topic id 上（可多标）。
+# 运行时：app/policy/config.py 用 Pydantic 强校验加载（fail-fast）。
+# ⚠️ 本文件是**唯一真源**：Python 不得再硬编码主题词表。
+# ============================================================
+version: 1
+
+topics:
+
+  - id: T01
+    name_en: EPR / take-back / producer responsibility
+    name_zh: 生产者责任延伸 / 回收责任
+    description: 生产者责任延伸制度、回收义务、责任主体、注册与申报义务
+    include_patterns:
+      - "extended producer responsibilit"
+      - "producer responsibilit"
+      - "\\bEPR\\b"
+      - "take[- ]?back"
+      - "生产者责任"
+      - "沿伸(生产者)?责任"
+      - "responsabilit[eé]\\s+[eé]largie"
+      - "producentansvar"
+      - "r[uü]cknahmepflicht"
+      - "herstellers?\\s*(verantwortung|pflicht)"
+    exclude_patterns: []
+    related_topics: [T02, T12, T14]
+    business_relevance: 回收企业的责任与合规义务来源；注册/申报义务直接可执行
+    risk_level: P0
+
+  - id: T02
+    name_en: Collection / take-back network
+    name_zh: 回收网络 / 收集体系
+    description: 回收点、收集目标（collection target）、回收渠道、押金/收集率
+    include_patterns:
+      - "collection\\s+(target|network|point|scheme|rate)"
+      - "collection[\\s\\S]{0,30}?of\\s+.{0,20}batter"
+      - "collection\\s+and\\s+treatment"
+      - "batter\\w*\\s+(collection|treatment)"
+      - "batter\\w*\\s+collection"
+      - "collection\\s+of\\s+.{0,20}batter"
+      - "回收(网络|网点|目标|率|渠道)"
+      - "inlever(en|punt)"
+      - "inzamel"
+      - "sammel(quote|ziel|stelle)"
+      - "collecte\\s+des?\\s+batter"
+    exclude_patterns:
+      - "waste\\s+(oil|tire|tyre|glass)\\s+collection"
+    related_topics: [T01, T05, T07]
+    business_relevance: 回收量来源；收集率目标直接决定市场空间
+    risk_level: P0
+
+  - id: T03
+    name_en: ELV / vehicle dismantling / battery removal
+    name_zh: 报废车辆 / 拆解 / 电池拆卸
+    description: 报废汽车管理、拆解规范、动力电池拆卸与预处理要求
+    include_patterns:
+      - "end[- ]?of[- ]?life\\s+vehicle"
+      - "\\bELV(s)?\\b"
+      - "\\bVHU\\b"
+      - "altfahrzeug"
+      - "autowrak"
+      - "v[eé]hicules?\\s+hors\\s+d'?usage"
+      - "dismantl"
+      - "depollut"
+      - "battery\\s+removal"
+      - "拆解"
+      - "报废(机动)?车"
+    exclude_patterns:
+      - "vehicle\\s+registration\\s+(tax|fee)"
+    related_topics: [T04, T06, T10]
+    business_relevance: "退役电池的**源头环节**；拆解规范约束预处理企业"
+    risk_level: P0
+
+  - id: T04
+    name_en: Second life / repurposing / testing
+    name_zh: 梯次利用 / 再制造检测
+    description: 梯次利用、再制造、余能检测、健康评估、二次使用许可
+    include_patterns:
+      - "second[- ]?life"
+      - "repurpos"
+      - "reus(e|ing)\\s+of\\s+batter"
+      - "梯次利用"
+      - "state\\s+of\\s+health"
+      - "remeasure|remanufactur"
+      - "hergebruik"
+    exclude_patterns: []
+    related_topics: [T03, T11, T12]
+    business_relevance: 退役电池的高值化路径；检测标准=准入事实门槛
+    risk_level: P1
+
+  - id: T05
+    name_en: Storage / packaging / dangerous goods transport
+    name_zh: 贮存 / 包装 / 危险货物运输
+    description: 退役/损坏电池的贮存、包装（UN3480/3481）、危险货物运输规则（ADR/IATA/49CFR）
+    include_patterns:
+      - "dangerous\\s+goods"
+      - "hazardous\\s+materials?"
+      - "lithium\\s+batter\\w*\\s+(transport|shipment|shipping)"
+      - "(transport|shipment|shipping)\\s+of\\s+.{0,20}batter"
+      - "\\bUN\\s?348[01]\\b"
+      - "49\\s+CFR\\s+17[23]"
+      - "\\bADR\\b|\\bIATA\\b|\\bIMDG\\b"
+      - "packaging\\s+instruction"
+      - "运输|贮存|包装"
+      - "transport(eren)?\\s+van\\s+batter"
+    exclude_patterns:
+      - "transport\\s+category\\s+airplane"
+    related_topics: [T03, T06, T13]
+    business_relevance: "黑粉/电池跨境的**运输合规**；PHMSA 判例所在主题"
+    risk_level: P0
+
+  - id: T06
+    name_en: Dismantling / shredding / preprocessing
+    name_zh: 拆解 / 破碎 / 预处理
+    description: 破碎分选、拆解线、黑粉产出上游工序的技术与许可要求
+    include_patterns:
+      - "shredd(er|ing)"
+      - "dismantl(ing)?\\s+(line|facilit)"
+      - "broyeur|broyage"
+      - "schredder|schwarzmasse"
+      - "破碎|分选|预处理"
+      - "preprocess"
+      - "sloperij|schroot"
+    exclude_patterns: []
+    related_topics: [T03, T07, T09]
+    business_relevance: 黑粉生产核心工序；设备与许可清单
+    risk_level: P0
+
+  - id: T07
+    name_en: Recycling / material recovery
+    name_zh: 回收 / 材料再生
+    description: 再生利用、湿法/火法冶金、材料回收工艺的监管要求
+    include_patterns:
+      - "recycl(ing|e|ed)"
+      - "material\\s+recovery"
+      - "recovery\\s+of\\s+materials"
+      - "treatment\\s+of\\s+waste\\s+batter"
+      - "regenerat"
+      - "再生利用|资源化"
+      - "valorisation|verwertung"
+      - "recyclage"
+    exclude_patterns:
+      - "recycl(e|ing)\\s+(grants?|programs?|funding)"   # 财政工具框架（08913 判例）
+    related_topics: [T06, T08, T09]
+    business_relevance: 主业所在的监管边界
+    risk_level: P0
+
+  - id: T08
+    name_en: Recycling efficiency / recycled content
+    name_zh: 回收效率 / 再生料含量
+    description: 回收效率核算、材料回收率、再生含量计算与验证方法
+    include_patterns:
+      - "recycling\\s+efficiency"
+      - "recycled\\s+content"
+      - "recovery\\s+rate"
+      - "回收效率|再生料|再生(材料)?比例"
+      - "material\\s+circularity"
+    exclude_patterns: []
+    related_topics: [T07, T11]
+    business_relevance: 合规核算方法（2025/606 主题）；影响工艺路线选择
+    risk_level: P0
+
+  - id: T09
+    name_en: Pollution control / environmental permits
+    name_zh: 污染防治 / 环保许可
+    description: 排放标准、环评、排污许可、污染防治技术规范
+    include_patterns:
+      - "pollution\\s+(control|prevention)"
+      - "emission\\s+standard"
+      - "environmental\\s+permit"
+      - "discharge\\s+permit"
+      - "(废水|废气|固废).{0,6}(排放|污染)"
+      - "environmental\\s+impact\\s+assessment"
+      - "污染控制"
+    exclude_patterns:
+      - "power\\s+plant\\s+emissions?"
+    related_topics: [T06, T10, T12]
+    business_relevance: "建厂/扩产的**许可前置**；污染控制技术规范直接约束工艺"
+    risk_level: P0
+
+  - id: T10
+    name_en: Hazardous waste / waste classification
+    name_zh: 危险废物 / 固废分类
+    description: 危废名录、废物分类、危废经营许可、鉴别标准
+    include_patterns:
+      - "hazardous\\s+waste"
+      - "waste\\s+classification"
+      - "waste\\s+catalogue"
+      - "危险废物|固废|废物分类"
+      - "avers(ion)?\\s+toxique"
+      - "abfallverzeichnis"
+      - "list\\s+of\\s+(waste|hazardous)"
+    exclude_patterns: []
+    related_topics: [T07, T09, T13]
+    business_relevance: "黑粉的**危废定性**决定运输/处置成本与跨境合法性"
+    risk_level: P0
+
+  - id: T11
+    name_en: Traceability / reporting / battery passport
+    name_zh: 追溯 / 申报 / 电池护照
+    description: 追溯平台、编码标识、数据报送、电池护照、CARB/碳足迹申报
+    include_patterns:
+      - "battery\\s+passport"
+      - "digital\\s+product\\s+passport"
+      - "traceabilit"
+      - "tracking\\s+(system|number)"
+      - "reporting\\s+(obligation|requirement|format)"
+      - "追溯|申报|编码标识|数字身份证"
+      - "batteriepas"
+      - "carbon\\s+footprint"
+    exclude_patterns: []
+    related_topics: [T01, T08, T12]
+    business_relevance: 数据合规工程量大；追溯是回收量统计口径的来源
+    risk_level: P1
+
+  - id: T12
+    name_en: Licensing / market access / enforcement
+    name_zh: 准入 / 资质 / 执法
+    description: 回收企业资质、白名单、经营许可、执法检查、处罚
+    include_patterns:
+      - "(licen[cs]|permit|qualification|authoris).{0,60}(recycl|batter|waste)"
+      - "white\\s+list"
+      - "waste\\s+(dealer|broker)\\s+registration"
+      - "(准入|资质|白名单|许可)"
+      - "enforcement\\s+action"
+      - "administrative\\s+penalt"
+    exclude_patterns: []
+    related_topics: [T01, T09, T14]
+    business_relevance: 市场准入的硬门槛；执法动态=行业风险信号
+    risk_level: P1
+
+  - id: T13
+    name_en: Import / export / waste shipment / black mass trade
+    name_zh: 进出口 / 废物运输 / 黑粉贸易
+    description: 废物越境转移（巴塞尔/WSR）、黑粉进出口管制、海关归类、贸易限制
+    include_patterns:
+      - "black\\s+mass"
+      - "masse\\s+noire"
+      - "schwarzmasse"
+      - "zwarte\\s+massa"
+      - "waste\\s+shipment"
+      - "transboundary\\s+(movement|shipment)"
+      - "shipment\\s+of\\s+waste"
+      - "import.{0,30}(batter|waste)"
+      - "export.{0,30}(batter|waste)"
+      - "跨境转移|进出口|过境"
+      - "\\bBasel\\b"
+      - "customs\\s+(code|classification)"
+      - "harmonized\\s+tariff"
+    exclude_patterns:
+      - "import.{0,30}(vehicle|car)s?\\s+safety"
+    related_topics: [T05, T10, T14]
+    business_relevance: "**黑粉贸易线核心**：决定货物能否出境/入境、走什么单证"
+    risk_level: P0
+
+  - id: T14
+    name_en: Tax / subsidy / fiscal incentive
+    name_zh: 财税激励
+    description: 增值税、税收抵免（45X等）、补贴、基金、押金制度
+    include_patterns:
+      - "tax\\s+(credit|incentive|exemption)"
+      - "45X|48C|30D|25E"
+      - "subsid(y|ies)|grant\\s+program"
+      - "advanced\\s+manufacturing\\s+production\\s+credit"
+      - "(增值税|税收|补贴|基金)"
+      - "investeringsaftrek"
+      - "steuer(liche)?\\s+(befreiung|ermäßigung)"
+    exclude_patterns: []
+    related_topics: [T01, T12]
+    business_relevance: 中国清单含财税类；对回收经济性有直接影响（转人工档）
+    risk_level: P2
