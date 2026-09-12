@@ -189,14 +189,14 @@ jurisdictions:
         critical: true
         expected: true
         sources: [us_federal_register]
-        status: PARTIAL
-        note: BIS 记录经 FR 覆盖；出口管制专项未建 — 用户待确认方向
+        status: CONNECTED
+        note: "FR 机构通道已实采（black mass / lithium battery / critical minerals export）；bis.doc.gov EAR 页为 guidance 通道"
       - role: CBP
         critical: true
         expected: true
-        sources: []
-        status: NOT_ONBOARDED
-        gap_reason: 海关归类/贸易救济内容未专项接入 — P2
+        sources: [cbp_cross, us_federal_register]
+        status: CONNECTED
+        note: "CROSS API（/api/search，裁定=official_guidance）+ FR CBP 机构通道；www.cbp.gov 主站 403 已记 HTTP_403；检索页为 SPA"
       - role: STATE_DEPARTMENT
         expected: true
         sources: [us_federal_register]

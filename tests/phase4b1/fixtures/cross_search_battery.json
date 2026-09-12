@@ -1,0 +1,74 @@
+{
+  "rulings": [
+    {
+      "id": 0,
+      "rulingNumber": "968227",
+      "subject": "Modification of NY G87863; solar powered battery charger with rechargeable battery",
+      "categories": "Classification",
+      "rulingDate": "2006-08-08T00:00:00",
+      "isUsmca": false,
+      "isNafta": false,
+      "collection": "hq",
+      "relatedRulings": [
+        "G87863",
+        "083672",
+        "E80178"
+      ],
+      "modifiedBy": [],
+      "modifies": [
+        "G87863"
+      ],
+      "revokedBy": [],
+      "revokes": [],
+      "tariffs": "8504.40.9550",
+      "operationallyRevoked": false,
+      "commodityGrouping": ""
+    },
+    {
+      "id": 0,
+      "rulingNumber": "968226",
+      "subject": "Revocation of HQ 955105; rechargeable storage battery and battery charger",
+      "categories": "Classification",
+      "rulingDate": "2006-08-08T00:00:00",
+      "isUsmca": false,
+      "isNafta": false,
+      "collection": "hq",
+      "relatedRulings": [
+        "955105",
+        "954061",
+        "083672",
+        "E80178"
+      ],
+      "modifiedBy": [],
+      "modifies": [],
+      "revokedBy": [],
+      "revokes": [
+        "955105"
+      ],
+      "tariffs": "8504.40.9550",
+      "operationallyRevoked": false,
+      "commodityGrouping": ""
+    },
+    {
+      "id": 0,
+      "rulingNumber": "N033615",
+      "subject": "The tariff classification of a Battery Storage Tray, with Battery Tester from China.",
+      "categories": "Classification",
+      "rulingDate": "2008-08-13T23:00:00",
+      "isUsmca": false,
+      "isNafta": false,
+      "collection": "ny",
+      "relatedRulings": [
+        "A85360"
+      ],
+      "modifiedBy": [],
+      "modifies": [],
+      "revokedBy": [],
+      "revokes": [],
+      "tariffs": "9030.33.0000",
+      "operationallyRevoked": false,
+      "commodityGrouping": null
+    }
+  ],
+  "totalHits": 7277
+}
