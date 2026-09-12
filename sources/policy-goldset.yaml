@@ -179,6 +179,34 @@ cases:
     notes: "DPAS 回收关键矿产指令（black mass 正文命中）"
     holdout: true
 
+  # ---------------- hard_b（标题无 battery，正文条款直接约束电池回收）----------------
+  # 来源：Phase 4B-1 Step 4/9 实采（eCFR 官方 XML），判定已过验收链
+  - id: hard_b_rcra_hazardous_waste
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T10]
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {title_contains: "40 CFR Part 261"}
+    notes: >
+      为何加入：B 类核心场景验证（标题无 battery，但危废鉴别条款直接约束
+      电池回收企业的废物分类）；来源：eCFR 官方 XML（USCODE 2023 版本）；
+      expected=B 成立依据：主题 T10 命中 + 条款证据存在（acceptance 已实测 B）。
+    holdout: false
+
+  - id: hard_b_hazmat_shippers
+    jurisdiction: US
+    expected_class: B
+    expected_topics: [T05]
+    expected_instrument_type: regulation
+    expected_binding_force: binding
+    must_find: {title_contains: "49 CFR Part 173"}
+    notes: >
+      为何加入：标题无 battery，但该 Part 正文直接约束锂电池托运/包装；
+      来源：eCFR 官方 XML；expected=B 成立依据：T05 主题 + 条款证据。
+      holdout=true（规则冻结后才发现，未参与调参）。
+    holdout: true
+
   # ---------------- hard_negative ----------------
   - id: neg_feoc_08913
     jurisdiction: US

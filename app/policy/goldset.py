@@ -141,10 +141,19 @@ def evaluate(include_holdout: bool = True) -> dict:
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
     insufficient = len(cases) < 20 or found_cases < len(cases) * 0.6
 
+    # ---- Step 9：A1 Gold Set 状态（用户口径 2026-09-12）----
+    a1_cases = [c for c in cases if c.get("expected_class") == "A1"]
+    a1_verified = len(a1_cases)
+    a1_holdout = sum(1 for c in a1_cases if c.get("holdout"))
+    a1_status = ("INSUFFICIENT_A1_GOLDSET" if a1_verified < 5 else "OK")
+
     return {
         "cases_total": len(cases),
         "cases_found": found_cases,
         "INSUFFICIENT_GOLDSET": insufficient,
+        "a1_verified_count": a1_verified,
+        "a1_holdout_count": a1_holdout,
+        "a1_goldset_status": a1_status,
         "precision": round(precision, 4),
         "recall": round(recall, 4),
         "f1": round(f1, 4),
