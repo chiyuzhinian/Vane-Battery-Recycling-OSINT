@@ -216,6 +216,56 @@ CASES = [
         "The lead battery industry achieves a 99% recycling rate.",
         "铅酸不在边界内（只要 EV 动力+储能退役+黑粉）",
     ),
+    # ============================================================
+    # 缺口补采发现的边界 case（2026-09-12 晚）—— 发现层补采 34 条缺口时
+    # 实测出的两类系统性误判，必须固化成断言。
+    # ============================================================
+    (
+        # 实测案例：52025XC00214（委员会指南——便携/LMT 电池可拆卸性）。
+        # 对象是便携类（边界外），但它是 2023/1542 的官方适用指南。
+        # 直接排除会让"依法适用政策文件"整类静默丢失 → 改判待人工。
+        "电池法适用指南：对象为便携类但引电池法（待人工而非排除）", "review",
+        "Commission Notice – Commission guidelines to facilitate the "
+        "harmonised application of provisions on the removability and "
+        "replaceability of portable batteries and LMT batteries in "
+        "Regulation (EU) 2023/1542",
+        "These guidelines clarify the application of the removability and "
+        "replaceability requirements.",
+        "对象边界外的法规适用文件 —— 不静默排除，交用户裁决",
+    ),
+    (
+        # 实测案例：52025SC0501（中小企业简化包 SWD）。
+        # 标题列 6 部被修订法规（含 2023/1542），但内容是中小企业举措。
+        # 旧判定靠 2023/1542 硬信号给 0.9 相关 —— 误收。
+        "综合立法包：中小企业简化包（电池只是名单之一）", "review",
+        "COMMISSION STAFF WORKING DOCUMENT on small mid-cap companies "
+        "Accompanying the documents Proposal for a REGULATION amending "
+        "Regulations (EU) 2016/679, (EU) 2016/1036, (EU) 2016/1037, "
+        "(EU) 2017/1129, (EU) 2023/1542 and (EU) 2024/573 as regards the "
+        "extension of certain mitigating measures available for small and "
+        "medium sized enterprises to small mid-cap enterprises",
+        "This staff working document assesses the impact of the "
+        "simplification measures on small mid-cap enterprises.",
+        "omnibus 包：电池只以裸法规号出现 → 待人工，不自动通过",
+    ),
+    (
+        # 反例守护：同样是简化包，但含"batteries and waste batteries"实体 →
+        # 电池 EPR 条款是包内**实质性内容**，必须保持自动相关。
+        # （实测案例：52025AE3982 委员会简化包意见 —— 含电池 EPR 授权代表规则）
+        "简化包但含电池 EPR 实体内容（保持相关）", "relevant",
+        "Opinion of the European Economic and Social Committee – "
+        "Communication from the Commission – Simplifying for sustainable "
+        "competitiveness – Proposal for a Regulation amending Regulation "
+        "(EU) 2023/1542 and Regulation (EU) 2024/1244 as regards "
+        "simplification – suspending the application of the rules on the "
+        "appointment of an authorised representative for extended producer "
+        "responsibility for batteries and waste batteries and packaging "
+        "and packaging waste",
+        "The opinion concerns the suspension of rules on authorised "
+        "representatives for extended producer responsibility for "
+        "batteries and waste batteries.",
+        "omnibus 但电池是实体内容 → 不受 omnibus 规则影响",
+    ),
 ]
 def main() -> int:
     print("门户类判定 —— 标准样本测试")

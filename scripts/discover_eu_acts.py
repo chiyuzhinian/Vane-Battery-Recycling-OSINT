@@ -61,17 +61,33 @@ async def main() -> int:
                     help="CELEX 年份正则片段（默认 2018-2029）")
     ap.add_argument("--limit", type=int, default=150)
     ap.add_argument("--emit", default="", help="把候选写到此 YAML 文件")
+    ap.add_argument("--anchor", default="",
+                    help="只扫单个锚点（如 2000/53/EC）——补扫失败 sector 用")
+    ap.add_argument("--sectors", default="",
+                    help="只扫指定 sector（逗号分隔，如 3 或 5）——补扫失败 sector 用")
     args = ap.parse_args()
+
+    anchors = ANCHORS
+    if args.anchor:
+        anchors = [a for a in ANCHORS if a[1] == args.anchor]
+        if not anchors:
+            print(f"❌ 未知锚点 {args.anchor}；可选："
+                  + ", ".join(a[1] for a in ANCHORS))
+            return 2
+    sectors: tuple[str, ...] = ("3", "5")
+    if args.sectors:
+        sectors = tuple(s.strip() for s in args.sectors.split(",") if s.strip())
 
     conn = get_connector("eur_lex")
     found: dict[str, list[dict]] = {}
 
-    for base_celex, anchor, label in ANCHORS:
+    for base_celex, anchor, label in anchors:
         print("=" * 92)
         print(f"锚点 {anchor:<12} （{base_celex} {label}）")
         print("=" * 92)
         try:
-            acts = await conn.find_acts_by_title(anchor, args.years, args.limit)
+            acts = await conn.find_acts_by_title(anchor, args.years, args.limit,
+                                                 sectors=sectors)
         except Exception as exc:  # noqa: BLE001
             print(f"  ⚠️ 查询失败：{type(exc).__name__}: {exc}")
             print()

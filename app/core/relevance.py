@@ -625,6 +625,17 @@ _V2_SUP_RE = re.compile(
     r"(batter|2023/1542|2006/66|2000/53|waste batter|end-of-life vehicle)",
     re.I)
 
+# 电池法规引用（对象为消费类/便携类时的"救回"信号 —— 见 judge_portal_policy 0c）
+_V2_REGREF_RE = re.compile(
+    r"2023/1542|batter(?:y|ies)\s+regulation", re.I)
+
+# 综合立法包（omnibus）：标题列举 ≥4 部 (EU) 法规 —— 电池只是名单之一
+#   ⚠️ 实测（2026-09-12）：2025-05 中小企业简化包 / 数字化包在标题里列十余部
+#      被修订法规，其中含 (EU) 2023/1542 → 法规号硬信号 → 被误判 0.9 相关，
+#      但内容是中小企业/数字化举措，与退役电池处置无关。
+_EU_NUM_RE = re.compile(r"\(EU\)\s*(?:No\s*)?\d{4}/\d+", re.I)
+_BARE_EU_NUM_RE = re.compile(r"\d{4}/\d+")
+
 # 待人工类型：附件技术修订 / 泛产品母法
 V2_REVIEW_TYPES = [
     r"amending\s+.{0,60}?annex",
@@ -719,8 +730,40 @@ def judge_portal_policy(text: str, title: str | None = None) -> RelevanceVerdict
     in_scope = any(rx.search(title_text) for rx in _V2_IN_RE)
     off = next((m for rx in _V2_OFF_RE if (m := rx.search(title_text))), None)
     if off and not in_scope:
+        # ⚠️ 例外（2026-09-12 实测）：**《电池法规》的适用文件**是合法家族成员。
+        #    案例 52025XC00214（委员会指南——便携/LMT 电池可拆卸性）：
+        #    对象是便携类（边界外），但它是 2023/1542 的官方适用指南 ——
+        #    与中国清单的「依法适用政策文件」同类。直接排除 = 静默丢失，
+        #    改判「待人工」交用户裁决（ESPR 先例：用户自己也标了 uncertain）。
+        if _V2_REGREF_RE.search(title_text):
+            return RelevanceVerdict(
+                relevant=True, score=0.5,
+                hits=[f"off_scope+regref:{off.group(0)[:20]}"],
+                needs_human_review=True,
+                review_reason="对象为消费/便携类，但引用《电池法规》——"
+                              "需人工确认是否涉及退役电池处置条款",
+            )
         return RelevanceVerdict(relevant=False, score=0.0,
                                 rejected_by=f"off_scope:{off.group(0)[:24]}")
+
+    # ---- 0f) 判定 2.0：综合立法包（omnibus）→ 转人工 ----
+    #   判据 = 「标题列举 ≥4 部 (EU) 法规」且「电池只以裸法规号出现」
+    #          （无任何电池/车辆对象词）。
+    #   ⚠️ 反例守护（测试锁定 2026-09-12）：
+    #      · 2018/849（ELV+电池修订指令）标题只含 1 个 (EU) 号 → 不受影响
+    #      · 52025AE3982（简化包，但含"batteries and waste batteries"实体）
+    #        → 有强对象词 → 不受影响（0.9 相关）
+    if len(_EU_NUM_RE.findall(title_text)) >= 4:
+        t_hits = _portal_disposal_hits(title_text)
+        if t_hits and not [h for h in t_hits
+                           if not _BARE_EU_NUM_RE.fullmatch(h.strip())]:
+            return RelevanceVerdict(
+                relevant=True, score=0.5,
+                hits=[f"omnibus:{len(_EU_NUM_RE.findall(title_text))}部法规"],
+                needs_human_review=True,
+                review_reason="综合立法包（一次修订多部法规，电池仅为名单之一）——"
+                              "需人工确认是否含电池处置条款",
+            )
 
     # ---- 0d) 判定 2.0：待人工类型（附件技术修订 / 泛产品母法）----
     rev = next((m for rx in _V2_REVIEW_RE if (m := rx.search(title_text))), None)
