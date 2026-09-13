@@ -66,12 +66,17 @@ def main() -> int:
     for pid, e in by_plan.items():
         c = plan_conv.get(e["plan_hash"][:12]) or {}
         e["convergence"] = {
+            # 防误读（2B0 审计 P0-A1）：本字段仅为 **plan 层** 收敛；
+            # jurisdiction eligibility（角色覆盖/路线/身份/失败闸门）
+            # 见 outputs/audit/jurisdiction_layers.json
+            "layer": "SOURCE_PLAN_CONVERGED",
             "converged": c.get("converged"),
             "streak": c.get("streak"),
             "blocked_by_high_value": c.get("blocked_by_high_value"),
             "evidence_rounds": c.get("evidence_rounds") or [],
             "threshold": c.get("threshold"),
             "mode_required": c.get("mode_required"),
+            "jurisdiction_converged": False,   # 不得由本产物直接断言
         }
 
     converged = sum(1 for e in by_plan.values()
@@ -79,6 +84,8 @@ def main() -> int:
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(
             timespec="seconds"),
+        "note": ("plan 级收敛≠管辖地收敛（2B0 P0-A1）；"
+                 "eligibility 见 outputs/audit/jurisdiction_layers.json"),
         "plans": by_plan,
         "summary": {
             "plans_total": len(by_plan),

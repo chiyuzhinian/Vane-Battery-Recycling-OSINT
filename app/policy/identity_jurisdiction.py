@@ -67,3 +67,43 @@ def identity_completeness(records: list[dict], jid: str = "") -> dict:
             full += 1
     return {"total": len(rows), "with_identity": full,
             "pct": round(100.0 * full / len(rows), 1) if rows else 0.0}
+
+
+#: discovery-layer 源前缀（NIM 索引 / 浏览器检索层——设计上无文档级身份，
+#: 不得计入 completeness 分母；Phase 4B-2B0 审计 Q4/P0-A3）
+_DISCOVERY_PREFIXES = ("eu_nim_", "browser_")
+
+
+def is_dedicated_source(source_id: str) -> bool:
+    """专线源（真实采集通道）判定；discovery-layer 返回 False。"""
+    sid = str(source_id or "")
+    if not sid:
+        return False
+    return not sid.startswith(_DISCOVERY_PREFIXES)
+
+
+def dedicated_identity_completeness(records: list[dict], jid: str) -> dict:
+    """**专线 corpus** 的身份完整度（分母 = 专线记录，NIM/browser 排除）。
+
+    与 identity_completeness 的区别：后者分母混入 discovery layer，
+    导致 SE 40% / FI 18.2% / CA 38.5% 的口径失真（审计坐实）。
+    """
+    full = 0
+    total = 0
+    missing_ids: list[str] = []
+    from app.policy.jurisdiction_map import jurisdiction_of
+    for r in records:
+        if not is_dedicated_source(str(r.get("source_id") or "")):
+            continue
+        if jurisdiction_of(r) != jid:
+            continue
+        total += 1
+        ident = r.get("identity") or identity_from_meta(r.get("meta"))
+        if ident and ident.get("canonical_id") and ident.get("official_identifier") \
+                and ident.get("language"):
+            full += 1
+        else:
+            missing_ids.append(str(r.get("evidence_id") or "?"))
+    return {"total": total, "with_identity": full,
+            "pct": round(100.0 * full / total, 1) if total else 0.0,
+            "missing_ids": missing_ids[:20]}

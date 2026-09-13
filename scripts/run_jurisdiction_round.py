@@ -530,16 +530,29 @@ async def run_round(jid: str, round_no: int, plan, mode: str,
                           encoding="utf-8")
 
     # 索引更新（与联邦轮同一视图）
+    rebuild_round_index()
+    return record
+
+
+def rebuild_round_index() -> dict:
+    """重建 outputs/audit/discovery_rounds.json（可独立调用）。
+
+    索引条目含 route_ids（独立路线类别——eligibility 判定输入），
+    并保持 plan_convergence 的同-plan 子集 streak 口径。
+    """
     rounds: list[dict] = []
     for idx_fp in sorted(glob.glob(str(ROUNDS_DIR / "round_*.json"))):
         try:
             data = json.loads(Path(idx_fp).read_text(encoding="utf-8"))
-            rounds.append({k: data.get(k) for k in
-                           ("round_id", "scope_level", "accepted_novelty_rate",
-                            "raw_yield", "totals", "ended_at", "plan_id",
-                            "plan_hash", "round_mode", "round_validity")})
         except json.JSONDecodeError:
             continue
+        entry = {k: data.get(k) for k in
+                 ("round_id", "scope_level", "accepted_novelty_rate",
+                  "raw_yield", "totals", "ended_at", "plan_id",
+                  "plan_hash", "round_mode", "round_validity")}
+        entry["route_ids"] = [str(r.get("id") or "")
+                              for r in (data.get("routes") or [])]
+        rounds.append(entry)
     plan_conv: dict[str, dict] = {}
     for h in sorted({r.get("plan_hash") for r in rounds if r.get("plan_hash")}):
         # 多管辖地并行：streak 只在**同 plan_hash 的轮次子集**内判定
@@ -553,7 +566,7 @@ async def run_round(jid: str, round_no: int, plan, mode: str,
         "convergence": convergence_status(rounds),
         "plan_convergence": plan_conv}, ensure_ascii=False, indent=2),
         encoding="utf-8")
-    return record
+    return {"rounds": len(rounds), "plans": len(plan_conv)}
 
 
 async def main() -> int:
