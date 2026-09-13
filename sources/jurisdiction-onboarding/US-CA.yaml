@@ -45,11 +45,16 @@ official_channel_map:
       access_method: browser
       status: PARTIAL
       note: "AB 2440 负责任电池回收计划文档已收（Phase 4B-1）"
+  STATE_WASTE_PROGRAM:
+    - source_id: browser_calrecycle
+      official_url: "https://calrecycle.ca.gov/"
+      access_method: browser
+      status: PARTIAL
+      note: "Step 6 角色 closure：CalRecycle = 加州废物/回收项目主管机构（官方事实）；已有语料 33 条"
 
 known_gaps:
-  STATE_ADMIN_CODE: "CCR（加州行政法规）通道未接入"
+  STATE_ADMIN_CODE: "CCR（加州行政法规）通道未接入（OAL 入口待探）"
   STATE_REGISTER: "加州公报（ZERO/NR）通道未接入"
-  STATE_WASTE_PROGRAM: "废物项目专项通道未接入"
   STATE_TRANSPORT_HAZMAT: "Caltrans/危货运输通道未接入"
 
 collector_strategy:

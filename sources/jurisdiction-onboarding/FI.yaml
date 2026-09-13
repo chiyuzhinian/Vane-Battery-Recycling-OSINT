@@ -27,6 +27,11 @@ official_channel_map:
       status: CONNECTED
       note: "Step 8 回填：ajantasa 直链连接器真实采集（Flight 解析）；R1-R3 发现 3 篇；检索=客户端渲染不可静态复现"
   MS_OFFICIAL_GAZETTE:
+    - source_id: fi_finlex
+      official_url: "https://www.finlex.fi/fi/laki/alkup/"
+      access_method: html
+      status: CONNECTED
+      note: "Step 6 角色 closure：säädöskokoelma（SDK）= 芬兰官方公报系列，Finlex 即其发布系统（官方事实；alkup 路径为公报原件）"
     - source_id: eu_nim_fi
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
       access_method: nim_index

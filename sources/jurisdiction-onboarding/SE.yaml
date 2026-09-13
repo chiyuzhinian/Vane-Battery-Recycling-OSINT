@@ -27,6 +27,11 @@ official_channel_map:
       status: CONNECTED
       note: "Step 8 回填：直链+检索（fritext）连接器真实采集；R1-R3 三轮发现 7 篇"
   MS_OFFICIAL_GAZETTE:
+    - source_id: se_sfst
+      official_url: "https://rkrattsbaser.gov.se/sfst"
+      access_method: html
+      status: CONNECTED
+      note: "Step 6 角色 closure：SFS = 瑞典官方公报（Svensk författningssamling），SFST 即公报发布系统——法源与公报同一通道（官方事实）"
     - source_id: eu_nim_se
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"
       access_method: nim_index
