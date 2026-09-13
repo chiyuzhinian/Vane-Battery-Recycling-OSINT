@@ -28,7 +28,10 @@ from .datafair import DataFairConnector
 from .dila_fr import DilaFrConnector
 from .eia import EiaConnector
 from .eur_lex import EurLexConnector
+from .finlex_fi import FinlexFiConnector
 from .gesetze_de import GesetzeDeConnector
+from .isap_pl import IsapPlConnector
+from .sfst_se import SfstSeConnector
 from .us_federal import FederalRegisterConnector
 from .vane import VaneConnector
 
@@ -45,6 +48,10 @@ REGISTRY: dict[str, Type[BaseConnector]] = {
     "es_boe": BoeEsConnector,          # ⭐ 西班牙立法整合库（BOE 官方 API）
     "dila_fr": DilaFrConnector,        # ⭐ 法国 DILA 开放数据（Légifrance 原始源）
     "datafair": DataFairConnector,     # ⭐ Data Fair 开放数据平台（法国 ADEME 等）
+    # ---- Phase 4B-2A：成员国 pilot（官方立法库直链）----
+    "se_sfst": SfstSeConnector,        # 瑞典 SFST（成员国层）
+    "pl_isap": IsapPlConnector,        # 波兰 ISAP（成员国层）
+    "fi_finlex": FinlexFiConnector,    # 芬兰 Finlex（成员国层）
     # ---- 企业侧 ----
     "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
     "eia": EiaConnector,            # 环评公示（非上市企业的唯一产能来源）
@@ -70,7 +77,10 @@ __all__ = [
     "EiaConnector",
     "EurLexConnector",
     "FederalRegisterConnector",
+    "FinlexFiConnector",
     "GesetzeDeConnector",
+    "IsapPlConnector",
+    "SfstSeConnector",
     "VaneConnector",
     "get_connector",
     "probe_all",
