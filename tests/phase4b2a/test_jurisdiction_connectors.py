@@ -142,3 +142,47 @@ def test_failures_artifact_records_pl_fi():
     jids = {e["jurisdiction"] for e in entries}
     assert {"PL", "FI"} <= jids
     assert all(e["error"] for e in entries)
+
+
+def test_extract_next_flight_and_text_nodes():
+    import json as _json
+
+    from app.connectors.leg_utils import extract_next_flight, extract_text_nodes
+    payload = _json.dumps('{"text":"Jätelaki 646/2011"}')
+    payload2 = _json.dumps('{"text":"tuottajavastuu ja jäte"}')
+    html = (f"<script>self.__next_f.push([1,{payload}])</script>"
+            f"<script>self.__next_f.push([1,{payload2}])</script>")
+    dec = extract_next_flight(html)
+    assert "Jätelaki 646/2011" in dec and "tuottajavastuu" in dec
+    nodes = extract_text_nodes(dec)
+    assert "Jätelaki 646/2011" in nodes and "jäte" in nodes
+
+
+def test_multilingual_topics_fi_pl_ee():
+    from app.policy.acceptance import scan_topics
+    fi = ("Jätelaki; tuottajavastuu ja keräysjärjestelmä; romuajoneuvo; "
+          "vaarallisten aineiden kuljetus; vaarallinen jäte; kierrätys")
+    pl = ("odpowiedzialność producenta; selektywna zbiórka; wycofane z eksploatacji; "
+          "towarów niebezpiecznych; odpady niebezpieczne; recykling")
+    ee = ("tootjavastutus; kogumine; vanasõiduk; ohtlike ainete vedu; "
+          "ohtlikud jäätmed; taaskasutus")
+    want = {"T01", "T02", "T03", "T05", "T07", "T10"}
+    for text in (fi, pl, ee):
+        ids, _ = scan_topics(text)
+        missing = want - set(ids)
+        assert not missing, f"多语种词表命中缺口 {missing}（text={text[:40]}…）"
+
+
+def test_fi_artifact_after_flight_extraction():
+    files = sorted(glob.glob(str(ROOT / "outputs" / "jurisdiction_fi_*.jsonl")))
+    if not files:
+        pytest.skip("需先运行 collect_jurisdiction_sources.py --jurisdictions FI")
+    rows = [json.loads(ln) for ln in
+            Path(files[-1]).read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(rows) >= 3
+    assert all(r["source_id"] == "fi_finlex" for r in rows)
+    assert all(r["region"] == "EU" and r["meta"]["jurisdiction"] == "FI"
+               for r in rows)
+    assert any(r["meta"]["acceptance_class"] in ("A1", "A2", "B", "C")
+               for r in rows), "Jätelaki 应至少为 C（背景语料）"
+    assert max(len(r["text"]) for r in rows) > 20000

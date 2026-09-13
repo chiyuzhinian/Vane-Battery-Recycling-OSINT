@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import html as _html
+import json as _json
 import re
 
 _SCRIPT_RE = re.compile(r"<(script|style|noscript)[^>]*>.*?</\1>", re.I | re.S)
@@ -18,6 +19,13 @@ _BLANK_RE = re.compile(r"\n{3,}")
 _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
 _H1_RE = re.compile(r"<h1[^>]*>(.*?)</h1>", re.I | re.S)
 _DATE_RE = re.compile(r"\b(20\d{2}-\d{2}-\d{2})\b")
+
+#: Next.js 流式载荷（self.__next_f.push([1,"…"])）—— 实测 Finlex 的法条正文在其中
+#: （页面 <script> 被常规 strip 误删 → 正文丢失）。
+_NEXT_FLIGHT_RE = re.compile(r'self\.__next_f\.push\(\[1,\s*("(?:[^"\\]|\\.)*")\]\)')
+
+#: React flight 树中的文本节点（"text":"…"）—— 实测 Finlex 的法条标题/条款文本在此
+_TEXT_NODE_RE = re.compile(r'"text":"((?:[^"\\]|\\.)*)"')
 
 
 def strip_html(html: str) -> str:
@@ -65,6 +73,42 @@ def detect_challenge(html: str) -> str:
         if rx.search(head):
             return name
     return ""
+
+
+def extract_next_flight(html: str) -> str:
+    """从 Next.js 流式载荷（__next_f）中提取服务端数据（拼接为文本）。
+
+    实测（2026-09-13）：Finlex 页面为 React 流式渲染，法条正文（"12 §"/"1 luku"）
+    存在于 `self.__next_f.push([1,"..."])` 的 JSON 字符串分片中；
+    常规 strip_html 会连 <script> 一起删除 → 正文丢失。
+    本函数仅回放**服务端已下发**的数据（与浏览器所见一致），不做任何伪造。
+    """
+    chunks = _NEXT_FLIGHT_RE.findall(html or "")
+    if not chunks:
+        return ""
+    parts: list[str] = []
+    for c in chunks:
+        try:
+            parts.append(_json.loads(c))
+        except Exception:  # noqa: BLE001 —— 单分片解码失败不中断
+            continue
+    return "".join(parts)
+
+
+def extract_text_nodes(payload: str) -> str:
+    """从 React flight 树中抽取全部 `"text":"…"` 节点并拼接为文本。
+
+    实测（Finlex Jätelaki）：3.4MB 页面 → 2.9MB 解码载荷 → 1042 个文本节点、
+    约 2.8 万字符（含标题/条款文本；"Akkujen ja paristojen" 等电池条款在场）。
+    """
+    vals = _TEXT_NODE_RE.findall(payload or "")
+    out: list[str] = []
+    for v in vals:
+        try:
+            out.append(_json.loads('"' + v + '"'))
+        except Exception:  # noqa: BLE001
+            continue
+    return "\n".join(out)
 
 
 def trim_nav(text: str, *, min_len: int = 120, scan_lines: int = 160) -> tuple[str, int]:

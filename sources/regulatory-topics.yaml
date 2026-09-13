@@ -26,6 +26,10 @@ topics:
       - "producentansvar"
       - "r[uü]cknahmepflicht"
       - "herstellers?\\s*(verantwortung|pflicht)"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语（pilot 语料实测缺词）
+      - "tuottajavastuu"
+      - "odpowiedzialno[sś][cć] producenta"
+      - "tootjavastutus"
     exclude_patterns: []
     related_topics: [T02, T12, T14]
     business_relevance: 回收企业的责任与合规义务来源；注册/申报义务直接可执行
@@ -47,6 +51,10 @@ topics:
       - "inzamel"
       - "sammel(quote|ziel|stelle)"
       - "collecte\\s+des?\\s+batter"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语
+      - "ker[äa]ys(j[äa]rjestelm|tavoite|velvoite|verkosto|astia)"
+      - "zbieranie|selektywna zbi[óo]rka"
+      - "kogumi(n|s|se|punkt|n[õo]ue)"
     exclude_patterns:
       - "waste\\s+(oil|tire|tyre|glass)\\s+collection"
     related_topics: [T01, T05, T07]
@@ -69,6 +77,10 @@ topics:
       - "battery\\s+removal"
       - "拆解"
       - "报废(机动)?车"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语
+      - "romuajoneuvo"
+      - "wycofan(y|ych|e) z eksploatacji"
+      - "vanas[õo]iduk"
     exclude_patterns:
       - "vehicle\\s+registration\\s+(tax|fee)"
     related_topics: [T04, T06, T10]
@@ -107,6 +119,10 @@ topics:
       - "packaging\\s+instruction"
       - "运输|贮存|包装"
       - "transport(eren)?\\s+van\\s+batter"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语
+      - "vaarallisten aineiden kuljetus"
+      - "towar[óo]w niebezpiecznych"
+      - "ohtlike ainete vedu"
     exclude_patterns:
       - "transport\\s+category\\s+airplane"
     related_topics: [T03, T06, T13]
@@ -143,6 +159,10 @@ topics:
       - "再生利用|资源化"
       - "valorisation|verwertung"
       - "recyclage"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语
+      - "kierr[äa]tys|kierr[äa]tykseen"
+      - "recykling"
+      - "taaskasutus|ringlussev[õo]tt"
     exclude_patterns:
       - "recycl(e|ing)\\s+(grants?|programs?|funding)"   # 财政工具框架（08913 判例）
     related_topics: [T06, T08, T09]
@@ -194,6 +214,10 @@ topics:
       - "avers(ion)?\\s+toxique"
       - "abfallverzeichnis"
       - "list\\s+of\\s+(waste|hazardous)"
+      # Phase 4B-2A：芬兰语/波兰语/爱沙尼亚语
+      - "vaarallinen j[äa]te|ongelma j[äa]te"
+      - "odpady niebezpieczne"
+      - "ohtlik(ud)? j[äa]{1,2}tmed"
     exclude_patterns: []
     related_topics: [T07, T09, T13]
     business_relevance: "黑粉的**危废定性**决定运输/处置成本与跨境合法性"

@@ -14,7 +14,8 @@ from __future__ import annotations
 from typing import Any
 
 from .base import BROWSER_UA, BaseConnector, ConnectorError, ProbeResult, RawEvidence
-from .leg_utils import detect_challenge, extract_title, strip_html, trim_nav
+from .leg_utils import (detect_challenge, extract_next_flight, extract_text_nodes,
+                        extract_title, strip_html, trim_nav)
 
 MAX_TEXT = 60000
 #: 正文下限：低于此值视为 JS 壳/网络异常（Finlex 页面实测壳 1.5k）
@@ -49,7 +50,16 @@ class FinlexFiConnector(BaseConnector):
                 html = resp.text
                 if detect_challenge(html):
                     raise ConnectorError("challenge_page")
-                text = strip_html(html)
+                # Finlex 为 React 流式渲染：法条文本/标题在 __next_f 载荷的 
+                # "text":"…" 节点中（实测 1042 节点/2.8 万字符；含电池条款）
+                flight = extract_next_flight(html)
+                nodes = extract_text_nodes(flight) if flight else ""
+                if len(nodes) >= MIN_TEXT:
+                    text = nodes
+                elif flight:
+                    text = strip_html(flight)
+                else:
+                    text = strip_html(html)
                 if len(text) < MIN_TEXT:
                     raise ConnectorError(f"正文不足（{len(text)} 字符，疑 JS 壳/网络异常）")
             except Exception as exc:  # noqa: BLE001
