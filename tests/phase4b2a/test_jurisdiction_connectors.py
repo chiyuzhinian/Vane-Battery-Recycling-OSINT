@@ -67,7 +67,7 @@ def _load_collect_module():
 
 def test_connector_map_and_record_schema():
     mod = _load_collect_module()
-    assert set(mod.CONNECTOR_MAP) >= {"SE", "PL", "FI"}
+    assert set(mod.CONNECTOR_MAP) >= {"SE", "PL", "FI", "US-CA", "US-WA"}
     from app.connectors.base import RawEvidence
     ev = RawEvidence(evidence_id="se_sfst_test", channel="connector",
                      source_id="se_sfst", source_url="https://x",
@@ -81,6 +81,38 @@ def test_connector_map_and_record_schema():
     assert rec["region"] == "EU"
     assert rec["meta"]["jurisdiction"] == "SE"
     assert rec["meta"]["acceptance_class"] in ("A1", "A2", "B", "C", "D")
+
+
+def test_us_state_connector_registry():
+    from app.connectors.leginfo_ca import LeginfoCaConnector
+    from app.connectors.rcw_wa import RcwWaConnector
+    assert REGISTRY["us_ca_leginfo"] is LeginfoCaConnector
+    assert REGISTRY["us_wa_rcw"] is RcwWaConnector
+    assert len(LeginfoCaConnector.DEFAULT_DOCS) >= 4
+    assert len(RcwWaConnector.DEFAULT_DOCS) >= 2
+
+
+def test_us_state_artifacts():
+    ca_files = sorted(glob.glob(str(ROOT / "outputs" / "jurisdiction_us-ca_*.jsonl")))
+    wa_files = sorted(glob.glob(str(ROOT / "outputs" / "jurisdiction_us-wa_*.jsonl")))
+    if not ca_files:
+        pytest.skip("需先运行 collect_jurisdiction_sources.py --jurisdictions US-CA")
+    ca_rows = [json.loads(ln) for ln in
+               Path(ca_files[-1]).read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(ca_rows) >= 4
+    assert all(r["source_id"] == "us_ca_leginfo" for r in ca_rows)
+    assert all(r["region"] == "US" and r["meta"]["jurisdiction"] == "US-CA"
+               for r in ca_rows)
+    titles = " ".join(r["title"] for r in ca_rows)
+    assert "AB 2440" in titles
+    assert max(len(r["text"]) for r in ca_rows) > 10000      # AB2440 全文
+    if wa_files:
+        wa_rows = [json.loads(ln) for ln in
+                   Path(wa_files[-1]).read_text(encoding="utf-8").splitlines()
+                   if ln.strip()]
+        assert all(r["source_id"] == "us_wa_rcw" for r in wa_rows)
+        assert any("70A.200" in r["title"] or "70A.555" in r["title"]
+                   for r in wa_rows)
 
 
 def test_se_artifact_and_junk_guard():

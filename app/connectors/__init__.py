@@ -31,6 +31,8 @@ from .eur_lex import EurLexConnector
 from .finlex_fi import FinlexFiConnector
 from .gesetze_de import GesetzeDeConnector
 from .isap_pl import IsapPlConnector
+from .leginfo_ca import LeginfoCaConnector
+from .rcw_wa import RcwWaConnector
 from .sfst_se import SfstSeConnector
 from .us_federal import FederalRegisterConnector
 from .vane import VaneConnector
@@ -52,6 +54,9 @@ REGISTRY: dict[str, Type[BaseConnector]] = {
     "se_sfst": SfstSeConnector,        # 瑞典 SFST（成员国层）
     "pl_isap": IsapPlConnector,        # 波兰 ISAP（成员国层）
     "fi_finlex": FinlexFiConnector,    # 芬兰 Finlex（成员国层）
+    # ---- Phase 4B-2A：US 州 pilot ----
+    "us_ca_leginfo": LeginfoCaConnector,   # 加州立法信息（法案/法典）
+    "us_wa_rcw": RcwWaConnector,           # 华盛顿州 RCW 修订法典
     # ---- 企业侧 ----
     "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
     "eia": EiaConnector,            # 环评公示（非上市企业的唯一产能来源）
@@ -80,6 +85,8 @@ __all__ = [
     "FinlexFiConnector",
     "GesetzeDeConnector",
     "IsapPlConnector",
+    "LeginfoCaConnector",
+    "RcwWaConnector",
     "SfstSeConnector",
     "VaneConnector",
     "get_connector",

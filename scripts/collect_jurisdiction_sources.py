@@ -36,6 +36,8 @@ CONNECTOR_MAP: dict[str, tuple[str, str]] = {
     "SE": ("EU", "app.connectors.sfst_se:SfstSeConnector"),
     "PL": ("EU", "app.connectors.isap_pl:IsapPlConnector"),
     "FI": ("EU", "app.connectors.finlex_fi:FinlexFiConnector"),
+    "US-CA": ("US", "app.connectors.leginfo_ca:LeginfoCaConnector"),
+    "US-WA": ("US", "app.connectors.rcw_wa:RcwWaConnector"),
 }
 
 
@@ -69,15 +71,30 @@ def to_record(ev, jid: str, region: str) -> dict:
     return rec
 
 
-async def collect(jid: str) -> dict:
+async def collect(jid: str, *, max_attempts: int = 2) -> dict:
     region, cls_path = CONNECTOR_MAP[jid]
     cls = _load_connector(cls_path)
     connector = cls()
+    expected = len(getattr(cls, "DEFAULT_DOCS", {}) or {})
+    merged: dict[str, object] = {}
+    failures: list[dict] = []
+    attempts_used = 0
     try:
-        evidences = await connector.fetch()
-        failures = list(getattr(connector, "last_errors", []))
+        for attempt in range(1, max_attempts + 1):
+            attempts_used = attempt
+            evidences = await connector.fetch()
+            for ev in evidences:
+                merged[ev.evidence_id] = ev
+            failures = list(getattr(connector, "last_errors", []))
+            if len(merged) >= expected or not failures:
+                break
+            await asyncio.sleep(3)          # 瞬态网络抖动 → 整轮重试
     finally:
         await connector.aclose()
+    evidences = list(merged.values())
+    # 失败计数修正：后续尝试已成功的 doc 不再计失败
+    ok_docs = {str((ev.meta or {}).get("doc_key", "")) for ev in evidences}
+    failures = [f for f in failures if f.get("doc") not in ok_docs]
     records = [to_record(ev, jid, region) for ev in evidences]
     # 防御层：挑战页/JS 壳文本一律不得入语料（不得伪造正文）
     from app.connectors.leg_utils import detect_challenge  # noqa: PLC0415
@@ -110,6 +127,7 @@ async def collect(jid: str) -> dict:
     return {"jurisdiction": jid, "records": len(records),
             "file": fp.name if records else "（无记录，未写文件）",
             "by_class": dict(by_class), "failed": len(failures),
+            "attempts": attempts_used,
             "errors": failures}
 
 
