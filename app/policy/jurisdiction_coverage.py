@@ -60,7 +60,12 @@ def load_proof_summary(jid: str) -> dict | None:
 
 def topic_status(records: list[dict], *, stuck: bool = False) -> dict[str, str]:
     """T01–T14 五态判定（COVERED=有 A/B 强证据；PARTIAL=有命中无强证据；
-    MISSING=无命中；BLOCKED=通道受阻且无记录）。"""
+    MISSING=无命中；BLOCKED=通道受阻且无记录）。
+
+    2B0 修复（审计 Q3/P0-A2）：
+        · 扫描窗口 = 全文（原 text[:4000] 对长法规严重截断）；
+        · 强证据分类用 effective_class（meta → 现算回退）。
+    """
     from app.policy.config import load_topics
     topics = load_topics().topics
     if stuck and not records:
@@ -70,11 +75,10 @@ def topic_status(records: list[dict], *, stuck: bool = False) -> dict[str, str]:
         pats = [re.compile(p, re.I) for p in t.include_patterns]
         matched = strong = 0
         for r in records:
-            hay = (r.get("title") or "") + "\n" + (r.get("text") or "")[:4000]
+            hay = (r.get("title") or "") + "\n" + (r.get("text") or "")
             if any(p.search(hay) for p in pats):
                 matched += 1
-                if str((r.get("meta") or {}).get("acceptance_class")) in (
-                        "A1", "A2", "B"):
+                if _is_corpus_strong(r):
                     strong += 1
         out[t.id] = ("COVERED" if strong else
                      "PARTIAL" if matched else "MISSING")
@@ -117,6 +121,27 @@ def unresolved_failures(fails: list[dict], rows: list[dict]) -> list[dict]:
     return out
 
 
+def _eff_class(record: dict) -> str:
+    """有效分类（meta → 现算回退；2B0 审计 Q3/P0-A2 修复）。"""
+    from app.policy.topic_audit import effective_class
+    return effective_class(record)
+
+
+_DISCOVERY_STRONG_EXCLUDED = ("eu_nim_",)
+
+
+def _is_corpus_strong(record: dict) -> bool:
+    """强证据（A1/A2/B）且**非 discovery layer**。
+
+    2A 铁律：NIM = discovery layer ≠ national corpus——NIM 记录的自动 A2
+    不得充当管辖地强证据（否则每个有 NIM 的国家都假 ACTIVE）。
+    """
+    sid = str(record.get("source_id") or "")
+    if sid.startswith(_DISCOVERY_STRONG_EXCLUDED):
+        return False
+    return _eff_class(record) in ("A1", "A2", "B")
+
+
 def build_jurisdiction_coverage(records: list[dict]) -> dict:
     """全量管辖地覆盖矩阵。"""
     from collections import Counter
@@ -140,9 +165,8 @@ def build_jurisdiction_coverage(records: list[dict]) -> dict:
     for jid in jids:
         rows = by_jid.get(jid, [])
         contract = contracts.get(jid)
-        acceptance = Counter(str((r.get("meta") or {}).get("acceptance_class")
-                                 or "?") for r in rows)
-        strong = sum(acceptance.get(k, 0) for k in ("A1", "A2", "B"))
+        acceptance = Counter(_eff_class(r) or "?" for r in rows)
+        strong = sum(1 for r in rows if _is_corpus_strong(r))
         raw_fails = [e for e in failures if e.get("jurisdiction") == jid]
         fails = unresolved_failures(raw_fails, rows)
         # 自有记录（本管辖地采集器产出；NIM 元数据不算）
