@@ -542,8 +542,11 @@ async def run_round(jid: str, round_no: int, plan, mode: str,
             continue
     plan_conv: dict[str, dict] = {}
     for h in sorted({r.get("plan_hash") for r in rounds if r.get("plan_hash")}):
+        # 多管辖地并行：streak 只在**同 plan_hash 的轮次子集**内判定
+        # （不同管辖地/不同 plan 的轮不得交错截断彼此的 streak）
+        subset = [r for r in rounds if r.get("plan_hash") == h]
         plan_conv[h[:12]] = convergence_status(
-            rounds, plan_hash=h, mode_required="convergence_validation")
+            subset, plan_hash=h, mode_required="convergence_validation")
     INDEX.parent.mkdir(parents=True, exist_ok=True)
     INDEX.write_text(json.dumps({
         "generated_at": now_iso(), "rounds": rounds,

@@ -607,3 +607,14 @@ plan_hash 与 plan 文件一致，索引见 `outputs/audit/discovery_rounds.json
 
 - 引用链观察：SE C 引用 11 个不存在文号（负结果）；WA 引用链 R1→R2→R3
   依次发现 11→2→1 篇（衰减序列）；FI R2 起 0 新增。**四地均进入相对稳定态**。
+
+### Step 9：MODE B 收敛验证（2026-09-13）
+
+- 8 轮 MODE B（`--mode validation`，round_mode=convergence_validation）：
+  SE R4–R5 · FI R4–R5 · US-CA R4–R5 · US-WA R5–R6。
+- **全部 FULL**、accepted_novelty_rate=0.0、new_high_risk_B=0（无高价值阻断）。
+- 收敛判定（严格视图：plan_hash 一致 + MODE B + FULL + novelty<阈值）：
+  **4/4 计划 converged=True ｜ streak=2**（证据轮双向记录于
+  `outputs/audit/jurisdiction_convergence.json`）。
+- 多管辖地并行修正：streak 仅在**同 plan_hash 轮次子集**内判定
+  （不同管辖地的轮不得交错截断彼此——run_jurisdiction_round 索引已修）。

@@ -93,3 +93,22 @@ def test_round_records_and_persisted_corpus_exist():
     recs = [json.loads(x) for x in pf.read_text(encoding="utf-8").splitlines()
             if x.strip()]
     assert recs and all(r["meta"]["jurisdiction"] == "SE" for r in recs)
+
+
+def test_mode_b_convergence_artifacts():
+    """MODE B（§Step 9）：四地 streak≥2 收敛；MODE B 轮全 FULL 且零新增。"""
+    fj = ROOT / "outputs" / "audit" / "jurisdiction_convergence.json"
+    if not fj.exists():
+        pytest.skip("需先运行 scripts/audit_jurisdiction_convergence.py")
+    data = json.loads(fj.read_text(encoding="utf-8"))
+    plans = data["plans"]
+    assert set(plans) == {"SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1",
+                          "US_WA_PLAN_V1"}
+    for pid, e in plans.items():
+        c = e["convergence"]
+        assert c["converged"] is True, pid
+        assert c["streak"] >= 2, pid
+        assert c["blocked_by_high_value"] is False, pid
+        assert e["modeb_rounds"] >= 2, pid
+        assert e["new_accepted_sum_modeB"] == 0, pid   # MODE B 零新增
+        assert e["invalid"] == 0, pid
