@@ -1,0 +1,55 @@
+# ============================================================
+# Search Plan —— SE_PLAN_V1（Pilot 管辖地级，Phase 4B-2A Step 8）
+# ------------------------------------------------------------
+# 字段映射（jurisdiction 轮，见 run_jurisdiction_round.py）：
+#   fr_agencies  → A 路线枚举种子（文号/章号直链种子）
+#   fr_terms     → B 路线母语全文检索词（?fritext=）
+#   eu_keywords  → C 路线引用种子（显式列出的引用文号）
+#   cross_terms  → D 路线缺口种子（相邻/补充枚举目标）
+#   year_segments→ B 路线结果年份过滤（空 = 不过滤）
+# 纪律：本文件自冻结起不得修改；搜索空间变化 → SE_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: SE_PLAN_V1
+jurisdiction: SE
+scope: SE
+
+source_roles:
+  - {role: SE_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - se_sfst_search
+  - se_sfst_doc
+
+critical_sources:
+  - se_sfst
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies: []                      # A 无种子（SE 走 B/C）
+  fr_terms:                            # B：母语检索词（瑞典语，单词形式）
+    # 词表经 Step 8 探针验证（fritext 为短语匹配，多词组合 0 命中）：
+    # batteri→22 docs ｜ batterier→30 docs ｜ batteriavfall→2 docs
+    - batteri
+    - batterier
+    - batteriavfall
+  eu_keywords:                         # C：显式引用种子（SFS 文号）
+    - "SFS 2008:834"
+    - "SFS 2007:185"
+    - "SFS 2020:614"
+    - "SFS 2025:1071"
+    - "SFS 2025:813"
+  cross_terms: []                      # D：无缺口种子
+
+language_set: [sv]
+time_window: {from: "2018-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [B, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Pilot（优先度 0.790）。B 路线经 Step 8 探针验证（fritext 检索 22 hits 可解析：
+  search-hit 块含标题 + SFS-nummer）；C 种子含 B 探针实见的两部 2025 年电池互补条例。
+created_at: "2026-09-13"

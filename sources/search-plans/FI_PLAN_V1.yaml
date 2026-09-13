@@ -1,0 +1,46 @@
+# ============================================================
+# Search Plan —— FI_PLAN_V1（Pilot 管辖地级，Phase 4B-2A Step 8）
+# ------------------------------------------------------------
+# 字段映射：fr_agencies→A 种子 ｜ fr_terms→B 检索词 ｜ eu_keywords→C 引用种子
+#          ｜ cross_terms→D 缺口种子 ｜ year_segments→B 年份过滤
+# 纪律：自冻结起不得修改；搜索空间变化 → FI_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: FI_PLAN_V1
+jurisdiction: FI
+scope: FI
+
+source_roles:
+  - {role: FI_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - fi_finlex_search
+  - fi_finlex_doc
+
+critical_sources:
+  - fi_finlex
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies: []                      # A 无种子
+  fr_terms: []                         # B 检索为客户端渲染（不可静态复现，如实排除）
+  eu_keywords:                         # C：显式引用种子（SDK 编号）
+    - "SDK 646/2011"
+    - "SDK 527/2014"
+    - "SDK 978/2021"
+  cross_terms: []
+
+language_set: [fi]
+time_window: {from: "2014-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Pilot（优先度 0.660）。检索端点经 Step 8 探针证实为**客户端渲染**
+  （/fi/haku?q= 服务端载荷不含结果，所有词返回同一批导航链接；api.finlex.fi 需
+  登录）→ B 路线不可用（如实）；C 从已采语料正文抽 "NNN/YYYY" 引用回采
+  （ajantasa 直链已验证可出全文）。
+created_at: "2026-09-13"

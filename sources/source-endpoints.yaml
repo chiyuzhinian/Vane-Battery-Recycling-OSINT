@@ -509,3 +509,93 @@ roles:
         content_kind: html
         role_method: page
         capabilities: {enumeration: false, metadata: true, fulltext: true}
+
+  # ---------------------------------------------------------- Phase 4B-2A Pilot 管辖地（Step 8）
+  # 端点均经 Step 8 真实探测（outputs/_probe_step8*.py 记录）：
+  #   ✅ 200 且可解析 / ⛔ 受阻（notes 注明，如实登记不臆造）
+  - role: SE_NATIONAL_LEGISLATION
+    jurisdiction: SE
+    source_name: "瑞典 SFST（Regeringskansliet 法库）"
+    official_domain: rkrattsbaser.gov.se
+    endpoints:
+      - id: se_sfst_doc
+        official_url: "https://rkrattsbaser.gov.se/sfst?bet=2008:834"
+        official_domain: rkrattsbaser.gov.se
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "文书直链（?bet=YYYY:NNN）；Source Proof 样本 3/3"
+      - id: se_sfst_search
+        official_url: "https://rkrattsbaser.gov.se/sfst?fritext=batteri"
+        official_domain: rkrattsbaser.gov.se
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "全文检索（?fritext=）；Step 8 探测 22 hits，结果含标题+SFS 号可解析"
+
+  - role: FI_NATIONAL_LEGISLATION
+    jurisdiction: FI
+    source_name: "芬兰 Finlex"
+    official_domain: finlex.fi
+    endpoints:
+      - id: fi_finlex_doc
+        official_url: "https://www.finlex.fi/fi/laki/ajantasa/2011/20110646"
+        official_domain: finlex.fi
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "文书直链（ajantasa 现行版）；React 流式渲染经 __next_f 解析"
+      - id: fi_finlex_search
+        official_url: "https://www.finlex.fi/fi/haku?q=akku"
+        official_domain: finlex.fi
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "站内检索；Step 8 探测结果链接 /fi/lainsaadanto/YYYY/NNN 可解析"
+      - id: fi_finlex_api
+        official_url: "https://api.finlex.fi/"
+        official_domain: api.finlex.fi
+        content_kind: html
+        role_method: api
+        capabilities: {enumeration: false, metadata: false, fulltext: false}
+        notes: "⛔ 需登录（Kirjaudu）→ 本阶段不可用，如实登记"
+
+  - role: US_CA_STATE_LEGISLATION
+    jurisdiction: US-CA
+    source_name: "加州 leginfo（立法信息库）"
+    official_domain: leginfo.legislature.ca.gov
+    endpoints:
+      - id: us_ca_leginfo_section
+        official_url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=42451"
+        official_domain: leginfo.legislature.ca.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "section 全文直链；Source Proof（PRC §42451 → B 级）"
+      - id: us_ca_leginfo_toc
+        official_url: "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PRC"
+        official_domain: leginfo.legislature.ca.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "PRC 目录展开（division 级链接可枚举）；检索表单为 JS → 无检索端点"
+
+  - role: US_WA_STATE_LEGISLATION
+    jurisdiction: US-WA
+    source_name: "华盛顿 RCW（修订法典）"
+    official_domain: app.leg.wa.gov
+    endpoints:
+      - id: us_wa_rcw_doc
+        official_url: "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.555"
+        official_domain: app.leg.wa.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "章节/条文直链；Source Proof（70A.555 64k 字符全文）"
+      - id: us_wa_rcw_chapter
+        official_url: "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.200"
+        official_domain: app.leg.wa.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: true}
+        notes: "章目录（章节链接 cite=70A.200.0NN 模式，Step 8 探测 40 条）；无检索端点（search.do 404）"

@@ -135,5 +135,23 @@ def build_recheck(round_files: list[Path]) -> dict:
     }
 
 
-def scan_round_files() -> list[Path]:
-    return sorted(Path(p) for p in glob.glob(str(ROUNDS_DIR / "round_*.json")))
+def scan_round_files(*, scopes: tuple[str, ...] = ("US_FEDERAL",
+                                                  "EU_SUPRANATIONAL")) -> list[Path]:
+    """扫描轮次文件（默认仅 Phase 4B-1 历史 scope）。
+
+    4B-2A 管辖地级轮次（SE/FI/US-CA/US-WA 等）由 discovery_rounds.json 的
+    plan_convergence 视图承担；本重标记审计**聚焦 4B-1 历史六轮**，
+    其 file_commitments（sha256）承诺保持稳定。
+    传 scopes=() 可扫描全部。
+    """
+    out: list[Path] = []
+    for p in sorted(Path(p) for p in glob.glob(str(ROUNDS_DIR / "round_*.json"))):
+        if scopes:
+            try:
+                doc = json.loads(p.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+            if doc.get("scope_level") not in scopes:
+                continue
+        out.append(p)
+    return out

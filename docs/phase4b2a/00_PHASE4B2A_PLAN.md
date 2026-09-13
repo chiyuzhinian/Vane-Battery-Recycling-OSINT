@@ -568,3 +568,42 @@ Step 1（协议）→ Step 2（契约+参考映射）→ Step 3（评分+Pilot �
 ```
 
 **当前状态：Step 0 完成（本文件）——等待放行后从 Step 1 开始，逐步推进。**
+
+---
+
+## 17. 执行回填（Step 7 / Step 8，2026-09-13）
+
+### Step 7：管辖地覆盖矩阵工具
+
+- `app/policy/jurisdiction_coverage.py` + `scripts/audit_jurisdiction_coverage.py`
+  → `outputs/audit/jurisdiction_coverage.{json,csv}`
+- 五态主题矩阵（T01–T14：COVERED/PARTIAL/MISSING/BLOCKED）、层级
+  （ACTIVE/COLLECTED/BLOCKED/REFERENCE/NOT_ONBOARDED）、失败解析
+  （同一 doc 成功记录出现 → 未决失败清零）、黑粉 jurisdiction 级。
+- Step 8 语料增长后重跑：US-WA 升 ACTIVE（16 条 · B2）、US-CA 13 条 · B1、
+  SE 25 条（身份 40%）、PL 保持 BLOCKED（NIM + Distil 未决失败 3）。
+
+### Step 8：MODE A 发现轮（管辖地级）
+
+- 端点注册表新增 4 角色（`SE/FI/US_CA/US_WA_*_LEGISLATION`）+ 端点经
+  真实探测（探针记录 `outputs/_probe_step8*.py`）。
+- 4 份管辖地级 plan 冻结（hash 已测试锁定）：`SE/FI/US_CA/US_WA_PLAN_V1`。
+- `scripts/run_jurisdiction_round.py`：A 枚举 / B 检索 / C 引用扩展 / D 缺口；
+  `DocNotFound` 与真实失败分离；引用抽取仅用**自有记录**（NIM 摘要为噪声源）；
+  `not_found` 逐轮入档。
+- 实跑 13 轮（2026-09-13）：
+
+| 管辖地 | 轮次 | 新入选 | validity | 备注 |
+|---|---|---|---|---|
+| SE | R1–R3 | 7（C×7） | R1 PARTIAL※/R2·R3 FULL | fritext 检索（3 词）；C 引用种子 |
+| FI | R1–R3 | 3（B×2+C×1） | FULL | 检索=客户端渲染（B 如实缺席）；引用链 R1 后饱和 |
+| US-CA | R1–R3 | 1（C×1） | R1 PARTIAL※/R2·R3 FULL | 42451/42452 已入库（eid 对齐）；42453 新 |
+| US-WA | R1–R4 | 14（B×2+C×12） | R1·R2 PARTIAL※/R3·R4 FULL | 引用链两级扩张后饱和 |
+
+※ R1 记录早于 `not_found` 口径修正：其中"失败"实为**不存在文号/section**
+（SE 3、US-CA 2），R2+ 已按负结果如实分离；12 个 R2+ 轮 validity 全 FULL。
+所有轮 `round_mode=discovery_expansion`（MODE A，不入 SG8 streak），
+plan_hash 与 plan 文件一致，索引见 `outputs/audit/discovery_rounds.json`。
+
+- 引用链观察：SE C 引用 11 个不存在文号（负结果）；WA 引用链 R1→R2→R3
+  依次发现 11→2→1 篇（衰减序列）；FI R2 起 0 新增。**四地均进入相对稳定态**。

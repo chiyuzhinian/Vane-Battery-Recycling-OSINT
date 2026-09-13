@@ -1,0 +1,53 @@
+# ============================================================
+# Search Plan —— US_CA_PLAN_V1（Pilot 管辖地级，Phase 4B-2A Step 8）
+# ------------------------------------------------------------
+# 字段映射：fr_agencies→A 种子（PRC section 直链）｜ fr_terms→B 检索词（本库无
+#          检索端点 → 供 A 的 TOC 标题过滤）｜ eu_keywords→C 引用种子
+#          ｜ cross_terms→D 缺口种子 ｜ year_segments→B 年份过滤
+# 纪律：自冻结起不得修改；搜索空间变化 → US_CA_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: US_CA_PLAN_V1
+jurisdiction: US-CA
+scope: US-CA
+
+source_roles:
+  - {role: US_CA_STATE_LEGISLATION, critical: true}
+
+source_endpoints:
+  - us_ca_leginfo_section
+  - us_ca_leginfo_toc
+
+critical_sources:
+  - us_ca_leginfo
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:                         # A：PRC section 直链种子
+    - "PRC:42451"
+    - "PRC:42452"
+    - "PRC:42453"
+    - "PRC:42454"
+    - "PRC:42455"
+  fr_terms:                            # B 不可用（无检索端点）→ 保留用于未来端
+    - "battery stewardship"
+    - "lead-acid battery"
+  eu_keywords:                         # C：引用种子（法条引用模式）
+    - "PRC Section 42451"
+    - "Public Resources Code Section 42452"
+  cross_terms: []                      # D：无缺口种子
+
+language_set: [en]
+time_window: {from: "2016-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Pilot（优先度 0.780；browser_calrecycle 已覆盖 2/8 角色）。leginfo 检索表单为
+  JS（billSearchClient）→ B 路线不可用（如实）；A 走 section 直链种子，C 从语料
+  正文抽 "Section 42NNN" 引用回采。TOC 展开（codes_displayexpandedbranch）为
+  后续轮扩张通道（Step 8 已探测可解析）。
+created_at: "2026-09-13"

@@ -110,7 +110,7 @@ jurisdictions:
       - {code: DK, name: 丹麦, status: PARTIAL, sources: [eu_nim_dk], note: NIM 17 条（bilskrotning 系列）}
       - {code: EE, name: 爱沙尼亚, status: PARTIAL, sources: [eu_nim_ee], note: NIM 15 条}
       - {code: ES, name: 西班牙, status: CONNECTED, sources: [es_boe, eu_nim_es], note: BOE 官方 API 专线}
-      - {code: FI, name: 芬兰, status: PARTIAL, sources: [eu_nim_fi], note: NIM 27 条（含 Åland·瑞典语）}
+      - {code: FI, name: 芬兰, status: CONNECTED, sources: [fi_finlex, eu_nim_fi], note: NIM 27 条（含 Åland·瑞典语）+ Finlex 专线（Step 8：ajantasa 直链 · 发现 3 篇；检索=客户端渲染不可静态复现）}
       - {code: FR, name: 法国, status: CONNECTED, sources: [fr_dila, fr_ademe_opendata, eu_nim_fr], note: DILA 日增量 + ADEME 数据集}
       - {code: GR, name: 希腊, status: PARTIAL, sources: [eu_nim_gr], note: NIM 4 条（含编号式标题转人工）}
       - {code: HR, name: 克罗地亚, status: PARTIAL, sources: [eu_nim_hr], note: NIM 22 条}
@@ -125,7 +125,7 @@ jurisdictions:
       - {code: PL, name: 波兰, status: PARTIAL, sources: [eu_nim_pl], note: NIM 24 条}
       - {code: PT, name: 葡萄牙, status: PARTIAL, sources: [eu_nim_pt], note: NIM 2 条}
       - {code: RO, name: 罗马尼亚, status: PARTIAL, sources: [eu_nim_ro], note: NIM 12 条}
-      - {code: SE, name: 瑞典, status: PARTIAL, sources: [eu_nim_se], note: NIM 15 条（bilskrotning 系列）}
+      - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, eu_nim_se], note: NIM 15 条（bilskrotning 系列）+ SFST 专线（Step 8：直链+检索 · 发现 7 篇）}
       - {code: SI, name: 斯洛文尼亚, status: PARTIAL, sources: [eu_nim_si], note: NIM 15 条}
       - {code: SK, name: 斯洛伐克, status: PARTIAL, sources: [eu_nim_sk], note: NIM 12 条（均为泛废物层，无电池专条）}
 
@@ -231,7 +231,7 @@ jurisdictions:
     role_schema: [STATE_LEGISLATION, STATE_ADMIN_RULES, STATE_ENVIRONMENT_AGENCY, STATE_EPR_PROGRAM]
     note: 本阶段只建 schema 与状态机；除加州外均为 NOT_ONBOARDED（用户战略待定）
     states:
-      - {code: US-CA, name: 加利福尼亚, status: PARTIAL, sources: [browser_calrecycle], note: AB 2440 负责任电池回收 + SB 212 体系}
+      - {code: US-CA, name: 加利福尼亚, status: PARTIAL, sources: [browser_calrecycle, us_ca_leginfo], note: AB 2440 负责任电池回收 + SB 212 体系；leginfo section 专线（Step 8）}
       - {code: US-AL, name: 阿拉巴马, status: NOT_ONBOARDED}
       - {code: US-AK, name: 阿拉斯加, status: NOT_ONBOARDED}
       - {code: US-AZ, name: 亚利桑那, status: NOT_ONBOARDED}
@@ -277,8 +277,39 @@ jurisdictions:
       - {code: US-UT, name: 犹他, status: NOT_ONBOARDED}
       - {code: US-VT, name: 佛蒙特, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
       - {code: US-VA, name: 弗吉尼亚, status: NOT_ONBOARDED}
-      - {code: US-WA, name: 华盛顿州, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-WA, name: 华盛顿州, status: PARTIAL, sources: [us_wa_rcw], note: "电池 EPR 法（70A.555 专章）；RCW 专线（Step 8：引用链扩张 · 发现 14 篇）"}
       - {code: US-WV, name: 西弗吉尼亚, status: NOT_ONBOARDED}
       - {code: US-WI, name: 威斯康星, status: NOT_ONBOARDED}
       - {code: US-WY, name: 怀俄明, status: NOT_ONBOARDED}
       - {code: US-DC, name: 哥伦比亚特区, status: NOT_ONBOARDED}
+
+  # ------------------------------------------------------------
+  # 五、Phase 4B-2A Pilot 管辖地直连（Step 8，jurisdiction 级轮）
+  # ------------------------------------------------------------
+  - code: PILOT_4B2A
+    name_zh: 4B-2A 试点管辖地（SE/FI/US-CA/US-WA）
+    level: pilot
+    note: >
+      jurisdiction 级 MODE A/B 轮（scripts/run_jurisdiction_round.py）；
+      端点经 Step 8 真实探测（outputs/_probe_step8*.py 记录）。
+    source_roles:
+      - role: SE_NATIONAL_LEGISLATION
+        expected: true
+        sources: [se_sfst]
+        status: CONNECTED
+        note: "SFST 直链 + fritext 检索（R1-R3 三轮 · 发现 7 篇）"
+      - role: FI_NATIONAL_LEGISLATION
+        expected: true
+        sources: [fi_finlex]
+        status: CONNECTED
+        note: "Finlex ajantasa 直链（R1-R3 发现 3 篇）；检索=客户端渲染不可静态复现（C 路线）"
+      - role: US_CA_STATE_LEGISLATION
+        expected: true
+        sources: [us_ca_leginfo]
+        status: CONNECTED
+        note: "leginfo section 直链（R1-R3）；无检索端点（B 如实缺席）"
+      - role: US_WA_STATE_LEGISLATION
+        expected: true
+        sources: [us_wa_rcw]
+        status: CONNECTED
+        note: "RCW 章节直链（R1-R4 引用链扩张 · 发现 14 篇）；无检索端点（B 如实缺席）"

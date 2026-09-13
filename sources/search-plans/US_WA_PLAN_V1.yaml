@@ -1,0 +1,54 @@
+# ============================================================
+# Search Plan —— US_WA_PLAN_V1（Pilot 管辖地级，Phase 4B-2A Step 8）
+# ------------------------------------------------------------
+# 字段映射：fr_agencies→A 种子（RCW cite 直链）｜ fr_terms→B 检索词（本库无
+#          检索端点 → 供 A 章目录标题过滤）｜ eu_keywords→C 引用种子
+#          ｜ cross_terms→D 缺口种子 ｜ year_segments→B 年份过滤
+# 纪律：自冻结起不得修改；搜索空间变化 → US_WA_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: US_WA_PLAN_V1
+jurisdiction: US-WA
+scope: US-WA
+
+source_roles:
+  - {role: US_WA_STATE_LEGISLATION, critical: true}
+
+source_endpoints:
+  - us_wa_rcw_doc
+  - us_wa_rcw_chapter
+
+critical_sources:
+  - us_wa_rcw
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:                         # A：RCW section 直链种子
+    - "70A.200.010"
+    - "70A.200.020"
+    - "70A.200.030"
+    - "70A.200.040"
+    - "70A.200.050"
+    - "70A.555.010"
+    - "70A.555.020"
+  fr_terms:                            # B 不可用（search.do 404）→ 供章目录过滤
+    - battery
+    - "battery stewardship"
+  eu_keywords:                         # C：引用种子（RCW 引用模式）
+    - "RCW 70A.555.010"
+  cross_terms: []                      # D：无缺口种子
+
+language_set: [en]
+time_window: {from: "2019-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Pilot（优先度 0.575；70A.555 电池管理专章已 Source Proof）。RCW 无检索端点
+  （Step 8 探测 search.do 404）→ B 路线不可用（如实）；A 走 section 直链种子 +
+  章目录（cite=70A.200 下 40 条章节链接）标题过滤，C 从语料正文抽 "RCW 70A.NNN.NNN"
+  引用回采。
+created_at: "2026-09-13"
