@@ -25,14 +25,14 @@ official_channel_map:
     - source_id: us_ca_leginfo
       official_url: "https://leginfo.legislature.ca.gov/"
       access_method: html
-      status: ACCESSIBLE
-      note: "Source Proof✅：AB-2440 全文+状态页（样本 3/3）；检索表单为 JS（需 POST/浏览器）"
+      status: CONNECTED
+      note: "Step 8 回填：连接器真实采集（AB-2440）；R1-R3 轮次验证"
   STATE_STATUTES:
     - source_id: us_ca_leginfo
       official_url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml"
       access_method: html
-      status: ACCESSIBLE
-      note: "PRC 42451 条款页已验证（AB 2440 编入 Public Resources Code）"
+      status: CONNECTED
+      note: "Step 8 回填：PRC 条款直连（42451 B 级；42453 发现）；R1-R3 轮次验证"
   STATE_ENVIRONMENT_AGENCY:
     - source_id: browser_calrecycle
       official_url: "https://calrecycle.ca.gov/"

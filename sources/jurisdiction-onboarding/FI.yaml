@@ -24,8 +24,8 @@ official_channel_map:
     - source_id: fi_finlex
       official_url: "https://www.finlex.fi/"
       access_method: html
-      status: ACCESSIBLE
-      note: "Source Proof✅：全文+元数据（样本 3/3，Jätelaki 646/2011 等）；检索接口待适配（官方 API 已知，Step 5 接入）"
+      status: CONNECTED
+      note: "Step 8 回填：ajantasa 直链连接器真实采集（Flight 解析）；R1-R3 发现 3 篇；检索=客户端渲染不可静态复现"
   MS_OFFICIAL_GAZETTE:
     - source_id: eu_nim_fi
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"

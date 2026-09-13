@@ -24,8 +24,8 @@ official_channel_map:
     - source_id: se_sfst
       official_url: "https://rkrattsbaser.gov.se/"
       access_method: html
-      status: ACCESSIBLE
-      note: "Source Proof✅：全文+元数据（样本 3/3：SFS 2008:834/2007:185/2020:614）；检索接口（fritext）未过主题核验 → Step 5 适配/官方 API"
+      status: CONNECTED
+      note: "Step 8 回填：直链+检索（fritext）连接器真实采集；R1-R3 三轮发现 7 篇"
   MS_OFFICIAL_GAZETTE:
     - source_id: eu_nim_se
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"

@@ -25,14 +25,14 @@ official_channel_map:
     - source_id: us_wa_rcw
       official_url: "https://app.leg.wa.gov/rcw/"
       access_method: html
-      status: ACCESSIBLE
-      note: "Source Proof✅：RCW 70A.555（电池 stewardship 专章）全文已验证；检索参数待 Step 5 适配"
+      status: CONNECTED
+      note: "Step 8 回填：连接器真实采集（章节直链）；R1-R4 引用链扩张 14 篇"
   STATE_BATTERY_EPR_OR_STEWARDSHIP:
     - source_id: us_wa_rcw
       official_url: "https://app.leg.wa.gov/RCW/default.aspx?cite=70A.555"
       access_method: html
-      status: ACCESSIBLE
-      note: "70A.555 = 电池管理专章（官方章节页已抓取）"
+      status: CONNECTED
+      note: "Step 8 回填：70A.555 专章 + 14 篇 section 级入库；检索端点缺失（如实）"
 
 known_gaps:
   STATE_LEGISLATURE: "WA legislature bill 通道未接入"
