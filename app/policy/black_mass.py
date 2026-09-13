@@ -65,12 +65,17 @@ def record_class(record: dict) -> str:
                ("B" if record.get("relevant") else "C"))
 
 
-def build_coverage(records: list[dict], *, region: str = "") -> dict:
-    """六线覆盖矩阵（region 为空=全球视图；'EU'/'US' 过滤）。"""
+def build_coverage(records: list[dict], *, region: str = "",
+                   jurisdiction: str = "") -> dict:
+    """六线覆盖矩阵（region 为空=全球视图；'EU'/'US' 过滤；
+    jurisdiction 如 'US-CA'/'SE' 时按管辖归属过滤，优先于 region）。"""
     out_lines: list[dict] = []
     for lid, name, _pat in LINES:
         docs = [r for r in records if classify_line(r, lid)]
-        if region:
+        if jurisdiction:
+            from app.policy.jurisdiction_map import jurisdiction_of
+            docs = [r for r in docs if jurisdiction_of(r) == jurisdiction]
+        elif region:
             docs = [r for r in docs if _region(r) == region]
         strong = [r for r in docs if record_class(r) in STRONG_CLASSES]
         status = ("COVERED" if strong else ("PARTIAL" if docs else "MISSING"))
