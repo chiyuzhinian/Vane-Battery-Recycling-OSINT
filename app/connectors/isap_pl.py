@@ -15,7 +15,7 @@ from __future__ import annotations
 from typing import Any
 
 from .base import BROWSER_UA, BaseConnector, ConnectorBlocked, ProbeResult, RawEvidence
-from .leg_utils import detect_challenge, extract_title, strip_html
+from .leg_utils import detect_challenge, extract_title, strip_html, trim_nav
 
 MAX_TEXT = 60000
 
@@ -63,17 +63,19 @@ class IsapPlConnector(BaseConnector):
                 continue
             title = extract_title(html)
             fallback, cite = self.DEFAULT_DOCS.get(doc_id, (doc_id, ""))
+            body, nav_removed = trim_nav(strip_html(html))
             out.append(RawEvidence(
                 evidence_id=f"pl_isap_{doc_id.lower().replace('wdu', '')}",
                 channel="connector", source_id=self.source_id,
                 source_url=self.doc_url(doc_id),
                 source_title=f"{fallback}" + (f" — {title}" if title and 'isap' not in title.lower() else ""),
                 publish_date=None,
-                raw_text=strip_html(html)[:MAX_TEXT],
+                raw_text=body[:MAX_TEXT],
                 meta={"region": "EU", "jurisdiction": "PL",
                       "doc_key": f"PL:ISAP:{doc_id}",
                       "citation": cite,
                       "page_title": title,
+                      "nav_trimmed_chars": nav_removed,
                       "collector": "IsapPlConnector",
                       "official_domain": "isap.sejm.gov.pl",
                       "language": "pl",

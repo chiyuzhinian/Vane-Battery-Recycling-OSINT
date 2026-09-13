@@ -14,7 +14,7 @@ from __future__ import annotations
 from typing import Any
 
 from .base import BROWSER_UA, BaseConnector, ConnectorError, ProbeResult, RawEvidence
-from .leg_utils import detect_challenge, extract_title, strip_html
+from .leg_utils import detect_challenge, extract_title, strip_html, trim_nav
 
 MAX_TEXT = 60000
 #: 正文下限：低于此值视为 JS 壳/网络异常（Finlex 页面实测壳 1.5k）
@@ -58,16 +58,18 @@ class FinlexFiConnector(BaseConnector):
                 continue
             title = extract_title(html)
             fallback = self.DEFAULT_DOCS.get(number, (number, ""))[0]
+            body, nav_removed = trim_nav(text)
             out.append(RawEvidence(
                 evidence_id=f"fi_finlex_{number}",
                 channel="connector", source_id=self.source_id,
                 source_url=self.doc_url(number),
                 source_title=fallback,
                 publish_date=None,
-                raw_text=text[:MAX_TEXT],
+                raw_text=body[:MAX_TEXT],
                 meta={"region": "EU", "jurisdiction": "FI",
                       "doc_key": f"FI:SDK:{number[:4]}/{number[4:]}",
                       "page_title": title,
+                      "nav_trimmed_chars": nav_removed,
                       "collector": "FinlexFiConnector",
                       "official_domain": "finlex.fi",
                       "language": "fi",

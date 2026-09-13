@@ -65,3 +65,25 @@ def detect_challenge(html: str) -> str:
         if rx.search(head):
             return name
     return ""
+
+
+def trim_nav(text: str, *, min_len: int = 120, scan_lines: int = 160) -> tuple[str, int]:
+    """裁掉开头的站点导航/菜单行，让**法条正文前置**。
+
+    背景（实测）：RCW/leginfo/SFST 页面的 stripped 文本开头是
+    “Menu Website Search Term …” 导航（>1000 字符），而验收分类只扫
+    `text[:1600]` → 真法案被判 NO_THEME/D。导航是样板内容，裁头不丢正文。
+
+    算法：在前 scan_lines 行内找到首个“长行”（长度 ≥ min_len 且空格多，
+    视为正文段落），从其前 2 行开始保留；找不到则原样返回。
+    → (裁剪后文本, 被裁字符数)
+    """
+    lines = (text or "").splitlines()
+    if not lines:
+        return "", 0
+    for i, ln in enumerate(lines[:scan_lines]):
+        if len(ln) >= min_len and ln.count(" ") >= 12:
+            start = max(0, i - 2)
+            removed = sum(len(x) + 1 for x in lines[:start])
+            return "\n".join(lines[start:]), removed
+    return text, 0

@@ -15,7 +15,7 @@ from __future__ import annotations
 from typing import Any
 
 from .base import BROWSER_UA, BaseConnector, ConnectorError, ProbeResult, RawEvidence
-from .leg_utils import detect_challenge, extract_title, strip_html
+from .leg_utils import detect_challenge, extract_title, strip_html, trim_nav
 
 MAX_TEXT = 60000
 MIN_TEXT = 1500
@@ -61,6 +61,7 @@ class LeginfoCaConnector(BaseConnector):
                 text = strip_html(html)
                 if len(text) < MIN_TEXT:
                     raise ConnectorError(f"正文不足（{len(text)} 字符）")
+                body, nav_removed = trim_nav(text)
             except Exception as exc:  # noqa: BLE001
                 self.last_errors.append({"doc": doc_key, "error": type(exc).__name__})
                 print(f"    ⚠️ us_ca_leginfo {doc_key} 失败：{type(exc).__name__}")
@@ -69,10 +70,11 @@ class LeginfoCaConnector(BaseConnector):
                 evidence_id=f"us_ca_leginfo_{doc_key.split(':')[-1].lower()}",
                 channel="connector", source_id=self.source_id,
                 source_url=url, source_title=label, publish_date=None,
-                raw_text=text[:MAX_TEXT],
+                raw_text=body[:MAX_TEXT],
                 meta={"region": "US", "jurisdiction": "US-CA",
                       "doc_key": doc_key,
                       "page_title": extract_title(html),
+                      "nav_trimmed_chars": nav_removed,
                       "collector": "LeginfoCaConnector",
                       "official_domain": "leginfo.legislature.ca.gov",
                       "language": "en",

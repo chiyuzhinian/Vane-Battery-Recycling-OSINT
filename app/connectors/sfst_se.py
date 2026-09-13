@@ -16,7 +16,7 @@ from datetime import datetime
 from typing import Any
 
 from .base import BaseConnector, ProbeResult, RawEvidence
-from .leg_utils import detect_challenge, extract_title, strip_html
+from .leg_utils import detect_challenge, extract_title, strip_html, trim_nav
 
 MAX_TEXT = 60000
 
@@ -54,16 +54,18 @@ class SfstSeConnector(BaseConnector):
                 continue
             page_title = extract_title(html)
             fallback = self.DEFAULT_DOCS.get(sfs, sfs)
+            body, nav_removed = trim_nav(strip_html(html))
             out.append(RawEvidence(
                 evidence_id=f"se_sfst_{sfs.replace(':', '_')}",
                 channel="connector", source_id=self.source_id,
                 source_url=self.doc_url(sfs),
                 source_title=f"SFS {sfs} — {fallback}",
                 publish_date=None,
-                raw_text=strip_html(html)[:MAX_TEXT],
+                raw_text=body[:MAX_TEXT],
                 meta={"region": "EU", "jurisdiction": "SE",
                       "doc_key": f"SE:SFS:{sfs}",
                       "page_title": page_title,
+                      "nav_trimmed_chars": nav_removed,
                       "collector": "SfstSeConnector",
                       "official_domain": "rkrattsbaser.gov.se",
                       "language": "sv",

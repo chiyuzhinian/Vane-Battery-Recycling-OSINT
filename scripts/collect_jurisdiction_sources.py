@@ -27,6 +27,7 @@ sys.path.insert(0, str(ROOT))
 sys.stdout.reconfigure(encoding="utf-8")
 
 from app.policy.acceptance import classify_record  # noqa: E402
+from app.policy.identity_jurisdiction import identity_from_meta  # noqa: E402
 
 FAILURES_LOG = ROOT / "outputs" / "audit" / "jurisdiction_collection_failures.json"
 
@@ -68,6 +69,9 @@ def to_record(ev, jid: str, region: str) -> dict:
     rec["hits"] = [f"acceptance:{res.classification}"] + list(res.reason_codes)[:4]
     rec["meta"]["acceptance_class"] = res.classification
     rec["meta"]["topic_ids"] = res.topic_ids
+    # 文档级身份（Step 6）：从官方编号（doc_key）构造；缺失即 None，不得猜
+    rec["identity"] = identity_from_meta(rec["meta"])
+    rec["meta"]["identity_present"] = rec["identity"] is not None
     return rec
 
 
