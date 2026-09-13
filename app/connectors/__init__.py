@@ -31,8 +31,11 @@ from .eur_lex import EurLexConnector
 from .finlex_fi import FinlexFiConnector
 from .gesetze_de import GesetzeDeConnector
 from .isap_pl import IsapPlConnector
+from .krs_ky import KrsKyConnector
 from .leginfo_ca import LeginfoCaConnector
 from .rcw_wa import RcwWaConnector
+from .revisor_mn import RevisorMnConnector
+from .sejm_eli_pl import SejmEliPlConnector
 from .sfst_se import SfstSeConnector
 from .us_federal import FederalRegisterConnector
 from .vane import VaneConnector
@@ -57,6 +60,10 @@ REGISTRY: dict[str, Type[BaseConnector]] = {
     # ---- Phase 4B-2A：US 州 pilot ----
     "us_ca_leginfo": LeginfoCaConnector,   # 加州立法信息（法案/法典）
     "us_wa_rcw": RcwWaConnector,           # 华盛顿州 RCW 修订法典
+    # ---- Phase 4B-2B0：受阻/未适配通道攻坚（Step 5）----
+    "pl_sejm_eli": SejmEliPlConnector,     # 波兰 Sejm ELI 官方 API（替代被挡的 ISAP）
+    "us_ky_krs": KrsKyConnector,           # 肯塔基 KRS 修订法典（statute.aspx）
+    "us_mn_revisor": RevisorMnConnector,   # 明尼苏达法规（revisor cite 直链）
     # ---- 企业侧 ----
     "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
     "eia": EiaConnector,            # 环评公示（非上市企业的唯一产能来源）

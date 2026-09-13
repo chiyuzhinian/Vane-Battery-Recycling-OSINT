@@ -122,7 +122,7 @@ jurisdictions:
       - {code: LV, name: 拉脱维亚, status: PARTIAL, sources: [eu_nim_lv], note: NIM 14 条}
       - {code: MT, name: 马耳他, status: PARTIAL, sources: [eu_nim_mt], note: NIM 6 条}
       - {code: NL, name: 荷兰, status: CONNECTED, sources: [nl_bwb, browser_netherlands, eu_nim_nl], note: KOOP BWB 官方 XML 专线}
-      - {code: PL, name: 波兰, status: PARTIAL, sources: [eu_nim_pl], note: NIM 24 条}
+      - {code: PL, name: 波兰, status: CONNECTED, sources: [pl_sejm_eli, eu_nim_pl], note: NIM 24 条 + Sejm ELI 官方 API 专线（Step 5 攻坚：电池法 129K 字符；ISAP 仍被 Distil 拦截）}
       - {code: PT, name: 葡萄牙, status: PARTIAL, sources: [eu_nim_pt], note: NIM 2 条}
       - {code: RO, name: 罗马尼亚, status: PARTIAL, sources: [eu_nim_ro], note: NIM 12 条}
       - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, eu_nim_se], note: NIM 15 条（bilskrotning 系列）+ SFST 专线（Step 8：直链+检索 · 发现 7 篇）}
@@ -247,13 +247,13 @@ jurisdictions:
       - {code: US-IN, name: 印第安纳, status: NOT_ONBOARDED}
       - {code: US-IA, name: 艾奥瓦, status: NOT_ONBOARDED}
       - {code: US-KS, name: 堪萨斯, status: NOT_ONBOARDED}
-      - {code: US-KY, name: 肯塔基, status: NOT_ONBOARDED}
+      - {code: US-KY, name: 肯塔基, status: PARTIAL, sources: [us_ky_krs], note: "KRS statute.aspx 专线（Step 5 攻坚：样本 3/3）；电池专条未定位"}
       - {code: US-LA, name: 路易斯安那, status: NOT_ONBOARDED}
       - {code: US-ME, name: 缅因, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
       - {code: US-MD, name: 马里兰, status: NOT_ONBOARDED}
       - {code: US-MA, name: 马萨诸塞, status: NOT_ONBOARDED}
       - {code: US-MI, name: 密歇根, status: NOT_ONBOARDED}
-      - {code: US-MN, name: 明尼苏达, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
+      - {code: US-MN, name: 明尼苏达, status: PARTIAL, sources: [us_mn_revisor], note: "revisor cite 专线（Step 5 攻坚：325E.1251/116.07 样本）；电池专条未定位（115A.30xx 404）"}
       - {code: US-MS, name: 密西西比, status: NOT_ONBOARDED}
       - {code: US-MO, name: 密苏里, status: NOT_ONBOARDED}
       - {code: US-MT, name: 蒙大拿, status: NOT_ONBOARDED}

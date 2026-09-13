@@ -25,8 +25,8 @@ official_channel_map:
     - source_id: us_ky_krs
       official_url: "https://apps.legislature.ky.gov/law/statutes/"
       access_method: html
-      status: ACCESSIBLE
-      note: "入口可达；章节页未解析出文书链接（Source Proof 记录）→ Step 5 适配章节直链"
+      status: CONNECTED
+      note: "Step 5 攻坚：statute.aspx 条文直链连接器（样本 3/3 已入库）；电池专条未定位（KRS 无 battery 专章）→ 通道成立、主题待续"
 
 known_gaps:
   STATE_LEGISLATURE: "KY legislature bill 通道未接入"

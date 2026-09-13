@@ -77,11 +77,13 @@ def test_coverage_artifact_shape():
     # （文本无 EV/traction/vehicle 信号）→ 降 C → 不得再充当 EV 强证据；
     # 该管辖地此后需以 EV 域真实文书回补（2B0 Step 6 深采）。
     assert js["US-CA"]["level"] in ("ACTIVE", "COLLECTED")
-    assert js["PL"]["level"] == "BLOCKED"            # Distil 未决失败
+    # 2B0 Step 5：PL 经官方替代通道（Sejm ELI API）解锁 → 离开 BLOCKED；
+    # ISAP 遗留失败如实保留在 failures 清单
+    assert js["PL"]["level"] in ("COLLECTED", "ACTIVE")
+    assert js["PL"]["failures"]                      # 遗留失败仍入档
     assert js["FI"]["level"] in ("ACTIVE", "COLLECTED")
-    # 未决失败：FI 已解决 → 0；PL 保留
+    # 未决失败：FI 已解决 → 0
     assert not js["FI"]["failures"]
-    assert js["PL"]["failures"]
     # 主题矩阵与黑粉矩阵每管辖地齐备
     for jid, row in js.items():
         assert len(row["topics"]) == 14

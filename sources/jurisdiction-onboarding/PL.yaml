@@ -21,11 +21,16 @@ optional_source_roles: [MS_EPR_AUTHORITY, MS_ELV_AUTHORITY]
 
 official_channel_map:
   MS_LEGISLATION_DATABASE:
+    - source_id: pl_sejm_eli
+      official_url: "https://api.sejm.gov.pl/eli/"
+      access_method: api
+      status: CONNECTED
+      note: "Step 5 攻坚：ISAP 仍被 Distil 拦截 → **官方替代 API**（Sejm ELI）：元数据+全文（电池法 2009/666 = 129K 字符）+实施法案家族；样本 3/3（已入库）"
     - source_id: pl_isap
       official_url: "https://isap.sejm.gov.pl/"
       access_method: html
-      status: ACCESSIBLE
-      note: "Source Proof✅：文书直链+全文（样本 3/3，含 Dz.U. 2009/79/666 电池法）；检索接口（search.xsp）需 Step 5 适配"
+      status: BLOCKED
+      note: "Distil 反爬（本环境全路径拦截）；保留作浏览器通道候选（不绕过访问控制）"
   MS_OFFICIAL_GAZETTE:
     - source_id: eu_nim_pl
       official_url: "https://eur-lex.europa.eu/legal-content/EN/NIM/?uri=CELEX:32023R1542"

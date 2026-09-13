@@ -25,8 +25,8 @@ official_channel_map:
     - source_id: us_mn_revisor
       official_url: "https://www.revisor.mn.gov/"
       access_method: html
-      status: ACCESSIBLE
-      note: "入口可达；检索/法规页提取未过主题核验（如实记录）→ Step 5 适配 revisor 检索参数"
+      status: CONNECTED
+      note: "Step 5 攻坚：statutes/cite 直链连接器（样本 3/3 已入库：325E.1251 电子废物 / 116.07 污染控制）；电池专条未定位（115A.30xx 404）→ 通道成立、主题待续"
 
 known_gaps:
   STATE_LEGISLATURE: "MN legislature bill 通道未接入"
