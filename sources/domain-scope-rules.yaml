@@ -1,0 +1,82 @@
+# ============================================================
+# Domain Scope Rules —— Phase 4B-2B0 Step 4（域相关性护栏）
+# ------------------------------------------------------------
+# 主研究对象：EV traction battery / end-of-life EV battery /
+#             vehicle battery recycling / black mass
+# 与 acceptance A1/A2/B/C/D 正交；约束矩阵（domain_scope.guard_class）：
+#   CORE_EV_TRACTION           → A1 允许（标题级对象）
+#   HORIZONTAL_APPLIES_TO_EV   → A2 允许（体系横向法案）
+#   SUPPORTING_REGULATION      → 最高 B（A1/A2 降 B）
+#   GENERAL_BATTERY_BACKGROUND → 最高 C（A1/A2/B 降 C——便携/消费电池背景）
+#   OUT_OF_SCOPE               → 仅 D
+# 纪律：**不得**因出现 battery recycling / EPR / stewardship 就自动 A1/A2
+# ============================================================
+version: 1
+
+# 1) 核心对象（标题级）：EV / 动力电池 / 车用 / 黑粉
+core_ev_traction:
+  - "traction batter"
+  - "vehicle batter"
+  - "automotive batter"
+  - "electric\\s+vehicle\\s+batter"
+  - "\\bev\\s+batter"
+  - "motive batter"
+  - "high-voltage batter"
+  - "drive batter"
+  - "动力电池|车用.{0,6}电池|退役电池|报废.{0,4}电池"
+  - "black\\s+mass"
+  - "masse\\s+noire"
+  - "blackmass"
+  - "黑粉"
+
+# 2) 横向适用于 EV 的体系法案（电池法/ELV/WSR/WFD/CRM 等）
+horizontal_applies_to_ev:
+  - "batter(?:y|ies)\\s+(?:and\\s+accumulators\\s+)?regulation"
+  - "2023/1542"
+  - "2006/66"
+  - "2000/53"
+  - "2024/1157"
+  - "2008/98"
+  - "waste\\s+shipment"
+  - "end-of-life\\s+vehicle|elv"
+  - "waste\\s+framework\\s+directive"
+  - "critical\\s+raw\\s+materials\\s+act|2024/1252"
+  - "batteries\\s+and\\s+accumulators"
+  - "persistent\\s+organic\\s+pollutant"
+  - "basel\\s+convention|transboundary"
+  # 多语种废物/车辆家族（横向适用——2B0 实测判例：BE NIM ELV 被误域外）
+  - "afgedankte\\s+voertuigen|afval|afvalstoffen|milieubeleidsover"
+  - "v[ée]hicules?\\s+hors\\s+d'usage|d[ée]chet"
+  - "altfahrzeug|altauto|abfall(?:verzeichnis|recht)"
+  - "romuajoneuvo|j[äa]telaki|j[äa]tehuolto|j[äa]te"
+  - "skrotade\\s+fordon|skrotfordon|avfallsf[öo]rordning|avfall"
+  - "gospodarka\\s+odpadami|odpad"
+
+# 3) 支撑性方法论/程序（回收效率/再生含量/碳足迹/尽职调查/运输/标准）
+supporting_markers:
+  - "recycl(?:ing|ed)\\s+(?:efficiency|content|material)"
+  - "carbon\\s+footprint"
+  - "due\\s+diligence"
+  - "transport|carriage|ADR|hazardous\\s+goods"
+  - "standard|EN\\s?\\d|ISO\\s?\\d"
+  - "harmonised\\s+standard"
+  - "traceability|battery\\s+passport"
+
+# 4) 泛电池背景（便携/消费/纽扣/家用/电单车——**不得**充当 EV 核心证据）
+general_battery_markers:
+  - "portable\\s+batter"
+  - "consumer\\s+batter"
+  - "button\\s+cell|coin\\s+cell"
+  - "household\\s+batter"
+  - "e-?bike|electric\\s+bicycle"
+  - "paristo|kannettava.{0,10}(?:akku|paristo)"
+  - "knappcell|husdjur"   # SE 便携语境（保守样例）
+  - "dry\\s+cell|alkaline\\s+batter"
+  - "toy\\s+batter|hearing\\s+aid\\s+batter"
+
+# 5) 域外对象（复用 relevance.py 的 V2_OFF_SCOPE 口径；铅酸/消费且无电池法引用）
+out_of_scope_markers:
+  - "lead-?acid\\s+batter"
+  - "automotive\\s+lead"
+  - "solar\\s+panel|photovoltaic"
+  - "packaging\\s+waste"

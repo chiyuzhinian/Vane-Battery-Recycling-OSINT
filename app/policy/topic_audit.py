@@ -20,16 +20,29 @@ PLACEHOLDER_MAX_CHARS = 600
 
 
 def effective_class(record: dict, overlay: dict | None = None) -> str:
-    """分类口径：meta.acceptance_class → overlay → 现算 classify_record。"""
+    """分类口径：meta.acceptance_class → overlay → 现算 classify_record。
+
+    终点套用 **Domain Scope Guard**（Step 4）：泛电池背景不得充当
+    A1/A2/B；域外对象仅 D。域规则异常时回退未护栏值（不阻断）。
+    """
     from app.policy.acceptance import classify_record
     meta_cls = str((record.get("meta") or {}).get("acceptance_class") or "")
     if meta_cls:
-        return meta_cls
-    if overlay:
+        cls = meta_cls
+    elif overlay:
         row = overlay.get(str(record.get("evidence_id") or "")) or {}
         ov = str(row.get("acceptance_class") or "")
-        if ov:
-            return ov
+        cls = ov or _rejudge(record, classify_record)
+    else:
+        cls = _rejudge(record, classify_record)
+    try:
+        from app.policy.domain_scope import guarded_effective_class
+        return guarded_effective_class(record, cls)
+    except Exception:  # noqa: BLE001
+        return cls
+
+
+def _rejudge(record: dict, classify_record) -> str:
     try:
         return classify_record(record).classification
     except Exception:  # noqa: BLE001

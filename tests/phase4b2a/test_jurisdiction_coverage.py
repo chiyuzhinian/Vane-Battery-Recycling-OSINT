@@ -27,12 +27,14 @@ def _rec(title: str, text: str = "", cls: str = "C",
 def test_topic_status_five_states():
     rows = [_rec("Jätelaki", "tuottajavastuu ja keräysjärjestelmä jätteistä",
                  cls="C"),
-            _rec("Battery recycling", "waste battery collection scheme", cls="B"),
+            # 2B0 Step 4：强证据需过域护栏——合成记录带横向体系法案信号
+            _rec("Regulation (EU) 2023/1542 on batteries",
+                 "waste battery collection scheme", cls="B"),
             _rec("VAHA-luettelo", "vaarallinen jäte sekä ohtlikud jäätmed",
                  cls="C")]
     st = topic_status(rows)
     assert st["T01"] == "PARTIAL"          # 有命中但强证据在 T02
-    assert st["T02"] == "COVERED"          # EN battery collection + B
+    assert st["T02"] == "COVERED"          # EN battery collection + B（域内）
     assert st["T03"] == "MISSING"          # 无命中
     assert st["T10"] == "PARTIAL"          # vaarallinen jäte 命中、无强证据
     assert set(st) and len(st) == 14
@@ -71,7 +73,10 @@ def test_coverage_artifact_shape():
     data = json.loads(ARTIFACT.read_text(encoding="utf-8"))
     js = data["jurisdictions"]
     assert {"SE", "FI", "US-CA", "US-WA", "PL", "DE", "BE"} <= set(js)
-    assert js["US-CA"]["level"] == "ACTIVE"          # 含 B 级条款
+    # 2B0 Step 4 域护栏：US-CA 证据（AB2440/PRC 42451）经核实为**泛电池**
+    # （文本无 EV/traction/vehicle 信号）→ 降 C → 不得再充当 EV 强证据；
+    # 该管辖地此后需以 EV 域真实文书回补（2B0 Step 6 深采）。
+    assert js["US-CA"]["level"] in ("ACTIVE", "COLLECTED")
     assert js["PL"]["level"] == "BLOCKED"            # Distil 未决失败
     assert js["FI"]["level"] in ("ACTIVE", "COLLECTED")
     # 未决失败：FI 已解决 → 0；PL 保留
