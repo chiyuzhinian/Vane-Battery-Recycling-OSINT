@@ -125,7 +125,7 @@ jurisdictions:
       - {code: PL, name: 波兰, status: CONNECTED, sources: [pl_sejm_eli, eu_nim_pl], note: NIM 24 条 + Sejm ELI 官方 API 专线（Step 5 攻坚：电池法 129K 字符；ISAP 仍被 Distil 拦截）}
       - {code: PT, name: 葡萄牙, status: PARTIAL, sources: [eu_nim_pt], note: NIM 2 条}
       - {code: RO, name: 罗马尼亚, status: PARTIAL, sources: [eu_nim_ro], note: NIM 12 条}
-      - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, eu_nim_se], note: NIM 15 条（bilskrotning 系列）+ SFST 专线（Step 8：直链+检索 · 发现 7 篇）}
+      - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, se_naturvardsverket, eu_nim_se], note: NIM 15 条 + SFST 专线（Step 8：直链+检索 · 发现 7 篇）+ Naturvårdsverket（Step 6：主站可达·正文客户端渲染 PARTIAL）}
       - {code: SI, name: 斯洛文尼亚, status: PARTIAL, sources: [eu_nim_si], note: NIM 15 条}
       - {code: SK, name: 斯洛伐克, status: PARTIAL, sources: [eu_nim_sk], note: NIM 12 条（均为泛废物层，无电池专条）}
 
@@ -277,7 +277,7 @@ jurisdictions:
       - {code: US-UT, name: 犹他, status: NOT_ONBOARDED}
       - {code: US-VT, name: 佛蒙特, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
       - {code: US-VA, name: 弗吉尼亚, status: NOT_ONBOARDED}
-      - {code: US-WA, name: 华盛顿州, status: PARTIAL, sources: [us_wa_rcw], note: "电池 EPR 法（70A.555 专章）；RCW 专线（Step 8：引用链扩张 · 发现 14 篇）"}
+      - {code: US-WA, name: 华盛顿州, status: PARTIAL, sources: [us_wa_rcw, us_wa_wac, us_wa_ecology, us_wa_bills], note: "电池 EPR 法（70A.555 专章）；RCW 专线（Step 8：引用链扩张 · 发现 14 篇）+ WAC 行政法规 + Ecology + Bills（SB 5144）——Step 6 角色 closure"}
       - {code: US-WV, name: 西弗吉尼亚, status: NOT_ONBOARDED}
       - {code: US-WI, name: 威斯康星, status: NOT_ONBOARDED}
       - {code: US-WY, name: 怀俄明, status: NOT_ONBOARDED}

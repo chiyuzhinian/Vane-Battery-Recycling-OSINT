@@ -38,7 +38,7 @@ OUT = ROOT / "outputs" / "audit" / "jurisdiction_layers.json"
 TARGETS = ("SE", "FI", "US-CA", "US-WA", "DE", "NL", "ES", "FR")
 
 PLAN_BY_JID = {"SE": "SE_PLAN_V1", "FI": "FI_PLAN_V1",
-               "US-CA": "US_CA_PLAN_V1", "US-WA": "US_WA_PLAN_V1"}
+               "US-CA": "US_CA_PLAN_V1", "US-WA": "US_WA_PLAN_V2"}
 
 
 def main() -> int:

@@ -1,0 +1,55 @@
+# ============================================================
+# Search Plan —— US_WA_PLAN_V2（Pilot 管辖地级，Phase 4B-2B0 Step 6）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak 留在 80f3 系列，独立视图）：
+#   · discovery_routes 增加 D（缺口枚举：章内未采 section 号段）
+#   · A 种子换为章内未采 section（020/030/040——经章节目录验证号段）
+#   · D 种子 = 章内缺口（080/100/120）
+#   · C 种子沿用 V1（引用链在 4B-2A 已饱和，本轮为复现验证）
+# 字段映射：fr_agencies→A 种子 ｜ fr_terms→B 检索词（WA 无检索端点）
+#          ｜ eu_keywords→C 引用种子 ｜ cross_terms→D 缺口种子
+# 纪律：自冻结起不得修改；再变 → US_WA_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: US_WA_PLAN_V2
+jurisdiction: US-WA
+scope: US-WA
+
+source_roles:
+  - {role: US_WA_STATE_LEGISLATION, critical: true}
+
+source_endpoints:
+  - us_wa_rcw_doc
+  - us_wa_rcw_chapter
+
+critical_sources:
+  - us_wa_rcw
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:                         # A：章内未采 section 直链
+    - "70A.555.020"
+    - "70A.555.030"
+    - "70A.555.040"
+  fr_terms:                            # B 不可用（search.do 404）
+    - battery
+    - "battery stewardship"
+  eu_keywords:                         # C：引用种子（复现验证）
+    - "RCW 70A.555.010"
+  cross_terms:                         # D：缺口枚举（章内缺口号段）
+    - "70A.555.080"
+    - "70A.555.100"
+    - "70A.555.120"
+
+language_set: [en]
+time_window: {from: "2019-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, C, D]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  2B0 Step 6：为达成 route diversity ≥3（eligibility 闸门）而建。
+  D=章内缺口枚举（4B-2A 引用链发现的 section 号段未覆盖部分）。
+created_at: "2026-09-14"

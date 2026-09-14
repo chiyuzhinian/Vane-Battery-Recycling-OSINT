@@ -38,9 +38,14 @@ official_channel_map:
       status: DISCOVERED
       discovery_layer_only: true
       note: "NIM 公报引用线索（15 条）；SFST 亦承载公报职能"
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY:
+    - source_id: se_naturvardsverket
+      official_url: "https://www.naturvardsverket.se/"
+      access_method: html
+      status: PARTIAL
+      note: "Step 6 探测：主站可达（avfall 主题页）但**正文客户端渲染**（静态仅 ~5K 残文）→ PARTIAL；浏览器/官方接口候选"
 
 known_gaps:
-  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: "Naturvårdsverket 通道未接入"
   MS_WASTE_REGULATOR: "废物监管通道未接入"
   MS_TRANSPORT_OR_DANGEROUS_GOODS: "运输/危货主管通道未接入"
   MS_CUSTOMS_OR_TRADE: "Tullverket 通道未接入"

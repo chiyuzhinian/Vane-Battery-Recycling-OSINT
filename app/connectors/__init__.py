@@ -23,6 +23,7 @@ from .base import (
 )
 from .boe_es import BoeEsConnector
 from .bwb_nl import BwbNlConnector
+from .bills_wa import BillsWaConnector
 from .cninfo import CninfoConnector
 from .datafair import DataFairConnector
 from .dila_fr import DilaFrConnector
@@ -33,10 +34,13 @@ from .gesetze_de import GesetzeDeConnector
 from .isap_pl import IsapPlConnector
 from .krs_ky import KrsKyConnector
 from .leginfo_ca import LeginfoCaConnector
+from .nv_se import NvSeConnector
 from .rcw_wa import RcwWaConnector
 from .revisor_mn import RevisorMnConnector
 from .sejm_eli_pl import SejmEliPlConnector
 from .sfst_se import SfstSeConnector
+from .ecology_wa import EcologyWaConnector
+from .wac_wa import WacWaConnector
 from .us_federal import FederalRegisterConnector
 from .vane import VaneConnector
 
@@ -64,6 +68,11 @@ REGISTRY: dict[str, Type[BaseConnector]] = {
     "pl_sejm_eli": SejmEliPlConnector,     # 波兰 Sejm ELI 官方 API（替代被挡的 ISAP）
     "us_ky_krs": KrsKyConnector,           # 肯塔基 KRS 修订法典（statute.aspx）
     "us_mn_revisor": RevisorMnConnector,   # 明尼苏达法规（revisor cite 直链）
+    # ---- Phase 4B-2B0：Step 6 角色 closure 通道 ----
+    "us_wa_wac": WacWaConnector,           # 华盛顿行政法规（WAC cite）
+    "us_wa_ecology": EcologyWaConnector,   # 华盛顿生态署（废物/环境项目页）
+    "us_wa_bills": BillsWaConnector,       # 华盛顿法案（billsummary；SB 5144 电池管理法）
+    "se_naturvardsverket": NvSeConnector,  # 瑞典环境保护署（avfall/生产者责任）
     # ---- 企业侧 ----
     "cninfo": CninfoConnector,      # 上市公司公告 / 年报（13 家上市系企业）
     "eia": EiaConnector,            # 环评公示（非上市企业的唯一产能来源）

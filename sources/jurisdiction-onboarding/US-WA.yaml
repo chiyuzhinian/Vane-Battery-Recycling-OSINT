@@ -33,13 +33,33 @@ official_channel_map:
       access_method: html
       status: CONNECTED
       note: "Step 8 回填：70A.555 专章 + 14 篇 section 级入库；检索端点缺失（如实）"
+  STATE_ADMIN_CODE:
+    - source_id: us_wa_wac
+      official_url: "https://app.leg.wa.gov/WAC/"
+      access_method: html
+      status: CONNECTED
+      note: "Step 6 角色 closure：WAC cite 直链连接器（173-303 危废章等，样本 3/3 已入库）"
+  STATE_ENVIRONMENT_AGENCY:
+    - source_id: us_wa_ecology
+      official_url: "https://ecology.wa.gov/"
+      access_method: html
+      status: CONNECTED
+      note: "Step 6 角色 closure：Ecology Waste & Toxics 频道连接器（3 页 B 级入库）"
+  STATE_WASTE_PROGRAM:
+    - source_id: us_wa_ecology
+      official_url: "https://ecology.wa.gov/Waste-Toxics"
+      access_method: html
+      status: CONNECTED
+      note: "同 Ecology 官方通道（废物/回收项目主管机构）"
+  STATE_LEGISLATURE:
+    - source_id: us_wa_bills
+      official_url: "https://app.leg.wa.gov/billsummary"
+      access_method: html
+      status: CONNECTED
+      note: "Step 6 角色 closure：billsummary 直链（SB 5144 (2023) 电池管理法已验证入库）"
 
 known_gaps:
-  STATE_LEGISLATURE: "WA legislature bill 通道未接入"
-  STATE_ADMIN_CODE: "WAC 行政法规通道未接入"
   STATE_REGISTER: "州公报通道未接入"
-  STATE_ENVIRONMENT_AGENCY: "Ecology 通道可达未接入（Step 5）"
-  STATE_WASTE_PROGRAM: "废物项目通道未接入"
   STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
 
 collector_strategy:

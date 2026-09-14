@@ -16,7 +16,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from app.policy.search_plan import load_plan, validate_plan  # noqa: E402
 import run_jurisdiction_round as rj  # noqa: E402
 
-PLANS = ("SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1", "US_WA_PLAN_V1")
+PLANS = ("SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1", "US_WA_PLAN_V1",
+         "US_WA_PLAN_V2")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -35,6 +36,7 @@ def test_plan_hashes_are_frozen():
         "FI_PLAN_V1": "bd138f120fb1",
         "US_CA_PLAN_V1": "391507348e01",
         "US_WA_PLAN_V1": "192be6abc2f2",
+        "US_WA_PLAN_V2": "69a4f37344f0",   # Step 6：+D 路线（reset 独立视图）
     }
     for pid, prefix in expect.items():
         assert load_plan(pid).plan_hash().startswith(prefix), \
