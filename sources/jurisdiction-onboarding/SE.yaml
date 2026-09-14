@@ -44,21 +44,37 @@ official_channel_map:
       access_method: html
       status: PARTIAL
       note: "Step 6 探测：主站可达（avfall 主题页）但**正文客户端渲染**（静态仅 ~5K 残文）→ PARTIAL；浏览器/官方接口候选"
+  MS_TRANSPORT_OR_DANGEROUS_GOODS:
+    - source_id: se_transportstyrelsen
+      official_url: "https://www.transportstyrelsen.se/sv/Regler/"
+      access_method: html
+      status: CONNECTED
+      note: >-
+        2B1：Transportstyrelsen（瑞典交通署）——Regler 法规索引 +
+        farligt gods 搜索（服务端渲染实证，可重复 httpx 采集）；
+        样本已入库（se_transportstyrelsen_regler / _farligt_gods）。
+  MS_STANDARDS_METADATA:
+    - source_id: se_sis
+      official_url: "https://www.sis.se/sok/"
+      access_method: html
+      status: PARTIAL
+      note: >-
+        2B1：SIS（瑞典标准协会）标准目录/检索 metadata 可达
+        （metadata-only 口径；标准全文付费——PAYWALLED_KNOWN）。
+        样本：se_sis_standarder。
 
 known_gaps:
-  MS_WASTE_REGULATOR: "废物监管通道未接入"
-  MS_TRANSPORT_OR_DANGEROUS_GOODS: "运输/危货主管通道未接入"
-  MS_CUSTOMS_OR_TRADE: "Tullverket 通道未接入"
-  MS_STANDARDS_METADATA: "SIS/ISO 直连未接入（metadata-only 口径）"
+  MS_WASTE_REGULATOR: "废物监管通道未接入（NV 正文渲染受限；Länsstyrelsen 待探）"
+  MS_CUSTOMS_OR_TRADE: "Tullverket 403（Cloudflare 壳，待网络环境/官方接口）"
 
 collector_strategy:
   MS_LEGISLATION_DATABASE: connector（HTML 解析，Step 5）
   MS_OFFICIAL_GAZETTE: nim_discovery
   MS_ENVIRONMENT_MINISTRY_OR_AGENCY: pending_probe
   MS_WASTE_REGULATOR: pending_probe
-  MS_TRANSPORT_OR_DANGEROUS_GOODS: pending_probe
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: connector（Transportstyrelsen，2B1）
   MS_CUSTOMS_OR_TRADE: pending_probe
-  MS_STANDARDS_METADATA: metadata_only
+  MS_STANDARDS_METADATA: metadata_only（SIS，2B1）
 identity_strategy:
   pattern: "SE:SFS:{year}:{number}"
   enrich_fields: [title, publish_date, official_url]

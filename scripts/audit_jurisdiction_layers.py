@@ -37,7 +37,7 @@ OUT = ROOT / "outputs" / "audit" / "jurisdiction_layers.json"
 #: pilot + 参考管辖地（2B0 评估范围）
 TARGETS = ("SE", "FI", "US-CA", "US-WA", "DE", "NL", "ES", "FR")
 
-PLAN_BY_JID = {"SE": "SE_PLAN_V1", "FI": "FI_PLAN_V1",
+PLAN_BY_JID = {"SE": "SE_PLAN_V2", "FI": "FI_PLAN_V1",
                "US-CA": "US_CA_PLAN_V2", "US-WA": "US_WA_PLAN_V2"}
 
 

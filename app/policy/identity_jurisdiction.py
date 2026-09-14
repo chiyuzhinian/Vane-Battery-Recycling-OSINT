@@ -87,9 +87,14 @@ def dedicated_identity_completeness(records: list[dict], jid: str) -> dict:
 
     与 identity_completeness 的区别：后者分母混入 discovery layer，
     导致 SE 40% / FI 18.2% / CA 38.5% 的口径失真（审计坐实）。
+
+    2B1 页面类豁免：机构索引/检索/目录页（无文书编号概念）由采集器
+    显式标注 meta.identity_status=NOT_APPLICABLE_* → **不计分母**
+    （有 reason 可审计；禁止无声剔除）。
     """
     full = 0
     total = 0
+    excluded_na = 0
     missing_ids: list[str] = []
     from app.policy.jurisdiction_map import jurisdiction_of
     for r in records:
@@ -97,8 +102,12 @@ def dedicated_identity_completeness(records: list[dict], jid: str) -> dict:
             continue
         if jurisdiction_of(r) != jid:
             continue
+        meta = r.get("meta") or {}
+        if str(meta.get("identity_status") or "").startswith("NOT_APPLICABLE"):
+            excluded_na += 1
+            continue
         total += 1
-        ident = r.get("identity") or identity_from_meta(r.get("meta"))
+        ident = r.get("identity") or identity_from_meta(meta)
         if ident and ident.get("canonical_id") and ident.get("official_identifier") \
                 and ident.get("language"):
             full += 1
@@ -106,4 +115,5 @@ def dedicated_identity_completeness(records: list[dict], jid: str) -> dict:
             missing_ids.append(str(r.get("evidence_id") or "?"))
     return {"total": total, "with_identity": full,
             "pct": round(100.0 * full / total, 1) if total else 0.0,
-            "missing_ids": missing_ids[:20]}
+            "missing_ids": missing_ids[:20],
+            "not_applicable_excluded": excluded_na}

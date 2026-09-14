@@ -16,8 +16,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from app.policy.search_plan import load_plan, validate_plan  # noqa: E402
 import run_jurisdiction_round as rj  # noqa: E402
 
-PLANS = ("SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1", "US_CA_PLAN_V2",
-         "US_WA_PLAN_V1", "US_WA_PLAN_V2")
+PLANS = ("SE_PLAN_V1", "SE_PLAN_V2", "FI_PLAN_V1", "US_CA_PLAN_V1",
+         "US_CA_PLAN_V2", "US_WA_PLAN_V1", "US_WA_PLAN_V2")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -33,6 +33,7 @@ def test_plan_hashes_are_frozen():
     """hash 冻结承诺：与提交时一致（变化说明搜索空间被改，必须新 plan）。"""
     expect = {
         "SE_PLAN_V1": "80f3d13818c8",
+        "SE_PLAN_V2": "b22caa0377a2",   # 2B1 §7：+A 直链枚举（reset）
         "FI_PLAN_V1": "bd138f120fb1",
         "US_CA_PLAN_V1": "391507348e01",
         "US_CA_PLAN_V2": "9ab375a053ba",   # 2B1 §6：+D 缺口种子（reset）
@@ -88,8 +89,11 @@ def test_round_records_and_persisted_corpus_exist():
         pytest.skip("需先运行 run_jurisdiction_round.py")
     data = json.loads(Path(sorted(rounds)[-1]).read_text(encoding="utf-8"))
     assert data["round_mode"] == "discovery_expansion"
-    assert data["plan_id"] == "SE_PLAN_V1"
-    assert data["plan_hash"].startswith("80f3d13818c8")
+    # 2B1：SE 已升级 V2（+A 路线）——V1 视图保留；读到的应二者之一
+    assert data["plan_id"] in ("SE_PLAN_V1", "SE_PLAN_V2")
+    assert data["plan_hash"].startswith(
+        "b22caa0377a2" if data["plan_id"] == "SE_PLAN_V2"
+        else "80f3d13818c8")
     assert data["totals"]["new_unique_accepted_count"] >= 1
     pf = ROOT / "outputs" / data["persisted_file"]
     assert pf.exists()

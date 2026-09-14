@@ -1,0 +1,58 @@
+# ============================================================
+# Search Plan —— SE_PLAN_V2（Pilot 管辖地级，Phase 4B-2B1 §7）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak 独立视图保留）：
+#   · discovery_routes 增加 A（官方直链枚举：经 SFST bet= 实测存在的
+#     高价值法源种子——2011:927 废物条例 / 2022:1274 / 2018:1231）
+#   · B/C 种子沿用 V1（复现验证）
+# 字段映射：fr_agencies→A 种子（SFS 号直链）｜ fr_terms→B 检索词
+#          （?fritext=）｜ eu_keywords→C 引用种子 ｜ cross_terms→D 缺口
+# 纪律：自冻结起不得修改；再变 → SE_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: SE_PLAN_V2
+jurisdiction: SE
+scope: SE
+
+source_roles:
+  - {role: SE_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - se_sfst_search
+  - se_sfst_doc
+
+critical_sources:
+  - se_sfst
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:                         # A：SFS 号直链（2B1 实测存在）
+    - "2011:927"                       # avfallsförordning（废物条例）
+    - "2022:1274"
+    - "2018:1231"
+  fr_terms:                            # B：母语检索词（V1 沿用）
+    - batteri
+    - batterier
+    - batteriavfall
+  eu_keywords:                         # C：引用种子（V1 沿用）
+    - "SFS 2008:834"
+    - "SFS 2007:185"
+    - "SFS 2020:614"
+    - "SFS 2025:1071"
+    - "SFS 2025:813"
+  cross_terms: []                      # D：无缺口种子（A+B+C 已 ≥3 类）
+
+language_set: [sv]
+time_window: {from: "2018-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  2B1 §7：为 SE eligibility 的 routes ≥3 而建。A = 官方直链枚举——
+  种子均先经 SFST bet= 实测存在（2011:927/2022:1274/2018:1231），
+  B/C 复现验证。角色 closure：MS_TRANSPORT_OR_DANGEROUS_GOODS ←
+  Transportstyrelsen；MS_STANDARDS_METADATA ← SIS（metadata-only）。
+created_at: "2026-09-14"

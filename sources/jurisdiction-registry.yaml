@@ -125,7 +125,7 @@ jurisdictions:
       - {code: PL, name: 波兰, status: CONNECTED, sources: [pl_sejm_eli, eu_nim_pl], note: NIM 24 条 + Sejm ELI 官方 API 专线（Step 5 攻坚：电池法 129K 字符；ISAP 仍被 Distil 拦截）}
       - {code: PT, name: 葡萄牙, status: PARTIAL, sources: [eu_nim_pt], note: NIM 2 条}
       - {code: RO, name: 罗马尼亚, status: PARTIAL, sources: [eu_nim_ro], note: NIM 12 条}
-      - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, se_naturvardsverket, eu_nim_se], note: NIM 15 条 + SFST 专线（Step 8：直链+检索 · 发现 7 篇）+ Naturvårdsverket（Step 6：主站可达·正文客户端渲染 PARTIAL）}
+      - {code: SE, name: 瑞典, status: CONNECTED, sources: [se_sfst, se_naturvardsverket, se_transportstyrelsen, se_sis, eu_nim_se], note: NIM 15 条 + SFST 专线（A/B/C 三轮 · V2 A 直链枚举）+ Transportstyrelsen（2B1：Regler+危货搜索 服务端可采）+ SIS（标准 metadata）+ Naturvårdsverket（PARTIAL）}
       - {code: SI, name: 斯洛文尼亚, status: PARTIAL, sources: [eu_nim_si], note: NIM 15 条}
       - {code: SK, name: 斯洛伐克, status: PARTIAL, sources: [eu_nim_sk], note: NIM 12 条（均为泛废物层，无电池专条）}
 
