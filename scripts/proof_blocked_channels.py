@@ -42,15 +42,19 @@ CHANNEL_STATUS = {
     "BE": {"status": "BLOCKED_SITE_LEVEL",
            "method": "ejustice 全路径同壳（含 ELI/loi_a1/change_lg）",
            "note": "站点对本环境出口整体拦截（5507B 壳）；建议后续换网络环境或等官方接口"},
-    "EE": {"status": "BLOCKED_SPA_SHELL",
-           "method": "RT 全路径同壳（akt/eli/avaandmed/?json 均 51763B）",
-           "note": "前端 SPA + Cloudflare 壳；未发现公开数据接口（api 路径 404）"},
+    "EE": {"status": "ADAPTED", "new_source": "ee_keskkonnaamet",
+           "method": "Keskkonnaamet（环境署）+ Kliimaministeerium（气候部）官方站（静态 HTML，httpx 可重复采集）",
+           "note": ("RT 法源站仍 SPA 壳（51763B 同壳实证）——改以官方环保机构通道适配："
+                    "2 样本已入库（ee_keskkonnaamet_home / ee_kliimaministeerium_home，"
+                    "scope=HORIZONTAL）；法源全文待 RT 数据接口")},
     "US-CO": {"status": "PARTIAL_ENTRY_ONLY",
-              "method": "leg.colorado.gov/bills 可达（62KB）",
-              "note": "检索为 JS；battery 专条存在性未确认（HB22-1355 为包装/印刷品 PRP）→ 待电池立法或 CRS 通道"},
-    "US-GA": {"status": "BLOCKED_SPA_AND_AUTH",
-              "method": "legis.ga.gov/laws 1.5KB SPA 壳；api/legislation 401",
-              "note": "SPA + API 需认证 → 未适配"},
+              "method": "leg.colorado.gov CRS 入口可达（40KB）；条文体 URL 模式未命中（多路 404）；OAL/CCR 403",
+              "note": "CRS 条文体直链模式待探（新版站点路由）；battery 专条存在性未确认"},
+    "US-GA": {"status": "ADAPTED", "new_source": "us_ga_epd",
+              "method": "epd.georgia.gov（官方环保署）Land Protection Branch + Hazardous Waste 页（静态 HTML，httpx 可重复采集）",
+              "note": ("legis.ga.gov SPA/401 仍阻——改以官方环保机构通道适配："
+                       "2 样本已入库（us_ga_epd_land_protection / us_ga_epd_hazardous_waste）；"
+                       "法源条文待 legis 数据接口")},
     "US-KY": {"status": "ADAPTED", "new_source": "us_ky_krs",
               "method": "statute.aspx?id 直链（官方服务器渲染）",
               "note": "目录 269 条；电池专条未定位（KRS 未见 battery 专章）→ 以真实条文样本验证通道"},

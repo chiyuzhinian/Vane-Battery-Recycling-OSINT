@@ -30,15 +30,16 @@ def test_blocked_channel_resolution_states():
         pytest.skip("需先运行 scripts/proof_blocked_channels.py")
     d = json.loads(RESOLUTION.read_text(encoding="utf-8"))
     ch = d["channels"]
-    # 攻坚结论（实测）：PL/KY/MN 适配；BE/EE/GA 端点级受阻；CO 部分
+    # 攻坚结论（实测）：PL/KY/MN 适配（2B0）；EE/GA 官方机构通道适配（2B1）
     assert ch["PL"]["status"] == "ADAPTED"
     assert ch["US-KY"]["status"] == "ADAPTED"
     assert ch["US-MN"]["status"] == "ADAPTED"
+    assert ch["EE"]["status"] == "ADAPTED"
+    assert ch["US-GA"]["status"] == "ADAPTED"
     assert ch["BE"]["status"].startswith("BLOCKED")
-    assert ch["EE"]["status"].startswith("BLOCKED")
-    assert ch["US-GA"]["status"].startswith("BLOCKED")
     assert ch["US-CO"]["status"].startswith("PARTIAL")
-    assert set(d["adapted"]) == {"PL", "US-KY", "US-MN"}
+    assert set(d["adapted"]) == {"PL", "US-KY", "US-MN", "EE", "US-GA"}
+    assert len(d["adapted"]) >= 5     # 2B1 §8 门槛（实测 5/7）
     # 每条受阻记录必须有方法/归因（不判死、可追溯）
     for k, v in ch.items():
         assert v.get("method"), k

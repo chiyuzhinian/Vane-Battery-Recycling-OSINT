@@ -100,11 +100,22 @@ def build_identity_v2(record: dict) -> dict | None:
     elif sid == "fr_dila":
         dataset = str(meta.get("dataset") or "LEGI")
         eid = str(record.get("evidence_id") or "")
-        out = {"canonical_id": f"FR:{dataset}:{eid}",   # 本地稳定 id（注明）
-               "official_identifier": _title_official_id(
-                   record.get("title") or ""),          # 提取不到即空
+        # 2B1 §10：从 legi_file 路径/正文头提取**官方 LEGI 标识**
+        #   （LEGIARTI 条文 > LEGISCTA 节 > LEGITEXT 法典——均为官方编号）
+        blob = str(meta.get("legi_file") or "") + "\n" + \
+            (record.get("text") or "")[:400]
+        m = (re.search(r"LEGIARTI\d+", blob)
+             or re.search(r"LEGISCTA\d+", blob)
+             or re.search(r"LEGITEXT\d+", blob))
+        official = m.group(0) if m else ""
+        out = {"canonical_id": f"FR:{dataset}:{official or eid}",
+               "official_identifier": official
+               or _title_official_id(record.get("title") or ""),
                "official_url": meta.get("archive_url")
                or record.get("url") or ""}
+        if not official:
+            # 如实原因（不造假编号；审计可核）
+            out["identity_resolution_status"] = "OFFICIAL_IDENTIFIER_UNAVAILABLE"
     if not out:
         return None
     out["jurisdiction"] = {"de_gesetze": "DE", "nl_bwb": "NL", "es_boe": "ES",
@@ -155,6 +166,10 @@ def identity_v2_completeness(records: list[dict], jid: str,
             continue
         if jurisdiction_of(r) != jid:
             continue
+        # 2B1：页面类豁免（显式标注的无编号机构页面——不计分母）
+        if str((r.get("meta") or {}).get("identity_status") or "").startswith(
+                "NOT_APPLICABLE"):
+            continue
         total += 1
         ident = effective_identity(r, overlay) or {}
         lacks = [f for f in CORE_FIELDS if not ident.get(f)]
@@ -181,6 +196,12 @@ def decompose_identity(records: list[dict], jid: str,
         if jurisdiction_of(r) != jid:
             continue
         if not is_dedicated_source(str(r.get("source_id") or "")):
+            out["discovery_layer_excluded"] += 1
+            continue
+        # 2B1：页面类豁免（机构索引/检索/主页——无文书编号概念；显式标注）
+        meta_r = r.get("meta") or {}
+        if str(meta_r.get("identity_status") or "").startswith(
+                "NOT_APPLICABLE"):
             out["discovery_layer_excluded"] += 1
             continue
         bucket = "new" if (r.get("meta") or {}).get("discovered_by_round") \
