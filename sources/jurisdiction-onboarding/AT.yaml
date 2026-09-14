@@ -1,0 +1,45 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— AT（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: AT
+jurisdiction_name:
+  zh: 奥地利
+  en: Austria
+level: member_state
+official_languages:
+- de
+source_proof: outputs/audit/source_proofs/AT.json（2026-09-14）
+mandatory_source_roles:
+- MS_LEGISLATION_DATABASE
+- MS_OFFICIAL_GAZETTE
+- MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+- MS_WASTE_REGULATOR
+- MS_TRANSPORT_OR_DANGEROUS_GOODS
+- MS_CUSTOMS_OR_TRADE
+- MS_STANDARDS_METADATA
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+  - source_id: at_ris
+    official_url: https://ris.bka.gv.at/Bundesrecht/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Bundeskanzleramt（RIS 法律信息系统）；检索尝试 HTTP 503：https://ris.bka.gv.at/Bundesrecht/；检索尝试
+      HTTP 503：https://www.ris.bka.gv.at/Dokumente/Bundesnormen/NOR40245808/NOR40245808.html
+known_gaps:
+  MS_OFFICIAL_GAZETTE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_CUSTOMS_OR_TRADE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_STANDARDS_METADATA: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector（html 解析）
+identity_strategy:
+  pattern: AT:{instrument}:{id}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

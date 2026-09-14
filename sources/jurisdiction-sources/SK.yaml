@@ -1,0 +1,23 @@
+# ============================================================
+# Jurisdiction Sources —— SK（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: SK
+language: sk
+link_keywords: "batéria|akumulátor|odpad|vozidl|zber"
+link_include: ["slov-lex.sk"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: sk_slovlex
+    official_owner: "Ministerstvo spravodlivosti SR（Slov-Lex 官方法律与公报库）"
+    official_domain: slov-lex.sk
+    access_method: html
+    entry_url: "https://www.slov-lex.sk/"
+    search_attempts:
+      - "https://www.slov-lex.sk/ezbierky/pravne-predpisy?q=bat%C3%A9ria"
+      - "https://www.slov-lex.sk/ezbierky/pravne-predpisy?q=odpad"
+    samples_known:
+      - "https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2015/79/"
+      - "https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2008/188/"
+    note: "Slov-Lex（官方综合法律库 + Zbierka zákonov 公报）；79/2015=废物法、188/2008=电池转化（直链样本）"

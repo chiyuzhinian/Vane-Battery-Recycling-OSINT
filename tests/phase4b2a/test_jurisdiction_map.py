@@ -37,7 +37,10 @@ def test_us_state_prefix_beats_federal_prefix():
     # 州级前缀必须优先：us_ca_* 不得判成 US
     assert jurisdiction_of(_rec("us_ca_leginfo")) == "US-CA"
     assert jurisdiction_of(_rec("us_ca_calrecycle")) == "US-CA"
-    assert jurisdiction_of(_rec("us_mi_egle")) == "US"  # 无 MI 契约 → 联邦回退（不误判 CA）
+    # Batch 1（4B-2B）：MI 契约已建立 → us_mi_* 归属 US-MI
+    assert jurisdiction_of(_rec("us_mi_egle")) == "US-MI"
+    # 尚无契约的州仍回退联邦（不误判其它州）
+    assert jurisdiction_of(_rec("us_wy_deq")) == "US"
 
 
 def test_us_federal_sources_map_to_us():

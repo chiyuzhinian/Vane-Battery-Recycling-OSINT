@@ -1,0 +1,23 @@
+# ============================================================
+# Jurisdiction Sources —— IT（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: IT
+language: it
+link_keywords: "batteri|accumulatori|rifiuti|veicoli|raccolta"
+link_include: ["normattiva.it"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: it_normattiva
+    official_owner: "Presidenza del Consiglio dei Ministri（Normattiva 官方立法库）"
+    official_domain: normattiva.it
+    access_method: html
+    entry_url: "https://www.normattiva.it/"
+    search_attempts:
+      - "https://www.normattiva.it/ricerca/semplice?testo=batterie"
+      - "https://www.normattiva.it/ricerca/semplice?testo=accumulatori"
+    samples_known:
+      - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2008-11-20;188"
+      - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2005-03-03;82"
+    note: "Normattiva（官方立法全文库）；D.Lgs. 188/2008 = 电池指令转化（固定 URN 直链样本）"

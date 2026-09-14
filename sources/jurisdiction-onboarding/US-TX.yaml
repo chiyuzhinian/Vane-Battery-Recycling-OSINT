@@ -1,0 +1,55 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-TX（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-TX
+jurisdiction_name:
+  zh: 得克萨斯
+  en: Texas
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-TX.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_STATUTES:
+  - source_id: us_tx_statutes
+    official_url: https://statutes.capitol.texas.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Texas Legislature Online（statutes.capitol.texas.gov，官方法典）；检索页无可解析文书链接（可能
+      JS 渲染/参数错误）：https://statutes.capitol.texas.gov/Docs/HS/htm/HS.361.htm；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://capitol.texas.gov/Search/BillSearch.aspx?q=battery
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_tx_tceq
+    official_url: https://www.tceq.texas.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Texas Commission on Environmental Quality（TCEQ）；检索页无可解析文书链接（可能
+      JS 渲染/参数错误）：https://www.tceq.texas.gov/permitting/waste_permits；检索页无可解析文书链接（可能
+      JS 渲染/参数错误）：https://www.tceq.texas.gov/permitting/waste_permits/waste_planning
+known_gaps:
+  STATE_LEGISLATURE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_STATUTES: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

@@ -81,3 +81,23 @@ def evaluate_scaleout_preconditions(*, layers_row: dict, evidence_summary: dict,
         "note": ("INSUFFICIENT_A1_GOLDSET 不阻塞开发，但必须阻止 A1 recall 声称。"
                  "near_saturated 仍恒 False 至 4B-2B 合并 SG 体系。"),
     }
+
+
+def aggregate_eligible(preconditions: dict[str, dict]) -> dict:
+    """Phase 4B-2B §2：eligible 全集逐一评估的聚合（禁止样本代表）。
+
+    preconditions: {jid: evaluate_scaleout_preconditions(...)}（仅 eligible 者）。
+    任何 eligible 自身 Gate 未通过 → 不得计入 eligible_pass。
+    """
+    total = len(preconditions)
+    passed = sorted(j for j, r in preconditions.items() if r.get("all_pass"))
+    failed = sorted(j for j, r in preconditions.items()
+                    if not r.get("all_pass"))
+    return {
+        "eligible_total": total,
+        "eligible_pass": len(passed),
+        "eligible_fail": len(failed),
+        "pass_list": passed,
+        "fail_list": failed,
+        "all_eligible_pass": total > 0 and not failed,
+    }

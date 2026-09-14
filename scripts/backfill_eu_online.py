@@ -445,6 +445,8 @@ def _mark_failed(celex: str, reason: str) -> int:
                 meta = rec.get("meta") or {}
                 if is_corrigendum:
                     meta["content_state"] = "METADATA_ONLY"
+                    meta["content_exempt_reason"] = (
+                        "NO_INDEPENDENT_OFFICIAL_MANIFESTATION")
                     meta["failure_reason"] = (
                         "no_online_variant: corrigendum has no HTML/TXT/PDF "
                         "variant on EUR-Lex (202/404; official form = OJ PDF)")

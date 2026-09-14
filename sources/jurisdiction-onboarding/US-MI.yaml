@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-MI（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-MI
+jurisdiction_name:
+  zh: 密歇根
+  en: Michigan
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-MI.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_LEGISLATURE:
+  - source_id: us_mi_legislature
+    official_url: https://www.legislature.mi.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Michigan Legislature（MCL 官方库）；检索页无可解析文书链接（可能 JS 渲染/参数错误）：https://www.legislature.mi.gov/Laws/ChapterList；检索页无可解析文书链接（可能
+      JS 渲染/参数错误）：https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-324-11101
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_mi_egle
+    official_url: https://www.michigan.gov/egle/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Michigan EGLE（环境、大湖区与能源部）；检索尝试 HTTP 403：https://www.michigan.gov/egle/about/organization/materials-management；检索尝试
+      HTTP 403：https://www.michigan.gov/egle/about/organization/materials-management/recycling
+known_gaps:
+  STATE_STATUTES: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_LEGISLATURE: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

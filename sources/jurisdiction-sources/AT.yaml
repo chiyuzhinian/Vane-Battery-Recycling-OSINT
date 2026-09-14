@@ -1,0 +1,22 @@
+# ============================================================
+# Jurisdiction Sources —— AT（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: AT
+language: de
+link_keywords: "batterie|altbatterie|abfall|fahrzeug|sammlung"
+link_include: ["ris.bka.gv.at", "/Dokumente/"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: at_ris
+    official_owner: "Bundeskanzleramt（RIS 法律信息系统）"
+    official_domain: ris.bka.gv.at
+    access_method: html
+    entry_url: "https://ris.bka.gv.at/Bundesrecht/"
+    search_attempts:
+      - "https://ris.bka.gv.at/Bundesrecht/"
+      - "https://www.ris.bka.gv.at/Dokumente/Bundesnormen/NOR40245808/NOR40245808.html"
+    samples_known:
+      - "https://ris.bka.gv.at/Bundesrecht/"
+    note: "RIS Bundesrecht；www 域实测 503，改用无 www 域尝试；BNR 文档直链备用"

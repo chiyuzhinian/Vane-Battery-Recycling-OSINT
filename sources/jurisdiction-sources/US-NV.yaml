@@ -1,0 +1,32 @@
+# ============================================================
+# Jurisdiction Sources —— US-NV（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-NV
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|solid waste"
+link_include: ["leg.state.nv.us", "ndep.nv.gov"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_nv_nrs
+    official_owner: "Nevada Legislature（NRS 官方全文，leg.state.nv.us）"
+    official_domain: leg.state.nv.us
+    access_method: html
+    entry_url: "https://www.leg.state.nv.us/nrs/"
+    search_attempts:
+      - "https://www.leg.state.nv.us/NRS/NRS-444A.html"
+      - "https://www.leg.state.nv.us/NRS/NRS-459.html"
+    samples_known: []
+    note: "NRS 444A（固体废物）/459（危险物质）为电池回收相邻主章；官方全文 HTML"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_nv_ndep
+    official_owner: "Nevada Division of Environmental Protection（NDEP）"
+    official_domain: ndep.nv.gov
+    access_method: html
+    entry_url: "https://ndep.nv.gov/"
+    search_attempts:
+      - "https://ndep.nv.gov/land/"
+      - "https://ndep.nv.gov/land/waste-management"
+    samples_known: []
+    note: "NDEP 土地/废物管理科"

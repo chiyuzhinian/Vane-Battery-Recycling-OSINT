@@ -1,0 +1,44 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— IT（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: IT
+jurisdiction_name:
+  zh: 意大利
+  en: Italy
+level: member_state
+official_languages:
+- it
+source_proof: outputs/audit/source_proofs/IT.json（2026-09-14）
+mandatory_source_roles:
+- MS_LEGISLATION_DATABASE
+- MS_OFFICIAL_GAZETTE
+- MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+- MS_WASTE_REGULATOR
+- MS_TRANSPORT_OR_DANGEROUS_GOODS
+- MS_CUSTOMS_OR_TRADE
+- MS_STANDARDS_METADATA
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+  - source_id: it_normattiva
+    official_url: https://www.normattiva.it/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Presidenza del Consiglio dei Ministri（Normattiva 官方立法库）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://www.normattiva.it/ricerca/semplice?testo=batterie；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://www.normattiva.it/ricerca/semplice?testo=accumulatori
+known_gaps:
+  MS_OFFICIAL_GAZETTE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_CUSTOMS_OR_TRADE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_STANDARDS_METADATA: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector（html 解析）
+identity_strategy:
+  pattern: IT:{instrument}:{id}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

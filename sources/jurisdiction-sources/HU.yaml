@@ -1,0 +1,32 @@
+# ============================================================
+# Jurisdiction Sources —— HU（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: HU
+language: hu
+link_keywords: "akkumulátor|elem|hulladék|jármű|gyűjtés"
+link_include: ["njt.hu"]
+
+sources:
+  - source_role: MS_LEGISLATION_DATABASE
+    source_id: hu_njt
+    official_owner: "Nemzeti Jogszabálytár（国家法律库，Igazságügyi Minisztérium）"
+    official_domain: njt.hu
+    access_method: html
+    entry_url: "https://njt.hu/"
+    search_attempts:
+      - "https://njt.hu/kereses?szo=akkumul%C3%A1tor"
+      - "https://njt.hu/jogszabaly/2012-181-20-30"
+    samples_known: []
+    note: "NJT 官方综合法律库（含 Magyar Közlöny 公报）；匈牙利语；实测本网络环境连接被重置（限记）"
+  - source_role: MS_OFFICIAL_GAZETTE
+    source_id: hu_magyarkozlony
+    official_owner: "Magyar Közlöny（官方公报）"
+    official_domain: magyarkozlony.hu
+    access_method: html
+    entry_url: "https://magyarkozlony.hu/"
+    search_attempts:
+      - "https://magyarkozlony.hu/kereses"
+      - "https://magyarkozlony.hu/hivatalos-lapok"
+    samples_known: []
+    note: "官方公报备选通道（NJT 连接受限时的替代）；搜索路径变体尝试"

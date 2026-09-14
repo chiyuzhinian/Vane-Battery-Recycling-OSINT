@@ -1,0 +1,34 @@
+# ============================================================
+# Jurisdiction Sources —— US-OH（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-OH
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|solid waste"
+link_include: ["codes.ohio.gov", "epa.ohio.gov", "legislature.ohio.gov"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_oh_orc
+    official_owner: "Ohio Laws（codes.ohio.gov，ORC 官方全文）"
+    official_domain: codes.ohio.gov
+    access_method: html
+    entry_url: "https://codes.ohio.gov/ohio-revised-code"
+    search_attempts:
+      - "https://codes.ohio.gov/ohio-revised-code/chapter-3734"
+      - "https://codes.ohio.gov/ohio-revised-code/section-3734.01"
+    samples_known:
+      - "https://codes.ohio.gov/ohio-revised-code/chapter-3734"
+      - "https://epa.ohio.gov/"
+    note: "ORC 3734（固废）主章直链；codes.ohio.gov 实测连接波动（ConnectTimeout），重试策略捕获"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_oh_epa
+    official_owner: "Ohio EPA（材料与废物管理办公室）"
+    official_domain: epa.ohio.gov
+    access_method: html
+    entry_url: "https://epa.ohio.gov/"
+    search_attempts:
+      - "https://epa.ohio.gov/divisions-and-offices/materials-and-waste-management"
+      - "https://epa.ohio.gov/divisions-and-offices/materials-and-waste-management/recycling"
+    samples_known: []
+    note: "Ohio EPA 材料与废物管理"

@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-NV（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-NV
+jurisdiction_name:
+  zh: 内华达
+  en: Nevada
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-NV.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_STATUTES:
+  - source_id: us_nv_nrs
+    official_url: https://www.leg.state.nv.us/nrs/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Nevada Legislature（NRS 官方全文，leg.state.nv.us）；检索尝试 HTTP
+      403：https://www.leg.state.nv.us/NRS/NRS-444A.html；检索尝试 HTTP 403：https://www.leg.state.nv.us/NRS/NRS-459.html
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_nv_ndep
+    official_url: https://ndep.nv.gov/
+    access_method: html
+    status: PARTIAL
+    note: 'status=None；owner=Nevada Division of Environmental Protection（NDEP）；检索尝试
+      HTTP 404：https://ndep.nv.gov/land/waste-management；note: NDEP 土地/废物管理科'
+known_gaps:
+  STATE_LEGISLATURE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_STATUTES: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

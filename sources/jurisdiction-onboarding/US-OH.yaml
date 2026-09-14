@@ -1,0 +1,53 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-OH（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-OH
+jurisdiction_name:
+  zh: 俄亥俄
+  en: Ohio
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-OH.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_STATUTES:
+  - source_id: us_oh_orc
+    official_url: https://codes.ohio.gov/ohio-revised-code
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Ohio Laws（codes.ohio.gov，ORC 官方全文）；检索尝试失败（ConnectError）：https://codes.ohio.gov/ohio-revised-code/chapter-3734；检索尝试失败（ConnectError）：https://codes.ohio.gov/ohio-revised-code/section-3734.01
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_oh_epa
+    official_url: https://epa.ohio.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Ohio EPA（材料与废物管理办公室）；检索尝试 HTTP 404：https://epa.ohio.gov/divisions-and-offices/materials-and-waste-management；检索尝试
+      HTTP 404：https://epa.ohio.gov/divisions-and-offices/materials-and-waste-management/recycling
+known_gaps:
+  STATE_LEGISLATURE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_STATUTES: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

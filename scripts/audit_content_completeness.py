@@ -68,6 +68,11 @@ def main() -> int:
         state = classify_content_state(r)
         text_len = len(r.get("text") or "")
         clause = has_clause_evidence(r) if cls == "B" else False
+        meta = r.get("meta") or {}
+        variant_absent = (
+            str(meta.get("content_exempt_reason") or "")
+            == "NO_INDEPENDENT_OFFICIAL_MANIFESTATION"
+            or "no_online_variant" in str(meta.get("failure_reason") or ""))
         backfill = "none"
         reason = ""
         if state in ("NOT_APPLICABLE", "PAYWALLED_KNOWN"):
@@ -92,9 +97,10 @@ def main() -> int:
             "clause_evidence_available": clause,
             "backfill_status": backfill,
             "failure_reason": reason,
-            "official_variant_absent": (
-                "no_online_variant" in str(
-                    (r.get("meta") or {}).get("failure_reason") or "")),
+            "official_variant_absent": variant_absent,
+            "content_exempt_reason": (
+                "NO_INDEPENDENT_OFFICIAL_MANIFESTATION"
+                if variant_absent else None),
             "b_status": ("confirmed" if clause else "candidate")
             if cls == "B" else "",
         })
@@ -125,11 +131,20 @@ def main() -> int:
     }
     for want in ("A1", "A2", "B"):
         sub = [x for x in applicable if x["acceptance_class"] == want]
+        exempt_sub = [x for x in exempt_variant_absent
+                      if x["acceptance_class"] == want]
         full = [x for x in sub if x["fulltext_available"]]
         clause = [x for x in sub if x["clause_evidence_available"]]
+        # Phase 4B-2B §3：双口径（applicable 与 strict 同时报告）
+        strict_den = len(sub) + len(exempt_sub)
         summary[want] = {
             "total": len(sub), "fulltext": len(full),
             "fulltext_pct": round(len(full) / max(len(sub), 1) * 100, 1),
+            "fulltext_rate_applicable": round(
+                len(full) / max(len(sub), 1) * 100, 1),
+            "fulltext_rate_strict": round(
+                len(full) / max(strict_den, 1) * 100, 1),
+            "no_independent_manifestation_count": len(exempt_sub),
             "clause_evidence": len(clause),
             "clause_pct": round(len(clause) / max(len(sub), 1) * 100, 1),
         }

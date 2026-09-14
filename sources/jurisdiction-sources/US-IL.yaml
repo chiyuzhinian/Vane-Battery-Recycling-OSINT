@@ -1,0 +1,32 @@
+# ============================================================
+# Jurisdiction Sources —— US-IL（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-IL
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|waste"
+link_include: ["ilga.gov", "epa.illinois.gov"]
+
+sources:
+  - source_role: STATE_LEGISLATURE
+    source_id: us_il_ilga
+    official_owner: "Illinois General Assembly（ILGA，ILCS 官方库）"
+    official_domain: ilga.gov
+    access_method: html
+    entry_url: "https://www.ilga.gov/"
+    search_attempts:
+      - "https://www.ilga.gov/Legislation/ILCS"
+      - "https://www.ilga.gov/Legislation/ILCS/Chapters"
+    samples_known: []
+    note: "ILGA 官方立法库（ILCS；已知 2026 年立法数据由 ILGA 官方维护）"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_il_epa
+    official_owner: "Illinois EPA"
+    official_domain: epa.illinois.gov
+    access_method: html
+    entry_url: "https://epa.illinois.gov/"
+    search_attempts:
+      - "https://epa.illinois.gov/topics/waste-management.html"
+      - "https://epa.illinois.gov/topics/waste-management/recycling.html"
+    samples_known: []
+    note: "IL EPA 废物管理（含电池/电子废物项目）"

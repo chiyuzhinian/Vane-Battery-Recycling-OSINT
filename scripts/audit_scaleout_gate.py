@@ -15,7 +15,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.stdout.reconfigure(encoding="utf-8")
 
-from app.policy.saturation_gates import evaluate_scaleout_preconditions  # noqa: E402
+from app.policy.saturation_gates import (  # noqa: E402
+    aggregate_eligible, evaluate_scaleout_preconditions,
+)
 
 AUDIT = ROOT / "outputs" / "audit"
 OUT = AUDIT / "scaleout_readiness.json"
@@ -48,9 +50,10 @@ def main() -> int:
             a1_status=str(a1.get("status") or ""),
             a1_verified=int(a1.get("a1_verified_count") or 0))
 
-    # 全局 gate（以"至少一个 eligible"的前置为样本口径）
-    sample = per_jid.get(eligible[0]) if eligible else {}
-    verdict = "READY" if (sample.get("all_pass") and len(eligible) >= 3
+    # 全局 gate（Phase 4B-2B §2：每一个 eligible 逐一评估，禁止样本代表）
+    per_eligible = {jid: per_jid[jid] for jid in eligible if jid in per_jid}
+    agg = aggregate_eligible(per_eligible)
+    verdict = "READY" if (agg["all_eligible_pass"] and len(eligible) >= 3
                           and adapted >= 5) else "NOT READY"
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -70,6 +73,7 @@ def main() -> int:
         },
         "domain_contradictions": mismatches.get("contradictions_count"),
         "per_jurisdiction_preconditions": per_jid,
+        "eligible_gate": agg,
         "verdict": verdict,
         "note": ("README gate（§14）：eligible≥3 且 通道≥5 且 高价值全文≥95% "
                  "且 B clause≥95% 且 domain 矛盾=0 且 topic 无 P0 且 "
@@ -89,6 +93,9 @@ def main() -> int:
           f"B={completeness.get('B', {}).get('fulltext_pct')}%  "
           f"B_clause={completeness.get('B', {}).get('clause_pct')}%")
     print(f"domain contradictions={mismatches.get('contradictions_count')}")
+    print(f"eligible_gate: total={agg['eligible_total']} "
+          f"pass={agg['eligible_pass']} fail={agg['eligible_fail']}"
+          f" fail_list={agg['fail_list']}")
     for jid, r in per_jid.items():
         print(f"  {jid:6s} all_pass={r['all_pass']} failing={r['failing']}")
     print(f"\nFULL SCALE-OUT: {verdict}")

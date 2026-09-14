@@ -1,0 +1,32 @@
+# ============================================================
+# Jurisdiction Sources —— US-MI（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-MI
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|salvage|solid waste"
+link_include: ["legislature.mi.gov", "michigan.gov"]
+
+sources:
+  - source_role: STATE_LEGISLATURE
+    source_id: us_mi_legislature
+    official_owner: "Michigan Legislature（MCL 官方库）"
+    official_domain: legislature.mi.gov
+    access_method: html
+    entry_url: "https://www.legislature.mi.gov/"
+    search_attempts:
+      - "https://www.legislature.mi.gov/Laws/ChapterList"
+      - "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-324-11101"
+    samples_known: []
+    note: "已知 403 风险（hard case）；MCL 324（自然资源与环境保护法）为电池回收相关主章"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_mi_egle
+    official_owner: "Michigan EGLE（环境、大湖区与能源部）"
+    official_domain: michigan.gov
+    access_method: html
+    entry_url: "https://www.michigan.gov/egle/"
+    search_attempts:
+      - "https://www.michigan.gov/egle/about/organization/materials-management"
+      - "https://www.michigan.gov/egle/about/organization/materials-management/recycling"
+    samples_known: []
+    note: "EGLE 材料管理（回收/危废主管）"

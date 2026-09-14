@@ -1,0 +1,34 @@
+# ============================================================
+# Jurisdiction Sources —— US-TX（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-TX
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|solid waste"
+link_include: ["capitol.texas.gov", "statutes.capitol.texas.gov", "/Docs/"]
+
+sources:
+  - source_role: STATE_STATUTES
+    source_id: us_tx_statutes
+    official_owner: "Texas Legislature Online（statutes.capitol.texas.gov，官方法典）"
+    official_domain: statutes.capitol.texas.gov
+    access_method: html
+    entry_url: "https://statutes.capitol.texas.gov/"
+    search_attempts:
+      - "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.361.htm"
+      - "https://capitol.texas.gov/Search/BillSearch.aspx?q=battery"
+    samples_known:
+      - "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.361.htm"
+      - "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.365.htm"
+    note: "Texas Health & Safety Code 361（固废）/365（废油）；法典全文静态 HTML 直链"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_tx_tceq
+    official_owner: "Texas Commission on Environmental Quality（TCEQ）"
+    official_domain: tceq.texas.gov
+    access_method: html
+    entry_url: "https://www.tceq.texas.gov/"
+    search_attempts:
+      - "https://www.tceq.texas.gov/permitting/waste_permits"
+      - "https://www.tceq.texas.gov/permitting/waste_permits/waste_planning"
+    samples_known: []
+    note: "TCEQ 废物许可与规划"

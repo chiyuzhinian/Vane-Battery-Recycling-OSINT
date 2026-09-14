@@ -1,0 +1,54 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-TN（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-TN
+jurisdiction_name:
+  zh: 田纳西
+  en: Tennessee
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-TN.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_LEGISLATURE:
+  - source_id: us_tn_capitol
+    official_url: https://www.capitol.tn.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Tennessee General Assembly（capitol.tn.gov）；检索尝试失败（ConnectError）：https://www.capitol.tn.gov/legislation/；检索尝试失败（ConnectError）：https://wapp.capitol.tn.gov/apps/BillInfo/
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_tn_tdec
+    official_url: https://www.tn.gov/environment.html
+    access_method: html
+    status: PARTIAL
+    note: 'status=None；owner=Tennessee Department of Environment and Conservation（TDEC）；检索尝试
+      HTTP 404：https://www.tn.gov/environment/program-areas/sw-solid-waste-management.html；样本
+      HTTP 403：https://dataviewers.tdec.tn.gov/dataviewers/f?p=19035:34001::::::'
+known_gaps:
+  STATE_STATUTES: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_LEGISLATURE: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

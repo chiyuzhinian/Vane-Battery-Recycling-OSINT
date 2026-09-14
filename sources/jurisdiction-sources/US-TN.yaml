@@ -1,0 +1,33 @@
+# ============================================================
+# Jurisdiction Sources —— US-TN（Batch 1 · Phase 4B-2B）
+# ============================================================
+version: 1
+jurisdiction_id: US-TN
+language: en
+link_keywords: "battery|batteries|recycl|hazardous|electronic|solid waste"
+link_include: ["capitol.tn.gov", "tn.gov"]
+
+sources:
+  - source_role: STATE_LEGISLATURE
+    source_id: us_tn_capitol
+    official_owner: "Tennessee General Assembly（capitol.tn.gov）"
+    official_domain: capitol.tn.gov
+    access_method: html
+    entry_url: "https://www.capitol.tn.gov/"
+    search_attempts:
+      - "https://www.capitol.tn.gov/legislation/"
+      - "https://wapp.capitol.tn.gov/apps/BillInfo/"
+    samples_known: []
+    note: "TGA 官方（法案/立法信息）；TCA 法典全文官方通道为 LexisNexis 付费，记录 limitation"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_tn_tdec
+    official_owner: "Tennessee Department of Environment and Conservation（TDEC）"
+    official_domain: tn.gov
+    access_method: html
+    entry_url: "https://www.tn.gov/environment.html"
+    search_attempts:
+      - "https://www.tn.gov/environment/program-areas/solid-waste"
+      - "https://www.tn.gov/environment/program-areas/sw-solid-waste-management.html"
+    samples_known:
+      - "https://www.tn.gov/environment.html"
+    note: "TDEC；路径多次迭代尝试；entry 页为 metadata 级样本兑底"

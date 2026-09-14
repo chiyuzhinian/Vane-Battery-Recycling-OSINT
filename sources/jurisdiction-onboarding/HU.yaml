@@ -1,0 +1,50 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— HU（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: HU
+jurisdiction_name:
+  zh: 匈牙利
+  en: Hungary
+level: member_state
+official_languages:
+- hu
+source_proof: outputs/audit/source_proofs/HU.json（2026-09-14）
+mandatory_source_roles:
+- MS_LEGISLATION_DATABASE
+- MS_OFFICIAL_GAZETTE
+- MS_ENVIRONMENT_MINISTRY_OR_AGENCY
+- MS_WASTE_REGULATOR
+- MS_TRANSPORT_OR_DANGEROUS_GOODS
+- MS_CUSTOMS_OR_TRADE
+- MS_STANDARDS_METADATA
+official_channel_map:
+  MS_LEGISLATION_DATABASE:
+  - source_id: hu_njt
+    official_url: https://njt.hu/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Nemzeti Jogszabálytár（国家法律库，Igazságügyi Minisztérium）；检索尝试失败（RemoteProtocolError）：https://njt.hu/kereses?szo=akkumul%C3%A1tor；检索尝试失败（RemoteProtocolError）：https://njt.hu/jogszabaly/2012-181-20-30
+  MS_OFFICIAL_GAZETTE:
+  - source_id: hu_magyarkozlony
+    official_url: https://magyarkozlony.hu/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Magyar Közlöny（官方公报）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/hivatalos-lapok
+known_gaps:
+  MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_TRANSPORT_OR_DANGEROUS_GOODS: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_CUSTOMS_OR_TRADE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  MS_STANDARDS_METADATA: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  MS_LEGISLATION_DATABASE: connector（html 解析）
+  MS_OFFICIAL_GAZETTE: connector（html 解析）
+identity_strategy:
+  pattern: HU:{instrument}:{id}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

@@ -24,6 +24,12 @@ ISSUERS: dict[str, str] = {
     "NL": "KOOP（Basiswettenbestand）",
     "ES": "Agencia Estatal Boletín Oficial del Estado",
     "FR": "DILA（Légifrance / JORF）",
+    # Batch 1（4B-2B）
+    "AT": "Bundeskanzleramt（RIS / BGBl）",
+    "CZ": "Ministerstvo vnitra（e-Sbírka）/ PSP ČR（Sbírka zákonů）",
+    "HU": "Igazságügyi Minisztérium（NJT / Magyar Közlöny）",
+    "IT": "Presidenza del Consiglio dei Ministri（Normattiva）",
+    "SK": "Ministerstvo spravodlivosti SR（Slov-Lex）",
     "US": "U.S. Government（Federal Register / govinfo）",
     "US-CA": "California Legislature（leginfo）",
     "US-CO": "Colorado General Assembly",
@@ -31,6 +37,12 @@ ISSUERS: dict[str, str] = {
     "US-KY": "Kentucky Legislative Research Commission",
     "US-MN": "Minnesota Revisor of Statutes",
     "US-WA": "Washington State Legislature（RCW）",
+    "US-IL": "Illinois General Assembly / Illinois EPA",
+    "US-MI": "Michigan Legislature / Michigan EGLE",
+    "US-NV": "Nevada Legislature（NRS）/ NDEP",
+    "US-OH": "Ohio Legislature（codes.ohio.gov）/ Ohio EPA",
+    "US-TN": "Tennessee General Assembly / TDEC",
+    "US-TX": "Texas Legislature（statutes.capitol.texas.gov）/ TCEQ",
 }
 
 

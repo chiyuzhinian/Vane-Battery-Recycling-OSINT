@@ -1,0 +1,53 @@
+# ============================================================
+# Jurisdiction Onboarding Contract —— US-IL（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
+# ============================================================
+version: 1
+jurisdiction_id: US-IL
+jurisdiction_name:
+  zh: 伊利诺伊
+  en: Illinois
+level: state
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-IL.json（2026-09-14）
+mandatory_source_roles:
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
+official_channel_map:
+  STATE_LEGISLATURE:
+  - source_id: us_il_ilga
+    official_url: https://www.ilga.gov/
+    access_method: html
+    status: PARTIAL
+    note: status=None；owner=Illinois General Assembly（ILGA，ILCS 官方库）；检索尝试失败（ConnectError）：https://www.ilga.gov/Legislation/ILCS；检索尝试失败（ConnectError）：https://www.ilga.gov/Legislation/ILCS/Chapters
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_il_epa
+    official_url: https://epa.illinois.gov/
+    access_method: html
+    status: PARTIAL
+    note: 'status=None；owner=Illinois EPA；检索尝试 HTTP 404：https://epa.illinois.gov/topics/waste-management/recycling.html；note:
+      IL EPA 废物管理（含电池/电子废物项目）'
+known_gaps:
+  STATE_STATUTES: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
+collector_strategy:
+  STATE_LEGISLATURE: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
+identity_strategy:
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py

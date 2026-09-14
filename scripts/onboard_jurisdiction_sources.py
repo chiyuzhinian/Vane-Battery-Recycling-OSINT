@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -86,17 +87,48 @@ def extract_doc_links(html: str, base_url: str,
     return out, False
 
 
-async def fetch(client: httpx.AsyncClient, url: str) -> tuple[httpx.Response | None, str]:
-    """GET + 瞬态重试 1 次（退避 2s）。"""
+class CurlResponse:
+    """curl 回退的最小响应封装（与 httpx.Response 同构子集）。"""
+
+    def __init__(self, status: int, content: bytes, url: str):
+        self.status_code = status
+        self.content = content
+        self.url = url
+        self.headers = {"content-type": "text/html; charset=utf-8"}
+
+    @property
+    def text(self) -> str:
+        return self.content.decode("utf-8", "replace")
+
+
+def _curl_get(url: str, timeout: int = 30) -> CurlResponse | None:
+    """curl.exe 回退（Windows SChannel 绕 TLS 兼容问题；项目既有模式）。"""
+    try:
+        proc = subprocess.run(
+            ["curl.exe", "-sS", "-L", "--max-time", str(timeout),
+             "-A", UA["User-Agent"], url],
+            capture_output=True, timeout=timeout + 10)
+    except Exception:  # noqa: BLE001
+        return None
+    if proc.returncode != 0:
+        return None
+    return CurlResponse(200, proc.stdout, url)
+
+
+async def fetch(client: httpx.AsyncClient, url: str) -> tuple[httpx.Response | CurlResponse | None, str]:
+    """GET + 瞬态重试 1 次（退避 2s）+ curl.exe 回退。"""
     try:
         r = await client.get(url, headers=UA, timeout=25, follow_redirects=True)
         return r, ""
-    except Exception as exc:  # noqa: BLE001
+    except Exception:  # noqa: BLE001
         await asyncio.sleep(2)
         try:
             r = await client.get(url, headers=UA, timeout=25, follow_redirects=True)
             return r, ""
         except Exception as exc2:  # noqa: BLE001
+            cur = await asyncio.to_thread(_curl_get, url)
+            if cur is not None:
+                return cur, "(curl fallback)"
             return None, type(exc2).__name__
 
 
