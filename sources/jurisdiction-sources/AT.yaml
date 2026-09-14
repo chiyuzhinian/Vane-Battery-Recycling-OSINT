@@ -5,18 +5,19 @@ version: 1
 jurisdiction_id: AT
 language: de
 link_keywords: "batterie|altbatterie|abfall|fahrzeug|sammlung"
-link_include: ["ris.bka.gv.at", "/Dokumente/"]
+link_include: ["ris.bka.gv.at", "ogd.ris.bka.gv.at", "data.bka.gv.at"]
 
 sources:
   - source_role: MS_LEGISLATION_DATABASE
-    source_id: at_ris
-    official_owner: "Bundeskanzleramt（RIS 法律信息系统）"
-    official_domain: ris.bka.gv.at
-    access_method: html
-    entry_url: "https://ris.bka.gv.at/Bundesrecht/"
+    source_id: at_ris_ogd
+    official_owner: "Bundeskanzleramt（RIS OGD 开放数据接口）"
+    official_domain: data.bka.gv.at
+    access_method: api
+    entry_url: "https://data.bka.gv.at/ris/api/v2.6/Bundesrecht?Applikation=BrKons&Suchworte=Batterie"
     search_attempts:
-      - "https://ris.bka.gv.at/Bundesrecht/"
-      - "https://www.ris.bka.gv.at/Dokumente/Bundesnormen/NOR40245808/NOR40245808.html"
+      - "https://data.bka.gv.at/ris/api/v2.6/Bundesrecht?Applikation=BrKons&Suchworte=Batterie"
+      - "https://data.bka.gv.at/ris/api/v2.6/Bundesrecht?Applikation=BrKons&Suchworte=Abfallwirtschaft"
     samples_known:
-      - "https://ris.bka.gv.at/Bundesrecht/"
-    note: "RIS Bundesrecht；www 域实测 503，改用无 www 域尝试；BNR 文档直链备用"
+      - "https://ogd.ris.bka.gv.at/Dokumente/Bundesnormen/NOR12151966/NOR12151966.html"
+      - "https://ogd.ris.bka.gv.at/Dokumente/Bundesnormen/NOR12151966/NOR12151966.xml"
+    note: "Batch 1R：www 主域 503 区域拦截；官方 OGD 开放数据通道（data.bka 检索 + ogd.bka 文档）实测 200——官方替代路由成立"

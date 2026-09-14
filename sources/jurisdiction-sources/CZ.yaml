@@ -19,4 +19,5 @@ sources:
       - "https://aplikace.mvcr.cz/sbirka-zakonu/"
     samples_known:
       - "https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008"
-    note: "297/2008 Sb.（电池法）= PSP ČR sbirka.sqw 直链（议会官方）；e-Sbírka 连接受限记录"
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=185&r=2001"
+    note: "297/2008 Sb.（电池法）/185/2001 Sb.（废物法）= PSP ČR sbirka.sqw 直链（议会官方）"

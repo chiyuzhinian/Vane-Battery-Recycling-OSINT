@@ -27,6 +27,8 @@ sources:
     entry_url: "https://epa.illinois.gov/"
     search_attempts:
       - "https://epa.illinois.gov/topics/waste-management.html"
-      - "https://epa.illinois.gov/topics/waste-management/recycling.html"
-    samples_known: []
+      - "https://epa.illinois.gov/topics/waste-management/batteries.html"
+    samples_known:
+      - "https://epa.illinois.gov/topics/waste-management.html"
+      - "https://epa.illinois.gov/topics/waste-management/batteries.html"
     note: "IL EPA 废物管理（含电池/电子废物项目）"

@@ -25,8 +25,8 @@ official_channel_map:
     official_url: https://www.e-sbirka.gov.cz/
     access_method: html
     status: PARTIAL
-    note: status=None；owner=Ministerstvo vnitra（e-Sbírka 官方法律库）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008；检索尝试
-      HTTP 404：https://aplikace.mvcr.cz/sbirka-zakonu/
+    note: status=None；owner=Ministerstvo vnitra（e-Sbírka 官方法律库）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008；检索页无可解析文书链接（可能
+      JS 渲染/参数错误）：https://aplikace.mvcr.cz/sbirka-zakonu/
 known_gaps:
   MS_OFFICIAL_GAZETTE: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）

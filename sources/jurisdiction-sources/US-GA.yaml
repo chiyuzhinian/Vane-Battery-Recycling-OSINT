@@ -4,8 +4,8 @@
 version: 1
 jurisdiction_id: US-GA
 language: en
-link_keywords: "battery|recycl|solid waste|hazardous"
-link_include: ["/legislation/", "/laws/"]
+link_keywords: "battery|recycl|solid waste|hazardous|land protection"
+link_include: ["/legislation/", "/laws/", "epd.georgia.gov"]
 
 sources:
   - source_role: STATE_LEGISLATURE
@@ -18,3 +18,15 @@ sources:
       - "https://www.legis.ga.gov/legislation?search=battery"
     samples_known: []
     note: "官方站点为 JS 渲染（SPA）——框架的异常分支验证对象"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_ga_epd
+    official_owner: "Georgia EPD（环境保护司，DNR）"
+    official_domain: epd.georgia.gov
+    access_method: html
+    entry_url: "https://epd.georgia.gov/"
+    search_attempts:
+      - "https://epd.georgia.gov/land-protection-branch"
+      - "https://epd.georgia.gov/hazardous-waste"
+    samples_known:
+      - "https://epd.georgia.gov/"
+    note: "Batch 1R vantage 实测 200（SOURCE_AVAILABLE）；原 DNS_RESOLVE_FAIL 系 runner 侧瞬态"

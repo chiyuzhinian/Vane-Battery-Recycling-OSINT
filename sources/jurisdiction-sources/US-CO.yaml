@@ -5,7 +5,7 @@ version: 1
 jurisdiction_id: US-CO
 language: en
 link_keywords: "battery|recycl|solid waste|hazardous|stewardship|producer"
-link_include: ["/bills/"]
+link_include: ["/bills/", "cdphe.colorado.gov"]
 
 sources:
   - source_role: STATE_LEGISLATURE
@@ -19,3 +19,15 @@ sources:
       - "https://leg.colorado.gov/bills?search_api_fulltext=battery+recycling"
     samples_known: []
     note: "电池 EPR 立法州（registry 标注）"
+  - source_role: STATE_ENVIRONMENT
+    source_id: us_co_cdphe
+    official_owner: "Colorado Department of Public Health & Environment（CDPHE）"
+    official_domain: cdphe.colorado.gov
+    access_method: html
+    entry_url: "https://cdphe.colorado.gov/"
+    search_attempts:
+      - "https://cdphe.colorado.gov/"
+      - "https://leg.colorado.gov/bills?search_api_fulltext=battery"
+    samples_known:
+      - "https://cdphe.colorado.gov/"
+    note: "Batch 1R vantage：cdphe 主页两轮复测 200（SOURCE_AVAILABLE）；子路径间歇 403 → 路由：本机直取 + 浏览器回退"

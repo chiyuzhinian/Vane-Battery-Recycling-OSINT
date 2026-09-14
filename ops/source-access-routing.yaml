@@ -1,0 +1,88 @@
+# ============================================================
+# Source Access Routing（Phase 4B-2B Batch 1R §C）
+# ------------------------------------------------------------
+# 运行层路由：source/endpoint → preferred runner。**不进入 Policy
+# Domain Schema**（冻结契约 §1 遵守）；执行日志必须记录：
+#   runner_id / egress_region / route_selected / fallback_used
+# 纪律：preferred_runner 不可用时走 fallback 链；官方替代端点
+# （官方 API / mirror / open-data）为合法 fallback；禁止代理池/
+# 访问控制规避。
+# ============================================================
+version: 1
+updated_at: "2026-09-14"
+
+runners:
+  runner-local-dev-1:
+    egress_region: local-cn
+    network_type: dev-workstation
+    status: active
+    note: "当前开发环境（Batch 1R 实测出口）"
+  runner-cloud-1:
+    egress_region: "<待配置>"
+    network_type: cloud-vm
+    status: not_configured
+    note: "需用户提供已授权云主机（ssh）；配置后用于 §A2 独立复核"
+
+routing_rules:
+  # ── Batch 1 blocked 辖区（本机出口受限 → 云 Runner 或官方替代）──
+  - match: { jurisdiction: AT, endpoints: ["ris.bka.gv.at"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "https://data.bka.gv.at/ris/api/v2.6/" }
+      - { kind: official_alt, endpoint: "https://www.ris.bka.gv.at/Dokumente/" }
+    last_reason: HTTP_503_REGIONAL_BLOCK（httpx+curl 同 503）
+  - match: { jurisdiction: HU, endpoints: ["njt.hu"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "https://magyarkozlony.hu/" }
+    last_reason: CONNECTION_RESET_PERSISTENT
+  - match: { jurisdiction: BE, endpoints: ["ejustice.just.fgov.be"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "http://www.ejustice.just.fgov.be/" }
+    last_reason: CONNECT_TIMEOUT
+  - match: { jurisdiction: US-GA, endpoints: ["epd.georgia.gov"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "https://georgia.gov/" }
+    last_reason: DNS_RESOLVE_FAIL
+  - match: { jurisdiction: US-OH, endpoints: ["codes.ohio.gov"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "https://www.legislature.ohio.gov/" }
+    last_reason: CONNECTION_REFUSED_TIMEOUT
+  - match: { jurisdiction: US-CO, endpoints: ["cdphe.colorado.gov"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: official_alt, endpoint: "https://colorado.gov/" }
+    last_reason: HTTP_403
+  - match: { jurisdiction: US-MI, endpoints: ["legislature.mi.gov", "michigan.gov"] }
+    preferred_runner: runner-cloud-1
+    fallback:
+      - { kind: browser_channel, endpoint: "browser" }   # JS 渲染场景
+    last_reason: HTTP_403 / JS_RENDERED
+
+  # ── Batch 1 CONNECTED 辖区（本机直取）──
+  - match: { jurisdiction: IT, endpoints: ["normattiva.it"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: SK, endpoints: ["slov-lex.sk"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: CZ, endpoints: ["psp.cz"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: US-IL, endpoints: ["epa.illinois.gov"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: US-TN, endpoints: ["tn.gov"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: US-TX, endpoints: ["statutes.capitol.texas.gov"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+  - match: { jurisdiction: US-NV, endpoints: ["ndep.nv.gov"] }
+    preferred_runner: runner-local-dev-1
+    fallback: []
+
+log_fields: [runner_id, egress_region, route_selected, fallback_used]

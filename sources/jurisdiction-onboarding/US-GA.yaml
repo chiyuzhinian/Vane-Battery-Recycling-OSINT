@@ -1,54 +1,54 @@
 # ============================================================
-# Jurisdiction Onboarding Contract —— US-GA（Pilot，Step 4b；SPA 挑战样本）
-# Source Proof：outputs/audit/source_proofs/US-GA.json
+# Jurisdiction Onboarding Contract —— US-GA（Batch 1 · 自动生成骨架）
+# 来源：scripts/gen_jurisdiction_contract.py（§5）；人工精修备注
 # ============================================================
 version: 1
 jurisdiction_id: US-GA
-jurisdiction_name: {zh: 佐治亚, en: Georgia}
+jurisdiction_name:
+  zh: US-GA
+  en: US-GA
 level: state
-official_languages: [en]
-legal_system_type: common_law
-
+official_languages:
+- en
+source_proof: outputs/audit/source_proofs/US-GA.json（2026-09-14）
 mandatory_source_roles:
-  - STATE_LEGISLATURE
-  - STATE_STATUTES
-  - STATE_ADMIN_CODE
-  - STATE_REGISTER
-  - STATE_ENVIRONMENT_AGENCY
-  - STATE_WASTE_PROGRAM
-  - STATE_BATTERY_EPR_OR_STEWARDSHIP
-  - STATE_TRANSPORT_HAZMAT
-optional_source_roles: [STATE_TAX_INCENTIVES, STATE_RECYCLING_PROGRAM]
-
+- STATE_LEGISLATURE
+- STATE_STATUTES
+- STATE_ADMIN_CODE
+- STATE_REGISTER
+- STATE_ENVIRONMENT_AGENCY
+- STATE_WASTE_PROGRAM
+- STATE_BATTERY_EPR_OR_STEWARDSHIP
+- STATE_TRANSPORT_HAZMAT
 official_channel_map:
   STATE_LEGISLATURE:
-    - source_id: us_ga_leg
-      official_url: "https://www.legis.ga.gov/"
-      access_method: html
-      status: ACCESSIBLE
-      note: "官方站点为 JS 渲染 SPA（Source Proof 记录限制）→ 浏览器通道候选（Step 5 决策）"
-
+  - source_id: us_ga_leg
+    official_url: https://www.legis.ga.gov/
+    access_method: html
+    status: PARTIAL
+    note: 'status=None；owner=Georgia General Assembly；检索页无可解析文书链接（可能 JS 渲染/参数错误）：https://www.legis.ga.gov/legislation?search=battery；note:
+      官方站点为 JS 渲染（SPA）——框架的异常分支验证对象'
+  STATE_ENVIRONMENT_AGENCY:
+  - source_id: us_ga_epd
+    official_url: https://epd.georgia.gov/
+    access_method: html
+    status: PARTIAL
+    note: 'status=None；owner=Georgia EPD（环境保护司，DNR）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://epd.georgia.gov/land-protection-branch；note:
+      Batch 1R vantage 实测 200（SOURCE_AVAILABLE）；原 DNS_RESOLVE_FAIL 系 runner 侧瞬态'
 known_gaps:
-  STATE_STATUTES: "O.C.G.A. 法典通道未接入"
-  STATE_ADMIN_CODE: "GA 行政法规通道未接入"
-  STATE_REGISTER: "州公报通道未接入"
-  STATE_ENVIRONMENT_AGENCY: "EPD 通道未接入"
-  STATE_WASTE_PROGRAM: "废物项目通道未接入"
-  STATE_BATTERY_EPR_OR_STEWARDSHIP: "无电池 EPR 立法信号（制造业型州）"
-  STATE_TRANSPORT_HAZMAT: "危货运输通道未接入"
-
+  STATE_STATUTES: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_BATTERY_EPR_OR_STEWARDSHIP: Batch 1：未接入（Source Proof 未覆盖该角色）
+  STATE_TRANSPORT_HAZMAT: Batch 1：未接入（Source Proof 未覆盖该角色）
 collector_strategy:
-  STATE_LEGISLATURE: browser_pending（SPA）
-  STATE_STATUTES: pending_probe
-  STATE_ADMIN_CODE: pending_probe
-  STATE_REGISTER: pending_probe
-  STATE_ENVIRONMENT_AGENCY: pending_probe
-  STATE_WASTE_PROGRAM: pending_probe
-  STATE_BATTERY_EPR_OR_STEWARDSHIP: not_applicable（无立法信号）
-  STATE_TRANSPORT_HAZMAT: pending_probe
+  STATE_LEGISLATURE: connector（html 解析）
+  STATE_ENVIRONMENT_AGENCY: connector（html 解析）
 identity_strategy:
-  pattern: "US-GA:SB|HB:{session}:{number}"
-  enrich_fields: [act_number, status]
-status_strategy: "官方 act 状态"
-legal_relation_strategy: "bill → act → O.C.G.A.（待通道）"
-notes: "Pilot（优先度 0.635；电池制造集群；SPA 异常分支验证）。"
+  pattern: US:{state}:{citation}
+  enrich_fields:
+  - title
+  - publish_date
+  - official_url
+notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
