@@ -16,8 +16,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from app.policy.search_plan import load_plan, validate_plan  # noqa: E402
 import run_jurisdiction_round as rj  # noqa: E402
 
-PLANS = ("SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1", "US_WA_PLAN_V1",
-         "US_WA_PLAN_V2")
+PLANS = ("SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1", "US_CA_PLAN_V2",
+         "US_WA_PLAN_V1", "US_WA_PLAN_V2")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -35,6 +35,7 @@ def test_plan_hashes_are_frozen():
         "SE_PLAN_V1": "80f3d13818c8",
         "FI_PLAN_V1": "bd138f120fb1",
         "US_CA_PLAN_V1": "391507348e01",
+        "US_CA_PLAN_V2": "9ab375a053ba",   # 2B1 §6：+D 缺口种子（reset）
         "US_WA_PLAN_V1": "192be6abc2f2",
         "US_WA_PLAN_V2": "69a4f37344f0",   # Step 6：+D 路线（reset 独立视图）
     }
@@ -104,8 +105,9 @@ def test_mode_b_convergence_artifacts():
         pytest.skip("需先运行 scripts/audit_jurisdiction_convergence.py")
     data = json.loads(fj.read_text(encoding="utf-8"))
     plans = data["plans"]
-    assert set(plans) == {"SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1",
-                          "US_WA_PLAN_V1"}
+    # V1 四地 + 2B1 起新冻结的 V2 视图（US-CA/US-WA）
+    assert {"SE_PLAN_V1", "FI_PLAN_V1", "US_CA_PLAN_V1",
+            "US_WA_PLAN_V1"} <= set(plans)
     for pid, e in plans.items():
         c = e["convergence"]
         assert c["converged"] is True, pid

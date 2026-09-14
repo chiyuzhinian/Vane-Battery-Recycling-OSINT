@@ -1,0 +1,60 @@
+# ============================================================
+# Search Plan —— US_CA_PLAN_V2（Pilot 管辖地级，Phase 4B-2B1 §6）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak 留在旧视图）：
+#   · discovery_routes 增加 D（缺口枚举：经探查确认存在但未采的
+#     section 直链种子——PRC 42450 / HSC 25215.1 / HSC 25215.2）
+#   · A/C 种子沿用 V1（复现验证）
+# 字段映射：fr_agencies→A 种子（PRC section 直链）｜ fr_terms→B 检索词
+#          （本库无检索端点）｜ eu_keywords→C 引用种子 ｜ cross_terms→D 缺口
+# 纪律：自冻结起不得修改；再变 → US_CA_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: US_CA_PLAN_V2
+jurisdiction: US-CA
+scope: US-CA
+
+source_roles:
+  - {role: US_CA_STATE_LEGISLATION, critical: true}
+
+source_endpoints:
+  - us_ca_leginfo_section
+  - us_ca_leginfo_toc
+
+critical_sources:
+  - us_ca_leginfo
+
+query_taxonomy_version: qt-v1
+query_set:
+  fr_agencies:                         # A：PRC section 直链种子（V1 沿用）
+    - "PRC:42451"
+    - "PRC:42452"
+    - "PRC:42453"
+    - "PRC:42454"
+    - "PRC:42455"
+  fr_terms:                            # B 不可用（无检索端点）→ 保留
+    - "battery stewardship"
+    - "lead-acid battery"
+  eu_keywords:                         # C：引用种子（V1 沿用）
+    - "PRC Section 42451"
+    - "Public Resources Code Section 42452"
+  cross_terms:                         # D：缺口枚举（2B1 探查实证存在未采）
+    - "PRC:42450"                      # AB2440 Part 3 首条（未采）
+    - "HSC:25215.1"                    # 危废管理条（未采）
+    - "HSC:25215.2"                    # 危废管理条（未采）
+
+language_set: [en]
+time_window: {from: "2016-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, C, D]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  2B1 §6：为 CA eligibility 的 routes ≥3 而建。D = 缺口枚举——
+  种子均先经 leginfo 实测存在（42450 1591c；25215.1 6992c；25215.2 3620c），
+  非"换关键词"而是**未覆盖条文直链**（机制独立于 A 的全量枚举与 C 的引用链）。
+  STATE_ADMIN_CODE 由 browser_calrecycle（CalRecycle CCR 结构页）承接，
+  与 leginfo 分离。
+created_at: "2026-09-14"

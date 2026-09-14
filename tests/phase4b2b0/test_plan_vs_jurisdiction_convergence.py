@@ -94,22 +94,24 @@ def test_not_converged_without_plan():
 
 
 def test_real_pilots_plan_converged_but_not_eligible():
-    """真实产物：四 pilot plan_converged=True；SE/FI/CA 因覆盖/路线不足不 eligible；
-    US-WA 经 Step 6 角色 closure + V2(D 路线) 达成 eligible（首例）。"""
+    """真实产物：四 pilot plan_converged=True；SE/FI 因覆盖/路线不足不 eligible；
+    US-WA（2B0 Step 6）与 US-CA（2B1 §6：CalRecycle ADMIN_CODE + V2 D 路线）
+    已达成 eligible。"""
     if not ARTIFACT.exists():
         pytest.skip("需先运行 scripts/audit_jurisdiction_layers.py")
     d = json.loads(ARTIFACT.read_text(encoding="utf-8"))
     js = d["jurisdictions"]
-    for jid in ("SE", "FI", "US-CA"):
+    for jid in ("SE", "FI"):
         assert js[jid]["plan_converged"] is True, jid
         assert js[jid]["jurisdiction_eligible"] is False, \
             f"{jid} 不得在覆盖/routes 不足时 eligible"
         assert js[jid]["state"] == STATE_PLAN_CONVERGED, jid
-    # US-WA：eligible（全闸门过）或（若数据变化）至少 plan 收敛
-    assert js["US-WA"]["plan_converged"] is True
-    if js["US-WA"]["jurisdiction_eligible"]:
-        assert js["US-WA"]["state"] == STATE_ELIGIBLE
-        assert len(js["US-WA"]["route_families"]) >= 3
+    # US-WA / US-CA：eligible（全闸门过）或（若数据变化）至少 plan 收敛
+    for jid in ("US-WA", "US-CA"):
+        assert js[jid]["plan_converged"] is True, jid
+        if js[jid]["jurisdiction_eligible"]:
+            assert js[jid]["state"] == STATE_ELIGIBLE, jid
+            assert len(js[jid]["route_families"]) >= 3, jid
     # 参考管辖地无 plan → NOT_CONVERGED
     for jid in ("DE", "NL", "ES", "FR"):
         assert js[jid]["state"] == STATE_NOT_CONVERGED, jid

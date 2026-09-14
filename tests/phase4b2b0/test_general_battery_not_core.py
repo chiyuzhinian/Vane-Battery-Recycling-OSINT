@@ -70,12 +70,15 @@ def test_real_artifact_guard_rules():
         if v["domain_scope"] == "GENERAL_BATTERY_BACKGROUND":
             assert v["class_after"] in ("C", "D"), v
         if v["domain_scope"] == "OUT_OF_SCOPE":
-            assert v["class_before"] in ("A1", "A2"), v   # 仅降 A1/A2
+            # 2B1：OOS 强类一律降 D（不再保留 B——语义一致性）
+            assert v["class_before"] in ("A1", "A2", "B"), v
+            assert v["class_after"] == "D", v
 
 
-def test_effective_class_applies_guard_for_nim_general():
+def test_nim_always_capped_c():
+    """2B1：NIM 泛电池语境（FI 便携）→ 封顶 C（discovery 层）。"""
     r = {"evidence_id": "t", "source_id": "eu_nim_fi",
          "title": "Valtioneuvoston asetus paristoista ja akuista",
          "text": "kannettavat paristot ja akut; kierrätys",
          "meta": {}, "relevant": True}
-    assert effective_class(r) == "C"      # A2 默认路径被域护栏改写
+    assert effective_class(r) == "C"

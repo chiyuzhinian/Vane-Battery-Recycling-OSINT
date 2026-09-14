@@ -51,18 +51,27 @@ official_channel_map:
       access_method: browser
       status: PARTIAL
       note: "Step 6 角色 closure：CalRecycle = 加州废物/回收项目主管机构（官方事实）；已有语料 33 条"
+  STATE_ADMIN_CODE:
+    - source_id: browser_calrecycle
+      official_url: "https://www.calrecycle.ca.gov/Laws/Regulations/Title14/"
+      access_method: browser
+      status: PARTIAL
+      note: >-
+        2B1：CalRecycle 官方托管其 CCR 规章（Title 14 Div 2 Ch 5 / Div 7、Title 27）
+        的结构/索引与部分文本——3 页真实样本已入库（us_ca_calrecycle_title14/
+        title27/regulations，浏览器通道）。完整官方条文在 OAL/Westlaw
+        （当前网络环境 403）→ PARTIAL。
 
 known_gaps:
-  STATE_ADMIN_CODE: "CCR（加州行政法规）通道未接入（OAL 入口待探）"
   STATE_REGISTER: "加州公报（ZERO/NR）通道未接入"
-  STATE_TRANSPORT_HAZMAT: "Caltrans/危货运输通道未接入"
+  STATE_TRANSPORT_HAZMAT: "Caltrans/危货运输通道未接入（Caltrans 站点升级中，内容 404；CHP 子页 403）"
 
 collector_strategy:
   STATE_LEGISLATURE: connector（leginfo billText/codes_displaySection 直链，Step 5）
   STATE_STATUTES: connector
   STATE_ENVIRONMENT_AGENCY: browser_channel（现有）
   STATE_BATTERY_EPR_OR_STEWARDSHIP: browser_channel（现有）
-  STATE_ADMIN_CODE: pending_probe
+  STATE_ADMIN_CODE: browser_channel（CalRecycle 规章结构页，2B1）
   STATE_REGISTER: pending_probe
   STATE_WASTE_PROGRAM: pending_probe
   STATE_TRANSPORT_HAZMAT: pending_probe

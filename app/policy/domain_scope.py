@@ -103,7 +103,7 @@ def classify_domain_scope(record: dict) -> str:
         return "GENERAL_BATTERY_BACKGROUND"
     # 支撑体系（无条件档；2B1）：危废/危货/激励——不要求电池字面词
     if _hit("supporting_unconditional", title) \
-            or _hit("supporting_unconditional", hay[:400]):
+            or _hit("supporting_unconditional", hay[:1200]):
         return "SUPPORTING_REGULATION"
     # 支撑性方法学（含电池对象语境）
     if _hit("supporting_markers", title) or _hit("supporting_markers",

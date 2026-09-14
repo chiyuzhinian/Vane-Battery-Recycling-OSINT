@@ -86,6 +86,8 @@ supporting_unconditional:
   - "e-?manifest|land\\s+disposal\\s+restriction|generator\\s+improvements"
   - "clean\\s+vehicle\\s+credit|45x"
   - "tax\\s+credit|section\\s+641[78]|elective\\s+payment"
+  - "solid\\s+waste(?:\\s+management)?"
+  - "california\\s+code\\s+of\\s+regulations"
 
 # 4) 泛电池背景（便携/消费/纽扣/家用/电单车——**不得**充当 EV 核心证据）
 general_battery_markers:
