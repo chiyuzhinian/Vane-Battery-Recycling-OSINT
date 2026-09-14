@@ -1,0 +1,220 @@
+# CELEX 52025XC00214
+# http://publications.europa.eu/resource/celex/52025XC00214
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:41 UTC（正文 36615 字符）
+
+Official Journal 
+of the European Union
+ EN
+ C series
+ C/2025/214
+ 10.1.2025
+ COMMISSION NOTICE
+ Commission guidelines to facilitate the harmonised application of provisions on the removability and replaceability of portable batteries and LMT batteries in Regulation (EU) 2023/1542
+ (Text with EEA relevance)
+ (C/2025/214)
+ CONTENTS 
+ 1.
+ INTRODUCTION
+ 2
+ 2.
+ GENERAL CONSIDERATIONS
+ 2
+ 2.1. Tool types
+ 3
+ 2.2. Interaction with other applicable EU legislation
+ 3
+ 3.
+ REMOVABILITY AND REPLACEABILITY BY INDEPENDENT PROFESSIONALS
+ 4
+ Concept of independent professionals
+ 4
+ Partial derogations from the main rule
+ 4
+ Appliances specifically designed to operate in a wet environment
+ 4
+ Medical devices and in-vitro diagnostic medical devices
+ 6
+ Additional derogations
+ 6
+ 4.
+ FULL DEROGATIONS TO THE GENERIC OBLIGATIONS ON REMOVABILITY AND REPLACEABILITY BY THE END-USER
+ 7
+ Safety considerations
+ 7
+ Data integrity considerations
+ 8
+ 5.
+ OTHER CONSIDERATIONS
+ 9
+ Concept of compatible battery
+ 9
+ Availability as spare parts
+ 9
+ Software limitations
+ 10
+ 1. INTRODUCTION 
+ These guidelines aim to facilitate the harmonised application of the provisions on the removability and replaceability of portable batteries and light means of transport (LMT) batteries in Regulation (EU) 2023/1542 ( 1 ) , which entered into force on 17 August 2023.
+ Article 11 of Regulation (EU) 2023/1542 is applicable from 18 February 2027 and contains obligations on the removability and replaceability of portable and LMT batteries that natural or legal persons who place products on the market incorporating them on the market must meet.
+ Given that portable and LMT batteries can be present in a wide range of products, in accordance with Article 11(9) of Regulation (EU) 2023/1542, this Notice aims to provide context and additional technical elements to facilitate a harmonised application of the rules on the removability and replaceability of portable batteries and LMT batteries laid down in that Article. It takes due account of dedicated discussions with Member States and stakeholders.
+ The examples set out in this document are non-exhaustive and serve only to illustrate how to interpret certain requirements laid down in Article 11. The content, including examples, reflects the views of the European Commission and, as such, is not legally binding. The binding interpretation of EU legislation is the exclusive competence of the Court of Justice of the European Union.
+ 2. GENERAL CONSIDERATIONS 
+ The removability of portable and LMT batteries is understood to be possible when the battery can be safely taken out of a device by the end user or an independent professional, with or without the use of tools, avoiding damage to the battery and to the device. In turn, the replaceability of portable and LMT batteries means that the battery can be removed and replaced with another battery without damaging or destroying the battery or the device where it is incorporated. This, therefore, enables further operation without affecting the functioning, performance or safety of the device.
+ The obligation in Article 11(1) of Regulation (EU) 2023/1542 on the removability and replaceability of portable batteries by the end user is applicable to entire batteries, and not to individual cells. The end user should be a person having attained the age of majority without any specific experience or related qualifications related to removing or replacing batteries.
+ In the case of LMT batteries, the obligation in Article 11(5) concerning the removability and replaceability by independent professionals is, additionally, applicable at the level of the battery cells included in the battery. Section 3 of the present guidelines discusses the concept of independent professionals.
+ When tools other than commercially available tools are required for independent professionals to have LMT batteries removed and replaced, these should be made available to them at a reasonable and non-discriminatory price. This should not deter access to such tools, thereby impeding the removability and replaceability of batteries.
+ Once batteries are removed, it is important that the dangers associated with waste batteries are addressed. The information provided to the user should include clear advice on the next steps required to ensure that waste batteries are not discarded with other waste, in particular municipal waste. Information should also be provided on the correct handling, packaging, storage and transport of the waste battery to a separate collection point or treatment facility.
+ Small lithium-based portable batteries in certain product categories such as greeting cards, smart textiles, wearables, and electronic cigarettes, may cause fire incidents in waste treatment facilities if they are discarded together with those products. It is important that portable batteries can be removed and replaced by the end-user, as required by the general provision in Article 11(1).
+ 2.1. Tool types 
+ Article 11 of Regulation (EU) 2023/1542 states that a battery shall be considered readily removable by the end-user where it can be removed from a product with the use of commercially available tools, without requiring the use of specialised tools, unless provided free of charge with the product, proprietary tools, thermal energy, or solvents to disassemble the product.
+ Guidance on tool types can be drawn from standard EN 45554:2020e ( 2 ) . In the context of the assessment of a product’s ability to be repaired, reused and upgraded, this standard uses the following classification groups: (i) basic tools (including those provided with the product as a spare part) or no tools; (ii) product-group specific tools; (iii) commercially available tools; and (iv) proprietary tools.
+ The concept of commercially available tools mentioned in Article 11 comprises the categories of basic tools or no tools and of commercially available tools as per EN 45554:2020e.
+ The concept of specialised tools laid down in the Regulation refers to product-group specific tools that are not available for purchase by the general public but are not protected by patents either. Article 11 requires that any such specialised tool that might be necessary to have a portable battery removed and replaced is provided free of charge with the product into which the battery is incorporated.
+ As per EN 45554:2020e, proprietary tools refer to tools not available for purchase by the general public, or for which any applicable patent are not available for license under fair, reasonable and non-discriminatory terms. Such tools should not be needed to remove portable batteries.
+ 2.2. Interaction with other applicable EU legislation 
+ Article 11(1) stipulates that the provisions in its paragraph shall be without prejudice to any specific provisions ensuring a higher level of protection of the environment and human health relating to the removability and replaceability of portable batteries by end users laid down in any Union law on electrical and electronic equipment as defined in Article 3(1), point (a), of Directive 2012/19/EU on Waste Electrical and Electronic Equipment ( 3 ) .
+ At the time of adopting these guidelines, the only EU law that sets out specific provisions is Regulation (EU) 2023/1670 ( 4 ) laying down ecodesign requirements for smartphones, mobile phones other than smartphones, cordless phones and slate tablets. On the replaceability of portable batteries, this regulation requires that individuals without any specific repair experience or related qualifications (referred to as laymen) ( 5 ) or those with general knowledge of basic repair techniques and safety precautions (referred to as generalists) must be able to replace the battery. However, in the latter case, the battery and the device also have to meet stricter durability requirements ( 6 ) .
+ Consequently, in the case of portable batteries included in products covered by Regulation (EU) 2023/1670, the removability and replaceability obligations set out in Annex II of that Regulation prevail over those set out in Regulation (EU) 2023/1542.
+ 3. REMOVABILITY AND REPLACEABILITY BY INDEPENDENT PROFESSIONALS 
+ Concept of independent professionals 
+ Article 3(23) of Regulation (EU) 2023/1542 provides a definition of ‘independent operators’, but not of ‘independent professionals’ that Article 11 refers to. Some clarifications are therefore proposed to address the concept of ‘independent professionals’ in Article 11(2) and (5). These are drawn and adapted from specifications established in other EU law, namely Annex II of Regulation (EU) 2023/1670 ( 7 ) .
+ ‘Independent professionals’ are to be understood as independent operators who have the technical competence and qualification to repair the product where the battery is integrated into, and conduct their business on commercial basis and/or in commercial premises.
+ If removability and replaceability interventions are carried out on individual cells within a battery pack of LMT batteries, the ‘independent professional’ is to be understood to have the technical competence to render the battery operating as intended again.
+ If removability and replaceability actions are carried out on products subject to battery type-approval under Regulation (EU) No 168/2013 and Regulation (EU) 2018/858, independent professionals are to be understood as ‘independent operators’ as defined in Regulation (EU) No 168/2013 ( 8 ) and Regulation (EU) 2018/858 ( 9 ) .
+ Compliance with the above points could be demonstrated by a reference to an official registration system as professional repairer (when such system exists in the Member States concerned), or by registration with, or training/certification by, the manufacturer of the product where the battery is integrated in (when required by national legislation).
+ In all cases, battery removal and replacement (both at pack or cell level) should be performed according to the safety information on the use, removal and replacement of batteries provided by the product manufacturer.
+ Partial derogations from the main rule 
+ Article 11(2) establishes derogations from the removability and replaceability requirements set out in Article 11(1) for portable batteries incorporated in products to be removable and replaceable by end users. For certain products where it is necessary to ensure the safety of the product user, it is sufficient that portable batteries can be replaced and removed by independent professionals with commercially available tools.
+ This includes products specifically designed to operate primarily in a wet environment and certain professional medical imaging and radiotherapy devices and in vitro diagnostic medical devices. These derogations are discussed in more detail below.
+ Appliances specifically designed to operate in a wet environment 
+ Appliances specifically designed to operate primarily in an environment that is regularly subject to splashing water, water streams or water immersion, and that are intended to be washable or rinseable, may be designed in such a way as to make the battery removable and replaceable only by independent professionals.
+ Recital (39) of Regulation (EU) 2023/1542 specifies that ‘this derogation should only apply when it is not possible, by way of redesign of the appliance, to ensure the safety of the end-user and the safe continued use of the appliance after the end-user has correctly followed the instructions to remove and replace the battery’.
+ Therefore, the following indicators are therefore all relevant for interpreting and applying the criteria for the applicability of a derogation for an appliance operating in a wet environment:
+ (i)
+ ‘specifically’: the appliance is designed with the main purpose to operate in the environment described;
+ (ii)
+ ‘primarily’: the environment described is the primary environment of the appliance, as Recital 39 explicitly specifies, ‘for the majority of the active service of the appliance’. In other words, not just an environment in which the device may only coincidentally or accidentally operate;
+ (iii)
+ ‘washable or rinseable’: the appliance is intended to be washable or rinseable;
+ (iv)
+ ‘compromising safety’: there is evidence in the product documentation when placing the product on the market that battery replaceability and removability by end-users would compromise the safety of the user or the appliance;
+ (v)
+ ‘no way to redesign’: there is evidence in the product documentation when placing the product on the market that there is no way to redesign the appliance with the current state of the art technology, without severely affecting the health and safety of the end-user or the performance and functionality of the product.
+ The Ingress Protection (IP) rating system defined in standard IEC 60529 (specifically, the second numeral related to water, as depicted in Figure 1) offers an indicative guide to identify the environment referred to in the above-mentioned criteria. Nevertheless, an IP rating grades resistance of an enclosure against the intrusion of dust or liquids; it is not limited only to appliances that operate in a certain primary environment for a given part of their active service, nor does it establish whether redesign is possible or not. As such, the IP rating alone is considered as sufficient to demonstrate the compliance with the above-mentioned criteria.
+ Specifically, the case of ‘splashing water’ referenced in Article 11 of Regulation 2023/1542 is equivalent to an IPX4 rating (class number 4 described in Figure 1 below), the case of ‘water streams’ is equivalent to IPX5 and IPX6 (classes number 5 and number 6), and the case of ‘water immersion’ is equivalent to an IPX7 rating (class number 7).
+ On points (ii) and (iii), a representative example of products primarily operating in such environment can be oral hygiene appliances (e.g., toothbrushes as in IEC 60335-2-52), and shavers, hair clippers and epilators (as in IEC 60335-2-8). At the same time, point (iv) indicates that there may still be appliances used in wet environment that incorporate batteries that are removable and replaceable by end-users, as long as this does not compromise safety. Examples of such appliances include toothbrushes and shavers powered by portable batteries of general use.
+ Figure 1 
+ Ingress Protection (IP) ratings guide for water (source IEC 60529) 
+ 0
+ No protection
+ 1
+ Protected against vertically falling water drops
+ Vertically falling drops shall have no harmful effects
+ 2
+ Protected against vertically falling water drops when enclosure titled up to 15 degrees
+ Vertically falling drops shall have no harmful effects when the enclosure is titled at any angle up 15 degrees on either side of the vertical
+ 3
+ Protected against spraying water
+ Water sprayed at an angle up to 60 degrees on either side of the vertical shall have no harmful effects
+ 4
+ Protected against splashing water
+ Water splashed against the enclosure from any direction shall have no harmful effects
+ 5
+ Protected against water jets
+ Water projected in jets against the enclosure from any directions shall have no harmful effects
+ 6
+ Protected against powerful water jets
+ Water projected in powerful jets against the enclosure from any directions shall have no harmful effects
+ 7
+ Protected against the effects of temporary immersion in water
+ Ingress of water in quantities causing harmful effects shall not be possible when the enclosure is temporarily immersed in water under standardized conditions of pressure and time
+ 8
+ Protected against the effects of continuous immersion in water
+ Ingress of water in quantities causing harmful effects shall not be possible when the enclosure is continuously immersed in water under conditions which shall be agreed between manufacturer and user, but which are more severe than for numeral 7
+ 9
+ Protected against high pressure and temperature water jets
+ Water projected at high pressure and high temperature against the enclosure from any direction shall not have harmful effects
+ Medical devices and in-vitro diagnostic medical devices 
+ Professional medical imaging and radiotherapy devices, which are medical devices as defined in Article 2 (1) of Regulation (EU) 2017/745 ( 10 ) , and in-vitro diagnostic medical devices, as defined in Article 2 (2) of Regulation (EU) 2017/746 ( 11 ) , may be designed in such a way as to make portable batteries removable and replaceable only by independent professionals.
+ Additional derogations 
+ In addition to the above-mentioned derogations already included in Article 11(2), the Commission is empowered to adopt delegated acts by adding further products to be exempted from the removability and replaceability requirements laid down in Article 11(1). Such delegated acts are to be adopted only on account of market developments and technical and scientific progress, and provided there are scientifically grounded concerns over the safety of end-users removing or replacing the portable battery, or where there is a risk that the removal or the replacement of the battery by end-users would be in violation of any product safety requirements provided for by applicable EU law.
+ In order to follow a structured approach in considering which candidate products to be included in a delegated act under the above-mentioned empowerment, the Commission will regularly publish calls for application.
+ When the first call is published, applicants wishing to demonstrate that candidate products fulfil the conditions laid out in Article 11(4) will have the possibility to submit evidence, for a period of three months, to explain that the requirement on the removability and replaceability of portable batteries by the end-user poses risks to the safety of the end-user or risks the violation of any product safety requirements provided for in applicable EU law.
+ Applicants will be required to submit an application form with the following information:
+ —
+ company name, address and contact details of the applicant
+ —
+ product category
+ —
+ technical documentation supporting the case for a derogation
+ —
+ other relevant information
+ The Commission will assess the documentation on the candidate products for additional derogations and, if justified, will propose adopting a delegated act under Article 11(4) in due course.
+ Given that this empowerment has been granted to the Commission on account of market development and technical and scientific progress, the Commission intends to periodically repeat the exercise explained above. This could lead to the adoption of further delegated acts with additional derogations.
+ 4. ON REMOVABILITY AND REPLACEABILITY BY THE END-USER FULL DEROGATIONS TO THE GENERIC OBLIGATIONS 
+ Article 11(3) of Regulation 2023/1542 stipulates that obligations laid down in Article 11(1) shall not apply where continuity of power supply is necessary and a permanent connection between the product and the respective portable battery is required to ensure the safety of the user and the appliance or, for products that collect and supply data as their main function, for data integrity reasons. This means that in such cases, portable batteries need not be removable and replaceable by end users.
+ Safety considerations 
+ Examples of devices where a permanent connection between the product and the respective portable battery is required to ensure the safety of the user and the device include life-saving, life-sustaining devices, and safety-critical devices.
+ Article 11(2) mentions professional medical imaging and radiotherapy devices where it is sufficient that portable batteries can be removed and replaced by independent professionals. Nevertheless, medical devices and in vitro diagnostic medical devices, as defined respectively in Regulations (EU) 2017/745 and (EU) 2017/746, cover a wide range of products which are used in applications with different levels of criticality. The uninterrupted operation of some medical devices is key when delivering care to a patient, and a risk-averse approach to medical devices is therefore proposed as appropriate.
+ The classification systems provided by Regulation (EU) 2017/745 (Article 51 and Annex VIII) and Regulation (EU) 2017/746 (Article 47 and Annex VIII) can be used for this. The classifications use a ‘risk based’ system based on the vulnerability of the human body taking account of the potential risks associated with the devices.
+ Implantable medical devices (e.g., cardiac pacemakers, implantable cardioverter defibrillators, implantable pulse generators) and certain in-vitro diagnostic medical devices (e.g., instruments used for detection of transmissible agents for screening of blood for transfusion, blood glucose meters to be used with test strips for diabetic patients) are associated with high risks. A lack of continuity of power supply and a break of connection between the product and the respective portable battery therefore entails a high risk of compromising the safety of the patient (end-user). Implantable active medical devices and certain in-vitro medical diagnostic devices are considered to be relevant to the derogation in Article 11 (3). It is worth noting that the above-mentioned classification is determined by the intended use. It is the intended use, and not the accidental use of the device, that determines the device class.
+ Additionally, and similar to implanted devices, hearing aids constitute medical devices whose useful lifetime is dictated specifically by medical reasons (i.e., progressive hearing loss). At the same time, replaceability of the battery could pose a safety risk to the patient. Hearing aid devices are therefore considered to be relevant to the derogation in Article 11(3).
+ Smoke alarms, carbon monoxide detectors and gas alarms are safety devices that are designed for use in residential settings, alerting occupants to fire, smoke or hazardous gases. They allow people to respond appropriately and evacuate if necessary.
+ Smoke alarms are harmonised construction products according to the Construction Products Regulation (CPR) ( 12 ) . A harmonised standard ( 13 ) supporting the CPR requires that the internal power source of smoke alarms be replaceable by the user unless its operating life is 10 years or greater. For harmonised construction products where the harmonised standard is introducing replaceability requirements, these shall apply instead.
+ Therefore, in smoke alarms which are designed for at least 10 years of uninterrupted operation matched by a battery with the same service life, and where continuity of power supply and a permanent connection between the product and the respective portable battery is required to ensure the safety of the user and the appliance, it is considered that the portable battery does not need to be removable and replaceable by the end-user.
+ Furthermore, Article 2(4)(g) of Directive 2012/19/EU excludes from its scope ‘medical devices and in vitro diagnostic medical devices, where such devices are expected to be infective prior to end of life, and active implantable medical devices’. Therefore, those devices should also be understood as relevant for derogation from the requirements in Article 11(1) of Regulation 2023/1542.
+ It is also worth recalling that Recital 38 of Regulation (EU) 2023/1542 states that the general provisions of the Regulation should apply without affecting the safety and maintenance requirements for professional medical imaging and radiotherapy devices as defined in Regulation (EU) 2017/745 and for in vitro diagnostic medical devices as defined in Regulation (EU) 2017/746, and could be complemented with requirements laid down for particular products powered by batteries under implementing measures under Directive 2009/125/EC. Where other EU law lays down more specific requirements for safety reasons, regarding the removal of batteries from products, those specific rules should apply.
+ Data integrity considerations 
+ Article 11(3) makes it clear that in order for the derogation related to data to be applicable, the main function of the product needs to be data collection and supply, and that a loss of data integrity needs to be at stake.
+ Examples of products where, for data integrity reasons, a permanent connection between the portable battery and the product is necessary are battery-powered devices used in professional weather stations or in laboratories. Their function is the continuous collection of data and where the continuity and integrity of such data is vital to that function.
+ A similar case is batteries whose main function is to power a volatile memory itself or deliver backup functions in the internal clock of a device, such as CMOS (Complementary Metal-Oxide Semiconductor) batteries found in digital cameras, processors, sensors, and medical devices regardless of their class under Regulations (EU) 2017/745 and (EU) 2017/746 (e.g. blood glucose monitors or devices for dialysis treatments). In this case, continuity of power supply is also deemed necessary for data integrity reasons.
+ Another example of devices that collect and supply data as their main function, and require continuity of power supply to deliver it, is on-board equipment (OBE) which is carried or installed in vehicles and is used as part of toll services, as defined in Directive (EU) 2019/520 ( 14 ) . A disruption to the power supply would compromise data that is essential for calculating tolls due.
+ Finally, the points-of-sale hardware used by the digital payments industry is another example of devices where a permanent connection with a portable battery is necessary to protect the integrity of data associated with payments, as required by the Payment Card Industry Data Security Standards ( 15 ) . In a similar vein, electronic credential hardware, which allows customers to hold and transmit personal digital payment credential data to enable funds or financial assets to be received or transferred, can also be considered to fall under the data integrity derogation in Article 11(3).
+ The derogation in Article 11(3) to the generic obligation on the removability and replaceability of portable batteries set out in Article 11(1) is not considered applicable for devices that:
+ —
+ deliver a data collection and supply function as an additional feature (beyond its main function) or may contain a component that delivers a data collection and supply function;
+ —
+ deliver a data collection and supply function, as a primary function, but do not pose a risk of data integrity loss, due to, for example, the presence of non-volatile memory in the device.
+ 5. OTHER CONSIDERATIONS 
+ Concept of compatible battery 
+ The concept of compatible battery is referred to in Article 11 (6) and (8) as a condition for a portable or LMT battery to be considered readily replaceable. This means that all batteries and their respective devices have to be designed in a way that makes it possible to use both original and compatible batteries.
+ A battery is considered to be compatible if it does not pose a risk to the user’s or the device’s safety, while allowing the device to operate as intended.
+ For batteries consisting of multiple cells, a cell is considered to be compatible if it does not render the battery pack unsafe, while having the same technical parameters, including its capacity, state of health, design and chemistry.
+ For products incorporating batteries that are subject to type-approval under Regulation (EU) No 168/2013, a battery is considered to be compatible only if the replacement of the original battery has no impact on the product’s type-approval specifications.
+ In the case of LMT batteries for non-type approved LMT vehicles, battery replacement, including at cell level, should be possible and done in a way that original safety certifications are not rendered invalid, applicable safety protocols are observed and standards are in line with the manufacturer’s recommendations.
+ Similarly, a replacement battery is not considered to be compatible in cases where such replacement would result in violation of any product safety requirements provided for in other applicable EU harmonisation legislation.
+ The design of batteries and devices therefore has to ensure that the conditions related to safety, performance and functionality can be met both by original and compatible batteries.
+ It is strongly recommended to include instructions for the replacement of portable and LMT batteries in the user’s manual or other relevant documentation, as well as the technical specifications that compatible batteries need to meet in order to be safe, with references to EU or international standards, if necessary.
+ Availability as spare parts 
+ Article 11(7) requires that portable batteries or LMT batteries are available as spare parts of the equipment that they power, for a minimum of five years after placing the last unit of the equipment model on the market, with a reasonable and non-discriminatory price for independent professionals and end users. For guidance, similar provisions in other existing EU harmonisation legislation, such as ecodesign implementing regulations, require the delivery of the spare part within five working days after having received the order.
+ Such requirement is not applicable to products placed on the market that incorporate portable or LMT batteries before the date of entry into force of Article 11, which is 18 February 2027.
+ The replacement of a portable or LMT battery may require physical elements, such as fasteners, other than the battery itself. If the disassembly and re-assembly of the battery requires reusable fasteners, these can be reused for the replacement. If the fasteners are not reusable, such fasteners should also be available as spare parts so the battery can be easily replaced.
+ Regulation (EU) 2023/1670 requires that, from 20 June 2025, manufacturers, importers or authorised representatives of phones make available to professional repairers and end users portable batteries ( 16 ) , including required fasteners, if not reusable, until at least seven years after the date of end of placement on the market.
+ As stated in Recital (38) of Regulation (EU) 2023/1542 ‘the general provisions of this Regulation […] could be complemented with requirements laid down for particular products powered by batteries under implementing measures under Directive 2009/125/EC’. In cases where both Regulation (EU) 2023/1542 and Regulation (EU) 2023/1670 are applicable to portable batteries incorporated in smartphones and slate tablets being available as spare parts, the requirements outlined in both pieces of legislation therefore apply.
+ Software limitations 
+ Article 11(8) requires that software shall not be used to impede the replacement of a portable battery or LMT battery, or of their key components, with another compatible battery or key components.
+ While software can be used to establish communication between a product and a replacement battery to ensure the correct functionality and safety of the product, such software should not impede the replacement of the original battery with a compatible battery as described above.
+ An example of software that impedes replacement is the practice known as ‘parts-pairing’. This is made possible by serialisation of some spare parts (including batteries) that are paired to an individual unit of a device using software. When serialisation leads to pairing a part to a product unit, it can be detrimental to repair. In such cases, if a product component, including a battery, needs replacing during a repair, it might not be accepted, or might lose some of its functionality unless remotely paired to the device again via software controlled by the original manufacturer.
+ Under Regulation (EU) 2023/1670 manufacturers, importers or authorised representatives of smartphones and slate tablets that provide as spare parts serialised parts, must provide non-discriminatory access for professional repairers to any software tools, firmware or similar auxiliary means needed to ensure the full functionality of those spare parts and of the device in which such spare parts are installed during and after the replacement ( 17 ) .
+ As stated in Recital (38) of Regulation (EU) 2023/1542 ‘the general provisions of this Regulation […] could be complemented with requirements laid down for particular products powered by batteries under implementing measures under Directive 2009/125/EC’. In cases where both Regulation (EU) 2023/1542 and Regulation (EU) 2023/1670 are applicable to portable batteries incorporated in smartphones and slate tablets, the requirements outlined in both pieces of legislation on serialisation apply.
+ Considering the above, software notifications to consumer informing them that a non-original spare battery is in use can be provided, as long as such notifications do not affect any functionality of the device (or the compatible battery) or the user experience. At all times, repair replacement should not be impeded in any way by software.
+ ( 1 ) Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and waste batteries, amending Directive 2008/98/EC and Regulation (EU) 2019/1020 and repealing Directive 2006/66/EC ( OJ L 191, 28.7.2023, p. 1 ).
+ ( 2 ) EN 45554:2020e – General methods for the assessment of the ability to repair, reuse and upgrade energy-related products.
+ ( 3 ) Directive 2012/19/EU of the European Parliament and of the Council of 4 July 2012 on waste electrical and electronic equipment, ( OJ L 197, 24.7.2012, p. 38 ).
+ ( 4 ) Commission Regulation (EU) 2023/1670 of 16 June 2023 laying down ecodesign requirements for smartphones, mobile phones other than smartphones, cordless phones and slate tablets pursuant to Directive 2009/125/EC of the European Parliament and of the Council and amending Commission Regulation (EU) 2023/826 ( OJ L 214, 31.8.2023, p. 47 ).
+ ( 5 ) See Annex II, points A 1.1. (5) (c) (i), B 1.1 (5) (c) (i) and D 1.1. (5) (c) (i) of Regulation (EU) 2023/1670.
+ ( 6 ) See Annex II, points A 1.1. (5) (c) (ii), B 1.1 (5) (c) (ii) and D 1.1. (5) (c) (ii) of Regulation (EU) 2023/1670.
+ ( 7 ) Commission Regulation (EU) 2023/1670 of 16 June 2023 laying down ecodesign requirements for smartphones, mobile phones other than smartphones, cordless phones and slate tablets pursuant to Directive 2009/125/EC of the European Parliament and of the Council and amending Commission Regulation (EU) 2023/826 ( OJ L 214, 31.8.2023, p. 47 ).
+ ( 8 ) Regulation (EU) No 168/2013 of the European Parliament and of the Council of 15 January 2013 on the approval and market surveillance of two- or three-wheel vehicles and quadricycles ( OJ L 60, 2.3.2013, p. 52 
+ ). 
+ ( 9 ) Regulation (EU) 2018/858 of the European Parliament and of the Council of 30 May 2018 on the approval and market surveillance of motor vehicles and their trailers, and of systems, components and separate technical units intended for such vehicles, amending Regulations (EC) No 715/2007 and (EC) No 595/2009 and repealing Directive 2007/46/EC ( OJ L 151, 14.6.2018, p. 1 ).
+ ( 10 ) Regulation (EU) 2017/745 of the European Parliament and of the Council of 5 April 2017 on medical devices, amending Directive 2001/83/EC, Regulation (EC) No 178/2002 and Regulation (EC) No 1223/2009 and repealing Council Directives 90/385/EEC and 93/42/EEC ( OJ L 117, 5.5.2017, p. 1 ).
+ ( 11 ) Regulation (EU) 2017/746 of the European Parliament and of the Council of 5 April 2017 on in vitro diagnostic medical devices and repealing Directive 98/79/EC and Commission Decision 2010/227/EU ( OJ L 117, 5.5.2017, p. 176 ).
+ ( 12 ) Regulation (EU) 305/2011 of the European Parliament and of the Council of 9 March 2011 laying down harmonised conditions for the marketing of construction products and repealing Council Directive 89/106/EEC ( OJ L 88, 4.4.2011, p. 5 ).
+ ( 13 ) EN 14604:2005/AC 2008.
+ ( 14 ) Directive (EU) 2019/520 of the European Parliament and of the Council of 19 March 2019 on the interoperability of electronic road toll systems and facilitating cross-border exchange of information on the failure to pay road fees in the Union ( OJ L 91, 29.3.2019, p. 45 ).
+ ( 15 ) See https://listings.pcisecuritystandards.org/documents/PCI_DSS-QRG-v3_2_1.pdf .
+ ( 16 ) Under the conditions stated in Annex II, points A 1.1. (1); B 1.1. (1); C 2.1 (1); and D 1.1 (1) of Regulation (EU) 2023/1670.
+ ( 17 ) Annex II, points A 1.1. (7) and D 1.1. (7) of Regulation (EU) 2023/1670.
+ ELI: http://data.europa.eu/eli/C/2025/214/oj
+ ISSN 1977-091X (electronic edition)

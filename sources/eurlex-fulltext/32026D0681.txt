@@ -1,0 +1,44 @@
+# CELEX 32026D0681
+# http://publications.europa.eu/resource/celex/32026D0681
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:44 UTC（正文 3782 字符）
+
+Official Journal 
+of the European Union
+ EN
+ L series
+ 2026/681
+ 27.3.2026
+ COMMISSION DECISION (EU) 2026/681
+ of 20 March 2026
+ entrusting the European Anti-Fraud Office (OLAF) with certain enforcement actions under Regulation (EU) 2024/1157 of the European Parliament and of the Council on shipments of waste
+ (Text with EEA relevance)
+ THE EUROPEAN COMMISSION,
+ Having regard to the Treaty on the Functioning of the European Union,
+ Whereas:
+ (1)
+ Articles 67 to 71 of Regulation (EU) 2024/1157 of the European Parliament and of the Council ( 1 ) empower the Commission to carry out inspections and coordinating actions in respect of illegal shipments of waste which are of a complex nature and might have serious adverse effects on human health or the environment and where the investigation needed has a cross-border dimension involving at least two countries.
+ (2)
+ According to Recital 63 of Regulation (EU) 2024/1157, the Commission may consider, as a matter of its internal organisation, entrusting certain enforcement actions provided for by that Regulation to the European Anti-Fraud Office (‘OLAF’), which possesses relevant expertise in that regard.
+ (3)
+ The exercise of the powers conferred on the Commission by Articles 67 to 71 of Regulation (EU) 2024/1157 should therefore be entrusted to OLAF, as part of OLAF’s tasks, in accordance with the last paragraph of Article 2(1) of Commission Decision 1999/352/EC, ECSC, Euratom ( 2 ) .
+ (4)
+ OLAF needs to have access to relevant information held by Commission services and executive agencies in order to exercise the powers this Decision confers on it,
+ HAS ADOPTED THIS DECISION:
+ Article 1
+ The European Anti-Fraud Office (‘OLAF’) is hereby entrusted with the powers conferred on the Commission in Articles 67 to 71 of Regulation (EU) 2024/1157, which shall be exercised by OLAF under the conditions set out in these provisions and in Article 3 of Decision 1999/352/EC, ECSC, Euratom.
+ Article 2
+ Within the scope of Regulation (EU) 2024/1157 as provided in Article 2(1) thereof, Commission services and executive agencies shall transmit to OLAF without delay all relevant information, document or data relating to a suspicion of illegal shipments of waste falling within the competence of OLAF.
+ The services and executive agencies referred to in the first paragraph shall, at the request of OLAF or on their own initiative, transmit to OLAF without delay all relevant information, documents or data relating to possible cases of illegal shipment of waste or to ongoing actions undertaken by OLAF within the scope of Regulation (EU) 2024/1157.
+ Article 3
+ In the exercise of the powers conferred on OLAF under this Decision, OLAF shall have the right of direct access to all relevant information in databases held by the services and executive agencies referred to in Article 2(1), and in particular to the central system referred to in Article 27(3) of Regulation (EU) 2024/1157.
+ Article 4
+ This Decision shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union .
+ Done at Brussels, 20 March 2026.
+ For the Commission 
+ The President 
+ Ursula VON DER LEYEN
+ ( 1 ) Regulation (EU) 2024/1157 of the European Parliament and of the Council of 11 April 2024 on shipments of waste, amending Regulations (EU) No 1257/2013 and (EU) 2020/1056 and repealing Regulation (EC) No 1013/2006 ( OJ L, 2024/1157, 30.4.2024, ELI: http://data.europa.eu/eli/reg/2024/1157/oj ).
+ ( 2 ) Commission Decision 1999/352/EC, ECSC, Euratom of 28 April 1999 establishing the European Anti-fraud Office (OLAF) ( OJ L 136, 31.5.1999, p. 20 , ELI: http://data.europa.eu/eli/dec/1999/352/oj ).
+ ELI: http://data.europa.eu/eli/dec/2026/681/oj
+ ISSN 1977-0677 (electronic edition)

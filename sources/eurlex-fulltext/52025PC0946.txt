@@ -1,0 +1,170 @@
+# CELEX 52025PC0946
+# http://publications.europa.eu/resource/celex/52025PC0946
+# 来源 CELLAR comnat XHTML
+# 抓取 2026-09-14 07:00 UTC（正文 24053 字符）
+
+IMMC.COM%282025%29946%20final.ENG.xhtml.1_EN_ACT_part1_v8.docx 
+ EUROPEAN COMMISSION
+ Brussels, 3.12.2025
+ COM(2025) 946 final
+ 2025/0385(COD)
+ Proposal for a
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL
+ amending Regulation (EU) 2024/1252
+ (Text with EEA relevance)
+ EXPLANATORY MEMORANDUM 
+ 1. CONTEXT OF THE PROPOSAL 
+ • Reasons for and objectives of the proposal 
+ The Critical Raw Materials Act (Regulation (EC) No 2024/1252) provided the EU with the objectives and a first set of tools to ensure that the EU industry has access to a secure and sustainable supply of the critical raw materials (CRMs). CRMs are needed to manufacture the strategic technologies crucial for the clean and digital transition, as well as for defence and aerospace applications. Yet, since the CRMA’s entry into force on 23 May 2024, the geopolitisation of critical raw materials supply has been heightened by a series of Chinese export restrictions on rare earths elements and other critical raw materials. In parallel, other global players have stepped up action to secure access to CRMs for their industries by financing CRM projects and diversifying their supplies through partnerships. 
+ It is within that context that the Commission has adopted on 3 Decembre 2025 the R ES ourceEU a ction p lan to accelerate the achievement of the CRMA and reinforce the European Economic Security Communication 
+ 1 
+ . The Action Plan contains measures on the financial de-risking and regulatory support for CRM projects with immediate diversification potential, as well as measures to operationalise its partnerships with third countries, protect the Single Market , and create a lasting market for divers if ied supplies of critical raw materials . Among the measures to meet those objectives , the Commission is proposing targeted amendments to Regulation (EC) No 2024/ 1252 (the Critical Raw Materials Act or “CRMA ”) in order to streamline, clarify and simplify some of the rules to improve circularity, in order to increase recycling capacity and to strenghten the secondary market for critical raw materials. 
+ Firstly, the proposed amendments to the CRMA aim to create a lasting market for the Union’s raw materials value chain. For that purpose, the amendments seek to strenghten the resilience of Union industrial sectors manufacturing strategic technological products with strategic raw materials, a subset of CRMs. The ongoing implementation of the CRMA underlines that there is a risk of fragmentation of the Single Market from disparate identification by individual Member States of the large companies that have to perform risk assessment of their supply chains under Article 24 of the CRMA. This risk of fragmentation demonstrates that, when market failures lead to where companies fail to undertake mitigation strategies to limit their vulnerabilities, additional action may be warranted by the Commission. In addition to incentivising companies to invest in the resilience of their supply chains, these amendments would also drive the demand for diversified CRM supply sources. 
+ Secondly, the imminent need to quickly increase production of CRMs require s the expansion of the circularity framework to increase the recovery and the reuse of critical raw materials , pa r ticularly for rare earth permanent magnets 
+ 2 
+ . The Commission therefore proposes to amend the CRMA by expanding the scope of products covered by labelling and clarifying information obligations under Article 28 CRMA . For the same reasons, the Commission is also proposing to include pre-consumer waste to the recycled content obligation for rare earths permanent magnets , also in light of the fact that pre-consumeer waste is more easily recycled and currently more accessible tha n post-consumer waste. 
+ Lastly, the Commission is proposing to introduce addition al flexibility in the number of calls required per calendar year , g iven the high number of applications per call and the need to ensure a coherent assessment of each application . This proposal is based on the Commission ’s implementation of the Article 7 of the CRMA on the selection of Strategic Projects. A first call was opened in 2024, leading to the selection of 47 Strategic Projects in the EU and 13 Strategic Projects outside of the Union 
+ 3 
+ . A second call was launched by the Commission on 25 September 2025. 
+ • Consistency with existing policy provisions in the policy area 
+ The amendments contained in this proposal will ensure resource efficiency and support the secure and sustainable supply of CRMs. It will in particular strengthen the Union’s strategic autonomy by securing and ensuring the diversification of its supply chains. The RESourceEU Action Plan initiative reinforces other measures to advance the Union’s industrial and economic security policy goals and contributes to the objectives set out in the Communication on the Clean Industrial Deal and is closely linked to the European Economic Security Doctrine. 
+ At the same time, the amendments will support the clean and digital transformation, by ensuring availability of essential resources used by industries of various sectors. The amendments will improve traceabilityto support end-of-life recovery and promoting the gradual uptake of recycled raw materials, thereby contributing to a coherent and aligned framework for enhancing circularity and securing the Union’s supply of CRMs. 
+ • Consistency with other Union policies 
+ This proposal is consistent and ensures complementarity and synergies with other Union policies. 
+ 2. LEGAL BASIS, SUBSIDIARITY AND PROPORTIONALITY 
+ • Legal basis 
+ In line with Article 114 of the Treaty on the Functioning of the European Union, the proposed regulation aims to contribute to the well-functioning of the Single Market, notably by strenghtening and clarifying the rules ensuring a secure and sustainable supply of CRMs for the Union. 
+ • Subsidiarity (for non-exclusive competence) 
+ The overall objective of the proposal is to ensure uniformity and streamline certain procedures at Union level, in order to prepare large companies operating in one or more Member States, to face in the supply chains disruptions and have mitigations measures in place. 
+ The objectives of this proposal cannot be achieved by the action of Member States alone. 
+ • Proportionality 
+ The proposal complies with the proportionality principle in that it does not go beyond the minimum required to achieve the stated objectives at the Union level and which is necessary for that purpose. 
+ • Choice of the instrument 
+ A regulation amending the CRMA Regulation is an appropriate legal instrument to implement the RESourceEU objectives. 
+ 3. RESULTS OF EX-POST EVALUATIONS, STAKEHOLDER CONSULTATIONS AND IMPACT ASSESSMENTS 
+ • Ex-post evaluations/fitness checks of existing legislation 
+ N/A 
+ • Stakeholder consultations 
+ While no formal stakeholder consultation was carried out, the proposed amendments result from technical workshops with representatives of the entire permanent magnets value chain, exchanges within the framework of the CRM Board, as well as the technical work undertaken by the Joint Research Centre in preparation for the secondary legislation under Articles 28 and 29 of the CRMA. 
+ • Collection and use of expertise 
+ Due to the nature of the proposed amendments and the urgency, there was no collection and use of expertise for this proposal. 
+ • Impact assessment 
+ Due to the urgent nature of the proposal, no impact assessment was carried out. 
+ • Regulatory fitness and simplification 
+ N/A 
+ • Fundamental rights 
+ This proposal does not have consequences for the protection of fundamental rights. 
+ 4. BUDGETARY IMPLICATIONS 
+ The proposal does not have implications for the Union budget. 
+ 5. OTHER ELEMENTS 
+ • Implementation plans and monitoring, evaluation and reporting arrangements 
+ This proposal amends the CRMA and includes changes to the implementation plans for Member States, in particular by removing the obligation for Member States to identify large companies and transferring this obligation to the Commission. This change simplifies and streamlines administrative procedures at Union level. 
+ The obligations and reporting arrangements for certain companies are clarified through targeted changes to a very limited number of articles. 
+ • Explanatory documents (for directives) 
+ N/A 
+ • Detailed explanation of the specific provisions of the proposal 
+ Article 1 amends Regulation (EU) 2024/1252. 
+ Article 1, point (1) modifies the number of cut-off dates for open calls for applications for Strategic projects under the CRMA. 
+ Article 1, point (2)(a), streamlines the obligation to identify large companies by tansferring it from national administrations to the Commission. 
+ Article 1, point (2)(b) requires the Commission to notify large companies of their obligations. 
+ Article 1, point (2)(c) clarifies the obligation for large companies and the aspects to consider for their risk preparedness assessment. 
+ Article 1, point (2)(d) clarifies the obligations that large companies need to comply with for the mitigation measures 
+ Article 1, point (2)(e) strengthens the obligation for large companies to maintain their board informed of the risk assessment. 
+ Article 1, point (2)(f) allows the Commission to request information from large companies on their compliance with the risk assessment obligations, and empowers the Commission to specify if needed the mitigations measures for large companies through delegated acts. 
+ Article 1, point (2)(g) deletes a paragraph that is not adapted anymore since the obligations under article 28 CRMA are placed on the Commission. 
+ Article 1, point (3) expands the list of products containg permanent magnets to be considered by the Commission for their labeling. 
+ Article 1, point (4) clarifies and expands the scope of Article 29 CRMA by including pre-consummer waste of permanent magnets to enable more comprehensive action by the Commission is more comprehensive for recycling permanent magnets. 
+ Article 1, point (5) adapts the rules for the exercise of the delegation to include the new empowerment under Article 1, point (2)(f). 
+ 2025/0385 (COD) 
+ Proposal for a 
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL 
+ amending Regulation (EU) 2024/1252 
+ (Text with EEA relevance) 
+ THE EUROPEAN PARLIAMENT AND THE COUNCIL OF THE EUROPEAN UNION, 
+ Having regard to the Treaty on the Functioning of the European Union, and in particular Article 114, thereof, 
+ Having regard to the proposal from the European Commission, 
+ After transmission of the draft legislative act to the national parliaments, 
+ Having regard to the opinion of the European Economic and Social Committee 
+ 4 
+ , 
+ Having regard to the opinion of the Committee of the Regions 
+ 5 
+ , 
+ Acting in accordance with the ordinary legislative procedure, 
+ Whereas: 
+ (1) Since the entry into force of Regulation (EU) 2024/1252 on 23 May 2024, the Commission has been collectin g data and information from stakeholders and Member States concerning the implementation of it . 
+ (2) Access to secure and sustainable c ritical raw materials is essential for the Union’s objectives of clean and digital transition as set out in the Clean Industrial Deal 
+ 6 
+ . They are also essential components for the Union’s industries, in all areas including defence . Due to the current geopoliti cal situation the Union’s supply and security of critical raw materials is put at risk and therefore, the current framework should be strengthened. 
+ (3) Under Regulation (EU) 2024/1252, the Commission is required to set up calls for application for Strategic Projects with at least four cut-off dates per year. Given the high number of applications for recognition of Strategic Project under each call per call received for the identification of Strategic projects of strategic critical raw material projects and to ensure a better assessment of the various applications, it should be possible for the Commission to limit the number of such calls per year. 
+ (4) Under Regulation (EU) 2024/1252 , Member States are required to identify large companies by May 2025 and within 12 months of each update of the list of strategic raw materials pursuant to Article 3(3) . Nevertheless, large companies that use critical raw materials can operate in more than one Member State. To avoid a duplication of the identification of these large companies by the various national administrations and to prevent a risk of fragmentation of the Single Market, it should be for the Commission to identify these large companies operating in the Union. 
+ (5) It is essential to strengthen the risk preparedness of the large companies that are identified by the Commission, i t is essential that their obligations are strengthen ed , and therefore large companies should be requir ed to take measures to mitigate their vulnerabilities, including by diversifying their raw material supply chain . The Commission should be able to receive the information regarding their compliance necessary for an effective monitoring and ensure they are prep ared in case of supply disruptio n. T he Commission should specify the m itigation measures that large companies should adopt in case of vulnerabilities , it should be able to do so by means of delegated acts. 
+ (6) L arge companies should, as part of that risk assessment, map where the strategic raw materials they use are extracted , processed and recycled from , an d analyse the factors that could affect their supply and assess their vulnerabilities to supply disruptions. In order to have a clear understanding of their vulnerabilities, they should also map the supply chain of the components containing critical raw materials. T o reinforce their preparedness large companies should r eport on th eir risk assessment to the companies’ board of directors or management board . 
+ (7) The Commission should continue to monitor the situation and the risk preparedness of large companies, ensuring their readiness in case of disruption of their supply chains. To that end, and when it decides so, the Commission can request information from large companies on their compliance and mitigation measures as required by this Regulation . 
+ (8) T he recognition of pre-consumer recycled materials complements , the recovery of post-consumer waste by ensuring that manufacturers can improve short-term resource efficiency while maintaining strong incentives to build and expand end-of-life collection and recycling systems. A dditional product categories and pre-consumer waste are therefore essential to improve recycling, strengthen traceability and increase the availability of secondary materials thereby supporting the Union’s overall resource efficiency and security of supply . 
+ (9) To attain the objectives set in the R ES ourceEU Action Plan, Regulation (EU) 2024/1252 should therefore be amended accordingly , 
+ HAVE ADOPTED THIS REGULATION: 
+ Article 1 
+ Amendments to Regulation (EU) 2024/1252 
+ Regulation (EU) 2024/1252 is amended as follows: 
+ (1) i n Article 7 (3) , the second subparagraph is replaced by the following : 
+ ‘The first such cut-off date shall be no later than 24 August 2024. The Commission shall set cut-off dates up to four times per year.’; 
+ (2) Article 24 is amended as follows: 
+ (a) paragraph 1 is replaced by the following: 
+ ‘1. By [P.O.: please insert date corresponding to the date of entry into force of this Regulation plus 2 months] and within six months of each update of the list of strategic raw materials, the Commission shall identify the large companies operating in the Union that use strategic raw materials to manufacture batteries for energy storage and e-mobility, equipment related to hydrogen production and utilisation, equipment related to renewable energy generation, aircrafts, traction motors, heat pumps, equipment related to data transmission and storage, mobile electronic devices, equipment related to additive manufacturing, equipment related to robotics, drones, rocket launchers, radar, satellites or advanced chips.’; 
+ (b) the following paragraph 1 a is inserted: 
+ ‘1a. The Commission shall inform the large companies it has identified under paragraph 1 of such identification and of their obligations under this Article.’; 
+ (c) p aragraph 2 is replaced by the following: 
+ 2. Large companies as referred to in paragraph 1 shall by six months of the information of their identification and at least every three years and to the extent the required information is available to them, carry out a risk assessment of their raw materials supply chain of strategic raw materials, including: 
+ a) a mapping of the supply chain of components containing strategic raw materials; 
+ b) a mapping of where the strategic raw materials they use are extracted, processed or recycled; 
+ c) an analysis of the factors that might affect their supply of strategic raw materials; 
+ d) an assessment of their vulnerabilities to supply disruptions.’; 
+ (d) paragraph 4 is replaced by the follow ing : 
+ ‘4. If significant vulnerabilities to supply disruptions are detected as a result of the risk assessment referred to in paragraph 2, large companies as referred to under paragraph 1 shall take efforts to mitigate those vulnerabilities, including by diversifying its raw materials supply chains, considering secondary raw materials, or substituting the strategic raw materials.’; 
+ (e) paragraph 5 is replaced by the following: 
+ ‘5. Large companies as referred to in paragraph 1 shall present to their board of directors or management board the results of the risk assessment referred to in paragraph 2.’; 
+ (f) the following paragraph s 5a and 5b are inserted: 
+ ‘5a. The Commission may request large companies referred to in paragraph 1 to explain how they comply with the obligations set out in this Article. They shall provide that information no later than 30 days after receiving the request from the Commission.’ 
+ ‘5b. The Commission is empowered to adopt a delegated act in accordance with Article 38 to supplement this Regulation by specifying the risk mitigation measures that the large companies referred to in paragraph 1 of this Article are to take when significant vulnerabilities to supply disruptions are detected in accordance with paragraph 4 of this Article. 
+ The Commission shall base such risk mitigation measures on an assessment of the available information on supply risks, the trade flows between the Union and third countries, and the potential obstacles to trade in critical raw materials and shall specify the maximum shares of reliance on a single third country in the supply chain of critical raw materials.’; 
+ (g) paragraph 6 is deleted ; 
+ (3) in Article 28 (1) , the introductory wording is replaced by the following: 
+ ‘1. From two years after the date of entry into force of the implementing act referred to in paragraph 2, any natural or legal person that places on the market magnetic resonance imaging devices, wind energy generators, industrial robots, motor vehicles, light means of transport, cooling generators, heat pumps, electric motors including where electric motors are integrated in other products, automatic washing machines, tumble driers, microwaves, vacuum cleaners, dishwashers,  hard disk drives, transducers, loudspeakers, drones for civil use or motorised toys shall ensure that those products bear a conspicuous, clearly legible and indelible label indicating:’; 
+ (4) Article 29 is amended as follows: 
+ (a) paragraph 1 is replaced by the following: 
+ ‘1. By 24 May 2027 or two years from the entry into force of the delegated act referred to in paragraph 2, whichever is later, any natural or legal person that places on the market products referred to in Article 28(1) which incorporate one or more permanent magnets referred to in Article 28(1), point (b)(i), (ii) and (iii), and for which the total weight of all such permanent magnets exceeds 0,2 kg shall make publicly available on a free-access website the share of neodymium, dysprosium, praseodymium, terbium, boron, samarium, nickel and cobalt recovered from pre-consumer and post-consumer waste, including the shares of such waste produced within the Union, present in the permanent magnets incorporated in the product.’; 
+ (b) in paragraph 2 , the first subparagraph is replaced by the following: 
+ ‘2. The Commission shall adopt a delegated act in accordance with Article 38 to supplement this Regulation by establishing rules for the calculation and verification of the share of neodymium, dysprosium, praseodymium, terbium, boron, samarium, nickel and cobalt recovered from pre-consumer and post-consumer waste, including the shares of such waste produced within the Union, present in the permanent magnets incorporated in the products referred to in paragraph 1 of this Article.’; 
+ (c) in paragraph 3 , the first subparagraph is replaced by the following: 
+ ‘3. After the entry into force of the delegated act adopted pursuant to paragraph 2, and in any event by 31 December 2031, the Commission shall adopt delegated acts supplementing this Regulation by laying down minimum shares for neodymium, dysprosium, praseodymium, terbium, boron, samarium, nickel and cobalt recovered from, pre-consumer and post-consumer waste, including the shares of such waste produced within the Union, or any combination thereof that must be present in the permanent magnet incorporated in the products referred to in paragraph 1.’; 
+ (d) in paragraph 3, third subparagraph, point ( a) is replaced by the following: 
+ ‘(a) The existing and forecasted availability of neodymium, dysprosium, praseodymium, terbium, boron, samarium, nickel and cobalt recovered from pre-consumer and post-consumer waste sources as well as Union recycling capacity;’; 
+ (5) Article 38 is amended as follows: 
+ (a) in paragraph 2, the first sentence is replaced by the following: 
+ ‘2. The power to adopt delegated acts referred to in Article 3(2), Article 4(2), Article 5(3), Article 6(2), Article 24(5b), Article 28(12), Article 29(2) and (3), Article 31(1) and (8), and Article 34(1) shall be conferred on the Commission for a period of eight years from 24 June 2024.’; 
+ (b) in paragraph 3, the first sentence is replaced by the following: 
+ ‘3. The delegation of power referred to in Article 3(2), Article 4(2), Article 5(3), Article 6(2), Article 24(5b), Article 28(12), Article 29(2) and (3), Article 31(1) and (8) and Article 34(1) may be revoked at any time by the European Parliament or by the Council.’; 
+ (c) paragraph 6 is replaced by the following : 
+ ‘6. A delegated act adopted pursuant to Article 3(2), Article 4(2), Article 5(3), Article 6(2), Article 24(5b), Article 28(12), Article 29(2) or (3), Article 31(1) or (8) or Article 34(1) shall enter into force only if no objection has been expressed either by the European Parliament or the Council within a period of two months of notification of that act to the European Parliament and the Council or if, before the expiry of that period, the European Parliament and the Council have both informed the Commission that they will not object. That period may be extended by two months at the initiative of the European Parliament or of the Council.’. 
+ Article 2 
+ Entry into force 
+ This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union . 
+ This Regulation shall be binding in its entirety and directly applicable in all Member States. 
+ Done at Brussels, 
+ For the European Parliament 
+ For the Council 
+ The President 
+ The Presiden t 
+ (1) 
+ COM/2025/977 final 
+ (2) 
+ Mc Govern, L., Tapoglou, E. and Georgakaki, A., Material streams from wind energy decommissioning to 2050, Publications Office of the European Union, Luxembourg, 2025, https://data.europa.eu/doi/10.2760/0326924, JRC139814 
+ (3) 
+ Selected strategic projects under CRMA 
+ (4) 
+ OJ C , , p. . 
+ (5) 
+ OJ C , , p. . 
+ (6) 
+ COM(2025) 85 final

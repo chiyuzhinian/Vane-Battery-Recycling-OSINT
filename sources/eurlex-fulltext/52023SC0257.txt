@@ -1,0 +1,110 @@
+# CELEX 52023SC0257
+# http://publications.europa.eu/resource/celex/52023SC0257
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:40 UTC（正文 21339 字符）
+
+EUROPEAN COMMISSION
+ Brussels, 13.7.2023
+ SWD(2023) 257 final
+ COMMISSION STAFF WORKING DOCUMENT
+EXECUTIVE SUMMARY OF THE IMPACT ASSESSMENT REPORT
+ Accompanying the document
+ Proposal for a Regulation of the European Parliament and of the Council
+ on circularity requirements for vehicle design and on management of end-of-life vehicles, amending Regulations (EU) 2018/858 and 2019/1020 and repealing Directives 2000/53/EC and 2005/64/EC
+ {COM(2023) 451 final} - {SEC(2023) 292 final} - {SWD(2023) 255 final} - {SWD(2023) 256 final}
+ 1. What is this initiative about? 
+ The initiative presents a joint review of the Directive 2000/53/EC on end-of-life vehicles ( ‘ ELV Directive ’ ) 
+ 1 
+ and of Directive 2005/64/EC on the type-approval of motor vehicles with regard to their reusability, recyclability and recoverability ( ‘ 3R type-approval ’ Directive) 
+ 2 
+ . The ELV Directive was adopted in 2000 and established for the first time a harmonised EU framework designed to ensure the environmentally sound treatment of vehicles reaching the end of their life and considered as waste . It sets ou t provisions on the collection and depollution of ELVs, on restrictions of hazardous substances in new vehicles, as well as reuse and recycling (85%) and reuse and recovery (95%) targets, based on the average weight of ELVs per vehicle and year . The 3R t ype-approval Directive , adopted in 2005, link s the provisions of the ELV Directive to design provisions on reusability, recyclability and recoverability tied to the type-approval process. In particular, the Directive states that vehicles should be constructed so as to be 85% recyclable/reusable and 95% reusable/recoverable. The 3R t ype-approval Directive is part of the type-approval framework 
+ 3 
+ , whereby new vehicle types are tested and granted type-approval before being placed on the EU market, provided they meet a set of technical requirements. 
+ The need to revise these Directives was stressed in the European Green Deal and the Circular Economy Action Plan (CEAP) 
+ 4 
+ . The evaluation of these Directives has shown that considerable improvements were needed to boost the transition of the automotive sector to a circular economy, thereby reducing the environmental footprint linked to the production and end-of-life treatment of vehicles and strengthening the sustainability of the automotive and recycling industry in Europe. 
+ The automotive manufacturing industry, which is a key pillar of the EU economy, largely relies on the supply of primary raw materials (steel, aluminium, copper, plastics) and uses a limited amount of recycled materials, while the treatment of ELVs results in important but low-quality metal scrap and very limited plastic recycling. The automotive sector is undergoing a massive transformation with the shift to electric vehicles. This transformation means that the main share of the environmental footprint of vehicles will shift from the use-phase to the production and recycling stages, and that important supplies of critical raw materials (CRMs) will be required. 
+ The EU h eads of s tate or g overnment have made the transition to a circular economy a priority to reduce the vulnerability of the EU industry supply chains, especially for critical raw materials essential for the EU’s strategic autonomy and for the transition to a carbon - neutral economy 
+ 5 
+ . It is a key point in the Green Deal Industrial Plan for the Net-Zero Age 
+ 6 
+ . 
+ In line with these priorities, this impact assessment addresses the following four problem areas: 
+ 1. There is a lack of integration of circularity in vehicle design and production leading to high dependencies for primary raw materials ; 
+ 2. The quality of treatment of vehicles at the end of their life is suboptimal compared to the potential to retain more environmental and economic value ; 
+ 3. An important share of ‘missing vehicles ’ subject to the ELV Directive are not collected to be treated under proper environmental conditions and a large volume of non-roadworthy and polluting used vehicles are exported from the EU every year ; 
+ 4. There is unexploited circularity potential of vehicles currently outside the scope of the ELV Directive to contribute to the objectives of the European Green Deal . 
+ 2. What is to be achieved and which policy options have been assessed? 
+ The general objective of the initiative is to make the EU internal market function better by reducing the negative environmental impact of vehicles throughout their different life phases and promoting sustainability in the automotive and recycling sectors. 
+ The initiative pursues the following five specific objectives: 
+ · ‘ Design circular’ : Make design and production more circular ; 
+ · ‘Use recycled content ’ : Significantly i ncrease the use of recycled materials in production ; 
+ · ‘Treat better’ : Significantly i ncrease the quantity , quality and value of materials reused and recycled ; 
+ · ‘Collect more’ : Significantly i ncrease the collection of ELVs in the EU and ensure that used vehicles exported from the EU are roadworthy , so that the number of ‘ missing vehicles ’ and the pollution associated with exporting non-roadworthy used vehicles outside the EU are reduced ; 
+ · ‘Cover more vehicles’ : Incr e ase circularity for vehicles ( lorries, buses, trailers, and vehicles in categories L3 e -L7 e ) currently outside the scope of ELV and 3R t ype-approval legislation . 
+ To address each of these objectives, specific policy options have been analysed 
+ 7 
+ : 
+ 1. D esign and production . Th ree p oli cy options were assessed to improve the circularity in the design and production of new vehicles, ranging from i) better compliance verification through the type-approval process and improved exchange of information with the dismantling sector , to ii) new requirements on design for dismantling and the development of circularity strategies , up to iii) the development of an Environmental Vehicle Passport ; 
+ 2. R ecycled content . Th ree policy options ass essed are i) setting out a moderate level for a target on plastics recycled content and a n empowerment allowing the Commission to set a future target level for steel within three years after entry into force of the Regulation ; ii) setting a mandatory recycled content target for plastics in newly type-approved vehicles of 25% and of 20% for steel ; and iii) increasing these levels up to 30% for both steel and plastics and finally establishing a n empowerment for the Commission to assess and set recycled content targets for other materials, especially CRMs, in the future ; 
+ 3. E nd-of-life treatment . The t hree policy options comprise i) measures modernising and clarifying the existing rules on ELV waste treatment ; ii) new obligations to remove key components with CRM s prior to shredding , a 30% plastics recycling target , a ban on mixing ELV scrap with WEEE (Waste Electrical and Electronic Equipment) and incentives to support the market for used spare parts and finally ; ii i) further removal of smaller electronic components prior to shredding, a 70% recycling target for glass and the development of standards to improve shredding technologies; 
+ 4. C ollection . Four policy options are targeting i) enhanced reporting and enforcement of existing rules, notably on the reporting of ELVs by dismantlers and shredders ; ii) better tracking of ELVs through digitalisation and exchange of information on national vehicle regist ers , stricter criteria to distinguish used vehicles from ELVs and the establishment of appropriate sanctions in case of infringements ; iii) the requirement that used vehicles should only be exported outside the EU with a valid roadworthiness certificate , and ; iv) a synergised combination of both the collection and export measures of the previous three policy options. 
+ 5. Incentives to increase collection of ELVs and improve waste treatment . Three policy options include i) the establishment by Member States of Extended Producer Responsibility (EPR) schemes for vehicles , whereby vehicle manufacturers would be covering costs linked to the collection and high - quality treatment of ELVs ; ii) harmonised circularity criteria for the modulation of EPR fees to be paid under these schemes by vehicle manufacturers and a mechanism to ensure the functioning of EPR in cross-border situations within the EU , and; iii) additional economic incentives such as ‘ deposit return schemes ’ and harmonised circularity criteria for Green Public Procurement of vehicles. 
+ 6. S cope. T hree p olicy options range from i) a limited extension of the scope of the rules to L-category vehicles 
+ 8 
+ , lorries , buses and trailers , ii) a more progressive extension including mandatory treatment at Authorised Treatment Facilities ( ATFs ) , and iii) a full scope extension with requirement s applicable . 
+ The options are based on findings from the evaluations of the existing legislation, contributions from stakeholders during the consultation process , and suggestions provided in the Fit for Future Platform (F4F) opinion 
+ 9 
+ . A comprehensive analysis of the impacts is conducted for each policy option , as well as for the joint impacts and synergies between these options . The impacts on small and medium-sized enterprises (SMEs ) are particularly taken into account and summarised in a dedicated SME test . The environmental, economic and social impacts have been calculated up until 2040 and compared to the baseline scenario. The main year for comparison is 2035 with all long-term measures taken effect by that date. 
+ 3. What is the preferred option and why? 
+ The preferred policy package contains a combination of the following options: 
+ Design circular : The preferred option contains short-term obligations for vehicle manufacturers to make available detailed and user-friendly dismantling and recycling information, including the use and location of CRMs in vehicles and on the share of recycled content used in new vehicles. Actions for the medium term include a revision of the methodology to calculate recyclability and re-usability of new vehicles at type-approval stage and the development of an environmental vehicle passport. Overall, this anchors circularity requirements into the type-approval of new vehicle types. 
+ Recycled content: The preferred option is to set a medium ambition level with plastics recycled content targets of 25% by 2030, of which 25% from closed loop from ELV treatment. For steel, this option provides an empowerment allowing the Commission to lay down a target for recycled steel content in newly approved vehicles within three years after the Regulation enters into force, based on a dedicated feasibility study. The possibility to set recycled content targets for other materials like aluminium and CRMs will be assessed in the future, based on changes in automotive designs and availability of recycling capacity. 
+ Treat better: The preferred option includes a stricter definition of recycling, a landfill ban for automotive shredder residue fractions and medium ambition level removal obligations to improve recovery of key components from ELVs, without placing disproportionate costs on treatment operators. It will increase recovery of (critical) raw materials and improve the quality of plastics, steel and aluminium fractions. 
+ Collect more: The preferred option is the most ambitious policy option. Measures such as clearer responsibility allocation for certificate of destruction, binding criteria for distinguishing used vehicles and ELVs, and new enforcement provisions will significantly increase the number of ELVs treated legally in the EU. Furthermore, it will ban the export of old, used polluting vehicles which are no longer roadworthy. 
+ To provide incentives to increase collection of ELVs and improve waste treatment , the preferred option includes financial and organisation incentives via establishment of EPR requirements to increase collection of ELVs and to compensate costs for improved treatment quality that cannot be offset by the value of materials and components recovered. 
+ Cover more vehicles: The preferred option is a phased-in approach to cover more vehicles in time under the new EU rules by requiring manufacturers to provide information on the composition of their vehicles, and at the same time introducing a set of minimum treatment requirements for end-of-life L3e-L7e category vehicles, lorries, buses and trailers. 
+ 4. What are the impacts of the preferred option? 
+ The preferred option will have a substantial positive impact on the environment by reducing the environmental footprint linked to the production and end-of-life requirements of vehicles. 
+ The overall environmental benefits are assessed as an annual reduction of 12.3 million tons of CO 2 -eq in 2035 (10.8 million tons in 2030 to 14.0 million tonnes in 2040), key for the decarbonisation of the automotive industry. These CO 2 savings represent 2.8 billion EUR when monetised. This is linked notably to a better valorisation of 5.4 million tons of materials (plastics, steel, aluminium, copper, CRMs) which would be either recycled at higher quality or re-used, as well as to the fact that up to 3.8 million additional ELVs would be collected and treated extra in the EU. 350 tons of rare earths in permanent magnet materials would be separately collected for reuse and recycling in 2035 (and 1,500 tons in 2040), which would contribute greatly to the EU efforts for strategic autonomy for CRMs. 
+ The total annual revenues for the preferred option is 5.2 billion EUR in 2035, including the CO 2 credits 
+ 10 
+ , against a cost of 3.3 billion EUR, leading to a 1.8 billion net revenue. 
+ Furthermore, preventing the export of old vehicles which are not roadworthy, will have a positive impact on road safety and will contribute to avoid increasing harmful pollutant emissions in those countries where EU used vehicles are being exported. This approach will support international efforts for more sustainable international trade in used vehicles and contribute to tackle the EU's external environmental footprint, particularly related to exports of end-of-life and used vehicles. 
+ The cost of the preferred option is estimated to reach 66 EUR per vehicle put on the market in 2035. 
+ The estimated additional jobs are determined at 22,100 , of which 14,200 are created in SMEs. 
+ For vehicle manufacturers, the costs are estimated to be roughly 39 EUR per vehicle, primarily related to increasing the recycled content of plastic and the contributions to EPR schemes. While there will be some short-term costs for the EU automotive industry, the implementation of preferred option will also generate energy savings, reduce its dependency on materials sourced from third countries and ensure that the transition to vehicle electrification is made based on sustainable and circular business models. 
+ The preferred option will generate both important costs (linked to investment in new technologies) and revenues (linked to increased values in spare parts and recycled materials) for the waste management sector. While the situation will vary between different Member States and operators due to differences in technologies used and labour costs, the preferred option is expected to significantly strengthen and modernise the EU dismantling, shredding and recycling industry. 
+ Member State authorities will incur limited costs associated with monitoring and enforcing compliance with the new legislation. The costs will be primarily associated with inspection campaigns, controls on the export of ELVs and used vehicles, and adapting registration systems. The implementation of digitalization measures will increase efficiency for both enforcement authorities and economic operators and will reduce their burden. The estimated overall cost for public authorities related to the supervision of EPR schemes, enforcement activities, and adaptation of national vehicle registration systems is around 24 million EUR, which is less than 2 EUR per vehicle. 
+ Consumers may face an increase in new vehicle prices of approximately 39 EUR per vehicle, as well a reduction in prices when selling second-hand cars by 12 EUR per vehicle due to reduced exports. Nevertheless, measures aimed at supporting the recovery and sales of used spare parts are expected to result in lower prices for consumers, thereby providing them with a benefit. 
+ The advanced requirements for end-of-life vehicle treatment may pose challenges for SMEs in terms of higher short- and medium-term implementation costs and adaptation to new treatment technologies. At the same time, increased investments in the automotive recycling sector, support for the reuse market of secondary parts and easier access to dismantling information of a vehicle will boost innovation and unlock new opportunities for the SMEs and support creation of new jobs in the field. To further mitigate the impacts on SMEs, reinforced EPR requirements enable costs compensation for higher collection and treatment quality. 
+ The initiative contributes to the United Nations' Sustainable Development Goals (SDGs), promoting, industry, innovation and infrastructure (SDG9), climate action (SDG13), responsible consumption and production (SDG12), decent work and economic growth (SDG8) and reducing pollution to water, air and land (SDG14 and SDG15). 
+ 5. Measuring success ? 
+ The success of the preferred option will be measured through the use of various implementation indicators, including amount of recycled materials used in new vehicles, recycling rates for specific materials from ELVs, materials/components/parts removed prior to shredding, market share of used spare parts, number of ELVs collected and treated according to the ELV requirements, amount of exported used vehicles. 
+ · Design circular and use of recycled materials : compliance with 3R criteria ( on r eusability , recoverability and recycl ability ) , the use of recycled materials will be verified at the time of type approval . By monitoring information fr om the circularity strategy , t he Commission would track the evolution of the automotive sector towards circular business models. 
+ · Better treatment : The success of quality treatment of ELVs will be assessed by monitoring the amount of removed parts and the achievement of 85% recycling / reuse and 95% reuse / recovery rates in compliance with the modernised recycling definition. R egular reporting by Member States on the number of inspections and penalties applied for illegal treatment operators will be used to assess how the new Regulation is enforced . 
+ · Collection: Based on improved Member State reporting to Eurostat, the Commission will monitor the number of vehicle s in the national fleets and their weight . This will make it possible to analyse tre n ds and compare data with the total number of exported vehicles and treat ed ELVs, including their weight at collection an d the fractions that are recycled . 
+ · Cover more vehicles: Reported number of L-category vehicles , lorries , buses and trailers treated at authorised treatment facilities and the number of Certificates of Destruction issued will allow measuring the success in applying new requirements to vehicle categories under the extended scope . 
+ The success of the revision will also be measured by monitoring environmental, economic and social impacts of the future legislation, including reduced Global Warming Potential, increased investment in the automotive recycling sector, creation of new jobs, and the overall economic viability of the economic operators within the automotive sector. These indicators will provide important insights about the effectiveness of the new EU legal framework. A general review is foreseen 8 years after entry into force of the new legislation. 
+ (1) 
+ Directive 2000/53/EC of the European Parliament and of the Council of 18 September 2000 on end-of life vehicles 
+ (2) 
+ Directive 2005/64/EC of the European Parliament and of the Council of 26 October 2005 on the type-approval of motor vehicles with regard to their reusability, recyclability . 
+ (3) 
+ Regulation (EU) 2018/858 on the approval and market surveillance of motor vehicles and their trailers, and of systems, components and separate technical units intended for such vehicles 
+ (4) 
+ https://environment.ec.europa.eu/strategy/circular-economy-action-plan_en 
+ (5) 
+ See the Versailles Declaration adopted in March 2022: 
+ https://www.consilium.europa.eu/media/54773/ 20220311-versailles-declaration-en.pdf 
+ and the Conclusion adopted by the European Council on 9 February 2023 
+ (6) 
+ https://commission.europa.eu/system/files/2023-02/COM_2023_62_2_EN_ACT_A%20Green%20Deal%20Industrial%20Plan%20for%20the%20Net-Zero%20Age.pdf 
+ (7) 
+ F or each objective , t hree options were developed and assessed 
+ (8) 
+ L-category vehicles include light 2-wheel powered vehicles (category L1 e ), three -wheel mopeds (L2 e ), two-wheel motorcycles (L3 e ), two- wheel motorcycles with sidecars (L4 e ), powered tricycles (L5 e ), light quadricycles (L6 e ) and heavy quadricycles (L7 e ) 
+ (9) 
+ https://cor.europa.eu/en/our-work/Pages/Fit-for-Future-opinion-on-End-of-life-vehicles-and-3R-type-approval.aspx 
+ (10) 
+ 2.8 billion EUR

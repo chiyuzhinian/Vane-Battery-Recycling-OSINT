@@ -1,0 +1,34 @@
+# CELEX 52020SC0334
+# http://publications.europa.eu/resource/celex/52020SC0334
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:39 UTC（正文 4020 字符）
+
+EUROPEAN COMMISSION
+ Brussels, 10.12.2020
+ SWD(2020) 334 final
+ COMMISSION STAFF WORKING DOCUMENT
+EXECUTIVE SUMMARY OF THE IMPACT ASSESSMENT REPORT
+ Accompanying the document
+ Proposal for a Regulation of the European Parliament and of the Council
+ concerning batteries and waste batteries, repealing Directive 2006/66/EC and amending Regulation (EU) 2019/1020
+ {COM(2020) 798 final} - {SEC(2020) 420 final} - {SWD(2020) 335 final}
+ What is the problem? 
+ This impact assessment looks at a proposal for a regulation that will replace the Batteries Directive. It aims to address three groups of highly interlinked problems related to batteries: 
+ 1. the lack of framework conditions providing incentives to invest in production capacity for sustainable batteries, which is linked to potentially diverging regulatory frameworks within the internal market; 
+ 2. the sub-optimal functioning of recycling markets and insufficiently closed materials loops, which limits the EU’s potential to mitigate risks to the supply of raw materials; 
+ 3. social and environmental risks that are currently not covered by EU environmental law. 
+ What do we want to achieve? 
+ The proposal has three highly interlinked objectives: 
+ 1. strengthening the functioning of the EU internal market for batteries; 
+ 2. promoting the circular economy by closing the materials loop; 
+ 3. reducing the environmental and social impacts of batteries throughout their lifecycle. 
+ What are the options? 
+ · Option 1 , business as usual , does not amend the Batteries Directive, which mostly covers the end-of-life stage of batteries. There is currently no EU legislation in place to cover the earlier stages in the batteries value chain and life cycle. 
+ · Option 2 , with a medium level of ambition , gradually strengthens the requirements and increases the level of ambition, both for the manufacturing and the end-of-life stages of batteries, and does so mostly in the form of issuing information requirements. 
+ · Option 3 , with a high level of ambition , is a bit more disruptive approach, but remains technically feasible . It entails setting limit values and thresholds for compliance within a set deadline. 
+ · Option 4¸ with a very high level of ambition, includes measures that would go far beyond the current regulatory framework and current business practice. 
+ What is the preferred option and why? 
+ The preferred option is a combination of Option 2 and Option 3. It includes a range of measures along the value chain, such as enabling the second life of industrial batteries, increasing the target collection rate for portable waste batteries from 65%, increasing the recovery of materials, setting new recycling efficiency requirements for lead and lithium-ion batteries, improving performance and durability, setting requirements on carbon intensity, tackling poor information flow and putting in place due diligence for the origins of raw materials. 
+ Legally, the switch from a directive to a regulation will result in direct requirements for all economic operators and a number of national authorities and other bodies. This will have the effect of improving harmonisation, providing the necessary legal certainty and making it possible to enforce a fully integrated market across the EU throughout the battery life cycle. 
+ There will be some financial costs related to some of the measures, but no significant impacts are expected for business or consumers. There will also be a small increase in the administrative burden, particularly on the carbon footprint and recycled content requirements. 
+ However the benefits clearly outweigh the costs. The proposed regulation will tackle the problems inherent in the current situation. It will improve the functioning of the internal market, reduce environmental impacts such as greenhouse gas emissions and reduce environmental and social risks. In addition, it will bring significant indirect benefits in terms of new jobs in the lithium batteries manufacturing and recycling sector.

@@ -1,0 +1,80 @@
+# CELEX 32020L0363
+# http://publications.europa.eu/resource/celex/32020L0363
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:27 UTC（正文 6015 字符）
+
+5.3.2020 
+ EN
+ Official Journal of the European Union
+ L 67/119
+ COMMISSION DELEGATED DIRECTIVE (EU) 2020/363
+ of 17 December 2019
+ amending Annex II to Directive 2000/53/EC of the European Parliament and of the Council on end-of-life vehicles as regards certain exemptions for lead and lead compounds in components
+ (Text with EEA relevance)
+ THE EUROPEAN COMMISSION,
+ Having regard to the Treaty on the Functioning of the European Union,
+ Having regard to Directive 2000/53/EC of the European Parliament and of the Council of 18 September 2000 on end-of-life vehicles ( 1 ) , and in particular Article 4(2)(b) thereof,
+ Whereas:
+ (1)
+ Pursuant to Article 4(2)(a) of Directive 2000/53/EC, Member States are to prohibit the use of lead, mercury, cadmium and hexavalent chromium in materials and components of vehicles put on the market after 1 July 2003.
+ (2)
+ Annex II to Directive 2000/53/EC lists vehicle materials and components exempt from the prohibition pursuant to Article 4(2)(a) thereof. Pursuant to Annex II, exemptions 8(e), 8(f)(b) and 8(g) are to be reviewed in 2019. Exemption 8(j) also needs to be re-assessed in view of the latest information on technical and scientific progress.
+ (3)
+ An assessment of exemptions 8(e) and 8(g) in view of that information led to the conclusion that there are currently no suitable alternatives to the use of lead for the materials and components covered by those exemptions. A date for a new review of those exemptions should therefore be set. Exemption 8(g), however, should be further specified with a more narrow scope. In order to allow the automotive industry to adapt to those changes, the current scope of exemption 8(g) should be maintained for vehicles of a type approved before 1 October 2022, while the narrower scope of that exemption should apply for vehicles of a type approved from that date.
+ (4)
+ The assessment of exemption 8(f)(b) leads to the conclusion that the use of lead in the applications covered by that exemption should not be prolonged because there are alternatives to the use of lead in those applications.
+ (5)
+ The assessment of exemption 8(j) which gives an exemption to the use of lead in solders for soldering of laminated glazing led to the conclusion that, for some applications, there are alternatives to the use of lead in solders for soldering of laminated glazing. However, there are some glass panes and applications for which there is no certainty that suitable alternatives to the use of lead exist at this time. It is therefore appropriate to lay down a new, more limited, exemption 8(k) for those glass panes and applications.
+ (6)
+ Exemption 8(j) applies only with respect to vehicles of a type approved before 1 January 2020. In order to ensure that the use of lead continues to be exempted for those glass panes and applications for which there is no certainty that suitable alternatives to the use of lead exist at this time, it is necessary for the new exemption 8(k) to apply as soon as possible. Therefore, this Directive should enter into force as a matter of urgency.
+ (7)
+ Directive 2000/53/EC should therefore be amended accordingly,
+ HAS ADOPTED THIS DIRECTIVE:
+ Article 1
+ Annex II to Directive 2000/53/EC is amended as set out in the Annex to this Directive.
+ Article 2
+ 1. Member States shall adopt and publish by 5 April 2020 at the latest, the laws, regulations and administrative provisions necessary to comply with this Directive. They shall forthwith communicate to the Commission the text of those provisions.
+ When Member States adopt those provisions, they shall contain a reference to this Directive or be accompanied by such a reference on the occasion of their official publication. Member States shall determine how such reference is to be made.
+ 2. Member States shall communicate to the Commission the text of the main provisions of national law, which they adopt in the field covered by this Directive.
+ Article 3
+ This Directive shall enter into force on the day following that of its publication in the Official Journal of the European Union .
+ Article 4
+ This Directive is addressed to the Member States.
+ Done at Brussels, 17 December 2019.
+ For the Commission 
+ The President 
+ Ursula VON DER LEYEN
+ ( 1 ) 
+ OJ L 269, 21.10.2000, p. 34 .
+ ANNEX
+ Annex II to Directive 2000/53/EC is amended as follows:
+ (1)
+ entry 8(e) is replaced by the following:
+ ‘8(e). Lead in high melting temperature type solders (i.e. lead-based alloys containing 85 % by weight or more lead)
+ ( 2 )
+ X’
+ (2)
+ entry 8(f)(b) is replaced by the following:
+ ‘8(f)(b). Lead in compliant pin connector systems other than the mating area of vehicle harness connectors
+ Vehicles type-approved before 1 January 2024 and spare parts for these vehicles
+ X’
+ (3)
+ entry 8(g) is replaced by the following:
+ ‘8(g)(i). Lead in solders to complete a viable electrical connection between semiconductor die and carrier within integrated circuit flip chip packages
+ Vehicles type approved before 1 October 2022 and spare parts for these vehicles
+ X
+ 8(g)(ii). Lead in solders to complete a viable electrical connection between the semiconductor die and the carrier within integrated circuit flip chip packages where that electrical connection consists of any of the following:
+ (i)
+ a semiconductor technology node of 90 nm or larger;
+ (ii)
+ a single die of 300 mm 2 or larger in any semiconductor technology node;
+ (iii)
+ stacked die packages with dies of 300 mm 2 or larger, or silicon interposers of 300 mm 2 or larger.
+ ( 2 )
+ Valid for vehicles type-approved from 1 October 2022 and spare parts for these vehicles
+ X’
+ (4)
+ the following entry 8(k) is inserted:
+ ‘8(k). Soldering of heating applications with 0,5 A or more of heat current per related solder joint to single panes of laminated glazings not exceeding wall thickness of 2,1 mm. This exemption does not cover soldering to contacts embedded in the intermediate polymer
+ Vehicles type approved before 1 January 2024 and spare parts for these vehicles
+ X( 4 )’

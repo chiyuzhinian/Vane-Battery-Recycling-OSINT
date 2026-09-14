@@ -1,0 +1,72 @@
+# CELEX 52018DC0266
+# http://publications.europa.eu/resource/celex/52018DC0266
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:38 UTC（正文 7867 字符）
+
+EUROPEAN COMMISSION
+ Brussels, 14.5.2018
+ COM(2018) 266 final
+ REPORT FROM THE COMMISSION TO THE EUROPEAN PARLIAMENT AND THE COUNCIL 
+ on the exercise of the power to adopt delegated acts conferred on the Commission pursuant to Directive 2006/66/EC of the European Parliament and of the Council on batteries and accumulators and waste batteries and accumulators, and repealing Directive 91/157/EEC
+ REPORT FROM THE COMMISSION 
+ TO THE EUROPEAN PARLIAMENT AND THE COUNCIL 
+ on the exercise of the power to adopt delegated acts conferred on the Commission pursuant to Directive 2006/66/EC of the European Parliament and of the Council on batteries and accumulators and waste batteries and accumulators, and repealing Directive 91/157/EEC 
+ 1. INTRODUCTION 
+ Directive 2006/66/EC on batteries and accumulators and waste batteries and accumulators 
+ 1 
+ (the Batteries Directive) lays down rules to minimise the negative impact of batteries and accumulators and waste batteries and accumulators 
+ 2 
+ on the environment, thus contributing to the protection, preservation and improvement of the quality of the environment. It also provides for measures to harmonise requirements concerning the heavy metal content and labelling of batteries and accumulators, and so to ensure the smooth functioning of the internal market. T he Directive has been amended several times. 
+ 3 
+ The Directive empowers the Commission to adopt delegated acts, as referred to in Article 23a, with a view to: 
+ · laying down criteria for the assessment of equivalent conditions for the recycling of waste batteries taking place outside of the EU, as provided for in Article 15(3), to supplement the rules referred to by Article 15(2), 
+ 4 
+ · laying down detailed rules as regards capacity labelling of portable and automotive batteries, as provided for in Article 21(2). 
+ · granting exemptions from the labelling requirements in Article 21. 
+ 2. LEGAL BASIS 
+ The present report is required under Article 23a of the amended Batteries Directive. Under this article, the Commission has the power to adopt delegated acts for a period of five years from 30 December 2013. The Commission is required to prepare a report in respect of delegated powers, at the latest 9 months before the end of the five-year period. In accordance with Article 23a(2), the delegation of power shall be tacitly extended for periods of an identical duration, unless the European Parliament or the Council opposes such an extension not later than three months before the end of each period. 
+ 3. EXERCISE OF THE DELEGATION 
+ 3.1. Criteria for the assessment of equivalent conditions for the recycling of waste batteries and accumulators taking place outside of the EU, Article 15(3) 
+ According to Article 15(2) of the Directive, waste batteries exported out of the EU shall count towards the fulfilment of the obligations and efficiencies laid down in Annex III to the Directive only if there is sound evidence that the recycling operation took place under conditions equivalent to the requirements of the Directive. Article 15(3) empowers the Commission to adopt delegated acts to lay down detailed rules at this respect, in particular criteria for the assessment of such equivalent conditions. 
+ It should be noted that Article 10(3) of Directive 2012/19/EU of 4 July 2012 on waste electrical and electronic equipment (WEEE) 
+ 5 
+ lays down a similar provision regarding WEEE exported from the EU. Since the environmental aspects are comparable, the obligations considered are similar and the operators in charge of the activities concerned (collectors, exporters, recyclers and public authorities) overlap to a large extent, the Commission considers that provisions regarding such ‘equivalent conditions’ should follow the same approach for both areas. 
+ Criteria for the assessment of equivalent conditions regarding treatment of WEEE exported from the EU have not yet been developed. 
+ 6 
+ The Commission plans to consider any criteria regarding the appreciation of equivalent conditions for batteries recycling following those regarding WEEE. Furthermore, the Batteries Directive is currently subject to an evaluation, and relevant information collected in this process will also be assessed. 
+ 3.2. Detailed rules as regards capacity labelling of portable secondary (rechargeable) and automotive batteries, Article 21(2) 
+ Under Article 21(2) of the Directive, the Commission is empowered to adopt delegated acts laying down detailed rules to supplement the requirement to Member States to ensure that the capacity of all portable and automotive batteries and accumulators is indicated on them in a visible, legible and indelible form, including harmonised methods for the determination of capacity and appropriate use. 
+ In 2010 the Commission adopted the rules as regards capacity labelling of portable secondary (rechargeable) and automotive batteries and accumulators. 
+ 7 
+ The possible harmonisation of capacity labelling rules for portable primary (non-rechargeable) batteries was also assessed. 
+ The studies conducted 
+ 8 
+ concluded that a single, simple and implementable capacity label for these battery types was not yet available. Subsequently, the Commission gave a mandate to the European Committee for Electrotechnical Standardization (CENELEC) to evaluate the feasibility of determining a standardized method for the capacity marking of primary portable batteries. Their review concluded that no appropriate method could be identified as being available to comply with the Battery Directive. 
+ 9 
+ The situation has not changed since, leading the Commission to conclude that, at present, it is not possible to identify harmonised methods for capacity labelling for portable primary batteries. 
+ The Commission will assess the situation again once the current process of review of the Directive is concluded. 
+ 3.3. Granting exemptions to the labelling requirements established in Article 21 of the Directive, Article 21(7) 
+ According to Article 21(7) of the Directive, the Commission is empowered to adopt delegated acts to grant exemptions from the labelling requirements set out in Article 21. In this regard, the Commission has no received any requests regarding the granting of exemptions from during the period covered by this report 
+ 4. CONCLUSIONS 
+ The Commission did not make use of the delegated power referred to in article 23a of the Batteries Directive during the period covered by this report. It may do so in the future, for the reasons given. 
+ The Commission invites the European Parliament and the Council to take note of this report. 
+ (1) 
+ OJ L 266, 26.9.2006, p. 1–14 
+ (2) 
+ In the following, the terms ‘batteries’ and ‘accumulators’ are considered synonyms and used indistinctively 
+ (3) 
+ Directive 2008/12/EC, OJ L 76, 19.3.2008, p. 39; Directive 2008/103/EC, p. 7, OJ L 327, 5.12.2008, ; Directive 2013/56/EU, OJ L 329, 10.12.2013, p. 5. 
+ (4) 
+ Regulation (EEC) No 259/93, OJ L30, 6.2.93, p. 1; Council Regulation (EC) No 1420/1999,OJ L166, 1.7.1999, p. 9; Commission Regulation (EC) No 1547/1999, OJ L 185, 17.7.1999, p. 1 
+ (5) 
+ OJ L 197, 24.7.2012, p. 38. 
+ (6) 
+ As explained in more detail in the Report from the Commission to the European Parliament and to the Council on the exercise of the power to adopt delegated acts conferred on the Commission pursuant to Directive 2012/19/EU on waste electrical and electronic equipment, COM(2017) 172 final 
+ (7) 
+ Commission Regulation (EU) No 1103/2010, OJ L 313, 30.11.2010 
+ (8) 
+ http://ec.europa.eu/environment/waste/batteries/pdf/battery_report_june2010.pdf 
+ , http://ec.europa.eu/environment/waste/batteries/pdf/battery_report.pdf 
+ (9) 
+ "Feasibility Study on Labelling and Efficiency of Primary Batteries (2012)" at: 
+ http://ec.europa.eu/environment/waste/batteries/pdf/CENELEC%20feasibility%20study.pdf

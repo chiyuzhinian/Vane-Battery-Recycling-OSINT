@@ -1,0 +1,2001 @@
+# CELEX 52025PC0981
+# http://publications.europa.eu/resource/celex/52025PC0981
+# 来源 CELLAR comnat XHTML
+# 抓取 2026-09-14 07:00 UTC（正文 74977 字符）
+
+IMMC.COM%282025%29981%20final.ENG.xhtml.1_EN_ACT_part1_v6.docx 
+ EUROPEAN COMMISSION
+ Brussels, 10.12.2025
+ COM(2025) 981 final
+ 2025/0397(COD)
+ Proposal for a
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL
+ amending Regulation (EU) 2023/1542 and Regulation (EU) 2024/1244 as regards simplification of some requirements and reduction of administrative burden
+ (Text with EEA relevance)
+ EXPLANATORY MEMORANDUM 
+ 1. CONTEXT OF THE PROPOSAL 
+ Union legislation should deliver its policy objectives efficiently, effectively and transparently. ‘The Future of European Competitiveness’ report emphasised that the transition to a low-carbon, resource-efficient, and circular economy will be essential for securing the EU's long-term economic prosperity, resilience, and competitiveness. 3 With the Competitiveness Compass for the EU, the Commission presented its strategy for the next five years for unlocking the full potential of this transition. 4 Moreover, the Commission has since strengthened targets to reduce administrative costs for business (together with public authorities) and Small and Medium sized Entreprises by 25% and 35% respectively ( 
+ 1 
+ ). 
+ A solid body of Union environmental law now exists. The Commission takes seriously its duty to manage these laws effectively and invests heavily in reviewing ( 
+ 2 
+ ) their application to ensure that they deliver as intended and that problematic issues are tackled early. Moreover, the Commission is committed to ‘stress-test’ all EU laws under its current term of office. The content of this proposal (and others in the ‘omnibus’ package) represents the initial outcome of the Commission’s ongoing ‘stress-testing’ in the environment area ( 
+ 3 
+ ) built on extensive engagement with stakeholders through meetings at political level, roundtables, implementation dialogues, call for evidence and inputs received from stake holders, including civil society , businesses and businesses associations, think tanks and public authorities . The omnibus package addresses legislation related to the circular economy, the operation of industrial installations, the management of geospatial data, and environmental permitting. 
+ The above legislation are crucial parts of delivering the Union’s commitment to a fair green, and digital transition and the shift towards a circular economy in particular. It is important that this legislation works well, mobilises the Union’s assets like the single market and avoids imposing unnecessary costs on business, public authorities and citizens. 
+ This specific proposed Regulation aims to make targeted revisions to the following instruments: 
+ – Regulation (EU) 2023/1542 concerning batteries and waste batteries ( 
+ 4 
+ ). 
+ – Regulation (EU) 2024/1244 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation (EC) No 166/2006 ( 
+ 5 
+ ) . 
+ This proposal includes limited and targeted amendments to the above Regulations in the area of environment. Further possible modifications of those Regulations are entirely outside of the scope and aims of the present proposal. The need for such modifications may be assessed, as appropriate, in the context of further stress-testing of EU environmental legislation announced in the [Chapeau Communication] and in Commission work programme 2026. The Commission will constructively engage with the co-legislators, in order to ensure that the legislative process on the present proposal fully preserves its essential object and does not distort it. 
+ Batteries Regulation 
+ Amending producer definition for distance contracts 
+ For producers not established in the Member State where they sell batteries, Regulation (EU) 2023/1542 currently covers solely producers using distance contracts. It is necessary to ensure that all operators irrespective of the selling technique used are covered by the definition of producer in Regulation (EU) 2023/1542. The proposal therefore clarifies that a manufacturer, importer or distributor or other natural or legal person that sells batteries in a Member State and is established in another Member State or in a third country, qualifies as a producer, irrespective of the selling technique used, including by means of distance contracts. 
+ Adding a definition for substances of very high concern 
+ Article 13 of Regulation (EU) 2023/1542 currently requires that batteries should bear a label indicating the presence of hazardous substances. However, the definition of those substances for labelling is unclear since the corresponding recital specifies that batteries should be labelled with the amount of certain hazardous substances present. Therefore, the proposal adds further precision on the scope of the substances that need to be labelled by referring to substances of very high concern identified in accordance with Regulation (EC) No 1907/2006 and Regulation (EC) 1272/2008 . 
+ Exclusion of battery packs from removability and replaceability requirements 
+ Regulation (EU) 2023/1542 currently requires light means of transport (LMT) batteries to be removable and replaceable at cell level. This may create unexpected safety concerns when faulty battery cells are not replaced in the right conditions. Thus, in order to achieve the right balance between safety and repairability, LMT battery packs should be removable and replaceable by independent professionals, but at module level instead of cell level. 
+ Simplification of redundant reporting 
+ The Commission is obligated to review and report every four years about the quality of the information reported annually by the Member States concerning battery waste management. In addition, the Commission should assess the organisation of data collection, data accuracy and reliability and may make recommendations for improvement. The requirement for the Commission to review and publish a report on data from Member States should be deleted to allow for a more adaptable data review process. The Commission should retain the ability to assess data as needed and discretionarily determine the appropriateness of the publication of a report, considering data sensitivity, confidentiality, and alignment with evaluation and review timelines. 
+ Industrial emissions portal 
+ Operators under the scope of the IEPR are required to report to competent authorities' data on the use of water, energy and relevant raw materials. Article 6(9) allows Member States to report on behalf of livestock and aquaculture operators in respect of releases to air, water, and land. 
+ Some Member States and stakeholders have questioned the feasibility of and burden associated to the requirement for livestock and aquaculture operators to report on the use of water, energy and relevant raw materials. In response, the Commission proposes exempting livestock and aquaculture operators from reporting on water, energy and materials use. 
+ Moreover, the Commission suggests allowing Member States to exempt operators of livestock production and aquaculture installations from reporting on off-site transfers of waste, off-site transfers of pollutants in wastewater, production volume and number of operating hours, provided that this information can be gathered by Member States by other means. Should this condition be met, Member States will be allowed to report more information than releases to air, water and land on behalf of individual livestock and aquaculture operators. 
+ There would be negligible environmental impact associated with this change which is about decreasing burden for livestock and aquaculture operators by relying more on MS action for gathering relevant information and improving the process for reporting. 
+ The cost savings associated with the measure would be for farmers and aquaculture operators, who would face reduced reporting requirements. Some of the data would be supplied by Member States who will have this information available through their standard agricultural analyses. 
+ Consistency with other Union policies 
+ This proposal is part of a package of measures aimed primarily at cutting red tape for economic operators. It is entirely consistent with the Commission’s policies on better regulation, and the objectives of the Competitiveness compass to promote greater competitiveness and economic resilience in the EU. The rationalisation introduced by these measures will not affect the achievement of the objectives in the concerned policy area nor the rationale of the legislative acts 
+ 2. LEGAL BASIS, SUBSIDIARITY AND PROPORTIONALITY 
+ • Legal basis 
+ The legal bases of the proposal are Articles 114 and 192(1) TFEU. These reflect the underlying legal bases of the Regulations that the proposal intends to revise. The legal bases of Regulation (EU) 2023/1542 concerning batteries and waste batteries is Article 114, and 192(1) in respect of Articles 54 to 76 of that Regulation. The legal base of Regulation (EU) 2024/1244 (‘the Industrial Emissions Portal Regulation’) is Article 192(1). 
+ • Subsidiarity (for non-exclusive competence) 
+ The Batteries Regulation was adopted in recognition of the expected demand for batteries in the coming years, the strategic role of batteries in the global transition towards decarbonised economies and the need to establish a functioning internal market and to avoid market distortions. As such the Batteries Regulation set out common rules on the sustainability, performance, safety, collection, recycling and second life of batteries as well as on information about batteries for end-users and economic operators. For these reasons, the revision of the Regulation is similarly justified on subsidiarity grounds. 
+ Industrial Emissions Portal Regulation : The Union and the Member States are Parties to the Aarhus Convention, which recognises that increased public access to environmental information and the dissemination of such information contribute to a greater awareness of environmental matters, a free exchange of views, more effective participation by the public in environmental decision-making and, ultimately, to a better environment. In addition, the Union is a Party the UNECE Protocol on Pollutant Release and Transfer Registers. There is a strong argument that action at Union level was necessary to establish a portal for the reporting of industrial emissions and clearly for any subsequent revision. Moreover, a consistent approach across all Member States is likely to lead to increased efficiency in reporting processes, and fairness for all operators wherever they are established in the Union. 
+ • Proportionality 
+ In the case of the circular economy legislation, the proposal would introduce alternative means to deliver the policy objectives of ensuring that waste products are appropriately managed at the end of their useful life 
+ The choice to promote national reporting of emissions and resource use by livestock and aquacultural operators is proportionate in that it intends to exploit processes that already exist within the legislation thereby keeping changes to a minimum. 
+ • Choice of the instrument 
+ A proposal for Regulation is the appropriate choice of instrument given that the underlying legislation that the proposal seeks to amend are also Regulations. 
+ 3. RESULTS OF EX-POST EVALUATIONS, STAKEHOLDER CONSULTATIONS AND IMPACT ASSESSMENTS 
+ • Ex-post evaluations/fitness checks of existing legislation 
+ Revisions of the Regulations on batteries and the industrial emissions portal were recently adopted by the Legislator based on Commission’s proposals that were supported by impact assessments. An evaluation cannot be carried out at this stage as too little time has passed, and too little practical experience gained. 
+ • Stakeholder consultations 
+ The Commission engaged in a broad consultation with stakeholders, civil society, public authorities and businesses, Member States and Members of the European Parliament, including through its Implementation Dialogues, stakeholder roundtables and many meetings ( 3 ). The staff working document accompanying this proposal provides more information on the various consultation activities that have been undertaken to support the preparation of this proposal. 
+ The key consultation activities are summarised below. 
+ The following consultation activities have been carried out to prepare this omnibus proposal: 
+ – An online webinar on environmental reporting (carried out by the consultant) on 13 February 2025 and an online survey of the participants to the above webinar who had agreed to be contacted for its purpose. 
+ – A call for evidence 
+ 6 
+ for the environmental omnibus open for feedback from 22 July 2025 to 10 September 2025. 
+ – A high-level roundtable on simplifying environmental laws on 2 October 2025. 
+ The general consultations about simplification of environmental legislation drew a lot of attention, also from the wider public. 
+ The above-mentioned online workshop held on 13 February 2025 had 500 registrants and more than 300 active participants 
+ 7 
+ . The follow-up targeted consultation led to more than 500 inputs, many of a specific nature. Several of the proposed simplifications in the omnibus are reflected in the input received. 
+ The call for evidence on environmental simplification drew most attention . The Commission published a call for evidence on the environmental simplification package on the Have-Your-Say website: 
+ Simplification of administrative burdens in environmental legislation 
+ . The feedback period was from 22 July 2025 till 10 September 2025. All feedback is published on the Have-Your-Say website. 
+ There were 190 998 contributions to the call for evidence, of which 189 751 (99.3%) came from citizens. 1 247 (0.7%) contributions came from organisations other than citizens, including businesses and business associations, non-governmental organisations (environmental and other), public authorities and academics. 622 attachments, mainly position papers, were attached to these submissions, which often included specific suggestions. 
+ From a business perspective, there is support for less burdensome regulation that leaves business with flexibility to deliver both growth and sustainable production. There is a perception of administrative obligations that are too prescriptive, and do not provide value added. 
+ On the side of civil society, there is support for a simplification that makes it easier to protect the environment and social standards and avoid deregulation, for example by removing redundancies and avoiding excessively detailed regulations. There is however concern that efforts to simplify regulations could undermine environmental protections. Citizens urged the EU to focus on enforcing existing laws rather than creating new simplifications. 
+ It is useful to note that the Commission has conducted consultations and prepared an impact assessment in support of the targeted revision of the Regulation on the registration, evaluation and authorisation of chemicals which is expected to contain a substantial simplifying component. Similarly, the Commission is currently preparing an impact assessment to support the preparation of the Circular Economy Act in 2026. This assessment will utilise ongoing consultation activities that will also cover simplification of existing (waste and circular economy-related) legislation. 
+ • Collection and use of expertise 
+ As indicated above the Commission contracted an external service provider to provide expertise related to this proposal. In particular, the contractor is screening the known body of environmental laws to identify reporting and other administrative obligations together with potential to simplify these obligations. In addition, the contractor has provided assistance in quantifying the reductions in costs of possible measures to simplify provisions in the omnibus package. All information provided by the contractor will be published. 
+ • Impact assessment 
+ An impact assessment has not been prepared primarily because the proposed amendments are highly specific with little choice available to remedy the underlying issues. A staff working document does however accompany this proposal. It justifies the different elements of the proposal and presents quantitative information about the expected impacts wherever possible. It also presents the views and inputs of stakeholders which the Commission has received. 
+ The consistency of this proposal with the climate-neutrality objective set out in Article 2(1) and the Union 2030 and 2040 climate targets has been assessed. The proposal is consistent with these objectives, as well as ensuring progress on adaptation. 
+ • Regulatory fitness and simplification 
+ Under the regulatory fitness and performance programme (REFIT), the Commission ensures that its legislation is fit for purpose, targeted to the needs of stakeholders, and minimises burdens while achieving its objectives. This proposal is therefore part of, and fully coherent with, the REFIT programme in so far as it attempts to simplify certain administrative procedures and reduce unnecessary costs for business. 
+ The savings associated with the changes to the Regulations are estimated using the Standard Cost Methodology and include EUR 70 million for the Industrial Emissions Portal. For the Batteries Regulation, the benefit comes from clarifying the legal text. 
+ • Fundamental rights 
+ No adverse impacts expected. 
+ 4. BUDGETARY IMPLICATIONS 
+ Not applicable. 
+ 5. OTHER ELEMENTS 
+ • Implementation plans and monitoring, evaluation and reporting arrangements 
+ The envisaged changes are very specific and directly applicable and will not need to be supported by implementation plans. The impacts will of course be assessed in due course as the underlying legislation is evaluation according to the usual way as part of the Commission’s policy on better regulation across the policy cycle. 
+ • Explanatory documents (for directives) 
+ Not relevant for directly applicable Regulations. 
+ • 
+ Detailed explanation of the specific provisions of the proposal 
+ Article 1 sets out amendments to Regulation (EU) 2023/1542. 
+ Article 2 sets out amendments to Regulation (EU) 2024/1244. 
+ 2025/0397 (COD) 
+ Proposal for a 
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL 
+ amending Regulation (EU) 2023/1542 and Regulation (EU) 2024/1244 as regards simplification of some requirements and reduction of administrative burden 
+ (Text with EEA relevance) 
+ THE EUROPEAN PARLIAMENT AND THE COUNCIL OF THE EUROPEAN UNION, 
+ Having regard to the Treaty on the Functioning of the European Union, and in particular Article 114 and Article 192(1) thereof, 
+ Having regard to the proposal from the European Commission, 
+ After transmission of the draft legislative act to the national parliaments, 
+ Having regard to the opinion of the European Economic and Social Committee 
+ 8 
+ , 
+ Having regard to the opinion of the Committee of the Regions 
+ 9 
+ , 
+ Acting in accordance with the ordinary legislative procedure, 
+ Whereas: 
+ (1) The political guidelines for the Commission’s 2024-2029 term 
+ 10 
+ point to the goal of simplifying legislation to eliminate any overlaps and contradictions while maintaining high standards and staying the course on the goals set out in the European Green Deal . 
+ 11 
+ (2) In response to the 2024 Draghi report 
+ 12 
+ pointing to regulatory obstacles and the regulatory administrative burden as one of the key challenges notably for small and m e d ium sized enterprises (’SME’) , the Competitiveness Compass 
+ 13 
+ identifies a set of horizontal enablers to underpin competitiveness including simplifying regulatory environment, reducing burden and favouring speed and flexibility. 
+ (3) In its C ommunication of 11 February 2025 entitled ‘A simpler and faster Europe: Communication on implementation and simplification’, 
+ 14 
+ the European Commission set out a vision for an implementation and simplification agenda that delivers fast and visible improvements for people and business es on the ground. That requires more than an incremental approach and the U nion is to take bold action to achieve that goal. The Commission, the European Parliament, the Council, Member States’ authorities at all levels and stakeholders need to work together to streamline and simplify Union , national and regional rules and to implement policies more effectively . 
+ (4) In the context of the Commission’s commitment to reduce reporting burdens and compliance costs, advance interoperability, and enhance competitiveness, it is necessary to adapt certain provisions set out in Regulations (EU) 2023/1542 
+ 15 
+ and (EU) 2024/1244 
+ 16 
+ of the European Parliament and of the Council whilst maintaining the policy objectives 
+ 17 
+ of the European Green Deal, and the Sustainable Finance Action Plan 
+ 18 
+ . 
+ (5) With a view to maintaining coherence with the original instruments and in order to preserve the legislative intent, amendments to Regulation (EU ) 2023/1542 are based on Article 114 of the Treaty and amendments to Chapter VIII of Regulation (EU) 2023/1542 and to Regulation (EU) 2024/1244 are based on Article 192(1) of the Treaty. 
+ (6) With a view to ensuring that all operators irrespective of the selling technique used are covered by the definition of a producer in Regulation (EU) 2023/1542, it should be clarified that a manufacturer, importer or distributor or other natural or legal person that sells batteries in a Member State, and is established in another Member State or in a third country, qualifies as a producer not only when selling by means of distance contracts. 
+ (7) Pursuant to Article 13 of Regulation (EU) 2023/1542, batteries should bear a label indicating the presence of hazardous substances. In line with Recital (44) of that regulation, it is necessary to add further precision on the scope of the substances that need to be labelled by referring to substances of very high concern identified in accordance with Regulation (EC) No 1907/2006 or Regulation (EC) 1272/2008 . 
+ (8) The requirement for light means of transport (LMT) batteries and battery packs to be removable and replaceable at cell level may create unexpected safety concerns when faulty battery cells are not replaced in the right conditions. Thus , in order to achieve the right balance between safety and repairability, it is appropriate to require that LMT batteries and LMT battery packs be readily removable and replaceable by independent professionals at module level. 
+ (9) Regulation (EU) 2023/1542 require s the Commission to publish a report on the results of the review of the information made available by the Member States . In practice, Article 76 (4) has been too prescriptive and meant that analysis of data on implementation is required at a time which does not align with evaluation cycles , and only covers part of the information. This requirement should therefore be deleted, allowing for more flexible data reviewing. Informed decision-making is integral to the governance processes within the Union. Therefore, the Commission should continue to review the data reported by the Member States. 
+ (10) With a view to simplifying requirements on operators and companies, and reduce the administrative burden stemming from reporting pursuant to Article 6 of Regulation (EU) 2024/1244, while maintaining equivalent standards as regards the protection of human health and the environment, it is appropriate to allow Member States to exempt operators of livestock production and aquaculture installations from reporting on off-site transfers of waste, off-site transfers of pollutants in wastewater, production volume and number of operating hours, provided that this information can be gathered by other means, in view of fulfilling the requirements set out in Article 7 of that R egulation. Furthermore, to minimize the administrative burden o n operators of livestock production and aquaculture installations, they should not be required to report on the use of water, energy and relevant raw materials. 
+ (11) Regulations (EU) 2023/1542 and (EU) 2024/1244 should therefore be amended accordingly , 
+ HAVE ADOPTED THIS REGULATION: 
+ Article 1 
+ Amendments to Regulation (EU) 2023/1542 
+ Regulation (EU) 2023/1542 is amended as follows: 
+ (1) Article 3 (1) is amended as follows: 
+ (a) in p oint (47) , point (d) is replaced by the following: 
+ ‘(d) sells batteries, including those incorporated in appliances, light means of transport or other vehicles, directly to end-users, whether or not they are private households, in a Member State, and is established in another Member State or in a third country;’(b) the following point (69) is added: ‘substance of very high concern’ means any substance which fulfils the criteria laid down in Article 57 of Regulation (EC) No 1907/2006 and is identified in accordance with Article 59(1) of that Regulation, or any substance which fulfils the criteria laid down in Article 57 of Regulation (EC) No 1907/2006 and listed in Annex VI of Regulation (EC) 1272/2008.’ 
+ (2) in Article 11, paragraph 5 is replaced by the following: 
+ ‘5. Any natural or legal person that places on the market products incorporating LMT batteries shall ensure that those batteries, as well as individual battery modules included in the battery pack, are readily removable and replaceable by an independent professional at any time during the lifetime of the product;’ 
+ (3) in Article 76 ( 4 ) , the second, third and fourth sentences are deleted . 
+ (4) in Annex VI Point 8 in Part A is replaced by the following:    
+ ‘8. the substances of very high concern in the meaning of Article 3 (1) (69) which are present in the battery, other than mercury, cadmium and lead, with a concentration equal or above 0,1%, weight on weight.’  
+ (5) 
+ Article 2 
+ Amendments to Regulation (EU) 2024/1244 
+ In Article 6 of Regulation (EU) 2024/1244, paragraph 9 is replaced by the following: 
+ ‘ 9. 
+ The reporting requirements set out in paragraph 1, first subparagraph, point (d) shall not apply to operators of installations carrying out activities referred to in rows 2 and 7 of Annex I (‘operators of livestock production and aquaculture installations’) . 
+ Member States may decide to quantify deliberate releases as referred to in paragraph 1, first subparagraph, point (a), themselves on behalf of operators of livestock production and aquaculture installations. In such cases, paragraphs 1 to 8 shall not apply to those operators in respect of such releases. 
+ Member States may decide to exempt operators of livestock production and aquaculture installations from reporting on any of the items referred to in paragraph 1, first subparagraph, points (b), (c), (e), (f) and (g), of this Article, provided that such information can be gathered by Member States by other means in order to fulfil their obligations pursuant to Article 7. In such cases, paragraphs 1 to 8 of this Article shall not apply to those operators in respect of such items.’ 
+ Article 3 
+ This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union . 
+ This Regulation shall be binding in its entirety and directly applicable in all Member States. 
+ Done at Brussels, 
+ For the European Parliament 
+ For the Council 
+ The President 
+ The President 
+ LEGISLATIVE FINANCIAL AND DIGITAL STATEMENT 
+ 1. FRAMEWORK OF THE PROPOSAL/INITIATIVE 3 
+ 1.1. Title of the proposal/initiative 3 
+ 1.2. Policy area(s) concerned 3 
+ 1.3. Objective(s) 3 
+ 1.3.1. General objective(s) 3 
+ 1.3.2. Specific objective(s) 3 
+ 1.3.3. Expected result(s) and impact 3 
+ 1.3.4. Indicators of performance 3 
+ 1.4. The proposal/initiative relates to: 4 
+ 1.5. Grounds for the proposal/initiative 4 
+ 1.5.1. Requirement(s) to be met in the short or long term including a detailed timeline for roll-out of the implementation of the initiative 4 
+ 1.5.2. Added value of EU involvement (it may result from different factors, e.g. coordination gains, legal certainty, greater effectiveness or complementarities). For the purposes of this section 'added value of EU involvement' is the value resulting from EU action, that is additional to the value that would have been otherwise created by Member States alone. 4 
+ 1.5.3. Lessons learned from similar experiences in the past 4 
+ 1.5.4. Compatibility with the multiannual financial framework and possible synergies with other appropriate instruments 5 
+ 1.5.5. Assessment of the different available financing options, including scope for redeployment 5 
+ 1.6. Duration of the proposal/initiative and of its financial impact 6 
+ 1.7. Method(s) of budget implementation planned 6 
+ 2. MANAGEMENT MEASURES 8 
+ 2.1. Monitoring and reporting rules 8 
+ 2.2. Management and control system(s) 8 
+ 2.2.1. Justification of the budget implementation method(s), the funding implementation mechanism(s), the payment modalities and the control strategy proposed 8 
+ 2.2.2. Information concerning the risks identified and the internal control system(s) set up to mitigate them 8 
+ 2.2.3. Estimation and justification of the cost-effectiveness of the controls (ratio between the control costs and the value of the related funds managed), and assessment of the expected levels of risk of error (at payment & at closure) 8 
+ 2.3. Measures to prevent fraud and irregularities 9 
+ 3. ESTIMATED FINANCIAL IMPACT OF THE PROPOSAL/INITIATIVE 10 
+ 3.1. Heading(s) of the multiannual financial framework and expenditure budget line(s) affected 10 
+ 3.2. Estimated financial impact of the proposal on appropriations 12 
+ 3.2.1. Summary of estimated impact on operational appropriations 12 
+ 3.2.1.1. Appropriations from voted budget 12 
+ 3.2.1.2. Appropriations from external assigned revenues 17 
+ 3.2.2. Estimated output funded from operational appropriations 22 
+ 3.2.3. Summary of estimated impact on administrative appropriations 24 
+ 3.2.3.1. Appropriations from voted budget 24 
+ 3.2.3.2. Appropriations from external assigned revenues 24 
+ 3.2.3.3. Total appropriations 24 
+ 3.2.4. Estimated requirements of human resources 25 
+ 3.2.4.1. Financed from voted budget 25 
+ 3.2.4.2. Financed from external assigned revenues 26 
+ 3.2.4.3. Total requirements of human resources 26 
+ 3.2.5. Overview of estimated impact on digital technology-related investments 28 
+ 3.2.6. Compatibility with the current multiannual financial framework 28 
+ 3.2.7. Third-party contributions 28 
+ 3.3. Estimated impact on revenue 29 
+ 4. Digital dimensions 29 
+ 4.1. Requirements of digital relevance 30 
+ 4.2. Data 30 
+ 4.3. Digital solutions 31 
+ 4.4. Interoperability assessment 31 
+ 4.5. Measures to support digital implementation 32 
+ 1. FRAMEWORK OF THE PROPOSAL/INITIATIVE 
+ 1.1. Title of the proposal/initiative 
+ Proposal for a Regulation of the European Parliament and of the Council amending Regulation (EU) 2023/1542 and Regulation (EU) 2024/1244 as regards simplification of some requirements and reduction of administrative burden 
+ 1.2. Policy area(s) concerned 
+ Environment 
+ European Green Deal 
+ 1.3. Objective(s) 
+ 1.3.1. General objective(s) 
+ The general objectives pursued by this legislative proposal are to simplify and clarify certain elements of Regulation (EU) 2023/1542 and (EU) 2024/1244 in order to clarify producer and manufacturer obligations as regards batteries and alleviate burden on certain operators under the scope of the IEPR as regards reporting. By reducing the administrative burden and compliance costs associated with technical and reporting requirements, this proposal intends to ensure the proportionality of the framework, while maintaining high standards of environmental protection. 
+ 1.3.2. Specific objective(s) 
+ The specific objectives of the proposed amendments to Regulation (EU) 2023/1542 included in this proposal aim to achieve the following results: 
+ Amend the producer definition for distance contracts 
+ Exclude battery packs from removability and replaceability requirements 
+ Simplification of redundant reporting from the Commission 
+ The specific objectives of the proposed amendments to Regulation (EU) 2024/1244 included in this proposal are as follows: 
+ - 
+ exempting livestock and aquaculture operators from reporting on water, energy and materials use. 
+ - 
+ allowing Member States to exempt operators of livestock and aquaculture installations from reporting on off-site transfers of waste, off-site transfers of pollutants in wastewater, production volume and number of operating hours, provided that this information can be gathered by Member States by other means. Should this condition be met, Member States would be allowed to report on these elements on behalf of individual livestock and aquaculture operators. 
+ 1.3.3. Expected result(s) and impact 
+ Specify the effects which the proposal/initiative should have on the beneficiaries/groups targeted. 
+ The proposed amendments to Regulation (EU) 2023/1542 will benefit a wide range of stakeholders, including producers of batteries. Producers will have clarity that all operators irrespective of the selling technique used are covered by the definition of producer in Regulation (EU) 2023/1542. This will create legal certainty as to which producers have extended producer responsibility. The exclusion of battery packs from removability and replaceability requirements will create legal certainty for battery manufacturers and address safety concerns when faulty battery cells are not replaced in the right conditions. 
+ The proposed amendments to Regulation (EU) 2024/1244 are expected to benefit operators of livestock and aquaculture installations by alleviating their reporting burden. 
+ 1.3.4. Indicators of performance 
+ Specify the indicators for monitoring progress and achievements. 
+ To monitor progress towards achieving the proposal’s specific objectives, the Commission will explore the possibility of organising exchanges with Member States in different formats, including by using the existing fora. 1.4. 
+ The proposal/initiative relates to: 
+  a new action 
+  a new action following a pilot project / preparatory action 
+ 19 
+  the extension of an existing action 
+  a merger or redirection of one or more actions towards another/a new action 
+ 1.5. Grounds for the proposal/initiative 
+ 1.5.1. Requirement(s) to be met in the short or long term including a detailed timeline for roll-out of the implementation of the initiative 
+ N/A 1.5.2. 
+ Added value of EU involvement (it may result from different factors, e.g. coordination gains, legal certainty, greater effectiveness or complementarities). For the purposes of this section 'added value of EU involvement' is the value resulting from EU action, that is additional to the value that would have been otherwise created by Member States alone. 
+ Regulation (EU) 2023/1542 already contains a producer definition. The amendment will provide legal certainty as to who is covered by the definition. The current removability and replaceability requirement for light means of transport batteries under Regulation (EU) 2023/1542 applied to the cell level. Battery manufactures will have legal certainty about the level of removability and replaceability requirements for light means of transport batteries and a coordinated approach will be taken across the Union. 
+ The amendments to Regulation (EU) 2024/1244 aim at ensuring coordination gains and greater complementarity on reporting by clarifying what has to be reported by livestock and aquaculture operators or by Member States. 
+ 1.5.3. Lessons learned from similar experiences in the past 
+ N/A 
+ 1.5.4. Compatibility with the multiannual financial framework and possible synergies with other appropriate instruments 
+ N/A 
+ 1.5.5. Assessment of the different available financing options, including scope for redeployment 
+ N/A 
+ 1.6. Duration of the proposal/initiative and of its financial impact 
+  limited duration 
+ –  
+ in effect from [DD/MM]YYYY to [DD/MM]YYYY 
+ –  
+ financial impact from YYYY to YYYY for commitment appropriations and from YYYY to YYYY for payment appropriations. 
+  unlimited duration 
+ – Implementation with a start-up period from YYYY to YYYY, 
+ – followed by full-scale operation. 
+ 1.7. Method(s) of budget implementation planned 
+ 20 
+  Direct management by the Commission 
+ –  by its departments, including by its staff in the Union delegations; 
+ –  
+ by the executive agencies 
+  Shared management with the Member States 
+  Indirect management by entrusting budget implementation tasks to: 
+ –  third countries or the bodies they have designated 
+ –  international organisations and their agencies (to be specified) 
+ –  the European Investment Bank and the European Investment Fund 
+ –  bodies referred to in Articles 70 and 71 of the Financial Regulation 
+ –  public law bodies 
+ –  bodies governed by private law with a public service mission to the extent that they are provided with adequate financial guarantees 
+ –  bodies governed by the private law of a Member State that are entrusted with the implementation of a public-private partnership and that are provided with adequate financial guarantees 
+ –  bodies or persons entrusted with the implementation of specific actions in the common foreign and security policy pursuant to Title V of the Treaty on European Union, and identified in the relevant basic act 
+ –   bodies established in a Member State, governed by the private law of a Member State or Union law and eligible to be entrusted, in accordance with sector-specific rules, with the implementation of Union funds or budgetary guarantees, to the extent that such bodies are controlled by public law bodies or by bodies governed by private law with a public service mission, and are provided with adequate financial guarantees in the form of joint and several liability by the controlling bodies or equivalent financial guarantees and which may be, for each action, limited to the maximum amount of the Union support. 
+ Comments 
+ N/A 
+ 2. MANAGEMENT MEASURES 
+ 2.1. Monitoring and reporting rules 
+ N/A 
+ 2.2. Management and control system(s) 
+ 2.2.1. Justification of the budget implementation method(s), the funding implementation mechanism(s), the payment modalities and the control strategy proposed 
+ N/A 
+ 2.2.2. Information concerning the risks identified and the internal control system(s) set up to mitigate them 
+ N/A 
+ 2.2.3. Estimation and justification of the cost-effectiveness of the controls (ratio between the control costs and the value of the related funds managed), and assessment of the expected levels of risk of error (at payment & at closure) 
+ N/A 
+ 2.3. Measures to prevent fraud and irregularities 
+ N/A 
+ 3. ESTIMATED FINANCIAL IMPACT OF THE PROPOSAL/INITIATIVE 
+ 3.1. Heading(s) of the multiannual financial framework and expenditure budget line(s) affected 
+ · Existing budget lines 
+ In order of multiannual financial framework headings and budget lines. 
+ Heading of multiannual financial framework 
+ Budget line 
+ Type of expenditure 
+ Contribution 
+ Number 
+ Diff./Non-diff. 
+ 21 
+ from EFTA countries 
+ 22 
+ from candidate countries and potential candidates 
+ 23 
+ From other third countries 
+ other assigned revenue 
+ N/A 
+ Diff./Non-diff. 
+ YES/NO 
+ YES/NO 
+ YES/NO 
+ YES/NO 
+ · New budget lines requested 
+ In order of multiannual financial framework headings and budget lines. 
+ Heading of multiannual financial framework 
+ Budget line 
+ Type of expenditure 
+ Contribution 
+ Number 
+ Diff./Non-diff. 
+ from EFTA countries 
+ from candidate countries and potential candidates 
+ from other third countries 
+ other assigned revenue 
+ N/A 
+ Diff./Non-diff. 
+ YES/NO 
+ YES/NO 
+ YES/NO 
+ YES/NO 
+ 3.2. Estimated financial impact of the proposal on appropriations 
+ 3.2.1. Summary of estimated impact on operational appropriations 
+ –  
+ The proposal/initiative does not require the use of operational appropriations 
+ –  
+ The proposal/initiative requires the use of operational appropriations, as explained below 
+ 3.2.1.1. Appropriations from voted budget 
+ EUR million (to three decimal places) 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 24 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 25 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <….> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial 
+ framework 
+ Number 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 26 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ Commitments 
+ =1a+1b +3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ for DG <…….> 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 27 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ Commitments 
+ =1a+1b +3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ for DG <…….> 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <….> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ • TOTAL operational appropriations (all operational headings) 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ • TOTAL appropriations of an administrative nature financed from the envelope for specific programmes (all operational headings) 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations Under Heading 1 to 6 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+(Reference amount) 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ 7 
+ ‘Administrative expenditure’ 
+ 28 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+  Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <…….> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+  Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <…….> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING 7 of the multiannual financial framework 
+ (Total commitments = Total payments) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ EUR million (to three decimal places) 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL appropriations under HEADINGS 1 to 7 
+ Commitments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.1.2. Appropriations from external assigned revenues 
+ EUR million (to three decimal places) 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 29 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 30 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <….> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 31 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes 
+ 32 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations 
+ for DG <…….> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <….> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ • TOTAL operational appropriations (all operational headings) 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ • TOTAL appropriations of an administrative nature financed from the envelope for specific programmes (all operational headings) 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under Headings 1 to 6 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework (Reference amount) 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ 7 
+ ‘Administrative expenditure’ 
+ 33 
+ EUR million (to three decimal places) 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+  Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <…….> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <…….> 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+  Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <…….> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING 7 of the multiannual financial framework 
+ (Total commitments = Total payments) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ EUR million (to three decimal places) 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021-2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ TOTAL appropriations under HEADINGS 1 to 7 
+ Commitments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.2. Estimated output funded from operational appropriations (not to be completed for decentralised agencies) 
+ Commitment appropriations in EUR million (to three decimal places) 
+ Indicate objectives and outputs 
+  
+ Year 
+ 2024 
+ Year 
+ 2025 
+ Year 
+ 2026 
+ Year 
+ 2027 
+ Enter as many years as necessary to show the duration of the impact (see Section1.6) 
+ TOTAL 
+ OUTPUTS 
+ Type 
+ 34 
+ Average cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ Total No 
+ Total cost 
+ SPECIFIC OBJECTIVE No 1 
+ 35 
+ … 
+ - Output 
+ - Output 
+ - Output 
+ Subtotal for specific objective No 1 
+ SPECIFIC OBJECTIVE No 2 ... 
+ - Output 
+ Subtotal for specific objective No 2 
+ TOTALS 
+ 3.2.3. Summary of estimated impact on administrative appropriations 
+ –  
+ The proposal/initiative does not require the use of appropriations of an administrative nature 
+ –  
+ The proposal/initiative requires the use of appropriations of an administrative nature, as explained below 
+ 3.2.3.1. Appropriations from voted budget 
+ VOTED APPROPRIATIONS 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL 2021 - 2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.3.2. Appropriations from external assigned revenues 
+ EXTERNAL ASSIGNED REVENUES 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL 2021 - 2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.3.3. Total appropriations 
+ TOTAL 
+VOTED APPROPRIATIONS + EXTERNAL ASSIGNED REVENUES 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL 2021 - 2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ The appropriations required for human resources and other expenditure of an administrative nature will be met by appropriations from the DG that are already assigned to management of the action and/or have been redeployed within the DG, together, if necessary, with any additional allocation which may be granted to the managing DG under the annual allocation procedure and in the light of budgetary constraints. 
+ 3.2.4. Estimated requirements of human resources 
+ –  
+ The proposal/initiative does not require the use of human resources 
+ –  
+ The proposal/initiative requires the use of human resources, as explained below 
+ 3.2.4.1. Financed from voted budget 
+ Estimate to be expressed in full-time equivalent units (FTEs) 
+ 36 
+ VOTED APPROPRIATIONS 
+ Year 
+ Year 
+ Year 
+ Year 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commission’s Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ • External staff (inFTEs) 
+ 20 02 01 (AC, END from the ‘global envelope’) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. Support line 
+[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ 3.2.4.2. Financed from external assigned revenues 
+ EXTERNAL ASSIGNED REVENUES 
+ Year 
+ Year 
+ Year 
+ Year 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commission’s Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ • External staff (in full time equivalent units) 
+ 20 02 01 (AC, END from the ‘global envelope’) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. Support line 
+[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ 3.2.4.3. Total requirements of human resources 
+ TOTAL VOTED APPROPRIATIONS + EXTERNAL ASSIGNED REVENUES 
+ Year 
+ Year 
+ Year 
+ Year 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+  Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commission’s Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ • External staff (in full time equivalent units) 
+ 20 02 01 (AC, END from the ‘global envelope’) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. Support line 
+[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ The staff required to implement the proposal (in FTEs): 
+ To be covered by current staff available in the Commission services 
+ Exceptional additional staff* 
+ To be financed under Heading 7 or Research 
+ To be financed from BA line 
+ To be financed from fees 
+ Establishment plan posts 
+ N/A 
+ External staff (CA, SNEs, INT) 
+ Description of tasks to be carried out by: 
+ Officials and temporary staff 
+ N/A 
+ External staff 
+ N/A 
+ 3.2.5. Overview of estimated impact on d igital technology- related investments 
+ Compulsory: the best estimate of the digital technology-related investments entailed by the proposal/initiative should be included in the table below. 
+ Exceptionally, when required for the implementation of the proposal/initiative, the appropriations under Heading 7 should be presented in the designated line. 
+ The appropriations under Headings 1-6 should be reflected as “Policy IT expenditure on operational programmes”. This expenditure refers to the operational budget to be used to re-use/ buy/ develop IT platforms/ tools directly linked to the implementation of the initiative and their associated investments (e.g. licences, studies, data storage etc). The information provided in this table should be consistent with details presented under Section 4 “Digital dimensions”. 
+ TOTAL Digital and IT appropriations 
+ Year 
+ Year 
+ Year 
+ Year 
+ TOTAL MFF 2021 - 2027 
+ 2024 
+ 2025 
+ 2026 
+ 2027 
+ HEADING 7 
+ IT expenditure (corporate) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Policy IT expenditure on operational programmes 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.6. Compatibility with the current multiannual financial framework 
+ The proposal/initiative: 
+ –  
+ can be fully financed through redeployment within the relevant heading of the multiannual financial framework (MFF) 
+ –  
+ requires use of the unallocated margin under the relevant heading of the MFF and/or use of the special instruments as defined in the MFF Regulation 
+ –  
+ requires a revision of the MFF 
+ 3.2.7. Third-party contributions 
+ The proposal/initiative: 
+ –  
+ does not provide for co-financing by third parties 
+ –  
+ provides for the co-financing by third parties estimated below: 
+ Appropriations in EUR million (to three decimal places) 
+ Year 
+ 2024 
+ Year 
+ 2025 
+ Year 
+ 2026 
+ Year 
+ 2027 
+ Total 
+ Specify the co-financing body 
+ TOTAL appropriations co-financed 
+ 3.3. 
+ Estimated impact on revenue 
+ –  
+ The proposal/initiative has no financial impact on revenue. 
+ –  
+ The proposal/initiative has the following financial impact: 
+ –  
+ on own resources 
+ –  
+ on other revenue 
+ –  
+ please indicate, if the revenue is assigned to expenditure lines 
+ EUR million (to three decimal places) 
+ Budget revenue line: 
+ Appropriations available for the current financial year 
+ Impact of the proposal/initiative 
+ 37 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Article …………. 
+ For assigned revenue, specify the budget expenditure line(s) affected. 
+ N/A 
+ Other remarks (e.g. method/formula used for calculating the impact on revenue or any other information). 
+ N/A 
+ 4. Digital dimension s 
+ 4.1. Requirements of digital relevance 
+ Reference to the requirement (Article/paragraph) 
+ Requirement description 
+ Actor affected or concerned 
+ High-level processes 
+ Category (Data / Digital solution / Digital public service / Process digitalisation) 
+ Art. 1(3) [Art. 76(4) of Regulation (EU) 2023/1542] 
+ Replaces the prescriptive obligation for the Commission to publish a periodic report on Member States’ data with a more flexible system allowing adaptive data review and optional publication. Digital relevance: modifies existing EU-level data-management and reporting processes. 
+ European Commission / Member States 
+ Data review and publication 
+ Data 
+ Art. 2 [Art. 6(9) of Regulation (EU) 2024/1244 ] 
+ Allows Member States to gather and submit data on emissions, waste transfers, production volumes and operating hours by alternative digital or administrative means, exempting certain operators. Digital relevance: modifies data-collection and transmission processes within the Industrial Emissions Portal system. 
+ Member States; Livestock and aquaculture operators; European Commission 
+ Environmental data collection and reporting 
+ Data / Digital Public Service 
+ 4.2. Data 
+ Type of data 
+ Reference(s) 
+ Standards/specifications (if applicable) 
+ Environmental and industrial emissions data 
+ Art. 2 [Art. 6(9) of Regulation (EU) 2024/1244 ] 
+ Existing Industrial Emissions Portal data formats (XML/CSV); aligned with Aarhus and UNECE PRTR Protocol 
+ Alignment with the European Data Strategy 
+ Explain how the requirement(s) are aligned with the European Data Strategy 
+ The proposal advances the European Data Strategy by ensuring adaptive and proportionate data management, while simplifying redundant reporting. It maintains interoperability and transparency under the Aarhus Convention and PRTR Protocol. 
+ Alignment with the once-only principle 
+ Explain how the once-only principle has been considered how the possibility to reuse existing data explored 
+ The proposal advances the European Data Strategy by ensuring adaptive and proportionate data management, while simplifying redundant reporting. It maintains interoperability and transparency under the Aarhus Convention and PRTR Protocol. 
+ Explain how newly created data is findable, accessible, interoperable and reusable, and meets high-quality standards 
+ Modified data remains findable, accessible, interoperable, and reusable within current reporting frameworks. 
+ Data flows 
+ Type of data 
+ Reference(s) to the requirement(s) 
+ Actor who provides the data 
+ Actor who receives the data 
+ Trigger for the data exchange 
+ Frequency (if applicable) 
+ Industrial emissions & waste transfer data 
+ Art. 2 [Art. 6(9) of Regulation (EU) 2024/1244 ] 
+ Operators / Member States 
+ Commission / EEA 
+ Environmental reporting cycle 
+ Annual / as collected 
+ Battery waste management data 
+ Art. 1(3) [Art. 76(4) of Regulation (EU) 2023/1542] 
+ Member States 
+ European Commission 
+ Reporting period 
+ As determined 
+ 4.3. Digital solutions 
+ Digital solution 
+ Reference(s) to the requirements 
+ Main mandated functionalities 
+ Responsible body 
+ How is accessibility catered for? 
+ How is reusability considered? 
+ Use of AI technologies 
+ Industrial Emissions Portal 
+ Art. 2 [Art. 6(9) of Regulation (EU) 2024/1244 ] 
+ Data collection, validation, and publication; alternative reporting methods by MS. 
+ EEA / European Commission 
+ Public access per Aarhus and PRTR 
+ Reuse of existing portal infrastructure 
+ None 
+ — 
+ — 
+ — 
+ For each digital solution, explain how the digital solution complies with the requirements and obligations of the EU cybersecurity framework, and other applicable digital policies and legislative enactments (such as eIDAS, Single Digital Gateway, etc.). 
+ Industrial Emissions Portal 
+ Digital and/or sectorial policy (when these are applicable) 
+ Explanation on how it aligns 
+ AI Act 
+ No AI use foreseen. 
+ EU Cybersecurity framework 
+ Compliant with Reg. (EU) 2019/881; ISO/IEC 27001 standards. 
+ eIDAS 
+ Access controlled via EU Login for national authorities. 
+ Single Digital Gateway and IMI 
+ Not applicable. 
+ Others 
+ - 
+ 4.4. Interoperability assessment 
+ Digital public service 
+ Description 
+ Reference(s) 
+ Interoperable Europe Solution(s) 
+ (NOT APPLICABLE) 
+ Other interoperability solution(s) 
+ Industrial Emissions Portal 
+ Cross-border environmental data exchange between MS and EU institutions. 
+ Art. 2 [Art. 6(9) of Regulation (EU) 2024/1244 ] 
+ Aarhus/PRTR protocol standards; INSPIRE metadata rules 
+ Assess the impact of the requirement(s) on cross-border interoperability 
+ Industrial Emissions Portal 
+ Assessment 
+ Measures 
+ Potential remaining barriers 
+ Assess the alignment with existing digital and sectorial policies 
+ Please list the applicable digital and sectorial policies identified 
+ The proposal does not introduce external digital/sectorial policy instruments as binding measures. 
+ Timing and frequency of MS-level alternative data collection may differ. 
+ Assess the organisational measures for a smooth cross-border digital public services delivery 
+ Please list the governance measures foreseen 
+ Conditional operator exemptions for items (b), (c), (e), (f), (g) when M ember S tates can obtain the data to fulfil Article 7 obligations; operators are relieved from Article 6(1)–(8) duties for those items, formalising a governance handover to M ember S tates if they can gather such information by other means . 
+ ( Article 2 of the proposal → Article 6(9), third subparagraph (link to Article 7). 
+ MS capacity and internal governance structures may vary, creating unevenness in how consistently and promptly MS can assume “on behalf of” reporting. 
+ Without uniform guidance in the proposal on coordination mechanisms, cross-border escalation/issue handling may differ across Member States. 
+ Assess the measures taken to ensure a shared understanding of the data 
+ Please list such measures 
+ T he proposal ties alternative MS reporting to specific data items enumerated in Article 6(1) thereby preserving the shared meaning of which datasets are in scope even when operators are exempted. 
+ ( Article 2 of the proposal → Article 6(9), second and third subparagraphs ) . 
+ Link to MS obligations under Article 7 ensures a common understanding of what must be compiled and delivered. 
+ ( Article 2 of the proposal → Article 6(9), third subparagraph). 
+ The proposal does not prescribe harmonised calculation methodologies or data dictionaries for the MS-collected “other means” data, so there could be different approaches. 
+ Mapping between operator-level semantics and MS-aggregated data may differ across among MS. 
+ Assess the use of commonly agreed open technical specifications and standards 
+ Please list such measures 
+ No additional technical specifications or standards are introduced by this proposal for the Industrial Emissions Portal. The amendment strictly concerns who reports and under what conditions, not how (format/standard). 
+ In the absence technical prescriptions, MS implementations of “other means” may rely on heterogeneous formats/tools. 
+ 4.5. Measures to support digital implementation 
+ Description of the measure 
+ Reference(s) 
+ Commission role 
+ Actors to be involved 
+ Indicative timeline 
+ Review of data publication practices under Batteries Regulation 
+ Art. 1(3) [Art. 76(4) of Regulation (EU) 2023/1542] 
+ Simplification of redundant reporting. 
+ Commission 
+ 2026 – 2027 
+ NB: In case the initial Commission proposal evolves considerably during the legislative negotiations, it should be considered to update information laid down in the LFDS for any financial and/or digital aspects, as necessary, with the aim to support the negotiation process and create clarity for all parties concern 
+ (1) 
+ COM( 2025) 47 final of 11 February 2025, A simpler and faster Europe: Communication on implementation and simplification . 
+ (2) 
+ COM( 2025) 420 final of 7 July 2025, 2025 Environmental Implementation Review - Environmental implementation for prosperity and security . 
+ (3) 
+ A nnounced by President von der Leyen in her political guidelines 2024-2029 ‘ Europe’s Choice ’. 
+ (4) 
+ Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and waste batteries, amending Directive 2008/98/EC and Regulation (EU) 2019/1020 and repealing Directive 2006/66/EC; OJ L 191 28.7.2023, p.1. 
+ (5) 
+ Regulation (EU) 2024/1244 of the European Parliament and of the Council of 24 April 2024 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation (EC) No 166/2006; OJ L, 2024/1244, 2.5.2024, p.1. 
+ (6) 
+ Simplification of administrative burdens in environmental legislation 
+ (7) 
+ Environmental Reporting and Simplification - Trinomics 
+ (8) 
+ OJ C , , p. . 
+ (9) 
+ OJ C , , p. . 
+ (10) 
+ Europe’s Choice, Political Guidelines for the next European Commission 2024−2029, Ursula von der Leyen 
+ (11) 
+ Communication from the Commission to the European Parliament, the European Council, the Council, the European Economic and Social Committee and the Committee of the Regions of 11 December 2019, ‘The European Green Deal’, COM/2019/640 final. 
+ (12) 
+ Draghi, M. (2024) The future of European competitiveness. Available at: The Draghi report on EU competitiveness. 
+ (13) 
+ Communication from the Commission to the European Parliament, the Council, the European Economic and Social Committee and the Committee of the Regions of 29 January 2025, A competitiveness Compass for the EU, COM( 2025) final. 
+ (14) 
+ Communication from the Commission to the European Parliament, the Council, the European Economic and Social Committee and the Committee of the Regions of 11 February 2025, ‘A simpler and faster Europe: Communication on implementation and simplification’, COM/2025/47 final. 
+ (15) 
+ Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and waste batteries, amending Directive 2008/98/EC and Regulation (EU) 2019/1020 and repealing Directive 2006/66/EC (OJ L 191, 28.7.2023, p. 1, ELI: 
+ http://data.europa.eu/eli/reg/2023/1542/oj 
+ ). 
+ (16) 
+ Regulation (EU) 2024/1244 of the European Parliament and of the Council of 24 April 2024 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation (EC) No 166/2006 (OJ L, 2024/1244, 2.5.2024, ELI: 
+ http://data.europa.eu/eli/reg/2024/1244/oj 
+ ). 
+ (17) 
+ Communication from the Commission to the European Parliament, the European Council, the Council, the European Economic and Social Committee and the Committee of the Regions of 11 December 2019, ‘ The European Green Deal ’, COM/2019/640 final. 
+ (18) 
+ Communication from the Commission to the European Parliament, the European Council, the Council, the European Central Bank, the European Economic and Social Committee and the Committee of the Regions of 8 March 2018 , ‘ Action Plan: Financing Sustainable Growth ’, COM/2018/097 final. 
+ (19) 
+ As referred to in Article 58(2), point (a) or (b) of the Financial Regulation. 
+ (20) 
+ Details of budget implementation methods and references to the Financial Regulation may be found on the BUDGpedia site: 
+ https://myintracomm.ec.europa.eu/corp/budget/financial-rules/budget-implementation/Pages/implementation-methods.aspx 
+ . 
+ (21) 
+ Diff. = Differentiated appropriations / Non-diff. = Non-differentiated appropriations. 
+ (22) 
+ EFTA: European Free Trade Association. 
+ (23) 
+ Candidate countries and, where applicable, potential candidates from the Western Balkans. 
+ (24) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (25) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (26) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (27) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (28) 
+ The necessary appropriations should be determined using the annual average cost figures available on the appropriate BUDGpedia webpage . 
+ (29) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (30) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (31) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (32) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former ‘BA’ lines), indirect research, direct research. 
+ (33) 
+ The necessary appropriations should be determined using the annual average cost figures available on the appropriate BUDGpedia webpage. 
+ (34) 
+ Outputs are products and services to be supplied (e.g. number of student exchanges financed, number of km of roads built, etc.). 
+ (35) 
+ As described in Section 1.3.2. ‘Specific objective(s)’ 
+ (36) 
+ Please specify below the table how many FTEs within the number indicated are already assigned to the management of the action and/or can be redeployed within your DG and what are your net needs. 
+ (37) 
+ As regards traditional own resources (customs duties, sugar levies), the amounts indicated must be net amounts, i.e. gross amounts after deduction of 20 % for collection costs.

@@ -1,0 +1,100 @@
+# CELEX 52023AE3741
+# http://publications.europa.eu/resource/celex/52023AE3741
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:40 UTC（正文 17080 字符）
+
+Official Journal 
+of the European Union
+ EN
+ Series C
+ C/2024/1593
+ 5.3.2024
+ Opinion of the European Economic and Social Committee on the ‘Proposal for a Regulation of the European Parliament and of the Council on circularity requirements for vehicle design and on management of end-of-life vehicles, amending Regulations (EU) 2018/858 and (EU) 2019/1020 and repealing Directives 2000/53/EC and 2005/64/EC’
+ (COM(2023) 451 final — 2023/0284 (COD))
+ (C/2024/1593)
+ Rapporteur:
+ Bruno CHOIX 
+ Referral
+ European Parliament, 19.10.2023
+ Council, 21.11.2023
+ Legal basis
+ Articles 114 and 304 of the Treaty on the Functioning of the European Union
+ Section responsible
+ Agriculture, Rural Development and the Environment
+ Adopted in section
+ 22.11.2023
+ Adopted at plenary
+ 14.12.2023
+ Plenary session No
+ 583
+ Outcome of vote
+ (for/against/abstentions)
+ 163/0/2
+ 1. Conclusions and recommendations 
+ 1.1.
+ The proposal for a regulation on the subject of vehicles, presented by the European Commission on 13 July 2023 ( 1 ) , is a major legislative proposal in the drive to increase the sustainability and circularity of vehicles placed on the market in Europe. The European Economic and Social Committee (EESC) warmly welcomes this proposed regulation and believes that there is scope for even greater ambition in vehicle design legislation aimed at ensuring vehicle circularity. 
+ 1.2.
+ With regard to recycled content requirements, the EESC fully supports the requirement for at least 25 % of the plastic used in a vehicle to come from recycling and recommends that equivalent measures be introduced to galvanise the recycling of other materials used in vehicles, where the environmental benefit has not been sufficiently harnessed. 
+ 1.3.
+ The EESC strongly endorses the requirements on vehicle design aimed at making sure that vehicle parts can be repaired, maintained, replaced and reused. It considers that additional safeguards are needed to ensure that authorised treatment facilities have free and undiscriminating access to vehicle parts and components, and particularly electric vehicle batteries. The EESC recommends prohibiting contractual clauses aimed at only allowing the manufacturers to market the parts and materials, within their network. The EESC also recommends that manufacturers be required to provide training on the removal, replacement and reinsertion of batteries by operators. 
+ 1.4.
+ The EESC supports the measures to strengthen the provision of information and labelling by manufacturers, and recommends ensuring that manufacturers make available at no extra cost to independent operators, and in particular very small enterprises, information and the serialisation of parts, so that they can be reprogrammed and reinserted into new vehicles. 
+ 1.5.
+ The EESC welcomes the establishment of fair representation of the authorised treatment facility sector within the governing bodies of extended producer responsibility (EPR) organisations in the Member States. In order to ensure fair competition in the vehicle treatment sector, the EESC recommends that the individual and collective systems for meeting the obligations be subject to effective and equivalent guarantees, and that the contracts with authorised treatment facilities be regulated, in particular as regards pre-contractual information and prohibiting placing the burden of the producer’s obligation on the authorised treatment facilities. 
+ 1.6.
+ In view of the significant lack of traceability of vehicles in Europe, the EESC warmly welcomes the measures to improve the traceability and collection of vehicles, in particular by requiring a certificate of destruction issued by an authorised treatment facility to be presented in order to deregister a vehicle. 
+ 1.7.
+ The EESC warmly welcomes the obligations placed on the Member States aimed at spurring on the market for the reuse, remanufacturing and refurbishment of end-of-life vehicle parts. It recommends adopting more stringent measures under the Regulation and ensuring that the parts can only be resold by authorised treatment facilities. In order to ensure that the authorised treatment facilities have ownership of the materials, the EESC also recommends prohibiting contractual clauses between a manufacturer and a company that require parts taken from vehicles to be returned to the manufacturer. 
+ 1.8.
+ With regard to the dismantling obligations for recycling, the EESC recommends that they be reassessed in the light of the economic costs and environmental benefits involved, as well as the principle of technological neutrality in the pursuit of environmental objectives, particularly with regard to dashboards. The EESC also recommends discussing with the Member States the rates to be set for the recovery of refrigerants from the air-conditioning systems of end-of-life vehicles. 
+ 1.9.
+ Stressing the importance of the rules aimed at combating illegal vehicle treatment, the EESC recommends ensuring that an oversight function is properly carried out by the competent authorities in each Member State of the European Union. Furthermore, the EESC strongly supports the rules regarding exports, which will create a clearer distinction between used and end-of-life vehicles. 
+ 2. General comments 
+ Introduction 
+ 2.1.
+ On 13 July 2023, the Commission proposed a new regulation on end-of-life vehicles (ELVs) with a view to increasing their circularity ( 2 ) , following a review. In line with the European Green Deal and with the Circular Economy Action Plan, this proposal for a regulation on vehicles builds on and replaces two existing directives: Directive 2000/53/EC of the European Parliament and of the Council ( 3 ) on end-of-life vehicles and Directive 2005/64/EC of the European Parliament and of the Council ( 4 ) on the type-approval of motor vehicles with regard to their reusability, recyclability and recoverability. This opinion follows on along the same lines as related opinions issued by the EESC ( 5 ) , particularly as regards driving the market for secondary raw materials by means of legal requirements ( 6 ) . 
+ 2.2.
+ Europe’s automotive sector is one of the EU’s most resource-intensive industries, accounting for 19 % of demand for the EU’s steel industry, 10 % of overall consumption of plastics, and a significant share of the demand for aluminium (42 % for all transport equipment), copper (6 % for automotive parts), rubber (65 % of the production of general rubber goods) and glass ( 7 ) . Against that backdrop, the EESC welcomes this proposal for a regulation, which lays down harmonised rules covering the whole life cycle of vehicles in order to increase their circularity, from their design and placing on the market to their final treatment. In order to ensure a holistic approach to vehicle circularity, it will be paramount to ensure ongoing dialogue with all stakeholders in the value chain, and this could be based on the model of the European Circular Economy Stakeholder Platform ( 8 ) . A fair and inclusive system of governance for the supply chain is needed. 
+ Designing vehicles with a view to ensuring their circularity 
+ 2.3.
+ The EESC welcomes the fact that the scope of the regulation is extended to the additional categories of buses, heavy-duty vehicles and trailers (M2, M3, N2, N3, O) and motorcycles (L3e to L7e), with a view to ensuring regulated final treatment for these categories of vehicles at the end of their life, including certain requirements foreseen for the special purpose vehicles. Rolling out circularity measures more widely should help bring about a greater degree of modularity in the vehicle industry. In a context of rapid change across all types of vehicles, the EESC recommends building in the option to extend the scope to innovative vehicles not listed in the Regulation (excluding security vehicles and emergency vehicles). 
+ 2.4.
+ The EESC fully supports the requirement for at least 25 % of the plastic used in a vehicle to come from recycling, as this form of recycling has a substantial environmental benefit ( 9 ) . The development of the plastics recycling industry helps diversify sources of supply for manufacturers and stimulate the growth of a European plastics recycling industry based on post-shredding technology, and is an important source of job creation in Europe. The EESC is in favour of introducing more ambitious measures in stages for the recycling of plastics, and of introducing equivalent measures to galvanise the recycling of other materials used in vehicles, where the environmental benefit has not been sufficiently harnessed. 
+ 2.5.
+ The provisions obliging manufacturers, when designing a vehicle, to enable the removal and replacement of certain parts and components of the vehicle in a simple and non-destructive manner are essential for developing the market for re-use of vehicle parts and components in Europe. In order to develop this activity during the use and scrapping phases of vehicles, it must be ensured that authorised treatment facilities and repair and maintenance operators have access to vehicle parts and components, including electric vehicle batteries and e-drive motors. The EESC recommends prohibiting contractual clauses aimed at only allowing the manufacturers to market the recyclable and recycled vehicle parts, within their network, particularly as regards batteries. 
+ 2.6.
+ The EESC regrets the fact that the Commission proposal and impact assessment fail to include an article on the upskilling and reskilling of workers and on the role of social dialogue. A joint project undertaken by the European Social Partners highlights the fact that the shift to a circular economy tends to require higher skills for workers ( 10 ) . Given the changes resulting from the vehicle circularity obligations, the EESC emphasises that it is important for the legislator to assess the new skills that workers will need in order to respond to the evolving automotive sector. The EESC recommends that technical skills training be organised, accessible to all workers, to enable them to upskill and ensure their safety and well-being at work. 
+ 2.7.
+ The EESC also recommends that training be provided — for which the manufacturers would be required to provide all of the relevant technical data and repair methods — on the removal, replacement and reinsertion of batteries by operators, in particular to mitigate the health and safety risks facing the operators during their work. 
+ Circularity of vehicles during their service life 
+ 2.8.
+ The EESC supports the measures to strengthen the provision of information and labelling by manufacturers. Mandatory declarations on the recycled content in vehicles is essential to ensuring harmonised information on their carbon footprint, the implementation of a circularity strategy by manufacturers and informed consumer choice on circularity. 
+ 2.9.
+ Information-sharing between producers and operators is crucial to ensuring a well-functioning circular economy. In order for vehicle parts, components and materials to be repaired, maintained, replaced and reinserted, waste management operators and repair and maintenance operators must have unrestricted, standardised and non-discriminatory access to the information necessary to carry out that work. In accordance with the principle of EPR and taking into account the risks to the health and safety of operators working on vehicles, it should be ensured that manufacturers make available at no extra cost to independent operators, and in particular very small enterprises, information and the serialisation of parts, so that they can be reprogrammed and reinserted into new vehicles. 
+ Collection and treatment of end-of-life vehicles 
+ 2.10.
+ The EESC emphasises the fact that a major problem when it comes to vehicle treatment is the lack of traceability of vehicles, since 32 % of deregistered vehicles cannot be located, i.e. around 3,4 million vehicles per year ( 11 ) , owing in particular to a lack of information on the transfer of ownership of vehicles and a failure to enforce the existing rules. The establishment of EPR organisations in each Member State may be a useful support measure for the vehicle treatment sector, in particular as regards economically non-viable treatment operations, provided that fair competition is ensured. The introduction of EPR systems in the Member States must provide for fair representation of vehicle treatment operators in the governing bodies of these organisations. Where producers choose to fulfil their extended producer responsibility obligations individually, the EESC calls for effective guarantees to be put in place equivalent to those applying to collective responsibility, in particular as regards the financial responsibility, and recommends that contracts with private operators be better regulated, in particular as regards pre-contractual information and the prohibition of a producer’s obligation being fulfilled free of charge by operators that are outside the repair, reuse and recycling sector. 
+ 2.11.
+ In view of the current lack of traceability of vehicles in Europe, the EESC warmly welcomes the measures to ensure that vehicles are treated by authorised operators in accordance with the rules in force, and in particular the measure whereby a vehicle can only be deregistered after a certificate of destruction of the vehicle has been received by the competent authorities in the Member States. 
+ 2.12.
+ With regard to the dismantling obligations for reuse and refurbishment, the EESC stresses the importance of a demand-driven market approach to ensure the economic viability of these dismantling operations. The EESC recommends adopting more stringent rules when it comes to the measures to be taken by the Member States to spur on the market for reuse, remanufacturing and refurbishment, thus facilitating the creation of local jobs in Europe. In this regard, end-of-life vehicle parts must be able to be resold by end-of-life vehicle treatment centres for reuse. The EESC recommends prohibiting contractual clauses between a manufacturer and a company that oblige the manufacturer to return the vehicle parts to the manufacturer. 
+ 2.13.
+ With regard to the dismantling obligations for recycling, the EESC points out that the current European post-shredding technology already enables recycled plastics to be produced with a view to their incorporation in new vehicles. The EESC recommends that the proposed dismantling obligations be reassessed, in the light of the principle of technological neutrality, their usefulness, and the established economic efficiency of the existing processes, such as post-shredding. With regard to the recovery of refrigerants from the air-conditioning systems of end-of-life vehicles, the EESC recommends that discussions be launched with the Member States aimed at setting realistic rates in relation to the materials and sectors in place, and ensuring that the costs involved are borne by the producers. 
+ 2.14.
+ The EESC stresses the importance of the rules on combating illegal vehicle treatment. Entrusting the private sector with the task of establishing — by means of commercial contracts concluded with the manufacturers — the conditions under which this activity can be carried out would be detrimental to the legal ELV processing sector The authorisation issued by the competent authorities is essential in verifying that the operators have the necessary technical, financial and organisational capacity to treat end-of-life vehicles. The regulation should ensure that this oversight function is indeed carried out by the competent authorities in each Member State of the European Union. The EESC supports the rules regarding exports, which will create a better distinction between used and end-of-life vehicles. 
+ Brussels, 14 December 2023.
+ The President of the European Economic and Social Committee 
+ Oliver RÖPKE
+ ( 1 ) COM(2023) 451 final.
+ ( 2 ) COM(2023) 451 final.
+ ( 3 ) Directive 2000/53/EC of the European Parliament and of the Council of 18 September 2000 on end-of-life vehicles ( OJ L 269 21.10.2000, p. 34 ).
+ ( 4 ) Directive 2005/64/EC of the European Parliament and of the Council of 26 October 2005 on the type-approval of motor vehicles with regard to their reusability, recyclability and recoverability and amending Council Directive 70/156/EEC ( OJ L 310, 25.11.2005, p. 10 ).
+ ( 5 ) EESC opinion on the Review of the CO 2 emission standards for heavy-duty vehicles ( OJ C 349, 29.9.2023, p. 134 ).
+ ( 6 ) EESC opinion on the New Circular Economy Action Plan ( OJ C 364, 28.10.2020, p. 94 ).
+ ( 7 ) COM(2023) 451 final.
+ ( 8 ) https://circulareconomy.europa.eu/platform/en
+ ( 9 ) European Commission — Towards recycled plastic content targets in new passenger cars and light commercial vehicles.
+ ( 10 ) European Social Partners Project on Circular Economy and the World of Work.
+ ( 11 ) Commission Staff Working Documents: SWD(2023) 256 final and SWD(2021) 60 final.
+ ELI: http://data.europa.eu/eli/C/2024/1593/oj
+ ISSN 1977-091X (electronic edition)

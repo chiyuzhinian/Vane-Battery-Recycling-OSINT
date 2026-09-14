@@ -92,17 +92,37 @@ def main() -> int:
             "clause_evidence_available": clause,
             "backfill_status": backfill,
             "failure_reason": reason,
+            "official_variant_absent": (
+                "no_online_variant" in str(
+                    (r.get("meta") or {}).get("failure_reason") or "")),
             "b_status": ("confirmed" if clause else "candidate")
             if cls == "B" else "",
         })
 
     summary: dict = {"total": len(rows), "nim_excluded": nim_rows}
     # 非文书（NOT_APPLICABLE：企业数据线）、付费墙（PAYWALLED_KNOWN）
-    # 不适用全文要求（2B1 口径；与规格 §4 “不要求 C/D 全文”同理）
+    # 不适用全文要求（2B1 口径；与规格 §4 “不要求 C/D 全文”同理）。
+    # official_variant_absent：官方在线数据形态中不存在独立全文变体
+    # （如 R(N) 更正件：EUR-Lex 站点 404/202 + CELLAR 全 Accept 404 + RDF 404
+    #  三重取证），任何采集系统都无法获取 → 不应计入“应得全文”分母。
+    # 该豁免**仅限**带 no_online_variant 证据标记的记录，且豁免名单随
+    # summary 一并输出（corrigendum_exempt）供审计核对，不得静默扩大。
+    exempt_variant_absent = [x for x in rows
+                             if x["official_variant_absent"]]
     applicable = [x for x in rows
                   if x["content_state"] not in ("NOT_APPLICABLE",
-                                                "PAYWALLED_KNOWN")]
+                                                "PAYWALLED_KNOWN")
+                  and not x["official_variant_absent"]]
     summary["applicable"] = len(applicable)
+    summary["no_online_variant_exempt"] = {
+        "count": len(exempt_variant_absent),
+        "evidence_ids": [x["evidence_id"]
+                         for x in sorted(exempt_variant_absent,
+                                         key=lambda r: r["evidence_id"])],
+        "basis": ("official online form does not include a standalone "
+                  "fulltext variant (EUR-Lex 404/202 + CELLAR 404 all "
+                  "accepts + CELLAR RDF 404)"),
+    }
     for want in ("A1", "A2", "B"):
         sub = [x for x in applicable if x["acceptance_class"] == want]
         full = [x for x in sub if x["fulltext_available"]]

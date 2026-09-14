@@ -73,8 +73,11 @@ def main() -> int:
         "verdict": verdict,
         "note": ("README gate（§14）：eligible≥3 且 通道≥5 且 高价值全文≥95% "
                  "且 B clause≥95% 且 domain 矛盾=0 且 topic 无 P0 且 "
-                 "identity≥90% 且 A1 可解释。当前 A2 全文受 EUR-Lex 故障影响"
-                 "（FETCH_FAILED 如实）——不满条件则 NOT READY。"),
+                 "identity≥90% 且 A1 可解释。4B-2B1R 后 EUR-Lex 全文经 "
+                 "CELLAR 官方 REST 通道恢复回填（§2/§3 取证见报告）；"
+                 "R(N) 更正件等官方无独立在线变体者按 no_online_variant "
+                 "豁免（证据链与名单在 content_completeness.json）。"
+                 "不满条件则 NOT READY。"),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2),

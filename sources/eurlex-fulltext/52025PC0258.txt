@@ -1,0 +1,1617 @@
+# CELEX 52025PC0258
+# http://publications.europa.eu/resource/celex/52025PC0258
+# 来源 CELLAR comnat XHTML
+# 抓取 2026-09-14 06:59 UTC（正文 45816 字符）
+
+IMMC.COM%282025%29258%20final.ENG.xhtml.1_EN_ACT_part1_v2.docx 
+ EUROPEAN COMMISSION
+ Brussels, 21.5.2025
+ COM(2025) 258 final
+ 2025/0129(COD)
+ Proposal for a
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL
+ amending Regulation (EU) 2023/1542 as regards obligations of economic operators concerning battery due diligence policies
+ (Text with EEA relevance)
+ EXPLANATORY MEMORANDUM 
+ 1. CONTEXT OF THE PROPOSAL 
+ • Reasons for and objectives of the proposal 
+ Regulation (EU) 2023/1542 ( 
+ 1 
+ ) aims to contribute to the efficient functioning of the internal market, while preventing and reducing the adverse impacts of batteries on the environment . It also aims to protect the environment and human health by preventing and reducing the adverse impacts of the generation and management of waste batteries. It imposes a mong other thing s battery due diligence obligations on economic operators placing batteries on the market or putting them into service. These obligations are to be applied from 18 August 2025. 
+ Battery raw material supply chains are affected by a shifting geopolitical landscape. This leaves the battery industry with many challenges in particular related to sourcing raw materials. It takes time to analyse and adjust supply chains. 
+ Furthermore, one of the battery due diligence obligations is that economic operators’ battery due diligence policies are verified by a notified body (‘third-party verification’). Only about half of the Member States have appointed their notifying authority in charge of the assessment, notification and monitoring of conformity assessment bodies. In many cases such applications would be based on accreditation, but the European co-operation for Accreditation association has not been able to determine a standard for the accreditation of notified bodies for battery due diligence. It instead indicated that this should rely on schemes approved by the European Commission. 
+ Due diligence schemes being developed by industry associations and groupings of interested organisations are expected to play an important role in the implementation of the battery due diligence obligations. The provisions on such schemes in Regulation (EU) 2023/1542 mirror those of Regulation (EU) 2017/821, for which several schemes are being assessed for recognition, but no scheme has been recognised to date. Schemes that address battery raw materials still need to be further developed and implemented and then go through the recognition process for schemes under Regulation (EU) 2023/1542. 
+ In addition , Article 94(4) of Regulation (EU) 2023/1542 requires the Commission to assess , one year after the Directive (EU) 2024/1760 on corporate sustainability due diligence ( 
+ 2 
+ ) was adopted , whether amendments to the battery due diligence obligations are necessary in light of the adoption of that Directive . While it is too early for such an assessment, especially because the Commission proposed amendments to Directive (EU) 2024/1760 on 26 February 2025 , consistency in implementation could be improved by developing the guidelines for both pieces of legislation hand in hand , if the application date s allow to do so . 
+ For these reasons, the Commission considers that the date of application of the battery due diligence obligations specified in Article 48(1) of Regulation (EU) 2023/1542 should be postponed by two years to allow economic operators placing batteries on the EU market to be better prepared, with the help of guidelines, and to allow time to resolve difficulties with the availability of notified bodies. 
+ • Consistency with existing policy provisions in the policy area 
+ The adoption of Regulation (EU) 2023/1542 was an integral part of the European Green Deal and is coherent with its overall objectives and all the initiatives developed under it. This proposal does not amend any substantive rules of Regulation (EU) 2023/1542 but merely aims to accord additional time for economic operators placing batteries on the EU market to be better prepared and to resolve difficulties with the availability of notified bodies. 
+ • Consistency with other Union policies 
+ Directive (EU) 2024/1760 on corporate sustainability due diligence lays down rules and obligations to ensure that companies identify and address potential and actual adverse human rights and environmental impacts in the company’s own operations, their subsidiaries and, when related to their chains of activities, those of their business partners. 
+ Directive (EU) 2024/1760 was adopted after the adoption of Regulation (EU) 2023/1542. It specifies that the Directive is ‘without prejudice to obligations in the areas of human, employment and social rights, and of protection of the environment and climate change under other Union legislative acts’, and that ‘if a provision of this Directive conflicts with a provision of another Union legislative act pursuing the same objectives and providing for more extensive or more specific obligations, the provision of that other Union legislative act shall prevail to the extent of the conflict and shall apply as regards those specific obligations.’ This is the case for the more specific requirements of the battery due diligence policy in Regulation (EU) 2023/1542. Operators in the battery supply chain must therefore apply the battery due diligence policy of Regulation (EU) 2023/1542 insofar as they are more extensive or more specific, instead of the equivalent provisions in Directive (EU) 2024/1760 for the supply chain stages and the minerals specified. For other operations, operators in scope of both legislative acts must follow the rules of Directive (EU) 2024/1760. 
+ There are some elements where the due diligence obligations of Regulation (EU) 2023/1542 are not harmonious with the provisions of Directive (EU) 2024/1760. This is because Regulation (EU) 2023/1542 is product-specific and Directive (EU) 2024/1760 is cross-sectorial. 
+ This proposal addresses consistency to the extent possible by harmonising the publication dates for guidelines under both pieces of legislation so they can be developed hand in hand. 
+ 2. LEGAL BASIS, SUBSIDIARITY AND PROPORTIONALITY 
+ • Legal basis 
+ Due diligence obligations on economic operators placing batteries on the market or putting them into service should prevent and reduce adverse impacts of batteries on the environment and ensure a sustainable battery value chain. Such measures will help to ensure the transition to a circular economy and the long-term competitiveness of the EU. They should also contribute to the efficient functioning of the internal market, while taking into account a high level of protection of the environment. To prevent divergences hampering the free circulation of batteries Article 114 of the Treaty on the Functioning of the European Union should be used as a legal basis of the proposal. 
+ • Subsidiarity (for non-exclusive competence) 
+ This initiative is consistent with the principle of subsidiarity. Given the need to modify Regulation (EU) 2023/1542 by postponing the application of its due diligence obligations, the objectives of this initiative cannot be achieved by the Member States themselves. 
+ • Proportionality 
+ The proposal is consistent with the principle of proportionality, i.e. it does not go beyond what is necessary to meet the objectives of the Treaties and in particular the smooth functioning of the internal market. As with the subsidiarity test, it is not possible for Member States to address the issues without a proposal to amend the date of application of the due diligence obligations of Regulation (EU) 2023/1542. 
+ • Choice of the instrument 
+ The proposal amends Regulation (EU) 2023/1542 concerning batteries and waste batteries only as regards the postponement of the date of application. It should therefore follow the same type of act, i.e. a regulation. 
+ 3. RESULTS OF EX POST EVALUATIONS, STAKEHOLDER CONSULTATIONS AND IMPACT ASSESSMENTS 
+ • Ex post evaluations/fitness checks of existing legislation 
+ Not applicable. 
+ • Stakeholder consultations 
+ Not applicable. 
+ • Collection and use of expertise 
+ Not applicable. 
+ • Impact assessment 
+ Not applicable. 
+ An impact assessment was carried out for the proposal, which led to the adoption of Regulation (EU) 2023/1542. The current proposal only amends the date of application of the due diligence obligations of Regulation (EU) 2023/1542. 
+ • Regulatory fitness and simplification 
+ The main goal of this proposal is to postpone the date of application of the due diligence obligations of Regulation (EU) 2023/1542 by two years to allow economic operators placing batteries on the EU market to be better prepared, with the help of guidelines, and resolve difficulties with third-party verification. 
+ The proposal does not change the substance of the rules, it only postpones their date of application. 
+ • Fundamental rights 
+ Not applicable. 
+ 4. BUDGETARY IMPLICATIONS 
+ Not applicable. 
+ 5. OTHER ELEMENTS 
+ • Implementation plans and monitoring, evaluation and reporting arrangements 
+ Not applicable. 
+ • Detailed explanation of the specific provisions of the proposal 
+ Not applicable. 
+ 2025/0129 (COD) 
+ Proposal for a 
+ REGULATION OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL 
+ amending Regulation (EU) 2023/1542 as regards obligations of economic operators concerning battery due diligence policies 
+ (Text with EEA relevance) 
+ THE EUROPEAN PARLIAMENT AND THE COUNCIL OF THE EUROPEAN UNION, 
+ Having regard to the Treaty on the Functioning of the European Union, and in particular Article 114 thereof, 
+ Having regard to the proposal from the European Commission, 
+ After transmission of the draft legislative act to the national parliaments, 
+ Having regard to the opinion of the European Economic and Social Committee ( 
+ 3 
+ ) , 
+ Acting in accordance with the ordinary legislative procedure, 
+ Whereas: 
+ (1) Regulation (EU) 2023/1542 of the European Parliament and of the Council ( 
+ 4 
+ ) sets out battery due diligence obligations that cover the sourcing, processing and trading of cobalt, natural graphite, lithium and nickel used for battery manufacturing. Those due diligence obligations are to be applied from 18 August 2025. 
+ (2) At a time when the geopolitical landscape continues to shift , v arious challenges need to be overcome , including in sourcing of raw materials. Battery manufacturers need time to analyse and , where necessary, adjust their supply chains as a result . 
+ (3) The battery due diligence obligations include requirements for third-party verification by notified bodies . However, t he designation of notified bodies for battery due diligence policies is taking longer than expected. Due diligence s chemes recognised by the Commission in accordance with Article 53 of Regulation (EU) 2023/1542 would facilitate the work of economic operators and of notified bodies. However, due diligence s chemes addressing battery raw materials still need to be further developed and implemented, and then go through the recognition process. 
+ (4) In order to provide sufficient time for the notification of conformity assessment bodies and to allow economic operators placing batteries on the market to be in a position to comply with their obligations, t he date of application of the battery due diligence policies set out in Regulation (EU) 2023/1542, should be postponed by two years. 
+ (5) Directive (EU) 2024/1760 of the European Parliament and of the Council ( 
+ 5 
+ ) lays down rules and obligations to ensure that companies identify and address potential and actual adverse human rights and environmental impacts in the company’s own operations, the operations of their subsidiaries and, where related to their chain s of activities , the operations of their business partners. 
+ (6) Th e Commission is to publish , in accordance with Article 48(5) Article of Regulation (EU) 2023/1542 , guidelines as regards the application of the due battery diligence requirements . The Commission is to make available , in accordance with Article 19(2), point (a) of Directive (EU) 2024/1760, guidelines as regards guidance and best practices on how to conduct due diligence . Consistency between Regulation (EU) 2023/1542 and Directive (EU) 2024/1760 is important for companies in the battery supply chain . Therefore, the relevant dates for the publication and making available of those guidelines should be harmonised . 
+ (7) Regulation (EU) 2023/1542 should t herefore be amended accordingly . 
+ (8) This Regulation should enter into force as a matter of urgency on the day following that of its publication in the Official Journal of the European Union and it should apply from 18 August 2025 in order to provide legal certainty with regard to the date of application of the due diligence obligations under Regulation (EU) 2023/1542 , 
+ HAVE ADOPTED THIS REGULATION: 
+ Article 1 
+ Amendments to 
+ Regulation (EU) 2023/1542 
+ Article 48 of 
+ Regulation (EU) 2023/1542 
+ is amended as follows: 
+ in paragraph 1, ‘18 August 2025’ is replaced by ‘18 August 2027’; 
+ in paragraph 5, ‘18 February 2025’ is replaced by ‘26 July 2026’. 
+ Article 2 
+ Entry into force 
+ This Regulation shall enter into force on the day following that of its publication in the Official Journal of the European Union . 
+ It shall apply from 18 August 2025. 
+ This Regulation shall be binding in its entirety and directly applicable in all Member States. 
+ Done at Brussels, 
+ For the European Parliament 
+ For the Council 
+ The President 
+ The President 
+ [...] 
+ [...] 
+ LEGISLATIVE FINANCIAL AND DIGITAL STATEMENT 
+ 1. FRAMEWORK OF THE PROPOSAL/INITIATIVE 
+ 1.1. Title of the proposal/initiative 
+ Proposal for a Regulation of the European Parliament and of the Council amending Regulation (EU) 2023/1542 as regards obligations of economic operators concerning battery due diligence policies 
+ 1.2. Policy area(s) concerned 
+ Policy area: 
+ 03 Single Market , 03 02 01 01 – Operation and development of the internal market of goods and services 
+ 1.3. Objective(s) 
+ 1.3.1. General objective(s) 
+ Reducing environmental and social impacts through responsible sourcing. 
+ 1.3.2. Specific objective(s) 
+ Ensure that the battery due diligence provisions of Regulation (EU) 2023/1542 can be properly implemented by economic operators, including third party verification. 
+ 1.3.3. Expected result(s) and impact 
+ Specify the effects which the proposal/initiative should have on the beneficiaries/groups targeted. 
+ Companies have more time to prepare for the implementation of due diligence obligations, including third party verification. It also allows the Commission, at the level of guidance, to address coherence in implementation with the provisions of Directive (EU) 2024/1760. 
+ 1.3.4. Indicators of performance 
+ Specify the indicators for monitoring progress and achievements. 
+ The indicators for Regulation (EU) 2023/1542 remain the same. 
+ 1.4. The proposal/initiative relates to: 
+ ☐ a new action 
+ ☐ a new action following a pilot project/preparatory action ( 
+ 6 
+ ) 
+  the extension of an existing action 
+ ☐ a merger or redirection of one or more actions towards another/a new action 
+ 1.5. Grounds for the proposal/initiative 
+ 1.5.1. Requirement(s) to be met in the short or long term including a detailed timeline for roll-out of the implementation of the initiative 
+ The obligations remain the same as for Regulation (EU) 2023/1542, but the timeline shifts. 
+ 1.5.2. Added value of EU involvement (it may result from different factors, e.g. coordination gains, legal certainty, greater effectiveness or complementarities). For the purposes of this section 'added value of EU involvement' is the value resulting from EU action, that is additional to the value that would have been otherwise created by Member States alone. 
+ Given the need to modify Regulation (EU) 2023/1542, the objectives of this initiative cannot be achieved by the Member States themselves. The EU added value remains the same. 
+ 1.5.3. Lessons learned from similar experiences in the past 
+ The due diligence provisions of Regulation (EU) 2023/1115 were also postponed. This was successfully done within three months of the Commission proposal. 
+ 1.5.4. Compatibility with the multiannual financial framework and possible synergies with other appropriate instruments 
+ There is no impact on the multiannual financial framework. 
+ 1.5.5. Assessment of the different available financing options, including scope for redeployment 
+ No financing or redeployment is necessary. 
+ 1.6. Duration of the proposal/initiative and of its financial impact 
+  limited duration 
+  in effect from 18 / 08/2025 to 18/08/2027 
+ ☐ financial impact from YYYY to YYYY for commitment appropriations and from YYYY to YYYY for payment appropriations. 
+ ☐ unlimited duration 
+ Implementation with a start-up period from YYYY to YYYY, 
+ followed by full-scale operation. 
+ 1.7. Method(s) of budget implementation planned ( 
+ 7 
+ ) 
+  Direct management by the Commission 
+  by its departments, including by its staff in the Union delegations; 
+ ☐ by the executive agencies 
+ ☐ Shared management with the Member States 
+ ☐ Indirect management by entrusting budget implementation tasks to: 
+ ☐ third countries or the bodies they have designated; 
+ ☐ international organisations and their agencies (to be specified); 
+ ☐ the European Investment Bank and the European Investment Fund; 
+ ☐ bodies referred to in Articles 70 and 71 of the Financial Regulation; 
+ ☐ public law bodies; 
+ ☐ bodies governed by private law with a public service mission to the extent that they are provided with adequate financial guarantees; 
+ ☐ bodies governed by the private law of a Member State that are entrusted with the implementation of a public-private partnership and that are provided with adequate financial guarantees; 
+ ☐ bodies or persons entrusted with the implementation of specific actions in the common foreign and security policy pursuant to Title V of the Treaty on European Union, and identified in the relevant basic act 
+ ☐ bodies established in a Member State, governed by the private law of a Member State or Union law and eligible to be entrusted, in accordance with sector-specific rules, with the implementation of Union funds or budgetary guarantees, to the extent that such bodies are controlled by public law bodies or by bodies governed by private law with a public service mission, and are provided with adequate financial guarantees in the form of joint and several liability by the controlling bodies or equivalent financial guarantees and which may be, for each action, limited to the maximum amount of the Union support. 
+ 2. MANAGEMENT MEASURES 
+ 2.1. Monitoring and reporting rules 
+ N/A - No financing or redeployment is necessary. 
+ 2.2. Management and control system(s) 
+ 2.2.1. Justification of the budget implementation method(s), the funding implementation mechanism(s), the payment modalities and the control strategy proposed 
+ N/A 
+ 2.2.2. Information concerning the risks identified and the internal control system(s) set up to mitigate them 
+ N/A 
+ 2.2.3. Estimation and justification of the cost-effectiveness of the controls (ratio between the control costs and the value of the related funds managed), and assessment of the expected levels of risk of error (at payment & at closure) 
+ N/A 
+ 2.3. Measures to prevent fraud and irregularities 
+ N/A 
+ 3. ESTIMATED FINANCIAL IMPACT OF THE PROPOSAL/INITIATIVE 
+ 3.1. Heading(s) of the multiannual financial framework and expenditure budget line(s) affected 
+ Existing budget lines 
+ In order of multiannual financial framework headings and budget lines. 
+ Heading of multiannual financial framework 
+ Budget line 
+ Type of expenditure 
+ Contribution 
+ Number 
+ Diff./Non-diff. ( 
+ 8 
+ ) 
+ from EFTA countries ( 
+ 9 
+ ) 
+ from candidate countries and potential candidates ( 
+ 10 
+ ) 
+ from other third countries 
+ other assigned revenue 
+ none 
+ New budget lines requested 
+ In order of multiannual financial framework headings and budget lines. 
+ Heading of multiannual financial framework 
+ Budget line 
+ Type of expenditure 
+ Contribution 
+ Number 
+ Diff./non-diff. 
+ from EFTA countries 
+ from candidate countries and potential candidates 
+ from other third countries 
+ other assigned revenue 
+ none 
+ 3.2. Estimated financial impact of the proposal on appropriations 
+ 3.2.1. Summary of estimated impact on operational appropriations 
+  The proposal/initiative does not require the use of operational appropriations 
+ ☐ The proposal/initiative requires the use of operational appropriations, as explained below: 
+ 3.2.1.1. Appropriations from voted budget 
+ EUR million (to three decimal places) 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 11 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 12 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <....> of the multiannual financial framework 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 13 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b +3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 14 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b +3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <....> of the multiannual financial framework 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations (all operational headings) 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes (all operational headings) 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under Headings 1 to 6 of the multiannual financial framework (Reference amount) 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ 7 
+ ‘Administrative expenditure’ ( 
+ 15 
+ ) 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <.......> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <.......> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING 7 of the multiannual financial framework 
+ (Total commitments = Total payments) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ EUR million (to three decimal places) 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL appropriations under HEADINGS 1 to 7 
+ Commitments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.1.2. Appropriations from external assigned revenues 
+ EUR million (to three decimal places) 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 16 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 17 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <....> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ Number 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 18 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Operational appropriations 
+ Budget line 
+ Commitments 
+ (1a) 
+ 0.000 
+ Payments 
+ (2a) 
+ 0.000 
+ Budget line 
+ Commitments 
+ (1b) 
+ 0.000 
+ Payments 
+ (2b) 
+ 0.000 
+ Appropriations of an administrative nature financed from the envelope of specific programmes ( 
+ 19 
+ ) 
+ Budget line 
+ (3) 
+ 0.000 
+ TOTAL appropriations for DG <.......> 
+ Commitments 
+ =1a+1b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =2a+2b+3 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING <....> 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL operational appropriations (all operational headings) 
+ Commitments 
+ (4) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ (5) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations of an administrative nature financed from the envelope for specific programmes (all operational headings) 
+ (6) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under Headings 1 to 6 of the multiannual financial framework (Reference amount) 
+ Commitments 
+ =4+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Payments 
+ =5+6 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Heading of multiannual financial framework 
+ 7 
+ ‘Administrative expenditure’ ( 
+ 20 
+ ) 
+ EUR million (to three decimal places) 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <.......> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ DG: <.......> 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL DG <.......> 
+ Appropriations 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL appropriations under HEADING 7 of the multiannual financial framework 
+ (Total commitments = Total payments) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ EUR million (to three decimal places) 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ TOTAL appropriations under HEADINGS 1 to 7 
+ Commitments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ of the multiannual financial framework 
+ Payments 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.2. Estimated output funded from operational appropriations (not to be completed for decentralised agencies) 
+ Commitment appropriations in EUR million (to three decimal places) 
+ Indicate objectives and outputs ⇓ 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Enter as many years as necessary to show the duration of the impact (see Section 1.6) 
+ TOTAL 
+ OUTPUTS 
+ Type ( 
+ 21 
+ ) 
+ Average cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ No 
+ Cost 
+ Total no 
+ Total cost 
+ SPECIFIC OBJECTIVE No 1 ( 
+ 22 
+ ) : [...] 
+ - Output 
+ - Output 
+ - Output 
+ Subtotal for specific objective No 1 
+ SPECIFIC OBJECTIVE No 2 ... 
+ - Output 
+ Subtotal for specific objective No 2 
+ TOTALS 
+ 3.2.3. Summary of estimated impact on administrative appropriations 
+ ☐ The proposal/initiative does not require the use of appropriations of an administrative nature 
+ ☐ The proposal/initiative requires the use of appropriations of an administrative nature, as explained below: 
+ 3.2.3.1. Appropriations from voted budget 
+ VOTED APPROPRIATIONS 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.3.2. Appropriations from external assigned revenues 
+ EXTERNAL ASSIGNED REVENUES 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.3. Total appropriations 
+ TOTALVOTED APPROPRIATIONS+EXTERNAL ASSIGNED REVENUES 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other administrative expenditure 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Human resources 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Other expenditure of an administrative nature 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ The appropriations required for human resources and other expenditure of an administrative nature will be met by appropriations from the DG that are already assigned to management of the action and/or have been redeployed within the DG, together, if necessary, with any additional allocation which may be granted to the managing DG under the annual allocation procedure and in the light of budgetary constraints. 
+ 3.2.4. Estimated requirements of human resources 
+ ☐ The proposal/initiative does not require the use of human resources 
+ ☐ The proposal/initiative requires the use of human resources, as explained below 
+ 3.2.4.1. Financed from voted budget 
+ Estimate to be expressed in full-time equivalent units (FTEs) ( 
+ 23 
+ ) 
+ VOTED APPROPRIATIONS 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commission's Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ External staff (in FTEs) 
+ 20 02 01 (AC, END from the 'global envelope') 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. support line[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ 3.2.4.2. Financed from external assigned revenues 
+ EXTERNAL ASSIGNED REVENUES 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commissions Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ External staff (in full time equivalent units) 
+ 20 02 01 (AC, END from the global envelope) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. support line[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ 3.2.4.3. Total requirements of human resources 
+ TOTALVOTED APPROPRIATIONS+EXTERNAL ASSIGNED REVENUES 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Establishment plan posts (officials and temporary staff) 
+ 20 01 02 01 (Headquarters and Commissions Representation Offices) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 01 02 03 (EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 01 (Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 11 (Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) 
+ 0 
+ 0 
+ 0 
+ 0 
+ External staff (in full time equivalent units) 
+ 20 02 01 (AC, END from the global envelope) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 20 02 03 (AC, AL, END and JPD in the EU Delegations) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Admin. support line[XX.01.YY.YY] 
+ - at Headquarters 
+ 0 
+ 0 
+ 0 
+ 0 
+ - in EU Delegations 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 02 (AC, END - Indirect research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ 01 01 01 12 (AC, END - Direct research) 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ Other budget lines (specify) - Outside Heading 7 
+ 0 
+ 0 
+ 0 
+ 0 
+ TOTAL 
+ 0 
+ 0 
+ 0 
+ 0 
+ The staff required to implement the proposal (in FTEs): 
+ To be covered by current staff available in the Commission services 
+ Exceptional additional staff* 
+ To be financed under Heading 7 or Research 
+ To be financed from BA line 
+ To be financed from fees 
+ Establishment plan posts 
+ N/A 
+ External staff (CA, SNEs, INT) 
+ Description of tasks to be carried out by: 
+ Officials and temporary staff 
+ External staff 
+ 3.2.5. Overview of estimated impact on digital technology-related investments 
+ Compulsory: the best estimate of the digital technology-related investments entailed by the proposal/initiative should be included in the table below. 
+ Exceptionally, when required for the implementation of the proposal/initiative, the appropriations under Heading 7 should be presented in the designated line. 
+ The appropriations under Headings 1-6 should be reflected as "Policy IT expenditure on operational programmes". This expenditure refers to the operational budget to be used to re-use/ buy/ develop IT platforms/ tools directly linked to the implementation of the initiative and their associated investments (e.g. licences, studies, data storage etc). The information provided in this table should be consistent with details presented under Section 4 "Digital dimensions". 
+ TOTAL Digital and IT appropriations 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ TOTAL MFF2021-2027 
+ HEADING 7 
+ IT expenditure (corporate) 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Outside HEADING 7 
+ Policy IT expenditure on operational programmes 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ Subtotal outside HEADING 7 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ TOTAL 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 0.000 
+ 3.2.6. Compatibility with the current multiannual financial framework 
+ The proposal/initiative: 
+ ☐ can be fully financed through redeployment within the relevant heading of the multiannual financial framework (MFF). 
+ ☐ requires use of the unallocated margin under the relevant heading of the MFF and/or use of the special instruments as defined in the MFF Regulation. 
+ ☐ requires a revision of the MFF. 
+ 3.2.7. Third-party contributions 
+ The proposal/initiative: 
+ ☐ does not provide for co-financing by third parties 
+ ☐ provides for the co-financing by third parties estimated below: 
+ Appropriations in EUR million (to three decimal places) 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Total 
+ Specify the co-financing body 
+ TOTAL appropriations co-financed 
+ 3.3. Estimated impact on revenue 
+  The proposal/initiative has no financial impact on revenue. 
+ ☐ The proposal/initiative has the following financial impact: 
+ ☐ on own resources 
+ ☐ on other revenue 
+ ☐ please indicate, if the revenue is assigned to expenditure lines 
+ EUR million (to three decimal places) 
+ Budget revenue line: 
+ Appropriations available for the current financial year 
+ Impact of the proposal/initiative ( 
+ 24 
+ ) 
+ Year 2024 
+ Year 2025 
+ Year 2026 
+ Year 2027 
+ Article .......... 
+ For assigned revenue, specify the budget expenditure line(s) affected. 
+ [...] 
+ Other remarks (e.g. method/formula used for calculating the impact on revenue or any other information). 
+ [...] 
+ 4. DIGITAL DIMENSIONS 
+ 4.1. Requirements of digital relevance 
+ None 
+ 4.2. Data 
+ N/A 
+ 4.3. Digital solutions 
+ N/A 
+ 4.4. Interoperability assessment 
+ N/A 
+ 4.5. Measures to support digital implementation 
+ N/A 
+ (1) 
+ ( ) 
+ Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and waste batteries, amending Directive 2008/98/EC and Regulation (EU) 2019/1020 and repealing Directive 2006/66/EC ( 
+ OJ L 191, 28.7.2023, p. 1 
+ ) . 
+ (2) 
+ ( ) 
+ Directive (EU) 2024/1760 of the European Parliament and of the Council of 13 June 2024 on corporate sustainability due diligence and amending Directive (EU) 2019/1937 and Regulation (EU) 2023/2859 ( 
+ OJ L, 2024/1760, 5.7.2024, p. 1 
+ ) . 
+ (3) 
+ ( ) 
+ OJ C [...], [...], p. [...] 
+ (4) 
+ ( ) 
+ Regulation (EU) 2023/1542 of the European Parliament and of the Council of 12 July 2023 concerning batteries and waste batteries, amending Directive 2008/98/EC and Regulation (EU) 2019/1020 and repealing Directive 2006/66/EC ( 
+ OJ L 191, 28.7.2023, p. 1 
+ , ELI: 
+ http://data.europa.eu/eli/reg/2023/1542/2024-07-18 
+ ) . 
+ (5) 
+ ( ) 
+ Directive (EU) 2024/1760 of the European Parliament and of the Council of 13 June 2024 on corporate sustainability due diligence and amending Directive (EU) 2019/1937 and Regulation (EU) 2023/2859 ( 
+ OJ L, 2024/1760, 5.7.2024, p. 1 
+ , 
+ http://data.europa.eu/eli/dir/2024/1760/oj 
+ ) . 
+ (6) 
+ ( ) 
+ As referred to in Article 58(2), point (a) or (b) of the Financial Regulation. 
+ (7) 
+ ( ) 
+ Details of budget implementation methods and references to the Financial Regulation may be found on the BUDGpedia site: https://myintracomm.ec.europa.eu/corp/budget/financial-rules/budget-implementation/Pages/implementation-methods.aspx. 
+ (8) 
+ ( ) 
+ Diff. = Differentiated appropriations / Non-diff. = Non-differentiated appropriations. 
+ (9) 
+ ( ) 
+ EFTA: European Free Trade Association. 
+ (10) 
+ ( ) 
+ Candidate countries and, where applicable, potential candidates from the Western Balkans. 
+ (11) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (12) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (13) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (14) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (15) 
+ ( ) 
+ The necessary appropriations should be determined using the annual average cost figures available on the appropriate BUDGpedia webpage. 
+ (16) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (17) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (18) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (19) 
+ ( ) 
+ Technical and/or administrative assistance and expenditure in support of the implementation of EU programmes and/or actions (former 'BA' lines), indirect research, direct research. 
+ (20) 
+ ( ) 
+ The necessary appropriations should be determined using the annual average cost figures available on the appropriate BUDGpedia webpage. 
+ (21) 
+ ( ) 
+ Outputs are products and services to be supplied (e.g.: number of student exchanges financed, number of km of roads built, etc.). 
+ (22) 
+ ( ) 
+ As described in point 1.4.2. 'Specific objective(s)...' 
+ (23) 
+ ( ) 
+ Please specify below the table how many FTEs within the number indicated are already assigned to the management of the action and/or can be redeployed within your DG and what are your net needs. 
+ (24) 
+ ( ) 
+ As regards traditional own resources (customs duties, sugar levies), the amounts indicated must be net amounts, i.e. gross amounts after deduction of 20% for collection costs.

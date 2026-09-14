@@ -1,0 +1,937 @@
+# CELEX 52020DC0033
+# http://publications.europa.eu/resource/celex/52020DC0033
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:38 UTC（正文 32391 字符）
+
+EUROPEAN COMMISSION
+ Brussels, 30.1.2020
+ COM(2020) 33 final
+ REPORT FROM THE COMMISSION TO THE EUROPEAN PARLIAMENT, THE COUNCIL, THE EUROPEAN ECONOMIC AND SOCIAL COMMITTEE AND THE COMMITTEE OF THE REGIONS
+ ON THE IMPLEMENTATION OF DIRECTIVE 2000/53/EC ON END-OF-LIFE VEHICLES
+FOR THE PERIOD 2014-2017
+ REPORT FROM THE COMMISSION TO THE COUNCIL, THE EUROPEAN PARLIAMENT, THE EUROPEAN ECONOMIC AND SOCIAL COMMITTEE, AND THE COMMITTEE OF THE REGIONS 
+ ON THE IMPLEMENTATION OF DIRECTIVE 2000/53/EC 
+ON END-OF-LIFE VEHICLES 
+FOR THE PERIOD 2014-2017 
+ 1. Introduction 
+ Directive 2000/53/EC on end-of-life vehicles 
+ 1 
+ (the ELV Directive) primarily aims to prevent the production of waste from vehicles and their components so as to reduce the final disposal of waste and its overall environmental impact. Moreover, the measures laid down in the Directive seek to improve the environmental performance of all economic operators involved in a vehicle’s life cycle, especially, the operators directly involved in the treatment of end-of- life vehicles (ELVs). Overall, the ELV Directive follows a circular economy approach by encouraging ecodesign, providing for the elimination of hazardous substances in the vehicles and establishing high reuse/recycling/recovery targets, thus aiming to reuse the valuable materials from the ELVs and keep precious resources in the economy. 
+ Article 9 of the ELV Directive obliges Member States to report to the Commission at three-year intervals on the implementation of the Directive based on a questionnaire established by Commission Decision 2001/753/EC. 
+ 2 
+ The questionnaire consists of two parts: the first part concerns details on the transposition of the Directive into national law and the second contains information on the actual implementation of the Directive. Based on the information provided by Member States for the reporting period, the Commission is required to draw up an implementation report. 
+ This is the fourth report on the implementation of the ELV Directive, covering the reporting period 22 April 2014 to 21 April 2017. All previous reports are available on the Commission’s website. 
+ 3 
+ 25 Member States submitted responses for the 2014–2017 reporting period. Three countries (Latvia, Malta and Hungary) have not done so yet. This is a slight reduction in the number of countries reporting compared with earlier reporting periods: as all Member States provided the Commission with the implementation reports for the 2008–2011 period, while two (the Netherlands and Spain) did not submit reports for 2011–2014. 
+ Overall, the information provided was mostly complete and of a satisfactory quality. It has been complemented by additional data sources, in particular national legislation, which has been checked directly for conformity with the ELV Directive, and by information from other Commission reports 
+ 4 
+ . Furthermore, data on the Directive’s targets for reuse/recycling and reuse/recovery reported pursuant to the Commission Decision 2005/293/EC, 
+ 5 
+ has also been taken into account. 
+ 2. 
+ Information on Transposition of the ELV Directive 
+ The Directive is considered to be satisfactorily transposed in all Member States and there are no open infringements. 
+ Under the ELV Directive, vehicle and equipment manufacturers are required to limit the use of lead, mercury, cadmium and hexavalent chromium for materials and components put on the market after 1 July 2003, subject to the exemptions listed in Annex II to the Directive. These hazardous substances have been dramatically reduced via several amendments of Annex II 
+ 6 
+ . While the limitation on the use of hazardous substances in vehicles was usually transposed in ELV-specific legislation, vehicle design to facilitate reuse and recovery or the integration of recycled material into new vehicles was often transposed in more generic waste legislation, with general requirements for these provisions across all markets. Austria is an example of good practice, as collection and recovery companies are required to use 0.5% of their turnover for waste prevention projects. Furthermore, the Directive also provides that vehicles are designed for reuse and recovery and that greater quantities of recycled materials are integrated in the vehicles. 
+ Manufacturers, importers and distributors must provide systems to collect ELVs and, where technically feasible, the used parts from repaired passenger cars. Producers are required to meet a significant part, if not all, of the costs involved in the delivery of ELVs to waste treatment centres. Member States typically transposed these requirements in a way that allows flexibility for economic operators, with the possibility for individual or collective schemes. In the majority of Member States, take-back is free, except for instances where essential components are missing, or if additional waste has been added, in line with the requirements of the Directive. As the value of the scrap metal and/or other components removed for recycling or reuse will almost cover the costs of collecting the vehicle from final owners, there is no significant challenge in meeting this obligation. 
+ Owners of ELVs must receive a certificate of destruction (CoD) in order to deregister their vehicle. All Member States reported having set up national deregistration systems in which the issuing of a CoD is a condition of deregistration. Processes for deregistration are key to ensuring ELVs are transferred to authorised treatment facilities (ATFs) and limiting illegal export of waste vehicles. Just under half of Member States have made use of a provision allowing producers, dealers and collectors to issue CoDs, in addition to the ATFs. While all Member States may have deregistration systems in place, there has been an increase in ELVs of unknown whereabouts over recent years (i.e. vehicles which are deregistered but have not been issued with a CoD, or for which the CoD is not available to the authorities). This indicates that the national deregistration systems are not operating as effectively as they could be. 
+ The ELV Directive has provisions to ensure that ELVs are properly and timely treated in treatment facilities that have obtained a permit by the competent authorities. These facilities are also subject to inspections. These conditions are put in place to reduce any negative environmental impacts and promote reuse and recycling of vehicle components. All Member States reported having transposed measures pursuant to the Directive’s requirements in this regard. Romania and Finland were the only Member States to report minor changes in legislation since the last reporting period: Romania has updated the permits required to handle and dismantle ELVs, while Finland has introduced a specific Government Decree for ELVs (123/2015) which updates the restrictions of the use of hazardous substances in vehicles. The majority of countries do not allow for derogations from the permit requirements for operations to recover waste from ELVs after they have been properly treated according to the ELV Directive and subject to annual inspection 
+ 7 
+ , with only Denmark, Italy, Romania and the UKs’ responses suggesting that they do so (this is also a change for Romania since the previous reporting period). 
+ Member States are required to encourage reuse and recycling activities, and the ELV Directive sets out targets for reuse, recycling and recovery. By 1 January 2015, Member States had to achieve the following targets: with deadlines in 2006 and 2015: 
+ · 95% reuse and recovery (on average per vehicle per year by weight); and 
+ · 85% reuse and recycling (on average per vehicle per year by weight. 
+ In 2017, 14 Member States met both targets of 85% and 95% for recycling and recovery. Achievement of targets is discussed in more detail in Section 3. 
+ A few Member States reported innovative measures for the encouragement of reuse and recycling. Italy requires Regional Authorities to adopt measures that ensure public bodies (and companies that are predominantly publically owned) to source at least 30% of their annually required goods/products from recycled materials. The Italian legislation also requires replacement tyre purchases for public vehicles fleets to comprise of at least 20% re-treaded tyres. France meanwhile requires the traceability of dissembled parts for their reuse. In Slovenia, before shredding dismantled vehicles, managers of dismantling facilities are required to strip 10% of the total annual weight of accepted ELVs of their components, materials and fluids and send them for reuse or recycling. 
+ Under the ELV Directive, coding standards require producers to mark (or ‘code’) component and materials, in order to facilitate the identification of those components and materials, which are suitable for reuse and recovery. 
+ Almost all Member States report having fully transposed legislation requiring producers to use coding standards. The exceptions are Denmark, where the legislation does not specifically mention coding standards, and Greece, which replied that they do not have any vehicle manufacturers; the Czech Republic referenced legislation that was not available to be checked by the Commission. 
+ Producers must also supply dismantling information for each vehicle type within six months of it being placed on the market, such as through manuals or via databases. By far the most popular way of having producers provide the required information on dismantling, storage and testing is via the International Dismantling Information System (IDIS – the International Dismantling Information System ). 
+ 8 
+ 20 Member States reported making use of IDIS and some Member States report using also other national measures. 
+ All Member States have transposed legislation ensuring that producers provide dismantling information for each type of new vehicle put on the market within six months after the vehicle is put on the market. 
+ 3. 
+ Information on the implementation of the ELV Directive 
+ The national implementation reports also provide information on how a number of the ELV Directive’s provisions have been implemented by Member States. 
+ Notable examples of where waste prevention measures have been introduced include Ireland, which requires producers to promote waste prevention through a range of measures applying to certain specified vehicles. These include: restricting the use of hazardous substances, taking into account dismantling, reuse, recovery and recycling at end-of-life when designing new vehicles, and increasing the proportion of recycled material used in the production of specified vehicles. 
+ In Romania , preliminary assessments are undertaken to ensure that vehicles meet certain targets, and vehicle producers have developed a new activation standard via a standardised on-board diagnostics (OBD) interface. 
+ The number of Member States able to provide detailed information on the quantity of recycled materials used in vehicle manufacture was limited. Points of interest include Poland’s statement that while recycled plastics are used, recovered plastics require a specific cleaning process before they can be used in vehicle production. In addition, Romania commented that the most frequently used recycled plastic material for vehicle parts is propylene, and that recycled plastic accounts for more than 10% of the total mass of plastic used in vehicles manufactured within its borders. 
+ Most Member States have seen an increase in the number of Authorised Treatment Facilities (ATFs) operating within their borders. Although three countries did not provide data on numbers of ATFs for 2015–2017 (Belgium, Hungary and Latvia), assuming that the numbers in those countries have stayed the same as previously reported, then the total number of ATFs in the EU28 has increased from 12,589 in 2012–2014 to 14,173 in 2015–2017. 
+ 18 Member States reported that within their borders there are treatment establishments with a certified environmental management system (EMS). Throughout the EU28, the proportion of treatment establishments with an EMS has increased from 1.9% in 2012–2014 to 3.73% in 2015–2017. Belgium is an example of good practice, as in Flanders and Wallonia all approved centres for depollution, dismantling and destruction of ELVs have an environmental care system, due to legislation which stipulates that such centres must submit an annual report to the authorities giving the results of an examination of the company’s activities by an independent inspection institution, and a negative evaluation can lead to approval being withdrawn. 
+ Only 10 Member States were able to provide specific information on the number of ELVs with no or a negative market value delivered to ATFs while five were able to give a partial response. Treating ELVs with negative value is important to reduce the disposal of waste. Meanwhile, 13 Member States were not able to answer the question, owing to the fact that no such data is recorded. Of the Member States which did provide definite information, in seven cases (Cyprus, Estonia, Finland, Ireland, Italy, Portugal and Spain) this was because there were no such vehicles with no or a negative market value; in other words, in all cases in these countries ELVs still held a positive market value. Meanwhile, Greece reported that all ELVs delivered to ATFs have no market value – however, it is unclear how the positive value of scrap metal is accounted for, even if the ELVs as such do not have a value on the second-hand vehicle market. Only Lithuania and Malta reported quantitative figures. 
+ Data on the achieved reuse/recycling and reuse/recovery rates are shown in 
+ Figure 1 
+ and Figure 2. Data has been collected by Eurostat following Member States obligation to report on the ELV targets every year within the context of the reporting requirement under the Commission Decision on details for monitoring compliance with the Directive. 
+ 9 
+ In 2017, 20 Member States had met the minimum reuse and recycling target of 85% by average weight per vehicle and year, 2 Member States had not reached the targets although they are close and for 6 Member States data was not available. The average reuse and recycling rate for the EU28 as a whole was 89%, four percentage points above the target. 
+ Figure 1 : ELV Reuse and Recycling Rates (% ) 
+ 10 
+ 2012 
+ 2013 
+ 2014 
+ 2015 
+ 2016 
+ 2017 
+ Belgium 
+ 88,7 
+ 88,2 
+ 89,2 
+ 91,3 
+ 92,1 
+ 93,2 
+ Bulgaria 
+ 89,5 
+ 93,2 
+ 94,1 
+ 94,4 
+ 94,6 
+ 97,6 
+ Czechia 
+ 80,3 
+ 80,3 
+ 80,3 
+ 90,2 
+ 90,3 
+ 91,9 
+ Croatia 
+ 97,2 
+ 100 
+ 89,5 
+ 92,8 
+ 93,9 
+ 99,3 
+ Denmark 
+ 92,4 
+ 86,6 
+ 86 
+ 91,2 
+ 88,8 
+ 91,5 
+ Germany 
+ 92,3 
+ 89,8 
+ 89,5 
+ 87,7 
+ 89,3 
+ 89,5 
+ Estonia 
+ 80,9 
+ 77,7 
+ 87 
+ 86 
+ 85,8 
+ 85,9 
+ Ireland 
+ 81,8 
+ 80,4 
+ 82,1 
+ 83,3 
+ 86 
+ 85,9 
+ Greece 
+ 82,8 
+ 88,8 
+ 80,4 
+ 64,5 
+ 100 
+ 91,9 
+ Spain 
+ 83 
+ 83,6 
+ 84,3 
+ 85 
+ 85,4 
+ 85,8 
+ France 
+ 82,4 
+ 85,3 
+ 85,9 
+ 87,5 
+ 86,9 
+ 87,4 
+ Italy 
+ 80,8 
+ 82,2 
+ 83,4 
+ 84,6 
+ 82,5 
+ : 
+ Cyprus 
+ 84,7 
+ 84,3 
+ 87,7 
+ 89,1 
+ 90,3 
+ : 
+ Latvia 
+ 97,6 
+ 92,4 
+ 92,2 
+ 86,6 
+ 94,3 
+ 84 
+ Lithuania 
+ 89,2 
+ 92,1 
+ 93,5 
+ 94,6 
+ 94,9 
+ 94,8 
+ Luxembourg 
+ 85 
+ 84 
+ 87 
+ 87 
+ 86 
+ 94,3 
+ Malta 
+ 95,8 
+ 91,9 
+ 45 
+ 77,7 
+ 54,4 
+ : 
+ Hungary 
+ 84,4 
+ 90,7 
+ 90,3 
+ 94,6 
+ 95,4 
+ 95,5 
+ Netherlands 
+ 83,7 
+ 86 
+ 86,1 
+ 87,7 
+ 88,9 
+ : 
+ Austria 
+ 83,4 
+ 85 
+ 85,8 
+ 86,9 
+ 87,2 
+ 86,6 
+ Poland 
+ 90,4 
+ 88,6 
+ 85,5 
+ 94,7 
+ 94,3 
+ 95,7 
+ Portugal 
+ 82,7 
+ 82,9 
+ 83,8 
+ 84 
+ 83,5 
+ 85,2 
+ Romania 
+ 84 
+ 83,8 
+ 84,1 
+ 85,1 
+ : 
+ : 
+ Slovenia 
+ 100 
+ : 
+ 85,9 
+ : 
+ : 
+ : 
+ Slovakia 
+ 89,9 
+ 92,5 
+ 94,8 
+ 88,4 
+ 96,1 
+ 95,7 
+ Finland 
+ 82,5 
+ 82,5 
+ 82,8 
+ 82,8 
+ 82,8 
+ 82,8 
+ Sweden 
+ 85 
+ 84,6 
+ 84,4 
+ 84,6 
+ 86,7 
+ 88,2 
+ United Kingdom 
+ 84,1 
+ 85,5 
+ 86,9 
+ 87,3 
+ 86,4 
+ 86,5 
+ Iceland 
+ 100 
+ 99,6 
+ 97,7 
+ 98,5 
+ 96,8 
+ : 
+ Liechtenstein 
+ 77,2 
+ 78,2 
+ 78,7 
+ 80,5 
+ 75,6 
+ 75,1 
+ Norway 
+ 75,5 
+ 75,4 
+ 82,9 
+ 85,2 
+ 85,2 
+ : 
+ 11 
+ Figure 2 : 2016 ELV Reuse and Recovery Rates (%) 
+ 2012 
+ 2013 
+ 2014 
+ 2015 
+ 2016 
+ 2017 
+ Belgium 
+ 93 
+ 93 
+ 94,2 
+ 96,7 
+ 96,4 
+ 97 
+ Bulgaria 
+ 91,3 
+ 94,1 
+ 95 
+ 95,1 
+ 95,6 
+ 98,8 
+ Czechia 
+ 86,3 
+ 86,3 
+ 86,3 
+ 95,7 
+ 95,4 
+ 95,6 
+ Croatia 
+ 99,9 
+ 100 
+ 96,2 
+ 99,5 
+ 99,5 
+ 99,7 
+ Denmark 
+ 92,6 
+ 86,7 
+ 86,1 
+ 97,6 
+ 97,1 
+ 99,6 
+ Germany 
+ 106,3 
+ 103,8 
+ 101,4 
+ 95,8 
+ 98 
+ 98,4 
+ Estonia 
+ 85,1 
+ 86,4 
+ 88,4 
+ 87 
+ 89,8 
+ 89,9 
+ Ireland 
+ 87,8 
+ 91,6 
+ 90,7 
+ 91,8 
+ 92,8 
+ 94,6 
+ Greece 
+ 90,3 
+ 91,5 
+ 85,5 
+ 68,9 
+ 108 
+ 99,5 
+ Spain 
+ 88,2 
+ 91,5 
+ 93,5 
+ 95 
+ 93,4 
+ 94 
+ France 
+ 87 
+ 89,3 
+ 91,3 
+ 94,3 
+ 94,8 
+ 94,6 
+ Italy 
+ 82,3 
+ 82,8 
+ 85,1 
+ 84,7 
+ 82,6 
+ : 
+ Cyprus 
+ 86,9 
+ 86,6 
+ 90,2 
+ 90,7 
+ 93,2 
+ : 
+ Latvia 
+ 97,9 
+ 92,6 
+ 92,4 
+ 87 
+ 94,5 
+ 84,1 
+ Lithuania 
+ 90,1 
+ 92,4 
+ 94,4 
+ 95 
+ 95,4 
+ 95,1 
+ Luxembourg 
+ 95 
+ 95 
+ 95 
+ 97 
+ 96 
+ 96,2 
+ Malta 
+ 96 
+ 91,9 
+ 45 
+ 77,7 
+ 54,5 
+ : 
+ Hungary 
+ 86,2 
+ 91,7 
+ 95,6 
+ 95,2 
+ 95,8 
+ 96,9 
+ Netherlands 
+ 96,1 
+ 95,9 
+ 96 
+ 97 
+ 98,7 
+ : 
+ Austria 
+ 94,2 
+ 96,7 
+ 96,1 
+ 96,9 
+ 96,9 
+ 97,9 
+ Poland 
+ 92,8 
+ 90,3 
+ 88 
+ 97 
+ 96,3 
+ 98,6 
+ Portugal 
+ 87,6 
+ 90,5 
+ 92,7 
+ 92,7 
+ 92,1 
+ 93,8 
+ Romania 
+ 86 
+ 87,4 
+ 88,5 
+ 90,8 
+ : 
+ : 
+ Slovenia 
+ 103 
+ : 
+ 91,3 
+ : 
+ : 
+ : 
+ Slovakia 
+ 91,2 
+ 93,7 
+ 96 
+ 89,4 
+ 97,4 
+ 97,5 
+ Finland 
+ 95 
+ 95 
+ 97,3 
+ 97,3 
+ 97,3 
+ 97,3 
+ Sweden 
+ 90,6 
+ 91,3 
+ 91,3 
+ 96,8 
+ 94,6 
+ 97,2 
+ United Kingdom 
+ 88,1 
+ 88,9 
+ 90,7 
+ 96,9 
+ 92,2 
+ 94,1 
+ Iceland 
+ 100 
+ 99,6 
+ 97,7 
+ 98,5 
+ 96,8 
+ : 
+ Liechtenstein 
+ 92,7 
+ 89 
+ 90,6 
+ 90,8 
+ 85,6 
+ 84,7 
+ Norway 
+ 93,8 
+ 94,7 
+ 97,5 
+ 96,7 
+ 97,7 
+ : 
+ As of 2017, 15 Member States had met the minimum reuse and recovery target of 95% by an average weight per vehicle and year, 7 Member States that have not yet reached the 95% target but are very close and 6 Member states have not yet reported. The average reuse and recovery rate for the EU28 as a whole was 94%, just below the target. 
+ A significant number of Member States with established ELV management infrastructure and processes appear to be missing their recovery targets but this fact can possibly be indicative of a greater focus on recycling rather than other forms of recovery (e.g. France, Spain, Sweden and the UK meet their recycling targets but not recovery targets) in line with the concept of the circular economy. It could also be indicative of more robust, improved reporting methods which contributes to a better implementation of the Directive. The Member States that have missed the targets have explained the reasons and the measures put in place to reach the targets. 
+ The high rates reported by Greece can be attributed to the fact that dismantling facilities chose to store for an extended time some ELVs that had not yet had fluids removed, most likely due to the low market values of metals, which were then shredded subsequent to the year of their decontamination. This resulted in a high number of ELVs treated in a year. 
+ New measures to encourage reuse and recycling that have been introduced include measures around ELV component reuse in Hungary, awareness raising and communications activities in Portugal, and financial assistance for new research and development projects around ELV waste prevention, recycling and component reuse in Spain, with priority given to projects focussing on the recycling of automobile plastics, windshield glass and tyres. 
+ 4 
+ Unknown whereabouts and illegal dismantling of ELVs 
+ The most challenging implementation and enforcement deficit of the ELV Directive remains the high number of “ELVs of unknown whereabouts”. This has already been pointed out in the previous Commission’s report on the implementation of the ELV Directive for 2011 to 2014 
+ 12 
+ and in the Commission’s ex-post evaluation of five waste directives 
+ 13 
+ . To assess the problem, the Commission conducted a “ Compliance Promotion Initiative to assess the implementation of Directive 2000/53/EC on end-of life vehicles (the ELV Directive) with emphasis on the end-of life vehicles of unknown whereabouts” 
+ 14 
+ . 
+ Member States are asked by Eurostat to provide details on numbers of vehicles collected and transferred to ATFs. These figures are compiled in table 1 below. 
+ Table 1: Total number of end-of-life vehicles, collected and transferred to ATFs, 2008–2016 
+ 15 
+ (number of vehicles) 
+ 2008 
+ 2009 
+ 2010 
+ 2011 
+ 2012 
+ 2013 
+ 2014 
+ 2015 
+ 2016 
+ European Union 
+ 6.301.000 
+ 9.039.000 
+ 7.383.000 
+ 6.789.000 
+ 6.286.000 
+ 6.234.000 
+ 6.150.000 
+ 5.964.000 
+ 5.920.000 
+ Belgium 
+ 141.521 
+ 140.993 
+ 170.562 
+ 165.016 
+ 160.615 
+ 134.506 
+ 126.835 
+ 107.425 
+ 106.458 
+ Bulgaria 
+ 38.600 
+ 55.330 
+ 69.287 
+ 62.937 
+ 57.532 
+ 61.673 
+ 80.862 
+ 85.946 
+ 92.706 
+ Czechia 
+ 147.259 
+ 155.425 
+ 145.447 
+ 132.452 
+ 125.587 
+ 121.838 
+ 131.987 
+ 139.440 
+ 145.928 
+ Denmark 
+ 101.042 
+ 96.830 
+ 100.480 
+ 93.487 
+ 106.504 
+ 125.650 
+ 104.413 
+ 98.929 
+ 89.039 
+ Germany 
+ 417.534 
+ 1.778.593 
+ 500.193 
+ 466.160 
+ 476.601 
+ 500.322 
+ 512.163 
+ 473.386 
+ 412.801 
+ Estonia 
+ 13.843 
+ 7.528 
+ 7.268 
+ 11.413 
+ 12.835 
+ 14.712 
+ 14.720 
+ 12.884 
+ 11.184 
+ Ireland 
+ 127.612 
+ 152.455 
+ 158.237 
+ 134.960 
+ 102.073 
+ 92.467 
+ 86.950 
+ 74.910 
+ 98.213 
+ Greece 
+ 55.201 
+ 115.670 
+ 95.162 
+ 112.454 
+ 84.456 
+ 86.205 
+ 82.863 
+ 87.050 
+ 46.573 
+ Spain 
+ 748.071 
+ 952.367 
+ 839.637 
+ 671.927 
+ 687.824 
+ 734.776 
+ 724.820 
+ 689.760 
+ 611.446 
+ France 
+ 1.109.876 
+ 1.570.593 
+ 1.583.283 
+ 1.515.432 
+ 1.209.477 
+ 1.115.280 
+ 1.084.766 
+ 1.016.326 
+ 1.046.083 
+ Croatia 
+ : 
+ : 
+ : 
+ : 
+ 35.213 
+ 32.135 
+ 19.388 
+ 16.900 
+ 20.386 
+ Italy 
+ 1.203.184 
+ 1.610.137 
+ 1.246.546 
+ 952.461 
+ 902.611 
+ 876.052 
+ 853.584 
+ 958.245 
+ 978.960 
+ Cyprus 
+ 14.273 
+ 17.303 
+ 13.219 
+ 17.145 
+ 17.547 
+ 13.212 
+ 11.160 
+ 8.293 
+ 5.151 
+ Latvia 
+ 10.968 
+ 10.590 
+ 10.640 
+ 9.387 
+ 10.228 
+ 9.003 
+ 9.268 
+ 8.924 
+ 8.049 
+ Lithuania 
+ 19.534 
+ 19.656 
+ 23.351 
+ 26.619 
+ 22.885 
+ 26.482 
+ 29.982 
+ 26.546 
+ 21.306 
+ Luxembourg 
+ 2.865 
+ 6.908 
+ 6.303 
+ 2.341 
+ 2.834 
+ 2.290 
+ 2.225 
+ 1.617 
+ 1.854 
+ Hungary 
+ 37.196 
+ 26.020 
+ 15.907 
+ 13.043 
+ 15.357 
+ 14.897 
+ 15.283 
+ 16.788 
+ 15.141 
+ Malta 
+ : 
+ : 
+ 330 
+ 2.526 
+ 2.530 
+ 1.198 
+ 2.646 
+ 4.509 
+ : 
+ Netherlands 
+ 152.175 
+ 191.980 
+ 232.448 
+ 195.052 
+ 187.143 
+ 183.451 
+ 188.487 
+ 167.777 
+ 197.488 
+ Austria 
+ 63.975 
+ 87.364 
+ 82.144 
+ 80.004 
+ 64.809 
+ 73.993 
+ 59.904 
+ 47.926 
+ 48.077 
+ Poland 
+ 189.871 
+ 210.218 
+ 259.576 
+ 295.152 
+ 344.809 
+ 402.416 
+ 454.737 
+ 478.202 
+ 380.529 
+ Portugal 
+ 107.746 
+ 107.946 
+ 107.419 
+ 77.929 
+ 92.008 
+ 92.112 
+ 86.713 
+ 84.158 
+ 88.559 
+ Romania 
+ 51.577 
+ 55.875 
+ 190.790 
+ 128.839 
+ 57.950 
+ 37.989 
+ 42.138 
+ 41.886 
+ : 
+ Slovenia 
+ 6.780 
+ 7.043 
+ 6.807 
+ 6.598 
+ 5.447 
+ : 
+ 6.260 
+ : 
+ : 
+ Slovakia 
+ 39.769 
+ 67.795 
+ 35.174 
+ 39.171 
+ 33.469 
+ 36.858 
+ 29.175 
+ 26.176 
+ 36.931 
+ Finland 
+ 103.000 
+ 96.270 
+ 119.000 
+ 136.000 
+ 119.000 
+ 99.300 
+ 94.540 
+ 99.630 
+ 114.460 
+ Sweden 
+ 150.197 
+ 133.589 
+ 170.658 
+ 184.105 
+ 185.616 
+ 189.748 
+ 186.967 
+ 188.810 
+ 186.875 
+ United Kingdom 
+ 1.210.294 
+ 1.327.517 
+ 1.157.438 
+ 1.220.873 
+ 1.163.123 
+ 1.149.459 
+ 1.106.846 
+ 995.527 
+ 1.103.050 
+ Iceland 
+ 9.386 
+ 5.109 
+ 4.195 
+ 4.075 
+ 5.824 
+ 4.463 
+ 5.245 
+ 6.063 
+ 6.527 
+ Liechtenstein 
+ 91 
+ 72 
+ 107 
+ 94 
+ 114 
+ 326 
+ 188 
+ 230 
+ 260 
+ Norway 
+ 130.018 
+ 95.000 
+ 112.537 
+ 124.563 
+ 119.905 
+ 141.452 
+ 139.920 
+ 145.098 
+ 142.280 
+ The data in the table refer to reported ELVs that have received a CoD and are being treated in ATFs. In the Guidelines addressed to the Member States, Eurostat is also asking Member States to report on the total number of ELVs arising instead of only on those for which a CoD has been issued. However, very few Member States submit such data as ELV arising is not mandatory reporting under the ELV Directive and the Commission Decision 2005/293/EC on the monitoring of the reuse/recovery and reuse/recycling targets of the ELV Directive. Therefore, data from other sources 
+ 16 
+ had to be used to estimate the ELV arising. A comparison of the data on ELVs that have received a CoD and are being treated by ATFs with data on ELV arising shows discrepancies. The graphic below from the recent Commission’s study shows the number of ELVs 
+ 17 
+ legally reported (i.e. those that received a CoD and legally treated) and the high number of the ELVs of unknown whereabouts in 2014 in the EU. The graphic is taking into account the vehicle entries to the national registration systems and exits of the EU-28 vehicle stock. The number of the ELVs of unknown whereabouts remains a great concern. 
+ For an example of how such discrepancies can occur, Finland reported that some citizens and operators do not take ELVs to the producers' official take-back system, and thus the total amount of ELVs is considerably higher than the actual number of CoDs. Furthermore, Finland highlighted that the increase in appropriate treatment of ELVs in 2017 may have resulted from the rise of metal prices and improvements to the online deregistration system. 
+ Germany reported that its relatively low number of ELVs collected and treated, compared with its approximately 2.8 million cars permanently deregistered annually, is due to the export of used vehicles, and that reports conducted in 2017 reduced the ‘statistical gap’ of vehicles of unknown whereabouts. 
+ 18 
+ , 
+ 19 
+ The closure of these gaps was primarily achieved through a recalculation of the actual number of permanently deregistered motor vehicles, and by means of qualified estimations regarding the statistical data on used vehicle export (to EU and non-EU countries). 
+ The recent Commission’s study further shows that some of the reasons for the high number of the ELVs of unknown whereabouts point to deregistration systems with deficiencies and improper handling of ELVs (i.e. not all ELVs are transferred to collection points, and of those transferred, not all of them receive a CoD; ELVs that are being dismantled in non-authorized facilities). Moreover, there are ELVs that are illegally exported as second-hand vehicles. 
+ In addition, there are inadequate links and follow-up between registration and de-registration or re-registration systems which may perhaps imply that only a part of deregistered ELVs receive a certificate of destruction (CoD) although legally treated; second-hand vehicles registered in another Member State that have never been deregistered from the Member State of origin; lack of good quality data, in particular regarding data on export of second-hand vehicles and ELVs and leakages of raw materials; need for improvement of the reporting methods from the Member States; illegal collection and dismantling of ELVs in unauthorized treatment facilities without environmental standards; and, therefore, need for better enforcement, including inspections of the collection points and the ATFs. 
+ There are Member States that have already taken measures to address the problem such as Denmark that has introduced a premium to the last registered owner that delivers its ELV to an authorised treatment facility (ATF) or France and the United Kingdom that have reported significant rise on the number of inspections to ATFs. 
+ 5. 
+ Conclusions 
+ The ELV Directive has been transposed into the national legislation of all Member States and is considered satisfactory. 
+ Overall, the implementation of the ELV Directive appears to be mainly appropriate. In 2017, the 2015 target of 85% reuse and recycling by an average weight per vehicle and year had been met by 20 out of 28 Member States (5 Member States failed to report). There were more challenges with achieving the reuse and recovery target of 95% by an average weight per vehicle and year. However, around half of those Member States failing to meet the targets only missed them with a few percentage points of meeting them. 
+ The use of the banned hazardous substances is continuously diminishing as they show the amendments to the Annex II of the ELV Directive 
+ 20 
+ with the constantly reduced entries allowing their use. Furthermore, the number of authorised treatment facilities has increased, and Member States are beginning to report innovative measures such as incorporating recycled content, supporting waste prevention projects and introducing environmental care systems, all of which can be looked at by other countries as examples of best practice. 
+ One notable exception to this generally positive trend is the issue of ELVs of unknown whereabouts. Illegal collection, treatment and trading of parts removed from ELVs remain a challenge. Besides the loss of valuable resources (recoverable components and materials), this problem and the treatment of ELVS in non-authorised treatment facilities also has a negative impact on health and the environment. This is reflected in preamble 7 of Directive 2018/849/EU 
+ 21 
+ that indicates that Directive 2000/53/EC should be reviewed and, if necessary amended, taking into account of the “problem of ELVs that are not accounted for, including the shipment of used vehicles suspected to be ELVs and the application of Correspondents’ Guidelines No 9 on shipment of waste vehicles”. 
+ The European Commission is currently carrying out an evaluation of the ELV Directive aiming to assess to what extent EU legislation rules on ELVs deliver the benefits for the environment, the public and industry. The evaluation will be finalised in 2020 
+ 22 
+ . Topics being explored include efficiency of the implementation of the Directive, including the problem of ELVs of unknown whereabouts, coherence with the definitions of other legislation relevance and feasibility of setting targets for specific materials, reporting and monitoring methods and relevance with regard to the challenges of the new technologies, including electric and hybrid vehicles, and changes in the material composition of vehicles. 
+ (1) 
+ OJ L 269, 21.10.2000, p. 34. 
+ (2) 
+ OJ L 282, 26.10.2001, p. 77. 
+ (3) 
+ http://ec.europa.eu/environment/waste/reporting/index.htm 
+ (4) 
+ http://ec.europa.eu/environment/waste/elv/events_en.htm 
+ (5) 
+ OJ L 94, 13.4.2005, p. 30–33 
+ (6) 
+ The Commission is currently preparing the 9 th and 10 th amendment to Annex II 
+ (7) 
+ Derogation from the permit requirements according to Article 6(2) of the ELV Directive 
+ (8) 
+ IDIS | The International Dismantling Information System , accessed 19 March 2019, https://www.idis2.com/ 
+ (9) 
+ EUROSTAT (2019) Eurostat - Data Explorer , accessed 25 March 2019, http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_waselvt&lang=en 
+ (10) 
+ https://ec.europa.eu/eurostat/web/waste/data/database 
+ (11) 
+ https://ec.europa.eu/eurostat/web/waste/data/database 
+ (12) 
+ http://ec.europa.eu/environment/waste/elv/implementation_en.htm 
+ (13) 
+ http://ec.europa.eu/environment/waste/target_review.htm 
+ (14) 
+ Compliance Promotion Initiative to assess the implementation of Directive 2000/53/EC on end-of life vehicles (the ELV Directive) with emphasis on the end-of life vehicles of unknown whereabouts ( 
+ http://ec.europa.eu/environment/waste/elv/events_en.htm 
+ ) 
+ (15) 
+ Source : Eurostat (online data code: env_waselvt) 
+ (16) 
+ Eurostat, Foreign Trade Statistics (FTS); European Automobile Manufacturers’ Association (ACEA); Eurostat, dataset: road_eqs; road_eqr); POLK. These sources were used in the Commission’s Compliance Promotion Initiative to assess the implementation of Directive 2000/53/EC on end-of life vehicles (the ELV Directive) with emphasis on the end-of life vehicles of unknown whereabouts ( 
+ http://ec.europa.eu/environment/waste/elv/events_en.htm 
+ ) 
+ (17) 
+ The ELV Directive’s scope are vehicles M1 (for the carriage of passengers with no more than eight seats in addition to the driver’s seat) and N1 (vehicles for the carriage of goods having a maximum mass not exceeding 3.5 tonnes) 
+ (18) 
+ Sander, K., Wagner, L., Sanden, D.J., and Wilts, H. (2017) Entwicklung von Lösungsvorschlägen, einschließlich rechtlicher Instrumente, zur Verbesserung der Datenlage beim Verbleib von Altfahrzeugen, p.333 
+ (19) 
+ Kohlmeyer et al (2017) Clarification of the whereabouts of end-of-life vehicles, Recycling and Raw Materials , Vol.10 
+ (20) 
+ http://ec.europa.eu/environment/waste/elv/legislation_en.htm 
+ (21) 
+ OJ 150, 14.6.2018, p. 93 
+ (22) 
+ http://ec.europa.eu/environment/waste/elv/evaluation_en.htm

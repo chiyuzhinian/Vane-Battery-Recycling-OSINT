@@ -1,0 +1,51 @@
+# CELEX 32026R1703
+# http://publications.europa.eu/resource/celex/32026R1703
+# 来源 CELLAR XHTML
+# 抓取 2026-09-14 06:38 UTC（正文 4455 字符）
+
+Official Journal 
+of the European Union
+ EN
+ L series
+ 2026/1703
+ 10.7.2026
+ REGULATION (EU) 2026/1703 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL
+ of 8 July 2026
+ amending Regulation (EU) 2024/1157 as regards the prohibition on the export of mixed municipal waste destined for recovery
+ (Text with EEA relevance)
+ THE EUROPEAN PARLIAMENT AND THE COUNCIL OF THE EUROPEAN UNION,
+ Having regard to the Treaty on the Functioning of the European Union, and in particular Article 192(1) thereof,
+ Having regard to the proposal from the European Commission,
+ After transmission of the draft legislative act to the national Parliaments,
+ Having regard to the opinion of the European Economic and Social Committee ( 1 ) ,
+ After consulting the Committee of the Regions,
+ Acting in accordance with the ordinary legislative procedure ( 2 ) ,
+ Whereas:
+ (1)
+ Article 44(2), point (f), of Regulation (EU) 2024/1157 of the European Parliament and of the Council ( 3 ) prohibits from 21 May 2026 the export from the Union of mixed municipal waste that is destined for recovery in third countries. The transfer of such waste from Union border areas to nearby treatment facilities in Switzerland, where high standards for the management of waste are maintained, would therefore no longer be authorised, bringing to an end a long-established practice. The ban on the export of that waste to Switzerland would consequently shift the transport of that waste to other countries and to waste management facilities located further away, and would result in the replacement of rail transport of waste with additional road transport. This would increase the management costs of that waste and generate a surplus of greenhouse gas emissions linked to its additional road transport, while giving rise to very limited benefits. Consequently, it is necessary to amend Article 44(2), point (f), of Regulation (EU) 2024/1157 to allow for the continuation of the export to Switzerland of mixed municipal waste destined for recovery.
+ (2)
+ Regulation (EU) 2024/1157 should therefore be amended accordingly.
+ (3)
+ Since the objective of this Regulation cannot be sufficiently achieved by the Member States, but can rather, by reason of the need for harmonisation, be better achieved at Union level, the Union may adopt measures, in accordance with the principle of subsidiarity as set out in Article 5 of the Treaty on European Union (TEU). In accordance with the principle of proportionality, as set out in that Article, this Regulation does not go beyond what is necessary in order to achieve that objective.
+ (4)
+ In view of the impending entry into force of the prohibition to ship mixed municipal waste for recovery, which would disrupt shipments of mixed municipal waste to Switzerland, and given that consents for such shipments given prior to the entry into force of that prohibition are valid for a maximum of one year, it is considered to be appropriate to invoke the exception to the eight-week period provided for in Article 4 of Protocol No 1 on the role of national Parliaments in the European Union, annexed to the TEU, to the Treaty on the Functioning of the European Union and to the Treaty establishing the European Atomic Energy Community,
+ HAVE ADOPTED THIS REGULATION:
+ Article 1
+ In Article 44(2) of Regulation (EU) 2024/1157, point (f) is replaced by the following:
+ ‘(f)
+ the export of waste referred to in Article 4(3) shall be prohibited, except to Switzerland;’.
+ Article 2
+ This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union .
+ This Regulation shall be binding in its entirety and directly applicable in all Member States.
+ Done at Strasbourg, 8 July 2026.
+ For the European Parliament 
+ The President 
+ R. METSOLA
+ For the Council 
+ The President 
+ T. BYRNE
+ ( 1 ) Opinion of 17 June 2026 (not yet published in the Official Journal).
+ ( 2 ) Position of the European Parliament of 18 June 2026 (not yet published in the Official Journal) and decision of the Council of 29 June 2026.
+ ( 3 ) Regulation (EU) 2024/1157 of the European Parliament and of the Council of 11 April 2024 on shipments of waste, amending Regulations (EU) No 1257/2013 and (EU) 2020/1056 and repealing Regulation (EC) No 1013/2006 ( OJ L, 2024/1157, 30.4.2024, ELI: http://data.europa.eu/eli/reg/2024/1157/oj ).
+ ELI: http://data.europa.eu/eli/reg/2026/1703/oj
+ ISSN 1977-0677 (electronic edition)
