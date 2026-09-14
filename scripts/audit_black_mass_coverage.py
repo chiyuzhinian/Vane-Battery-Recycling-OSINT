@@ -33,7 +33,8 @@ def main() -> int:
         "records_total": len(records),
         "global": build_coverage(records),
         "EU": build_coverage(records, region="EU"),
-        "US": build_coverage(records, region="US"),
+        # §九：US 视图拆分联邦/州——州不得重复计联邦
+        "US": build_coverage(records, region="US", split_level=True),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2),
@@ -51,8 +52,13 @@ def main() -> int:
             mark = {"COVERED": "✅", "PARTIAL": "⚠️", "MISSING": "❌",
                     "BLOCKED": "⛔"}[line["status"]]
             ev = line["best_evidence"][0]["evidence_id"] if line["best_evidence"] else "-"
+            lv = ""
+            if line.get("level_note"):
+                lv = (f" | 联邦 {line['federal_strong']} / 州 {line['state_strong']}"
+                      f"（{line['level_note']}）")
             print(f"  {mark} {line['line_id']:14s} docs={line['documents']:4d} "
-                  f"strong={line['strong_documents']:3d} best={ev} "
+                  f"strong={line['strong_documents']:3d} best={ev}"
+                  f"{lv}"
                   f"{('｜' + line['gap']) if line['gap'] else ''}")
     print(f"\n→ 已写 {OUT.name}")
     return 0

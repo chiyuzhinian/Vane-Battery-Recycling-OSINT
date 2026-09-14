@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
 from app.policy.black_mass import (  # noqa: E402
-    LINES, STATUS_ENUM, build_coverage, classify_line,
+    LINES, STATUS_ENUM, build_coverage, classify_line, gov_level,
 )
 
 
@@ -72,3 +72,48 @@ def test_region_filter():
     eu_lines = {l["line_id"]: l["documents"] for l in cov_eu["lines"]}
     assert us_lines["transport"] >= 1
     assert eu_lines["transboundary"] >= 1
+
+
+# ---------------- Phase 4B-2B0 Step 8：联邦/州拆分（§九）----------------
+
+def test_gov_level_classification():
+    assert gov_level(_rec("f", "x", sid="us_ecfr")) == "federal"
+    assert gov_level(_rec("s", "x", sid="us_ca_leginfo")) == "state"
+    assert gov_level(_rec("w", "x", sid="us_wa_wac")) == "state"
+    assert gov_level(_rec("e", "x", sid="eu_eurlex_battery_reg")) == "supra"
+
+
+def test_state_does_not_count_as_federal():
+    """州级强证据不得冒充联邦覆盖（规格 §九）。"""
+    records = [
+        _rec("ca1", "Hazardous waste listing and identification",
+             sid="us_ca_leginfo"),
+    ]
+    cov = build_coverage(records, region="US", split_level=True)
+    haz = next(l for l in cov["lines"] if l["line_id"] == "hazardous")
+    assert haz["status"] == "COVERED"          # 州级强证据仍算 US 覆盖
+    assert haz["federal_strong"] == 0
+    assert haz["state_strong"] == 1
+    assert "州" in haz["level_note"] and "联邦" in haz["level_note"]
+
+
+def test_split_level_reports_both_sides():
+    records = [
+        _rec("fed1", "Identification and Listing of Hazardous Waste",
+             sid="us_ecfr"),
+        _rec("st1", "Hazardous waste requirements",
+             sid="us_ca_leginfo"),
+    ]
+    cov = build_coverage(records, region="US", split_level=True)
+    haz = next(l for l in cov["lines"] if l["line_id"] == "hazardous")
+    assert haz["federal_strong"] == 1
+    assert haz["state_strong"] == 1
+    assert haz["federal_ids"] == ["fed1"] and haz["state_ids"] == ["st1"]
+    assert "不合并计数" in haz["level_note"]
+
+
+def test_split_level_default_off_keeps_shape():
+    """默认（split_level=False）不改变既有输出形状。"""
+    cov = build_coverage([_rec("x", "battery recycling")])
+    for line in cov["lines"]:
+        assert "federal_strong" not in line

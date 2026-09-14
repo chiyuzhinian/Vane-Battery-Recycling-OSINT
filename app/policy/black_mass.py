@@ -65,10 +65,32 @@ def record_class(record: dict) -> str:
                ("B" if record.get("relevant") else "C"))
 
 
+def gov_level(record: dict) -> str:
+    """政府层级（Phase 4B-2B0 Step 8 §九：州不得重复计联邦）。
+
+    federal = 联邦（jurisdiction_of == 'US'）｜state = 州（US-XX）｜
+    supra = 欧盟超国家 ｜global = 国际/未知。
+    """
+    from app.policy.jurisdiction_map import jurisdiction_of
+    jid = jurisdiction_of(record)
+    if jid == "US":
+        return "federal"
+    if jid.startswith("US-"):
+        return "state"
+    if jid == "EU":
+        return "supra"
+    return "global"
+
+
 def build_coverage(records: list[dict], *, region: str = "",
-                   jurisdiction: str = "") -> dict:
+                   jurisdiction: str = "",
+                   split_level: bool = False) -> dict:
     """六线覆盖矩阵（region 为空=全球视图；'EU'/'US' 过滤；
-    jurisdiction 如 'US-CA'/'SE' 时按管辖归属过滤，优先于 region）。"""
+    jurisdiction 如 'US-CA'/'SE' 时按管辖归属过滤，优先于 region）。
+
+    split_level=True（规格 §九）：US 视图额外拆分联邦/州强证据——
+    州级证据**不得**重复计为联邦覆盖，两者独立列示。
+    """
     out_lines: list[dict] = []
     for lid, name, _pat in LINES:
         docs = [r for r in records if classify_line(r, lid)]
@@ -92,11 +114,29 @@ def build_coverage(records: list[dict], *, region: str = "",
                 status = "BLOCKED"
                 gap = "通道被阻：" + "；".join(blocked)
     # 修正：region 行组装
-        out_lines.append({
+        entry = {
             "line_id": lid, "name": name, "region": region or "GLOBAL",
             "documents": len(docs), "strong_documents": len(strong),
             "best_evidence": evidence, "status": status, "gap": gap,
-        })
+        }
+        if split_level:
+            fed = [r for r in strong if gov_level(r) == "federal"]
+            st = [r for r in strong if gov_level(r) == "state"]
+            entry["federal_strong"] = len(fed)
+            entry["state_strong"] = len(st)
+            entry["federal_ids"] = sorted(
+                str(r.get("evidence_id")) for r in fed)[:5]
+            entry["state_ids"] = sorted(
+                str(r.get("evidence_id")) for r in st)[:5]
+            if strong and not fed and st:
+                entry["level_note"] = "仅州级强证据——不构成联邦覆盖（州不得计联邦）"
+            elif strong and fed and not st:
+                entry["level_note"] = "仅联邦强证据——州级待补（州不重复计）"
+            elif fed and st:
+                entry["level_note"] = (
+                    f"联邦 {len(fed)} 条 + 州 {len(st)} 条"
+                    "（独立并行，不合并计数）")
+        out_lines.append(entry)
     return {
         "lines": out_lines,
         "summary": {
