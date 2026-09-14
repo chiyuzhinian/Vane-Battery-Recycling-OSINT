@@ -80,11 +80,12 @@ async def main() -> int:
     else:
         targets = DEFAULT_CELEX
 
-    # 去重保序
+    # 去重保序（2B1：更正件 R(N) **独立抓取**——它们有真实短正文，
+    # 且是独立 A2 记录；不再归一化到主体快照）
     seen: set[str] = set()
     uniq: list[tuple[str, str]] = []
     for c, note in targets:
-        base = c.split("R(")[0]          # 更正版本共用主体快照
+        base = c.strip()
         if base in seen:
             continue
         seen.add(base)
@@ -108,10 +109,15 @@ async def main() -> int:
                 print(f"  ❌ {celex:<14} 抓取失败：{type(exc).__name__}")
                 fail += 1
                 continue
-            if not text or len(text) < 2000:
-                print(f"  ⚠️ {celex:<14} 正文过短（{len(text)} 字符），"
+            if not text or len(text) < 150:
+                print(f"  ⚠️ {celex:<18} 正文过短（{len(text)} 字符），"
                       f"可能该 CELEX 无 HTML 版本（如提案/公报）")
                 fail += 1
+                continue
+            if len(text) < 2000:
+                # 2B1：短文书（更正件/决定）正文天然短——仍落盘
+                print(f"  ✅ {celex:<18} {len(text):>7} 字符（短文书）→ {path.name}")
+                ok += 1
                 continue
             lines = black_mass_lines(text)
             tag = ("　黑粉线 " + "/".join(x[0] for x in lines)) if lines else ""
