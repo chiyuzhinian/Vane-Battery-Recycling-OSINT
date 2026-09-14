@@ -148,6 +148,23 @@ cases:
     notes: "用户✅ 清洁车辆抵免（财税→B）"
     holdout: true
 
+  # ---------------- a1（EV 牵引电池核心对象）----------------
+  # Phase 4B-2B0 Step 7：首个真实 A1 案例（US-CA 深采发现）
+  - id: us_ca_sb615_traction
+    jurisdiction: US-CA
+    expected_class: A1
+    expected_topics: [T04, T07]
+    expected_instrument_type: proposal
+    expected_binding_force: proposal
+    must_find: {evidence_id: "us_ca_leginfo_sb615"}
+    notes: >
+      SB 615（2025-2026 届）"Vehicle traction batteries"——标题级 EV 牵引电池
+      （Division 26 H&SC §44480 系，涉及 traction battery labels/回收）。
+      状态 Enrolled（2026-09-04 呈交州长，尚未签署）→ force=proposal 保守。
+      来源：CA leginfo 官方 billTextClient（16.9K 全文，现算分类 A1、
+      domain=CORE_EV_TRACTION）。holdout=false（采集同时发现，未参与调参）。
+    holdout: false
+
   # ---------------- black_mass ----------------
   - id: bm_wsr_main
     jurisdiction: EU

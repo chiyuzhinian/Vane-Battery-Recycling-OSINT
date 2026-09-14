@@ -26,20 +26,28 @@ class LeginfoCaConnector(BaseConnector):
     base_url = "https://leginfo.legislature.ca.gov"
     timeout = 45.0
 
-    #: (路径, 标题, doc_key)
-    DEFAULT_DOCS: list[tuple[str, str, str]] = [
+    #: (路径, 标题, doc_key, evidence_id)——显式 eid：status 尾缀按法案命名，
+    #: 防跨法案冲突（AB2440 status 保留历史 eid `us_ca_leginfo_status`）
+    DEFAULT_DOCS: list[tuple[str, str, str, str]] = [
         ("/faces/billTextClient.xhtml?bill_id=202120220AB2440",
          "AB 2440 — Responsible Battery Recycling Act of 2022（全文）",
-         "US-CA:AB:2021-2022:AB2440"),
+         "US-CA:AB:2021-2022:AB2440", "us_ca_leginfo_ab2440"),
         ("/faces/billStatusClient.xhtml?bill_id=202120220AB2440",
          "AB 2440 — 立法状态（Chaptered）",
-         "US-CA:AB:2021-2022:AB2440:status"),
+         "US-CA:AB:2021-2022:AB2440:status", "us_ca_leginfo_status"),
         ("/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=42451",
          "California PRC § 42451（电池回收计划条款）",
-         "US-CA:PRC:42451"),
+         "US-CA:PRC:42451", "us_ca_leginfo_42451"),
         ("/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=42452",
          "California PRC § 42452（电池回收计划条款）",
-         "US-CA:PRC:42452"),
+         "US-CA:PRC:42452", "us_ca_leginfo_42452"),
+        # Step 7（2B0）：EV traction battery 专项 —— A1 核心对象（标题级）
+        ("/faces/billTextClient.xhtml?bill_id=202520260SB615",
+         "SB 615 — Vehicle traction batteries（全文）",
+         "US-CA:SB:2025-2026:SB615", "us_ca_leginfo_sb615"),
+        ("/faces/billStatusClient.xhtml?bill_id=202520260SB615",
+         "SB 615 — 立法状态",
+         "US-CA:SB:2025-2026:SB615:status", "us_ca_leginfo_sb615_status"),
     ]
 
     def doc_url(self, path: str) -> str:
@@ -51,7 +59,7 @@ class LeginfoCaConnector(BaseConnector):
                    if not docs or d[2] in docs or d[1] in docs]
         out: list[RawEvidence] = []
         self.last_errors: list[dict] = []
-        for path, label, doc_key in targets:
+        for path, label, doc_key, eid in targets:
             url = self.doc_url(path)
             try:
                 resp = await self._polite_get(url, headers={"User-Agent": BROWSER_UA})
@@ -67,7 +75,7 @@ class LeginfoCaConnector(BaseConnector):
                 print(f"    ⚠️ us_ca_leginfo {doc_key} 失败：{type(exc).__name__}")
                 continue
             out.append(RawEvidence(
-                evidence_id=f"us_ca_leginfo_{doc_key.split(':')[-1].lower()}",
+                evidence_id=eid,
                 channel="connector", source_id=self.source_id,
                 source_url=url, source_title=label, publish_date=None,
                 raw_text=body[:MAX_TEXT],
