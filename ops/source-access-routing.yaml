@@ -18,29 +18,30 @@ runners:
     status: active
     note: "当前开发环境（Batch 1R 实测出口）"
   runner-cloud-1:
-    egress_region: "<待配置>"
+    egress_region: aliyun-cn
     network_type: cloud-vm
-    status: not_configured
-    note: "需用户提供已授权云主机（ssh）；配置后用于 §A2 独立复核"
+    status: active
+    note: "阿里云主机 106.12.59.96（2C4G，instance-9l0xgyty）——Batch 1R Runner B；2026-09-14 实测上线；密码不入库（SSH 密钥）"
 
 routing_rules:
   # ── Batch 1 blocked 辖区（本机出口受限 → 云 Runner 或官方替代）──
   - match: { jurisdiction: AT, endpoints: ["ris.bka.gv.at"] }
-    preferred_runner: runner-cloud-1
+    preferred_runner: runner-local-dev-1      # via OGD 通道（data.bka + ogd.bka 本地 200）
     fallback:
       - { kind: official_alt, endpoint: "https://data.bka.gv.at/ris/api/v2.6/" }
-      - { kind: official_alt, endpoint: "https://www.ris.bka.gv.at/Dokumente/" }
-    last_reason: HTTP_503_REGIONAL_BLOCK（httpx+curl 同 503）
+      - { kind: cloud_runner, endpoint: "runner-cloud-1" }
+    last_reason: "主域双 vantage 503（区域拦截）；OGD 通道双 vantage 200 → 已恢复 CONNECTED"
   - match: { jurisdiction: HU, endpoints: ["njt.hu"] }
-    preferred_runner: runner-cloud-1
+    preferred_runner: runner-local-dev-1      # via gazette（magyarkozlony 本地 200）
     fallback:
-      - { kind: official_alt, endpoint: "https://magyarkozlony.hu/" }
-    last_reason: CONNECTION_RESET_PERSISTENT
+      - { kind: official_alt, endpoint: "https://magyarkozlony.hu/kereses?q=akkumul%C3%A1tor" }
+      - { kind: cloud_runner, endpoint: "runner-cloud-1" }
+    last_reason: "NJT 双 vantage 不可达（MULTI_VANTAGE）；gazette 双 vantage 200 → 已恢复 CONNECTED"
   - match: { jurisdiction: BE, endpoints: ["ejustice.just.fgov.be"] }
     preferred_runner: runner-cloud-1
     fallback:
       - { kind: official_alt, endpoint: "http://www.ejustice.just.fgov.be/" }
-    last_reason: CONNECT_TIMEOUT
+    last_reason: "MULTI_VANTAGE_BLOCKED（本地 timeout + 云 000/ERR——双独立出口均不可达）"
   - match: { jurisdiction: US-GA, endpoints: ["epd.georgia.gov"] }
     preferred_runner: runner-cloud-1
     fallback:
@@ -50,7 +51,7 @@ routing_rules:
     preferred_runner: runner-cloud-1
     fallback:
       - { kind: official_alt, endpoint: "https://www.legislature.ohio.gov/" }
-    last_reason: CONNECTION_REFUSED_TIMEOUT
+    last_reason: "MULTI_VANTAGE_BLOCKED（本地 timeout + 云 000/ERR）"
   - match: { jurisdiction: US-CO, endpoints: ["cdphe.colorado.gov"] }
     preferred_runner: runner-cloud-1
     fallback:
@@ -59,8 +60,8 @@ routing_rules:
   - match: { jurisdiction: US-MI, endpoints: ["legislature.mi.gov", "michigan.gov"] }
     preferred_runner: runner-cloud-1
     fallback:
-      - { kind: browser_channel, endpoint: "browser" }   # JS 渲染场景
-    last_reason: HTTP_403 / JS_RENDERED
+      - { kind: browser_channel, endpoint: "browser" }   # JS 渲染 / 403 场景
+    last_reason: "MULTI_VANTAGE_BLOCKED（legislature 双败）+ ACCESS_CONTROLLED（EGLE 双 403）"
 
   # ── Batch 1 CONNECTED 辖区（本机直取）──
   - match: { jurisdiction: IT, endpoints: ["normattiva.it"] }

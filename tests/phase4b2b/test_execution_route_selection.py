@@ -48,10 +48,14 @@ def test_blocked_jurisdictions_have_cloud_preferred():
 def test_connected_jurisdictions_use_local():
     d = _load()
     by_jid = {r["match"]["jurisdiction"]: r for r in d["routing_rules"]}
-    for jid in ("IT", "SK", "CZ", "US-IL", "US-TN", "US-TX", "US-NV"):
+    # 含 1R 新恢复的 AT/HU（本地/本地+官方替代可达）
+    for jid in ("IT", "SK", "CZ", "AT", "HU", "US-IL", "US-TN", "US-TX",
+                "US-NV"):
         assert by_jid[jid]["preferred_runner"] == "runner-local-dev-1", jid
 
 
-def test_cloud_runner_marked_not_configured():
+def test_cloud_runner_configured_active():
     d = _load()
-    assert d["runners"]["runner-cloud-1"]["status"] == "not_configured"
+    rc = d["runners"]["runner-cloud-1"]
+    assert rc["status"] == "active"
+    assert rc["egress_region"] == "aliyun-cn"

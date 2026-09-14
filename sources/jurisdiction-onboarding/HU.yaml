@@ -25,13 +25,13 @@ official_channel_map:
     official_url: https://njt.hu/
     access_method: html
     status: PARTIAL
-    note: status=None；owner=Nemzeti Jogszabálytár（国家法律库，Igazságügyi Minisztérium）；检索尝试失败（RemoteProtocolError）：https://njt.hu/kereses?szo=akkumul%C3%A1tor；检索尝试失败（RemoteProtocolError）：https://njt.hu/jogszabaly/2012-181-20-30
+    note: status=None；owner=Nemzeti Jogszabálytár（国家法律库，Igazságügyi Minisztérium）；检索尝试失败（RemoteProtocolError）：https://njt.hu/kereses?szo=akkumul%C3%A1tor；检索尝试失败（ConnectTimeout）：https://njt.hu/jogszabaly/2012-181-20-30
   MS_OFFICIAL_GAZETTE:
   - source_id: hu_magyarkozlony
     official_url: https://magyarkozlony.hu/
     access_method: html
     status: PARTIAL
-    note: status=None；owner=Magyar Közlöny（官方公报）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/hivatalos-lapok
+    note: status=None；owner=Magyar Közlöny（官方公报，Miniszterelnökség）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses?q=akkumul%C3%A1tor；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses?q=elem
 known_gaps:
   MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）

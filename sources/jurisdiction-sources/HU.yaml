@@ -21,12 +21,14 @@ sources:
     note: "NJT 官方综合法律库（含 Magyar Közlöny 公报）；匈牙利语；实测本网络环境连接被重置（限记）"
   - source_role: MS_OFFICIAL_GAZETTE
     source_id: hu_magyarkozlony
-    official_owner: "Magyar Közlöny（官方公报）"
+    official_owner: "Magyar Közlöny（官方公报，Miniszterelnökség）"
     official_domain: magyarkozlony.hu
     access_method: html
     entry_url: "https://magyarkozlony.hu/"
     search_attempts:
-      - "https://magyarkozlony.hu/kereses"
-      - "https://magyarkozlony.hu/hivatalos-lapok"
-    samples_known: []
-    note: "官方公报备选通道（NJT 连接受限时的替代）；搜索路径变体尝试"
+      - "https://magyarkozlony.hu/kereses?q=akkumul%C3%A1tor"
+      - "https://magyarkozlony.hu/kereses?q=elem"
+    samples_known:
+      - "https://magyarkozlony.hu/dokumentumok/d5a9c2f2c728908437c52693273af4a34e30c7cb/megtekintes"
+      - "https://magyarkozlony.hu/dokumentumok/fbdda3d49e5e91c81743bbdc35ce5b0b95b44ada/megtekintes"
+    note: "Batch 1R：公报文档通道打通（kereses 搜索 + /dokumentumok/{sha1}/megtekintes 直链）；本地与云双 vantage 实测 200"

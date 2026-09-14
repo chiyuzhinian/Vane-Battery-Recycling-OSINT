@@ -175,3 +175,56 @@ GA +4（EPD Land Protection 等）、CO +1（CDPHE 主页）。
 
 本阶段提交见仓库 `phase4b2a` 分支（Batch 1R 单一提交，含 overlay 模块/
 探测脚本/恢复产物/路由配置/契约刷新/6 测试/本报告）。
+
+---
+
+## 附录 A — Runner B 上线（1R 续：Network Vantage B 实测）
+
+> 2026-09-14：用户提供已授权云主机（阿里云 2C4G，`runner-cloud-1`，
+> egress_region=aliyun-cn），通过 SSH 公钥免密接入；**未改动系统任何服务**；
+> 密码不入库（仅一次性密钥注入）。
+
+### A.1 双 vantage 实测矩阵（本地 runner-local-dev-1 vs 云 runner-cloud-1）
+
+| 端点 | 本地 | 云 | 结论升级 |
+|------|------|----|----------|
+| AT_main | 503 | **503** | 双一致 → `ACCESS_CONTROLLED`（跨环境） |
+| AT_ogd | 200 | **200** | 双 200 → 真可达（恢复通道确认） |
+| HU_njt | reset/no_resp | **000/ERR** | **双败 → `MULTI_VANTAGE_BLOCKED`** |
+| HU_gazette | 200 | **200** | 双 200 → **恢复通道确认** |
+| BE_main | timeout | **000/ERR** | **双败 → `MULTI_VANTAGE_BLOCKED`** |
+| MI_leg | no_resp | **000/ERR** | **双败 → `MULTI_VANTAGE_BLOCKED`** |
+| MI_egle | 403 | **403** | 双一致 → `ACCESS_CONTROLLED` |
+| OH_codes/leg | timeout/DNS | **000/ERR** | **双败 → `MULTI_VANTAGE_BLOCKED`** |
+| GA_epd | **200** | 000/ERR | 本地可 / 云被拦（vantage 特定；维持 CONNECTED） |
+| CO_cdphe | **200** | 403 | 同上（维持 CONNECTED） |
+| IT_norm | 波动 | **200** | 云印证 |
+| NV_nrs | 403 | **403** | 双一致控制 |
+| EU_eurlex | 202 | **202** | 双一致软风控（CELLAR 通道继续有效） |
+
+### A.2 HU 恢复闭环（云侦察 → 通道打通 → 双 vantage 样本）
+
+1. 云端枚举发现公报文档模式：`magyarkozlony.hu/dokumentumok/{sha1}/megtekintes`
+   ＋ 搜索端点 `/kereses?q=...`（**此前未知，NJT 不可达时的关键缺口**）；
+2. 云端抓取 2 个官方文档（2026/131、2026/123 期；sha256 存证于
+   `outputs/audit/cloud_samples/`），经 `scripts/ingest_cloud_samples.py`
+   注入 HU proof（带 `vantage=runner-cloud-1` 注记）；
+3. **本地重跑复证**：文档直链本地亦 200 → **samples_ok=2/2**，**HU = CONNECTED**。
+
+### A.3 更新后的恢复统计与 Gate
+
+- **Originally blocked 7 → Recovered 4**（AT、HU、US-GA、US-CO）；
+  **官方替代路由 verified 3**（AT/HU/US-CO）；**Still blocked 3**（BE、US-MI、US-OH，
+  均为 **MULTI_VANTAGE_BLOCKED**（两独立出口实证）。
+- **EU onboarding: 5/6 = 83.3% ≥ 80% ✓** ｜ **US onboarding: 6/8 = 75.0% < 80%**
+- **BATCH 1 判定保持 PARTIAL**（US 侧未达 80%；BE/MI/OH 双环境不可达为如实外部限制），
+  **BATCH 2 = NOT READY**（前置：US 侧 OH/MI 的浏览器通道或目标地区 vantage；
+  10 个 CONNECTED 的 MODE A 消化）。
+
+### A.4 复核
+
+- `ops/source-access-routing.yaml`：`runner-cloud-1` → `status: active`；
+  AT/HU 改本地优先（含官方替代/云 fallback）；BE/OH/MI 保留云优先并记录双败实证。
+- 契约刷新：HU（2 roles：NJT blocked / gazette CONNECTED）。
+- **414 passed**（0 fail）。
+
