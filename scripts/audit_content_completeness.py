@@ -97,8 +97,14 @@ def main() -> int:
         })
 
     summary: dict = {"total": len(rows), "nim_excluded": nim_rows}
+    # 非文书（NOT_APPLICABLE：企业数据线）、付费墙（PAYWALLED_KNOWN）
+    # 不适用全文要求（2B1 口径；与规格 §4 “不要求 C/D 全文”同理）
+    applicable = [x for x in rows
+                  if x["content_state"] not in ("NOT_APPLICABLE",
+                                                "PAYWALLED_KNOWN")]
+    summary["applicable"] = len(applicable)
     for want in ("A1", "A2", "B"):
-        sub = [x for x in rows if x["acceptance_class"] == want]
+        sub = [x for x in applicable if x["acceptance_class"] == want]
         full = [x for x in sub if x["fulltext_available"]]
         clause = [x for x in sub if x["clause_evidence_available"]]
         summary[want] = {
