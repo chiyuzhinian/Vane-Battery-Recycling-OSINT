@@ -129,11 +129,23 @@ MODE_A = [
      "native_keywords": ["baterie", "akumulátor", "odpad"],
      "enumeration": "sbirka.sqw?cz=&r= 参数枚举",
      "samples_ok": 2, "status": "IN_PROGRESS"},
-    {"jurisdiction": "AT", "roles": ["MS_LEGISLATION_DATABASE"],
-     "endpoints": ["data.bka.gv.at OGD API（分页检索）", "ogd.bka.gv.at 文档"],
+    {"jurisdiction": "HU", "roles": ["MS_OFFICIAL_GAZETTE"],
+     "endpoints": ["magyarkozlony.hu（kereses 搜索 + "
+                   "/dokumentumok/{sha1}/megtekintes 直链）"],
+     "native_keywords": ["akkumulátor", "elem"],
+     "enumeration": ("公报搜索端点 + 文档直链（云端侦察发现；本地+云双 "
+                     "vantage 200）；2 文档（2026/131、2026/123）sha256 存证"),
+     "samples_ok": 2,
+     "status": "NEWLY_CONNECTED（1R：云端侦察 + 双 vantage 复证）"},
+    {"jurisdiction": "AT", "roles": ["MS_LEGISLATION_DATABASE",
+                                      "MS_TRANSPORT_OR_DANGEROUS_GOODS"],
+     "endpoints": ["data.bka.gv.at OGD API（分页枚举）",
+                   "ogd.bka Dokumente/Bundesnormen/{NOR}.html（直链）"],
      "native_keywords": ["Batterie", "Altbatterie", "Abfallwirtschaft"],
-     "enumeration": "OGD API Suchworte 分页 + 文档 URL 直取（Batch 1R 新增通道）",
-     "samples_ok": 2, "status": "NEWLY_CONNECTED（1R）"},
+     "enumeration": ("MODE A 实采（2026-09-14）：OGD API 3 词/6 页 → 80 条"
+                     "枚举 /57 相关（Batterienverordnung×5、AWG×3、ADR 锂电"
+                     "×12+）；8 文档入库 sources/at-ogd/；AT_PLAN_V1 已冻结"),
+     "samples_ok": 8, "status": "MODE_A_COMPLETE（PLAN_V1 FROZEN，MODE B 待启动）"},
     {"jurisdiction": "US-GA", "roles": ["STATE_ENVIRONMENT"],
      "endpoints": ["epd.georgia.gov（Land Protection / Hazardous Waste）"],
      "native_keywords": ["battery", "hazardous waste", "solid waste"],

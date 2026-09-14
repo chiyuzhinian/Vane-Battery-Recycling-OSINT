@@ -228,3 +228,37 @@ GA +4（EPD Land Protection 等）、CO +1（CDPHE 主页）。
 - 契约刷新：HU（2 roles：NJT blocked / gazette CONNECTED）。
 - **414 passed**（0 fail）。
 
+---
+
+## 附录 B — MODE A 深化（AT 完整走通：枚举 → 样本 → PLAN_V1 冻结）
+
+> 2026-09-14：以 AT（Batch 1R 恢复辖区）为样板，执行完整
+> MODE A（DISCOVERY_EXPANSION）→ 冻结搜索计划（§B4）。
+
+### B.1 实采结果（`scripts/collect_at_ogd.py` → `outputs/audit/at_ogd_inventory.json`）
+
+- 经 **RIS OGD API**（`data.bka.gv.at/ris/api/v2.6/Bundesrecht`）：
+  3 个德语查询词 × 分页 → **枚举 80 条 / 相关 57**，含：
+  - **Batterienverordnung**（电池条例）×5、**Abfallwirtschaftsgesetz**（AWG）×3、
+  - **ADR 锂电运输系列**（Lithiumbatterien/-zellen）×12+、
+  - Abfallverzeichnisverordnung 2020、Abfallverbrennungsverordnung 等。
+- **8 份官方文档入库**（`sources/at-ogd/`，40–55KB/份）——通道技术细节：
+  `ogd.ris.bka.gv.at/eli/...` 端点 **503**（已记录）→
+  `ogd.ris.bka.gv.at/Dokumente/Bundesnormen/{NOR}/{NOR}.html` **200**（alt 路径实证）。
+
+### B.2 AT_PLAN_V1 冻结（`sources/search-plans/AT_PLAN_V1.yaml`）
+
+- 角色/端点已注册（`AT_NATIONAL_LEGISLATION`：`at_ris_ogd_api` + `at_ogd_doc`；
+  `source-endpoints.yaml` + `jurisdiction-registry.yaml` 同步）；
+- A 种子 ×5（Batterienverordnung/AWG/Abfallverzeichnis/ADR 锂电×2，**均实测存在**）；
+  B 词 ×3（API 实测）；routes [A, B]；language [de]；窗口 1990–2026；
+- **登记 hash 后的 MODE B（CONVERGENCE_VALIDATION）可从 V1 起算 streak**。
+
+### B.3 当前状态
+
+- EU 5/6（83.3%）、US 6/8（75.0%）——**BATCH 1 = PARTIAL** 判定不变；
+- 12 个 CONNECTED 辖区中 AT 已达 **MODE_A_COMPLETE**，其余保持
+  DISCOVERY_EXPANSION IN_PROGRESS（`batch1r_mode_a_log.json`）。
+- 回归：**414 passed**（含 plan 注册/hash 校验）。
+
+

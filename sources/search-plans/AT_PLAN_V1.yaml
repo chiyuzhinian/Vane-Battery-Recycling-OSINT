@@ -1,0 +1,55 @@
+# ============================================================
+# Search Plan —— AT_PLAN_V1（Batch 1R 新恢复辖区，§B4）
+# ------------------------------------------------------------
+# 冻结依据：MODE A（DISCOVERY_EXPANSION）2026-09-14 实采
+#   · 通道：RIS OGD API（data.bka.gv.at）枚举 + 文档直取
+#     （ogd.ris.bka.gv.at/Dokumente/Bundesnormen/{NOR}.html，503→alt 已验证）
+#   · 枚举 80 条 / 相关 57（Batterienverordnung×5、AWG×3、ADR 锂电系列×12+、
+#     Abfallverzeichnis 2020 等）；8 份文档已入库 sources/at-ogd/
+# 纪律：自冻结起不得修改；再变 → AT_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: AT_PLAN_V1
+jurisdiction: AT
+scope: AT
+
+source_roles:
+  - {role: AT_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - at_ris_ogd_api          # data.bka.gv.at/ris/api/v2.6/Bundesrecht（注册表 at_ris_ogd_api）
+  - at_ogd_doc              # ogd Dokumente/Bundesnormen/{NOR}.html（注册表 at_ogd_doc）
+
+critical_sources:
+  - at_ris_ogd
+
+query_taxonomy_version: qt-at-v1
+query_set:
+  fr_agencies:                         # A：官方直链种子（MODE A 实测存在）
+    - "NOR40098375"                    # Batterienverordnung
+    - "NOR12135153"                    # Abfallwirtschaftsgesetz（AWG）
+    - "NOR40226726"                    # Abfallverzeichnisverordnung 2020
+    - "NOR12151966"                    # ADR - Beförderung von Lithiumbatterien
+    - "NOR40185349"                    # ADR - Lithiumzellen aus Produktionsserien
+  fr_terms:                            # B：德语检索词（OGD API Suchworte 实测）
+    - Batterie
+    - Altbatterie
+    - Abfallwirtschaft
+  eu_keywords: []                      # C：无引用种子扩展（A+B 已足）
+  cross_terms: []                      # D：无缺口种子
+
+language_set: [de]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1R：AT 经官方 OGD 通道恢复（主域 503 区域拦截，双 vantage 一致；
+  OGD 双 vantage 200）。A 种子均经 MODE A 实采存在（inventory 存
+  outputs/audit/at_ogd_inventory.json）；B 词经 API 验证（Altbatterie 命中少、
+  以 Batterie/Abfallwirtschaft 为主）。文档直取须走 Dokumente/Bundesnormen
+  路径（eli 端点 503 已记录）。MODE B 待启动（streak 从 V1 冻结起算）。
+created_at: "2026-09-14"

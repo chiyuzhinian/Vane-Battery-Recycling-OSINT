@@ -313,3 +313,13 @@ jurisdictions:
         sources: [us_wa_rcw]
         status: CONNECTED
         note: "RCW 章节直链（R1-R4 引用链扩张 · 发现 14 篇）；无检索端点（B 如实缺席）"
+      - role: AT_NATIONAL_LEGISLATION
+        expected: true
+        sources: [at_ris_ogd]
+        status: CONNECTED
+        note: "Batch 1R：OGD 开放数据通道恢复（主域 503 双 vantage；data.bka/ogd.bka 双 200）；MODE A 实采 80/57；AT_PLAN_V1 已冻结"
+      - role: HU_OFFICIAL_GAZETTE
+        expected: true
+        sources: [hu_magyarkozlony]
+        status: CONNECTED
+        note: "Batch 1R：Magyar Közlöny 公报通道（云端侦察 + 本地/云双 vantage 200；2 文档 sha256 存证）"

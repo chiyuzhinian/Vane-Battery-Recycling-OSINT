@@ -513,6 +513,27 @@ roles:
   # ---------------------------------------------------------- Phase 4B-2A Pilot 管辖地（Step 8）
   # 端点均经 Step 8 真实探测（outputs/_probe_step8*.py 记录）：
   #   ✅ 200 且可解析 / ⛔ 受阻（notes 注明，如实登记不臆造）
+  - role: AT_NATIONAL_LEGISLATION
+    jurisdiction: AT
+    source_name: "奥地利 RIS OGD（联邦法律开放数据通道）"
+    official_domain: data.bka.gv.at
+    notes: "Batch 1R：主域 ris.bka.gv.at 503 区域拦截（本地+云双 vantage 一致）；OGD 通道双 vantage 200（恢复通道）"
+    endpoints:
+      - id: at_ris_ogd_api
+        official_url: "https://data.bka.gv.at/ris/api/v2.6/Bundesrecht?Applikation=BrKons&Suchworte=Batterie"
+        official_domain: data.bka.gv.at
+        content_kind: json
+        role_method: api
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "OGD 检索 API（JSON：Kurztitel/Eli/DokumentUrl）；MODE A 实采 80 条/57 相关"
+      - id: at_ogd_doc
+        official_url: "https://ogd.ris.bka.gv.at/Dokumente/Bundesnormen/NOR12151966/NOR12151966.html"
+        official_domain: ogd.ris.bka.gv.at
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "文档直链（eli 端点 503 → Dokumente 路径 200 已验证）；8 文档入库 sources/at-ogd/"
+
   - role: SE_NATIONAL_LEGISLATION
     jurisdiction: SE
     source_name: "瑞典 SFST（Regeringskansliet 法库）"
