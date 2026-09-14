@@ -45,14 +45,17 @@ horizontal_applies_to_ev:
   - "persistent\\s+organic\\s+pollutant"
   - "basel\\s+convention|transboundary"
   # 多语种废物/车辆家族（横向适用——2B0 实测判例：BE NIM ELV 被误域外）
-  - "afgedankte\\s+voertuigen|afval|afvalstoffen|milieubeleidsover"
-  - "v[ée]hicules?\\s+hors\\s+d'usage|d[ée]chet"
+  - "afgedankte\\s+voertuigen|afval|afvalstoffen|milieubeleidsover|autowrak"
+  - "v[ée]hicules?\\s+hors\\s+d'usage|\\bvhu\\b|d[ée]chet"
+  - "\\bvfu\\b|veh[íi]culos\\s+fuera\\s+de\\s+uso"
   - "altfahrzeug|altauto|abfall(?:verzeichnis|recht)"
   - "romuajoneuvo|j[äa]telaki|j[äa]tehuolto|j[äa]te"
   - "skrotade\\s+fordon|skrotfordon|avfallsf[öo]rordning|avfall"
   - "gospodarka\\s+odpadami|odpad"
 
 # 3) 支撑性方法论/程序（回收效率/再生含量/碳足迹/尽职调查/运输/标准）
+#    2B1 增补：危废/危货体系（RCRA/49 CFR、e-Manifest/LDR、清洁车辆抵免）——
+#    这类文书是电池回收企业的真实约束，属 SUPPORTING（最高 B）而非域外
 supporting_markers:
   - "recycl(?:ing|ed)\\s+(?:efficiency|content|material)"
   - "carbon\\s+footprint"
@@ -61,6 +64,28 @@ supporting_markers:
   - "standard|EN\\s?\\d|ISO\\s?\\d"
   - "harmonised\\s+standard"
   - "traceability|battery\\s+passport"
+  # 2B1：危货/危废支撑体系
+  - "hazardous\\s+materials?"
+  - "hazardous\\s+waste"
+  - "\\b49\\s+cfr\\b"
+  - "\\b40\\s+cfr\\s+26[0-8]"
+  - "rcra|resource\\s+conservation\\s+and\\s+recovery"
+  - "e-?manifest|land\\s+disposal\\s+restriction|generator\\s+improvements"
+  - "clean\\s+vehicle\\s+credit|45x|advanced\\s+manufacturing"
+  - "solid\\s+waste|waste\\s+management\\s+program"
+
+# 3b) 支撑体系（无条件档）：危废/危货/激励机制——适用范围由文书本体
+#     决定，**不要求**标题/正文出现电池字面词（49 CFR 171、40 CFR 261 等）
+#     2B1：这些是电池回收企业的真实约束，不得误判为域外
+supporting_unconditional:
+  - "hazardous\\s+materials?"
+  - "hazardous\\s+waste"
+  - "\\b49\\s+cfr\\b"
+  - "\\b40\\s+cfr\\s+26[0-8]"
+  - "rcra|resource\\s+conservation\\s+and\\s+recovery"
+  - "e-?manifest|land\\s+disposal\\s+restriction|generator\\s+improvements"
+  - "clean\\s+vehicle\\s+credit|45x"
+  - "tax\\s+credit|section\\s+641[78]|elective\\s+payment"
 
 # 4) 泛电池背景（便携/消费/纽扣/家用/电单车——**不得**充当 EV 核心证据）
 general_battery_markers:

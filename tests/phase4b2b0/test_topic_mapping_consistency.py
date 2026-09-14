@@ -45,13 +45,20 @@ def test_is_placeholder_boundary():
 
 
 def test_effective_class_priority():
+    # overlay meta 优先 + 域护栏（2B1：支撑法规记录 B 保持）
+    wr = _rec(eid="w1", sid="us_ecfr",
+              title="Identification and Listing of Hazardous Waste",
+              text=("hazardous waste management of battery recyclers " * 20),
+              meta={"acceptance_class": "B"})
+    assert effective_class(wr) == "B"
+    # 无域信号记录（空 title/text）→ OUT_OF_SCOPE：强类一律降 D（2B1 一致性）
     with_meta = _rec(meta={"acceptance_class": "B"})
-    assert effective_class(with_meta) == "B"
-    # 无 meta 分类 → 现算；NIM 泛电池语境 → A2 经域护栏降到 C（Step 4）
+    assert effective_class(with_meta) == "D"
+    # 无 meta 分类 → 现算；NIM → 封顶 C（discovery layer）
     nim = _rec(sid="eu_nim_se", text="waste batteries recycling scheme")
     nim["relevant"] = True
     assert effective_class(nim) == "C"
-    # overlay 回退优先于现算（且 OUT_OF_SCOPE 不降 B/C）
+    # overlay 回退优先于现算
     ov = {"e1": {"acceptance_class": "C"}}
     assert effective_class(_rec(eid="e1", text="x"), ov) == "C"
 

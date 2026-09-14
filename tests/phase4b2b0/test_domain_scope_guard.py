@@ -48,9 +48,11 @@ def test_guard_class_matrix():
     assert guard_class("A2", "GENERAL_BATTERY_BACKGROUND") == "C"
     assert guard_class("B", "GENERAL_BATTERY_BACKGROUND") == "C"
     assert guard_class("D", "GENERAL_BATTERY_BACKGROUND") == "D"
-    # OUT_OF_SCOPE：仅降 A1/A2（B 保留——eCFR 实测判例）
+    # OUT_OF_SCOPE：任意强类 → D（2B1：不再保留 B——语义一致性；
+    # 真支撑法规由词表归位 SUPPORTING）
     assert guard_class("A2", "OUT_OF_SCOPE") == "D"
-    assert guard_class("B", "OUT_OF_SCOPE") == "B"
+    assert guard_class("B", "OUT_OF_SCOPE") == "D"
+    assert guard_class("A1", "OUT_OF_SCOPE") == "D"
     # SUPPORTING：A1/A2 → B
     assert guard_class("A1", "SUPPORTING_REGULATION") == "B"
     assert guard_class("B", "SUPPORTING_REGULATION") == "B"
@@ -70,12 +72,15 @@ def test_non_policy_sources_exempt():
     assert guarded_effective_class(r, "B") == "B"
 
 
-def test_nim_out_of_scope_exempt_but_general_guarded():
-    # NIM + 多语言域外误判 → 豁免（保持原类）
+def test_nim_capped_c_via_flag():
+    """2B1：NIM 不再有 "OUT_OF_SCOPE 豁免" 特例——统一封顶 C。"""
+    # NIM + 多语言域外误判 → 封顶 C（不提强类）
     r = _rec(sid="eu_nim_be", title="Arrêté relatif à l'immatriculation")
-    assert guarded_effective_class(r, "A2") == "A2"
-    # NIM + 泛电池背景 → 仍受 GENERAL 防护
+    assert guarded_effective_class(r, "A2") == "C"
+    assert guarded_effective_class(r, "B") == "C"
+    # NIM + 泛电池背景 → 域判定保留（诊断）且最终 C
     r2 = _rec(sid="eu_nim_fi",
              title="Valtioneuvoston asetus paristoista ja akuista")
     assert classify_domain_scope(r2) == "GENERAL_BATTERY_BACKGROUND"
+    assert guarded_effective_class(r2, "A2") == "C"
     assert guarded_effective_class(r2, "A2") == "C"

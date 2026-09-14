@@ -54,9 +54,12 @@ def _rules() -> dict:
         raise DomainRulesError(f"域规则文件非法：{RULES_PATH}")
     out = {}
     for key in ("core_ev_traction", "horizontal_applies_to_ev",
-                "supporting_markers", "general_battery_markers",
-                "out_of_scope_markers"):
+                "supporting_markers", "supporting_unconditional",
+                "general_battery_markers", "out_of_scope_markers"):
         pats = raw.get(key)
+        if key == "supporting_unconditional":
+            out[key] = [re.compile(p, re.I) for p in (pats or [])]
+            continue
         if not isinstance(pats, list) or not pats:
             raise DomainRulesError(f"域规则缺少非空列表：{key}")
         out[key] = [re.compile(p, re.I) for p in pats]
@@ -73,6 +76,14 @@ def classify_domain_scope(record: dict) -> str:
     def _hit(key: str, s: str) -> bool:
         return any(rx.search(s) for rx in rules[key])
 
+    # 核心 CELEX 锚点（2B1）：eeu_fulltext_* 记录标题为占位样式，全文含
+    # 核心体系法案（2000/53、2008/98、2023/1542…）→ 直接归位 HORIZONTAL
+    celex = str((record.get("meta") or {}).get("celex") or "")
+    if celex.startswith(("32000L0053", "32006L0066", "32008L0098",
+                         "32023R1542", "32024R1157", "32024R1252",
+                         "32018L0849", "32026R1738")):
+        return "HORIZONTAL_APPLIES_TO_EV"
+
     # 域外对象（标题级）且无横向电池法引用 → OUT_OF_SCOPE
     if _hit("out_of_scope_markers", title) \
             and not _hit("horizontal_applies_to_ev", hay):
@@ -82,7 +93,7 @@ def classify_domain_scope(record: dict) -> str:
         return "CORE_EV_TRACTION"
     # 横向体系法案
     if _hit("horizontal_applies_to_ev", title) or _hit(
-            "horizontal_applies_to_ev", hay[:400]):
+            "horizontal_applies_to_ev", hay[:1200]):
         return "HORIZONTAL_APPLIES_TO_EV"
     # 泛电池背景（标题级）
     if _hit("general_battery_markers", title):
@@ -90,6 +101,10 @@ def classify_domain_scope(record: dict) -> str:
         if _hit("core_ev_traction", hay):
             return "CORE_EV_TRACTION"
         return "GENERAL_BATTERY_BACKGROUND"
+    # 支撑体系（无条件档；2B1）：危废/危货/激励——不要求电池字面词
+    if _hit("supporting_unconditional", title) \
+            or _hit("supporting_unconditional", hay[:400]):
+        return "SUPPORTING_REGULATION"
     # 支撑性方法学（含电池对象语境）
     if _hit("supporting_markers", title) or _hit("supporting_markers",
                                                  hay[:600]):
@@ -106,19 +121,38 @@ def classify_domain_scope(record: dict) -> str:
     return "OUT_OF_SCOPE"
 
 
-def guard_class(acceptance_class: str, domain_scope: str) -> str:
-    """域约束下的最终类（规格 §五 约束矩阵；不满足 → 降级）。
+FORBIDDEN_BY_SCOPE: dict[str, frozenset] = {
+    "OUT_OF_SCOPE": frozenset(("A1", "A2", "B")),
+    "GENERAL_BATTERY_BACKGROUND": frozenset(("A1", "A2", "B")),
+    "SUPPORTING_REGULATION": frozenset(("A1", "A2")),
+}
 
-    口径修正（实测判例）：
-      · OUT_OF_SCOPE 仅降 **A1/A2**（"被判核心却无域信号"= 可疑）；
-        不降 B —— eCFR 危废/危货文书（49 CFR 171、40 CFR 260）标题无电池词
-        但经 CFR 链与电池法规挂钩，B 级是真实政策证据，不得误伤。
-      · GENERAL_BATTERY_BACKGROUND + A1/A2/B → C（便携/消费不得冒充 EV）。
-      · SUPPORTING_REGULATION + A1/A2 → B。
-      · CORE/HORIZONTAL 无约束。
+
+def is_domain_acceptance_consistent(scope: str, final_class: str) -> bool:
+    """域/acceptance 语义一致性（Phase 4B-2B1 §2；contradiction 目标 0）。
+
+    final_class 应为**护栏后**的最终类；矛盾定义：
+      OUT_OF_SCOPE / GENERAL + A1/A2/B；SUPPORTING + A1/A2。
     """
+    return final_class not in FORBIDDEN_BY_SCOPE.get(scope, frozenset())
+
+
+def guard_class(acceptance_class: str, domain_scope: str, *, is_nim: bool = False) -> str:
+    """域约束下的最终类（2B1 口径；语义一致性纪律）。
+
+    约束矩阵：
+      · OUT_OF_SCOPE + 任意强类（A1/A2/B）→ **D**（2B1：不得再允许 OOS+B 终态；
+        真支撑法规由词表归位到 SUPPORTING——hazmat/RCRA/VHU 等）；
+      · GENERAL_BATTERY_BACKGROUND + A1/A2/B → C（便携/消费不得冒充 EV）；
+      · SUPPORTING_REGULATION + A1/A2 → B；
+      · CORE/HORIZONTAL 无约束。
+    例外：NIM discovery 层（is_nim=True）封顶 C，不受 OUT_OF_SCOPE 降级影响
+    （多语言域判定不可靠；且 NIM 本就不充当 corpus 强证据）。
+    """
+    if is_nim:
+        return acceptance_class if acceptance_class in ("C", "D") else "C"
     if domain_scope == "OUT_OF_SCOPE":
-        return "D" if acceptance_class in ("A1", "A2") else acceptance_class
+        return "D" if acceptance_class in ("A1", "A2", "B") else acceptance_class
     if domain_scope == "GENERAL_BATTERY_BACKGROUND":
         return "C" if acceptance_class in ("A1", "A2", "B") else acceptance_class
     if domain_scope == "SUPPORTING_REGULATION":
@@ -129,20 +163,17 @@ def guard_class(acceptance_class: str, domain_scope: str) -> str:
 def guarded_effective_class(record: dict, acceptance_class: str) -> str:
     """对已得分类应用域护栏（供 effective_class 接入）。
 
-    作用域细则（2B0 实测判例）：
+    作用域细则（2B1 修订）：
       · 仅政策域通道；企业线（cninfo/eia/eol）原样返回；
-      · NIM（discovery layer）**豁免 OUT_OF_SCOPE 惩罚**——多语言标题的
-        域判定不可靠（BE 法语 ELV 协议/保加利亚语法规会被误判域外），
-        且 NIM 本就不充当 corpus 强证据；GENERAL_BATTERY_BACKGROUND
-        防护**保留**（paristo/portable 多语种可判，规格核心场景）。
+      · NIM（discovery layer）封顶 C（see guard_class is_nim）——
+        **不再豁免**域护栏逻辑分支；域判定结果仅作诊断报告。
     """
     sid = str(record.get("source_id") or "")
     if not is_policy_domain_source(sid):
         return acceptance_class
     scope = classify_domain_scope(record)
-    if sid.startswith("eu_nim_") and scope == "OUT_OF_SCOPE":
-        return acceptance_class
-    return guard_class(acceptance_class, scope)
+    return guard_class(acceptance_class, scope,
+                       is_nim=sid.startswith("eu_nim_"))
 
 
 def audit_domain_guard(records: list[dict]) -> dict:

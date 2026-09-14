@@ -70,10 +70,15 @@ def test_black_mass_title_without_literal_word_is_b():
     assert classify_record(r).classification == "A2"  # 体系锚点优先（WSR 族）
 
 
-def test_native_language_not_killed():
-    """母语文档不因没有英文标题被误杀（风险 10）。"""
+def test_nim_discovery_layer_capped_c():
+    """2B1：NIM 不得 force A1/A2/B——多语言 NIM 记录封顶 C（discovery 层）。
+
+    原测试（4A）期望 NIM 母语文档自动 A2；2B1 起 NIM 只是发现索引，
+    national 实施须由各国官方通道采集（见 test_nim_discovery_only.py）。
+    """
     r = _rec(title="Vyhláška o bateriích a akumulátorech",
              source_id="eu_nim_cz", meta={"nim_id": "283350"})
     res = classify_record(r)
-    assert res.classification == "A2"
-    assert res.relevant
+    assert res.classification == "C"
+    assert res.relevant is False
+    assert "C_DISCOVERY_LAYER_NIM" in res.reason_codes

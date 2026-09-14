@@ -195,14 +195,24 @@ def classify_record(record: dict) -> PolicyAcceptanceResult:
                                       ["C_OMNIBUS_PACKAGE"], quotes[:2])
 
     # ---- 体系锚点（A2）----
+    #   2B1：NIM 前缀**不再**是体系锚点（NIM 仅 discovery，不得 force A1/A2/B）
     celex = str(meta.get("celex") or "")
     system_anchor = bool(
         _SYSTEM_NUM.search(title)
         or (celex and _SYSTEM_NUM.search(celex))
         or core_celex
-        or str(record.get("source_id") or "").startswith("eu_nim_")
         or meta.get("directive")
     )
+
+    # ---- NIM discovery 层封顶（2B1，置于强类判定之前）----
+    #   NIM 是成员国实施措施的**发现索引**（多语言清单），不是 national
+    #   corpus 证据：即使采集器词表命中，也不得自动升入强类。
+    #   封顶 C（背景/索引层）；relevant=False（不计入选）。
+    #   真实实施立法须由各国官方通道（SFST/Sejm/Finlex 等）采集。
+    sid = str(record.get("source_id") or "")
+    if sid.startswith("eu_nim_"):
+        return PolicyAcceptanceResult("C", False, 0.5, topic_ids,
+                                      ["C_DISCOVERY_LAYER_NIM"], quotes[:2])
 
     # ---- 4) A1（对象必须在标题中——"明确针对"）----
     a1_title = next((rx.search(title) for rx in _A1_OBJECT
@@ -223,16 +233,6 @@ def classify_record(record: dict) -> PolicyAcceptanceResult:
             "A2", True, 0.8 if theme_hit else 0.72, topic_ids,
             ["A2_BATTERY_SYSTEM"], quotes[:3],
         )
-
-    # ---- 5b) NIM 层特例：采集器已按多语言分层判相关 → 认可为体系成员 ----
-    #   （与 rejudge 跳过 NIM 同一纪律：该层由采集器的 24 语种词表自治）
-    sid = str(record.get("source_id") or "")
-    if sid.startswith("eu_nim_") and record.get("relevant"):
-        if record.get("needs_human_review"):
-            return PolicyAcceptanceResult("C", False, 0.5, topic_ids,
-                                          ["C_THEME_ONLY"], quotes[:2])
-        return PolicyAcceptanceResult("A2", True, 0.7, topic_ids,
-                                      ["A2_BATTERY_SYSTEM"], quotes[:2])
 
     # ---- 6) B（条款证据必需）----
     b_topics = set(rules.classes["B"].required_any_topics)

@@ -92,7 +92,7 @@ cases:
   # ---------------- eu_member_state ----------------
   - id: eu_ms_cz_battery_decree
     jurisdiction: EU_27
-    expected_class: A2
+    expected_class: C
     expected_topics: [T01, T02]
     expected_instrument_type: administrative_rule
     expected_binding_force: binding
@@ -105,16 +105,21 @@ cases:
       属 national administrative rule（binding），**不是**标准（标准应为 EN/ČSN 类）。
       来源：EUR-Lex NIM 页面（官方公报原文标题）。修正后 instrument 判定
       metadata-first + NIM 母语文种规则可稳定命中（不再依赖占位标签）。
+      ⚠️ 期望再次修正（Phase 4B-2B1 §3）：NIM 记录自 2B1 起为 discovery
+      层（封顶 C）——本案例验证"NIM 索引能找到该法令"（must_find 仍命中），
+      但其 acceptance 期望从 A2 降为 C（NIM 不得 force A1/A2/B）。
     holdout: false
 
   - id: eu_ms_be_elv_decree
     jurisdiction: EU_27
-    expected_class: A2
+    expected_class: C
     expected_topics: [T03]
     expected_instrument_type: unknown
     expected_binding_force: unknown
     must_find: {nim: "28881"}
-    notes: "比利时瓦隆报废车管理办法（规格§5：ELV 拆除走体系/B 域 → A2）"
+    notes: >
+      比利时瓦隆报废车管理办法（规格§5：ELV 拆除走体系/B 域 → A2）。
+      ⚠️ Phase 4B-2B1 §3：NIM 封顶 C——期望从 A2 降为 C（discovery 层）。
     holdout: true
 
   # ---------------- us_federal ----------------
