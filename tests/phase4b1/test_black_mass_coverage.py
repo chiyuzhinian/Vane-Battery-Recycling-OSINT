@@ -117,3 +117,15 @@ def test_split_level_default_off_keeps_shape():
     cov = build_coverage([_rec("x", "battery recycling")])
     for line in cov["lines"]:
         assert "federal_strong" not in line
+
+
+def test_federal_only_lines_marked_not_applicable_state_level():
+    """2B1 §12：跨境/海关属联邦权限——州级 NOT_APPLICABLE，不得误判 MISSING。"""
+    records = [
+        _rec("t1", "Shipments of waste — Regulation (EU) 2024/1157 transboundary",
+             sid="us_ecfr"),
+    ]
+    cov = build_coverage(records, region="US", split_level=True)
+    tb = next(l for l in cov["lines"] if l["line_id"] == "transboundary")
+    assert tb["state_strong"] == 0
+    assert "NOT_APPLICABLE_STATE_LEVEL" in tb["level_note"]

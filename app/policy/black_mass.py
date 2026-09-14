@@ -59,6 +59,10 @@ def classify_line(record: dict, line_id: str) -> bool:
     return bool(pat.search(hay))
 
 
+#: 天然联邦权限线（州级 NOT_APPLICABLE——不得误判为 MISSING；2B1 §12）
+FEDERAL_ONLY_LINES = frozenset(("transboundary", "customs"))
+
+
 def record_class(record: dict) -> str:
     meta = record.get("meta") or {}
     return str(meta.get("acceptance_class") or
@@ -131,7 +135,12 @@ def build_coverage(records: list[dict], *, region: str = "",
             if strong and not fed and st:
                 entry["level_note"] = "仅州级强证据——不构成联邦覆盖（州不得计联邦）"
             elif strong and fed and not st:
-                entry["level_note"] = "仅联邦强证据——州级待补（州不重复计）"
+                if lid in FEDERAL_ONLY_LINES:
+                    entry["level_note"] = (
+                        "仅联邦强证据——州级 NOT_APPLICABLE_STATE_LEVEL"
+                        "（跨境运输/海关属联邦权限，非州缺失）")
+                else:
+                    entry["level_note"] = "仅联邦强证据——州级待补（州不重复计）"
             elif fed and st:
                 entry["level_note"] = (
                     f"联邦 {len(fed)} 条 + 州 {len(st)} 条"
