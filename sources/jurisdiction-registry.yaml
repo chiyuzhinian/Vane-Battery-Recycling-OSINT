@@ -252,7 +252,7 @@ jurisdictions:
       - {code: US-ME, name: 缅因, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
       - {code: US-MD, name: 马里兰, status: NOT_ONBOARDED}
       - {code: US-MA, name: 马萨诸塞, status: NOT_ONBOARDED}
-      - {code: US-MI, name: 密歇根, status: NOT_ONBOARDED}
+      - {code: US-MI, name: 密歇根, status: PARTIAL, sources: [us_mi_egle], note: "2026-09-15 browser 通道恢复：EGLE 2 样本（sha256 存证）；legislature 多通道 403/timeout 如实保留"}
       - {code: US-MN, name: 明尼苏达, status: PARTIAL, sources: [us_mn_revisor], note: "revisor cite 专线（Step 5 攻坚：325E.1251/116.07 样本）；电池专条未定位（115A.30xx 404）"}
       - {code: US-MS, name: 密西西比, status: NOT_ONBOARDED}
       - {code: US-MO, name: 密苏里, status: NOT_ONBOARDED}
@@ -265,7 +265,7 @@ jurisdictions:
       - {code: US-NY, name: 纽约, status: NOT_ONBOARDED}
       - {code: US-NC, name: 北卡罗来纳, status: NOT_ONBOARDED}
       - {code: US-ND, name: 北达科他, status: NOT_ONBOARDED}
-      - {code: US-OH, name: 俄亥俄, status: NOT_ONBOARDED}
+      - {code: US-OH, name: 俄亥俄, status: NOT_ONBOARDED, note: "2026-09-15 三通道终判：本地/云/真实浏览器均被拒（品牌 404/timeout，全州 WAF）；待美区 vantage"}
       - {code: US-OK, name: 俄克拉何马, status: NOT_ONBOARDED}
       - {code: US-OR, name: 俄勒冈, status: NOT_ONBOARDED}
       - {code: US-PA, name: 宾夕法尼亚, status: NOT_ONBOARDED}

@@ -51,7 +51,7 @@ routing_rules:
     preferred_runner: runner-cloud-1
     fallback:
       - { kind: official_alt, endpoint: "https://www.legislature.ohio.gov/" }
-    last_reason: "MULTI_VANTAGE_BLOCKED（本地 timeout + 云 000/ERR）"
+    last_reason: "MULTI_VANTAGE_BLOCKED + BROWSER_CHANNEL_BLOCKED（全州 WAF：品牌 404/timeout；三通道一致）"
   - match: { jurisdiction: US-CO, endpoints: ["cdphe.colorado.gov"] }
     preferred_runner: runner-cloud-1
     fallback:
@@ -61,7 +61,7 @@ routing_rules:
     preferred_runner: runner-cloud-1
     fallback:
       - { kind: browser_channel, endpoint: "browser" }   # JS 渲染 / 403 场景
-    last_reason: "MULTI_VANTAGE_BLOCKED（legislature 双败）+ ACCESS_CONTROLLED（EGLE 双 403）"
+    last_reason: "RECOVERED via browser channel（EGLE 2 样本 200，desktop-browser-mcp）；legislature 双败+浏览器 403 如实保留"
 
   # ── Batch 1 CONNECTED 辖区（本机直取）──
   - match: { jurisdiction: IT, endpoints: ["normattiva.it"] }

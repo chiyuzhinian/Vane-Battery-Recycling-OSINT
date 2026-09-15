@@ -71,11 +71,15 @@ RECOVERY = [
         "jurisdiction": "US-MI", "source_role": "STATE_LEGISLATURE / STATE_ENVIRONMENT",
         "main_endpoint": "https://www.legislature.mi.gov/ + https://www.michigan.gov/egle",
         "current_runner_result": "CURRENT_RUNNER_BLOCKED / HTTP_NO_RESPONSE（legislature）；ACCESS_CONTROLLED / HTTP_403（EGLE）",
-        "second_runner_result": "云 vantage（runner-cloud-1）：legislature 000/ERR；EGLE 403（与本地一致）",
-        "official_alternative_routes": [],
-        "final_access_classification": "MULTI_VANTAGE_BLOCKED（legislature 双败）+ ACCESS_CONTROLLED（EGLE 双 403）",
-        "recommended_execution_route": "browser channel（EGLE 403 双环境一致性） / 目标地区 vantage",
-        "remaining_blocker": "两独立出口均不可达；EGLE 为跨环境一致的控制壳",
+        "second_runner_result": "云 vantage（runner-cloud-1）：legislature 000/ERR；EGLE 403（与本地一致）；第三通道 desktop-browser-mcp（真实浏览器栈）：EGLE 200 ✓（legislature 403）",
+        "official_alternative_routes": [
+            {"route": "browser channel（真实浏览器栈，desktop-browser-mcp）",
+             "endpoint": "https://www.michigan.gov/egle/about/organization/materials-management",
+             "verified": "200（MMD 409,386B + Recycling 479,683B 双样本，sha256 存证 browser_samples/）"},
+        ],
+        "final_access_classification": "RECOVERED（browser channel：EGLE 2 样本；legislature 侧多通道 403/timeout 如实保留）",
+        "recommended_execution_route": "browser channel（desktop-browser-mcp）+ local 复采",
+        "remaining_blocker": "无（已恢复 CONNECTED：EGLE 2 真实样本；legislature 单源保留 BLOCKED 记录）",
     },
     {
         "jurisdiction": "US-GA", "source_role": "STATE_ENVIRONMENT",
@@ -91,11 +95,15 @@ RECOVERY = [
         "jurisdiction": "US-OH", "source_role": "STATE_STATUTES",
         "main_endpoint": "https://codes.ohio.gov/ + https://www.legislature.ohio.gov/",
         "current_runner_result": "CURRENT_RUNNER_BLOCKED / CONNECT_TIMEOUT；alt 轮 DNS_ERROR",
-        "second_runner_result": "云 vantage（runner-cloud-1）：codes/legislature 均 000/ERR（双败）",
-        "official_alternative_routes": [],
-        "final_access_classification": "MULTI_VANTAGE_BLOCKED（双独立出口均不可达）",
-        "recommended_execution_route": "目标地区 vantage / browser channel（后续）",
-        "remaining_blocker": "两独立出口均不可达（高置信非本机特例）",
+        "second_runner_result": "云 vantage（runner-cloud-1）：codes/legislature 均 000/ERR（双败）；第三通道 browser（真实浏览器栈）：epa.ohio.gov / ohio.gov 品牌 404（WAF 策略页）、codes.ohio.gov ERR_TIMED_OUT",
+        "official_alternative_routes": [
+            {"route": "browser channel 复测（desktop-browser-mcp）",
+             "endpoint": "https://epa.ohio.gov/ / https://ohio.gov/",
+             "verified": "未测通（品牌 404——非页面迁移，为全州 WAF 对当前网络位的封锁策略）"},
+        ],
+        "final_access_classification": "MULTI_VANTAGE_BLOCKED + BROWSER_CHANNEL_BLOCKED（三通道一致拒绝，高置信）",
+        "recommended_execution_route": "美区 vantage（需新增 runner；浏览器通道无助）",
+        "remaining_blocker": "当前网络位（本地+阿里云+真实浏览器）全被拒；品牌 404 为 WAF 遮蔽（legislature 超时同源）",
     },
     {
         "jurisdiction": "US-CO", "source_role": "STATE_ENVIRONMENT",
@@ -156,6 +164,11 @@ MODE_A = [
      "native_keywords": ["battery", "hazardous", "recycling"],
      "enumeration": "CDPHE 站内页枚举（子路径 403 → 浏览器回退）",
      "samples_ok": 1, "status": "NEWLY_CONNECTED（1R）"},
+    {"jurisdiction": "US-MI", "roles": ["STATE_ENVIRONMENT"],
+     "endpoints": ["michigan.gov/egle（browser 通道，desktop-browser-mcp）"],
+     "native_keywords": ["battery", "recycling", "solid waste"],
+     "enumeration": "EGLE MMD + Recycling 页（browser 捕获 409KB/480KB；Recycling 页含 7 处 battery 命中）",
+     "samples_ok": 2, "status": "NEWLY_CONNECTED（1R-2：browser channel）"},
     {"jurisdiction": "US-IL", "roles": ["STATE_ENVIRONMENT"],
      "endpoints": ["epa.illinois.gov（waste-management）"],
      "native_keywords": ["battery", "recycling", "waste"],
@@ -205,14 +218,16 @@ def main() -> int:
         "runner_note": ("Runner B（runner-cloud-1，阿里云 106.12.59.96，egress_region=aliyun-cn）"
                         "已于 Batch 1R 上线：对全部原 blocked 端点完成第二 vantage 实测；"
                         "HU 经云+本地双 vantage 逆转；BE/OH/MI-legislature 双败 → MULTI_VANTAGE_BLOCKED；"
-                        "EGLE 双 403 → ACCESS_CONTROLLED；AT-main 双 503（区域拦截，OGD 通道除外）。"),
+                        "EGLE 双 403 → ACCESS_CONTROLLED；AT-main 双 503（区域拦截，OGD 通道除外）。"
+                        "Batch 1R-2：第三通道（desktop-browser-mcp 真实浏览器栈）实测——"
+                        "MI-EGLE 200 → RECOVERED；OH 全州品牌 404（WAF）→ BROWSER_CHANNEL_BLOCKED。"),
         "decisions": RECOVERY,
     }
     (AUDIT / "batch1_channel_recovery.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     (AUDIT / "batch1r_mode_a_log.json").write_text(
         json.dumps({"generated_at": now, "track": "B/MODE A（DISCOVERY_EXPANSION）",
-                    "note": "MODE B 未进入（PLAN_V1 待 MODE A 稳定后生成）",
+                    "note": "本日志为 Batch 1R 时点快照；MODE B 已于 2026-09-15 对 CZ/IT/HU/SK 完成收敛（见 docs/phase4b2b/PHASE4B2B_MODEB_BATCH1_CHANNELS.md）",
                     "jurisdictions": MODE_A},
                    ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"recovered: {payload['recovered_via_rerun_or_alt_route']}")

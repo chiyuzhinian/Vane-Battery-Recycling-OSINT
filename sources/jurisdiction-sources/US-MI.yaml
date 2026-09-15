@@ -18,7 +18,7 @@ sources:
       - "https://www.legislature.mi.gov/Laws/ChapterList"
       - "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-324-11101"
     samples_known: []
-    note: "已知 403 风险（hard case）；MCL 324（自然资源与环境保护法）为电池回收相关主章"
+    note: "已知 403 风险（hard case）；MCL 324（自然资源与环境保护法）为电池回收相关主章；2026-09-15 browser 通道复测：403（多通道一致）"
   - source_role: STATE_ENVIRONMENT
     source_id: us_mi_egle
     official_owner: "Michigan EGLE（环境、大湖区与能源部）"
@@ -28,5 +28,7 @@ sources:
     search_attempts:
       - "https://www.michigan.gov/egle/about/organization/materials-management"
       - "https://www.michigan.gov/egle/about/organization/materials-management/recycling"
-    samples_known: []
-    note: "EGLE 材料管理（回收/危废主管）"
+    samples_known:
+      - "https://www.michigan.gov/egle/about/organization/materials-management"
+      - "https://www.michigan.gov/egle/about/organization/materials-management/recycling"
+    note: "EGLE 材料管理（回收/危废主管）；2026-09-15 browser 通道（desktop-browser-mcp）恢复：2 样本 200（409KB/480KB，sha256 存证）；脚本端 403=bot 壳"

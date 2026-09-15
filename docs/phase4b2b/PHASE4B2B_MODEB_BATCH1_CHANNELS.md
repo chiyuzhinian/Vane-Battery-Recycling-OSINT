@@ -62,3 +62,22 @@ CZ/IT/HU/SK 适配器；streak 仅计 `convergence_validation` 模式轮）：
   （静态 HTML 为骨架目录 → 分类窗口 NO_THEME 的根因修复）
 - 失败纪律：SK 种子 79/2015、373/2015 按现行判据记 D（泛述窗口），
   与 CZ 泛废物法同口径，不做特例放水
+
+## 七、Batch 1R-2：第三通道（真实浏览器栈）——MI 恢复 / OH 终判（2026-09-15）
+
+- **技术**：MCP Playwright（Chromium 真实浏览器栈）+ vantage `desktop-browser-mcp`
+  （脚本端 UA/指纹被 bot 壳识别；真实浏览器栈可过 JS/指纹层）
+- **US-MI → RECOVERED**（browser channel）：
+  · EGLE MMD 页 409,386B（sha256 `dc618784…`）
+  · EGLE Recycling 页 479,683B（sha256 `fe338c78…`，含 7 处 battery 内容）
+  · legislature.mi.gov：脚本双败 + 浏览器 403 → 单源如实保留 BLOCKED
+  · 样本注入 `us_mi_egle` proof → **US onboarded 7/8 = 87.5% ≥ 80% 门槛 ✓**
+    （BATCH 1 美国组门槛达成；EU 5/6 = 83.3% 保持）
+- **US-OH → 三通道终判 BLOCKED**（高置信）：
+  · 脚本（本地）/ 云 runner / 真实浏览器 三通道全被拒
+  · epa.ohio.gov、ohio.gov 均返回**品牌 404 页**（Innovate Ohio Platform
+    错误页——为 WAF 策略而非页面迁移；截图存证
+    `browser_samples/US-OH_ohio-gov_branded404.png`）
+  · codes.ohio.gov = ERR_TIMED_OUT（真实浏览器同判）
+  · 结论：全州平台对当前网络位封锁；恢复路径=美区 vantage（需新增 runner）
+- 存证目录：`outputs/audit/browser_samples/`（outputs/ 不入库，报告引用哈希）
