@@ -30,6 +30,11 @@ topics:
       - "tuottajavastuu"
       - "odpowiedzialno[sś][cć] producenta"
       - "tootjavastutus"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语（四辖区起跑实测缺词）
+      - "zp[eě]tn[ýy]\\s+odb[eě]r"
+      - "sp[aä]tn[ýy]\\s+odber"
+      - "kiterjesztett\\s+gy[aá]rt[oó]i\\s+felel[oő]ss[eé]g"
+      - "responsabilit[àa]\\s+estesa"
     exclude_patterns: []
     related_topics: [T02, T12, T14]
     business_relevance: 回收企业的责任与合规义务来源；注册/申报义务直接可执行
@@ -55,6 +60,13 @@ topics:
       - "ker[äa]ys(j[äa]rjestelm|tavoite|velvoite|verkosto|astia)"
       - "zbieranie|selektywna zbi[óo]rka"
       - "kogumi(n|s|se|punkt|n[õo]ue)"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语
+      - "(sb[eě]r|odb[eě]r)[\\s\\S]{0,40}?(bateri|akumul[aá]tor)|(bateri|akumul[aá]tor)[\\s\\S]{0,40}?(sb[eě]r|odb[eě]r)"
+      - "(zber|odber)[\\s\\S]{0,40}?(bat[eé]ri|akumul[aá]tor)|(bat[eé]ri|akumul[aá]tor)[\\s\\S]{0,40}?(zber|odber)"
+      - "(gy[uű]jt|begy[uű]jt)[\\s\\S]{0,40}?(akkumul[aá]tor|eleme[kt])"
+      - "raccolta[\\s\\S]{0,40}?(pile|accumulatori)|pile\\s+e\\s+accumulatori"
+      # Phase 4B-2B：多语言"电池法令标题"直配（法名 + 电池词近邻；四辖区种子判例）
+      - "(z[aá]kon|vyhl[aá][sš]ka|na[rř][ií]zen[ií]|nariadenie|rendelet|decreto)[\\s\\S]{0,90}?(bateri|batter|bat[eé]ri|akkumul|accumul)"
     exclude_patterns:
       - "waste\\s+(oil|tire|tyre|glass)\\s+collection"
     related_topics: [T01, T05, T07]
@@ -123,6 +135,11 @@ topics:
       - "vaarallisten aineiden kuljetus"
       - "towar[óo]w niebezpiecznych"
       - "ohtlike ainete vedu"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语
+      - "p[rř]eprav[aeyu][\\s\\S]{0,40}?(bateri|akumul[aá]tor)"
+      - "preprav[aeyu][\\s\\S]{0,40}?(bat[eé]ri|akumul[aá]tor)"
+      - "vesz[eé]lyes\\s+[aá]ru|sz[aá]ll[ií]t[aá]s[\\s\\S]{0,40}?(akkumul[aá]tor|eleme[kt])"
+      - "merci\\s+pericolose|trasporto[\\s\\S]{0,40}?(pile|accumulatori|batteri)"
     exclude_patterns:
       - "transport\\s+category\\s+airplane"
     related_topics: [T03, T06, T13]
@@ -163,6 +180,10 @@ topics:
       - "kierr[äa]tys|kierr[äa]tykseen"
       - "recykling"
       - "taaskasutus|ringlussev[õo]tt"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语
+      - "recykl[aá]c"
+      - "[uú]jrahasznos[ií]t|hullad[eé]k[\\s\\S]{0,24}hasznos[ií]t"
+      - "riciclagg|recupero\\s+di\\s+materi"
     exclude_patterns:
       - "recycl(e|ing)\\s+(grants?|programs?|funding)"   # 财政工具框架（08913 判例）
     related_topics: [T06, T08, T09]
@@ -218,6 +239,10 @@ topics:
       - "vaarallinen j[äa]te|ongelma j[äa]te"
       - "odpady niebezpieczne"
       - "ohtlik(ud)? j[äa]{1,2}tmed"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语
+      - "nebezpe[cč]n[ýé]\\s+odpad"
+      - "vesz[eé]lyes\\s+hullad[eé]k"
+      - "rifiuti\\s+pericolosi"
     exclude_patterns: []
     related_topics: [T07, T09, T13]
     business_relevance: "黑粉的**危废定性**决定运输/处置成本与跨境合法性"
@@ -236,6 +261,10 @@ topics:
       - "追溯|申报|编码标识|数字身份证"
       - "batteriepas"
       - "carbon\\s+footprint"
+      # Phase 4B-2B：捷克语/斯洛伐克语/匈牙利语/意大利语
+      - "ohla[sš]ovac"
+      - "nyilv[aá]ntart[aá]s"
+      - "tracciabilit"
     exclude_patterns: []
     related_topics: [T01, T08, T12]
     business_relevance: 数据合规工程量大；追溯是回收量统计口径的来源

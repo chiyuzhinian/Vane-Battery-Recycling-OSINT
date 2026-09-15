@@ -17,7 +17,8 @@ from app.policy.search_plan import load_plan, validate_plan  # noqa: E402
 import run_jurisdiction_round as rj  # noqa: E402
 
 PLANS = ("SE_PLAN_V1", "SE_PLAN_V2", "FI_PLAN_V1", "US_CA_PLAN_V1",
-         "US_CA_PLAN_V2", "US_WA_PLAN_V1", "US_WA_PLAN_V2")
+         "US_CA_PLAN_V2", "US_WA_PLAN_V1", "US_WA_PLAN_V2",
+         "CZ_PLAN_V1", "IT_PLAN_V1", "HU_PLAN_V1", "SK_PLAN_V1")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -39,6 +40,11 @@ def test_plan_hashes_are_frozen():
         "US_CA_PLAN_V2": "9ab375a053ba",   # 2B1 §6：+D 缺口种子（reset）
         "US_WA_PLAN_V1": "192be6abc2f2",
         "US_WA_PLAN_V2": "69a4f37344f0",   # Step 6：+D 路线（reset 独立视图）
+        # MODE B 批次 1（2026-09-15 冻结）
+        "CZ_PLAN_V1": "a79ce1e093c8",
+        "IT_PLAN_V1": "754fa7f36028",
+        "HU_PLAN_V1": "52086fc8df8d",
+        "SK_PLAN_V1": "a3b3d3c5889d",
     }
     for pid, prefix in expect.items():
         assert load_plan(pid).plan_hash().startswith(prefix), \
@@ -76,10 +82,11 @@ def test_extract_cited_only_uses_own_rows():
 
 def test_doc_not_found_is_distinct_from_failure():
     assert issubclass(rj.DocNotFound, Exception)
-    # 路线完全体：四个管辖地均有 fetch 实现
-    assert set(rj.FETCHERS) == {"SE", "FI", "US-CA", "US-WA"}
-    # 检索仅 SE/FI 具备（CA/WA 无检索端点，如实）
-    assert set(rj.SEARCHERS) == {"SE", "FI"}
+    # 路线完全体：八个管辖地均有 fetch 实现（4B-2B MODE B 批次 1：+CZ/IT/HU/SK）
+    assert set(rj.FETCHERS) == {"SE", "FI", "US-CA", "US-WA",
+                                "CZ", "IT", "HU", "SK"}
+    # 检索：SE/FI + MODE B 批次 1 四地（CA/WA 无检索端点，如实）
+    assert set(rj.SEARCHERS) == {"SE", "FI", "CZ", "IT", "HU", "SK"}
 
 
 def test_round_records_and_persisted_corpus_exist():

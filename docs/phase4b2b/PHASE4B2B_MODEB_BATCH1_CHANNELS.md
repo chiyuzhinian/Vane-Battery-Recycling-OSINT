@@ -41,3 +41,24 @@
 - **MODE B 收敛轮**：streak 自各自 PLAN_V1 冻结起算（四辖区可并行；采集用 `run_jurisdiction_round.py` 适配器补齐 CZ/IT/HU/SK fetch/searcher）
 - US 80% 门槛缺口（OH/MI 目标区 vantage）与 BATCH 2 待办保持不变
 - 磁盘压缩一键脚本仍待管理员执行（`outputs\_compact_docker_admin.cmd`，预期回收 ~88GB）
+
+## 六、MODE B 收敛轮（2026-09-15 完成）
+
+四辖区各自 PLAN_V1 冻结后立即起跑（`run_jurisdiction_round.py` 新增
+CZ/IT/HU/SK 适配器；streak 仅计 `convergence_validation` 模式轮）：
+
+| 辖区 | 轮次 | 新增入语料 | 收敛判定 |
+|---|---|---|---|
+| **CZ** | R1-R6 | R1 +1(B)、R2 +1(C)、R3 +1(C：170/2010 修复后) | ✅ streak=2（R5+R6） |
+| **IT** | R1-R6 | R3 +9（3 种子 + 6 检索发现） | ✅ streak=2（R5+R6） |
+| **HU** | R1-R4 | R1 +4（1 高风险 B + 3 C） | ✅ streak=2（R3+R4） |
+| **SK** | R1-R5 | R1 +1(B)、R2 +2(C) | ✅ streak=2（R4+R5） |
+
+起跑期基建修复（全部有记录）：
+- **词表**：cs/sk/hu/it 六主题词根扩容（承接 4B-2A pilot 语料先例）
+- **CZ**：T02 多语言"电池法令标题"模式（170/2010 种子正常入语料）
+- **IT**：Normattiva 门户菜单噪音截断 + FAQ 页脚误伤修复（188/2008 → C）
+- **SK**：`_get` 301 重定向跟随 + `sk_fetch` 改 PDF 优先 + 真实标题抽取
+  （静态 HTML 为骨架目录 → 分类窗口 NO_THEME 的根因修复）
+- 失败纪律：SK 种子 79/2015、373/2015 按现行判据记 D（泛述窗口），
+  与 CZ 泛废物法同口径，不做特例放水
