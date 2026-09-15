@@ -1,0 +1,55 @@
+# ============================================================
+# Search Plan —— IT_PLAN_V1（Phase 4B-2B MODE B · 批次 1 通道化）
+# ------------------------------------------------------------
+# 冻结依据：MODE B 侦查 Round 1-9（2026-09-15）实采
+#   · 通道：Normattiva——veloce 快速检索（?testoRicerca=，142 命中/20 链接）
+#     + atto 详情（codiceRedazionale）+ N2Ls URN 全文（实测 119KB/35KB）
+#   · A 种子 ×6 均经实测存在（188/2008=pile e accumulatori 电池专法）
+# 纪律：自冻结起不得修改；再变 → IT_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: IT_PLAN_V1
+jurisdiction: IT
+scope: IT
+
+source_roles:
+  - {role: IT_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - it_normattiva_veloce
+  - it_normattiva_atto
+  - it_normattiva_doc
+
+critical_sources:
+  - it_normattiva
+
+query_taxonomy_version: qt-it-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（MODE B 实测存在）
+    - "D.Lgs. 188/2008"              # pile e accumulatori（电池专法）
+    - "D.Lgs. 152/2006"              # Codice dell'ambiente（环境法典，含 rifiuti）
+    - "D.Lgs. 82/2005"               # URN 直链既有样本（Batch 1）
+    - "D.Lgs. 49/2014"               # RAEE（含 accumulatori）
+    - "D.Lgs. 118/2020"              # 新 RAEE/pile 指令转化（veloce 命中 #1）
+    - "D.Lgs. 27/2016"               # RAEE 修订
+  fr_terms:                          # B：意大利语检索词（veloce 实测）
+    - batterie
+    - accumulatori
+    - pile e accumulatori
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [it]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  MODE B 批次 1：Normattiva（veloce 检索 + atto 详情 + N2Ls 全文）。
+  A 种子实测：188/2008（119KB 全文，accumulatori/rifiuti 命中）、
+  152/2006（35KB）、49/2014（39KB）等。B 词 veloce 实测 142 命中；
+  ricerca/semplice 表单为 JS 提交（已记录，改用 veloce 通道）。
+created_at: "2026-09-15"

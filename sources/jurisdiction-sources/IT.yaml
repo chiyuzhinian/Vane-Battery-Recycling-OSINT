@@ -15,10 +15,12 @@ sources:
     access_method: html
     entry_url: "https://www.normattiva.it/"
     search_attempts:
-      - "https://www.normattiva.it/ricerca/semplice?testo=batterie"
-      - "https://www.normattiva.it/ricerca/semplice?testo=accumulatori"
+      - "https://www.normattiva.it/ricerca/veloce/0?testoRicerca=pile%20e%20accumulatori"   # MODE B：142 命中/20 链接
+      - "https://www.normattiva.it/ricerca/veloce/0?testoRicerca=batterie"
+      - "https://www.normattiva.it/ricerca/semplice?testo=batterie"                           # JS 表单（限记）
     samples_known:
       - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2008-11-20;188"
-      - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2005-03-03;82"
       - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2006-04-03;152"
-    note: "Normattiva（官方立法全文库）；188/2008=电池指令转化、152/2006=环境法典（固定 URN 直链）"
+      - "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2014-03-14;49"
+      - "https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2020-09-12&atto.codiceRedazionale=20G00136"
+    note: "MODE B（2026-09-15）：veloce 检索 + atto 详情 + N2Ls 全文全通；188/2008=电池专法、118/2020=新转化；IT_PLAN_V1 已冻结"

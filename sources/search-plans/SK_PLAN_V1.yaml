@@ -1,0 +1,52 @@
+# ============================================================
+# Search Plan —— SK_PLAN_V1（Phase 4B-2B MODE B · 批次 1 通道化）
+# ------------------------------------------------------------
+# 冻结依据：MODE B 侦查 Round 1-9（2026-09-15）实采
+#   · 通道：static.slov-lex.sk 静态门户——年索引（分页）→ 法案目录 →
+#     vyhlasene_znenie.html 全文（79/2015=532K 字符实测）
+#     或 static/pdf/{年}/{号}/ZZ_{年}_{号}.pdf（pypdf 172/80 页实测）
+#   · A 种子 ×2 实测：79/2015（废物法）、373/2015（batéri×90 / akumulátor×74）
+# 纪律：自冻结起不得修改；再变 → SK_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: SK_PLAN_V1
+jurisdiction: SK
+scope: SK
+
+source_roles:
+  - {role: SK_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - sk_slovlex_index
+  - sk_slovlex_doc
+  - sk_slovlex_pdf
+
+critical_sources:
+  - sk_slovlex
+
+query_taxonomy_version: qt-sk-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（MODE B 实测存在）
+    - "79/2015"                      # Zákon o odpadoch（废物法；全文含 akumulátor/batéria）
+    - "373/2015"                     # 电池相关法令（batéri×90 / akumulátor×74 实测）
+  fr_terms:                          # B：斯洛伐克语检索词（年索引标题域）
+    - batérie a akumulátory
+    - akumulátor
+    - odpad
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [sk]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  MODE B 批次 1：Slov-Lex 静态门户（原站全站 JS 壳已绕过）。
+  年索引分页可枚举；法案目录给出 vyhlasene_znenie/日期版本链接。
+  79/2015 静态 HTML 532K 字符、373/2015 PDF 80 页（batéri×90）
+  均实测；NIM 显示 SK 无电池专法（泛废物层），种子以两者为核心。
+created_at: "2026-09-15"

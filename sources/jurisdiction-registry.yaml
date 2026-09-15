@@ -322,4 +322,19 @@ jurisdictions:
         expected: true
         sources: [hu_magyarkozlony]
         status: CONNECTED
-        note: "Batch 1R：Magyar Közlöny 公报通道（云端侦察 + 本地/云双 vantage 200；2 文档 sha256 存证）"
+        note: "Batch 1R 恢复 + MODE B（2026-09-15）：?content= 内容检索（23/385 期命中）+ letoltes PDF（pypdf 130 页）；HU_PLAN_V1 已冻结"
+      - role: CZ_NATIONAL_LEGISLATION
+        expected: true
+        sources: [cz_psp]
+        status: CONNECTED
+        note: "MODE B（2026-09-15）：PSP sbirka 年枚举（486 部/年）+ 全文（84~229KB）；电池专条 170/2010 确认；CZ_PLAN_V1 已冻结"
+      - role: IT_NATIONAL_LEGISLATION
+        expected: true
+        sources: [it_normattiva]
+        status: CONNECTED
+        note: "MODE B（2026-09-15）：veloce 检索（142 命中）+ N2Ls 全文（188/2008=电池专法）；IT_PLAN_V1 已冻结"
+      - role: SK_NATIONAL_LEGISLATION
+        expected: true
+        sources: [sk_slovlex]
+        status: CONNECTED
+        note: "MODE B（2026-09-15）：静态门户年索引→全文（79/2015=532K 字符；373/2015 PDF batéri×90）；SK_PLAN_V1 已冻结"

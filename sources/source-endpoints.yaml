@@ -620,3 +620,121 @@ roles:
         role_method: page
         capabilities: {enumeration: true, metadata: true, fulltext: true}
         notes: "章目录（章节链接 cite=70A.200.0NN 模式，Step 8 探测 40 条）；无检索端点（search.do 404）"
+
+  # ---------------------------------------------------------- Phase 4B-2B MODE B 批次 1（CZ/IT/HU/SK 通道化）
+  # 均经 MODE B 探头 Round 1-9 实测（outputs/_modeb_probe*_out.txt；矩阵
+  # outputs/audit/modeb_channel_probe.json）
+  - role: CZ_NATIONAL_LEGISLATION
+    jurisdiction: CZ
+    source_name: "捷克 PSP ČR sbirka（议会法律库）"
+    official_domain: psp.cz
+    notes: "MODE B（2026-09-15）：年索引枚举 + 法律全文静态可采；170/2010 电池专条实测；e-Sbírka JS 壳已绕过"
+    endpoints:
+      - id: cz_psp_sbirka_year
+        official_url: "https://www.psp.cz/sqw/sbirka.sqw?r=2008"
+        official_domain: psp.cz
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "年索引（实测 2008 年 486 部，标题全量可解析）"
+      - id: cz_psp_sbirka_doc
+        official_url: "https://www.psp.cz/sqw/sbirka.sqw?cz=170&r=2010"
+        official_domain: psp.cz
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "法律全文（实测 84~229KB，含 akumulátor/odpad/sběr；170/2010 title 确认）"
+
+  - role: IT_NATIONAL_LEGISLATION
+    jurisdiction: IT
+    source_name: "意大利 Normattiva（官方立法库）"
+    official_domain: normattiva.it
+    notes: "MODE B（2026-09-15）：veloce 检索闭合 + atto 详情 + N2Ls 全文；semplice 表单为 JS 提交已记录"
+    endpoints:
+      - id: it_normattiva_veloce
+        official_url: "https://www.normattiva.it/ricerca/veloce/0?testoRicerca=pile%20e%20accumulatori"
+        official_domain: normattiva.it
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "快速检索（实测 142 命中/20 法案链接，含 dataPubblicazioneGazzetta+codiceRedazionale）"
+      - id: it_normattiva_atto
+        official_url: "https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2020-09-12&atto.codiceRedazionale=20G00136"
+        official_domain: normattiva.it
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: false}
+        notes: "法案详情（标题实测：D.Lgs. 118/2020）"
+      - id: it_normattiva_doc
+        official_url: "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2008-11-20;188"
+        official_domain: normattiva.it
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "URN 全文（188/2008 实测 119KB，accumulatori/rifiuti 命中）"
+
+  - role: HU_OFFICIAL_GAZETTE
+    jurisdiction: HU
+    source_name: "Magyar Közlöny（官方公报）"
+    official_domain: magyarkozlony.hu
+    notes: "MODE B（2026-09-15）：搜索参数定型 ?content=（year/page 可组合）；letoltes PDF + pypdf 全文 130 页实测"
+    endpoints:
+      - id: hu_mk_content
+        official_url: "https://magyarkozlony.hu?content=akkumul%C3%A1tor"
+        official_domain: magyarkozlony.hu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "内容检索（autofill API 计数：akkumulátor 385 期、elemekre és akkumulátorokra 23 期）"
+      - id: hu_mk_doc
+        official_url: "https://magyarkozlony.hu/dokumentumok/d5a9c2f2c728908437c52693273af4a34e30c7cb/megtekintes"
+        official_domain: magyarkozlony.hu
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: false}
+        notes: "文档页（JS 壳 277 字符——只作寻址，不作全文）"
+      - id: hu_mk_download
+        official_url: "https://magyarkozlony.hu/dokumentumok/d5a9c2f2c728908437c52693273af4a34e30c7cb/letoltes"
+        official_domain: magyarkozlony.hu
+        content_kind: pdf
+        role_method: download
+        probe: {kind: download_head}
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "PDF 实体（实测 564KB/1.98MB；pypdf 130 页/139K 字符）"
+      - id: hu_mk_pages_api
+        official_url: "https://magyarkozlony.hu/api/v1/kozlonyok/pages?uuid=d5a9c2f2c728908437c52693273af4a34e30c7cb"
+        official_domain: magyarkozlony.hu
+        content_kind: json
+        role_method: api
+        probe: {kind: json_api, expect_keys: [pages]}
+        capabilities: {enumeration: false, metadata: true, fulltext: false}
+        notes: "官方 JSON API（页索引 1..130；autofill 计数亦为 JSON）"
+
+  - role: SK_NATIONAL_LEGISLATION
+    jurisdiction: SK
+    source_name: "斯洛伐克 Slov-Lex 静态门户"
+    official_domain: static.slov-lex.sk
+    notes: "MODE B（2026-09-15）：原站全站 JS 壳；静态镜像年索引→法案目录→全文 HTML/PDF 全通"
+    endpoints:
+      - id: sk_slovlex_index
+        official_url: "https://static.slov-lex.sk/static/SK/ZZ/2015/"
+        official_domain: static.slov-lex.sk
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: true, metadata: true, fulltext: false}
+        notes: "年索引（分页 1/2/3...；标题可 grep）"
+      - id: sk_slovlex_doc
+        official_url: "https://static.slov-lex.sk/static/SK/ZZ/2015/79/vyhlasene_znenie.html"
+        official_domain: static.slov-lex.sk
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "宣布版全文（79/2015 实测 2.28MB/532K 字符，akumulátor/batéria 命中）"
+      - id: sk_slovlex_pdf
+        official_url: "https://www.slov-lex.sk/static/pdf/2015/79/ZZ_2015_79.pdf"
+        official_domain: slov-lex.sk
+        content_kind: pdf
+        role_method: download
+        probe: {kind: download_head}
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "公报 PDF（79/2015=172 页、373/2015=80 页均 pypdf 抽取通过）"

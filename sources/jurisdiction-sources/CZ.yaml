@@ -15,9 +15,12 @@ sources:
     access_method: html
     entry_url: "https://www.e-sbirka.gov.cz/"
     search_attempts:
-      - "https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008"
+      - "https://www.psp.cz/sqw/sbirka.sqw?r=2008"                    # MODE B：年索引枚举（486 部）
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=170&r=2010"             # 电池专条全文
       - "https://aplikace.mvcr.cz/sbirka-zakonu/"
     samples_known:
-      - "https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008"
-      - "https://www.psp.cz/sqw/sbirka.sqw?cz=185&r=2001"
-    note: "297/2008 Sb.（电池法）/185/2001 Sb.（废物法）= PSP ČR sbirka.sqw 直链（议会官方）"
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=170&r=2010"
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=383&r=2001"
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=541&r=2020"
+      - "https://www.psp.cz/sqw/sbirka.sqw?cz=542&r=2020"
+    note: "MODE B（2026-09-15）：PSP 通道打通——年索引 + 全文直取；170/2010=电池专条（title 确认）；CZ_PLAN_V1 已冻结"

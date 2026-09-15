@@ -1,0 +1,53 @@
+# ============================================================
+# Search Plan —— CZ_PLAN_V1（Phase 4B-2B MODE B · 批次 1 通道化）
+# ------------------------------------------------------------
+# 冻结依据：MODE B 侦查 Round 1-9（2026-09-15）实采
+#   · 通道：PSP ČR sbirka.sqw——年索引枚举（?r={年}，2008 实测 486 部）
+#     + 法律全文直取（?cz={号}&r={年}，实测 84~229KB 静态 HTML）
+#   · A 种子 ×5 均经实测存在（170/2010 title 确认 = 电池专条）
+# 纪律：自冻结起不得修改；再变 → CZ_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: CZ_PLAN_V1
+jurisdiction: CZ
+scope: CZ
+
+source_roles:
+  - {role: CZ_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - cz_psp_sbirka_year
+  - cz_psp_sbirka_doc
+
+critical_sources:
+  - cz_psp
+
+query_taxonomy_version: qt-cz-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（MODE B 实测存在）
+    - "170/2010"                     # Vyhláška o bateriích a akumulátorech（电池专条）
+    - "383/2001"                     # Vyhláška o podrobnostech nakládání s odpady
+    - "185/2001"                     # Zákon o odpadech（旧废物法，含 akumulátor）
+    - "541/2020"                     # Zákon o odpadech（现行废物法）
+    - "542/2020"                     # Zákon o výrobcích s ukončenou životností（EoL 产品法）
+  fr_terms:                          # B：捷克语检索词（年索引标题域可验证）
+    - baterie
+    - akumulátor
+    - odpad
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [cs]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  MODE B 批次 1：PSP 通道（年索引枚举 + 静态全文直取）。
+  A 种子实测：170/2010=电池专条（title+bat 命中）、383/2001=170 修改链、
+  185/2001 旧废物法与 541/2020/542/2020 现行框架均 200 且含关键词。
+  B 词经年索引可枚举验证；e-Sbírka/MVČR 替代路径已记录（JS 壳/404）。
+created_at: "2026-09-15"

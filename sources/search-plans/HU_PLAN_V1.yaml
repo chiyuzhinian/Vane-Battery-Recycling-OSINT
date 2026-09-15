@@ -1,0 +1,55 @@
+# ============================================================
+# Search Plan —— HU_PLAN_V1（Phase 4B-2B MODE B · 批次 1 通道化）
+# ------------------------------------------------------------
+# 冻结依据：MODE B 侦查 Round 1-9（2026-09-15）实采
+#   · 通道：magyarkozlony.hu——内容检索 ?content={短语}（+&year=&page=）
+#     + 文档 letoltes PDF（pypdf 130 页/139K 字符实测）
+#   · A 种子：内容检索命中期刊（2014/188-190 年末疑似电池法令、
+#     2023/194、2026/131 letoltes PDF 全文实测）
+# 纪律：自冻结起不得修改；再变 → HU_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: HU_PLAN_V1
+jurisdiction: HU
+scope: HU
+
+source_roles:
+  - {role: HU_OFFICIAL_GAZETTE, critical: true}
+
+source_endpoints:
+  - hu_mk_content
+  - hu_mk_doc
+  - hu_mk_download
+
+critical_sources:
+  - hu_magyarkozlony
+
+query_taxonomy_version: qt-hu-v1
+query_set:
+  fr_agencies:                       # A：公报期刊种子（内容检索命中）
+    - "2014/188"                     # 2014. évi 188. szám（"elemek és akkumulátorok" 命中）
+    - "2014/189"
+    - "2014/190"
+    - "2023/194"
+    - "2026/131"                     # letoltes PDF 全文实测（130 页）
+  fr_terms:                          # B：匈牙利语检索词（?content= 实测计数）
+    - "elemekre és akkumulátorokra"  # 23 期命中（电池专语）
+    - akkumulátor                    # 385 期命中
+    - elem és akkumulátor
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [hu]
+time_window: {from: "2012-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  MODE B 批次 1：Magyar Közlöny 公报（内容检索 + letoltes PDF 全文）。
+  ?content= 为真实过滤参数（kereses?q= 静态壳不过滤已记录）；年份/分页
+  参数均有效。B 词计数：elemekre és akkumulátorokra=23、akkumulátor=385。
+  云端通道（Batch 1R）与本地一致；letoltes PDF 经 pypdf 抽取验证。
+created_at: "2026-09-15"

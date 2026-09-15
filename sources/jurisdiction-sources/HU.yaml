@@ -26,9 +26,11 @@ sources:
     access_method: html
     entry_url: "https://magyarkozlony.hu/"
     search_attempts:
-      - "https://magyarkozlony.hu/kereses?q=akkumul%C3%A1tor"
-      - "https://magyarkozlony.hu/kereses?q=elem"
+      - "https://magyarkozlony.hu?content=elemekre%20%C3%A9s%20akkumul%C3%A1torokra"   # MODE B：真过滤参数（23 期命中）
+      - "https://magyarkozlony.hu?content=akkumul%C3%A1tor"                            # 385 期命中
+      - "https://magyarkozlony.hu/api/v1/kozlonyok/autofill?content=akkumul%C3%A1tor"  # 官方 JSON 计数
     samples_known:
+      - "https://magyarkozlony.hu/dokumentumok/d5a9c2f2c728908437c52693273af4a34e30c7cb/letoltes"   # PDF 130 页（pypdf 实测）
       - "https://magyarkozlony.hu/dokumentumok/d5a9c2f2c728908437c52693273af4a34e30c7cb/megtekintes"
       - "https://magyarkozlony.hu/dokumentumok/fbdda3d49e5e91c81743bbdc35ce5b0b95b44ada/megtekintes"
-    note: "Batch 1R：公报文档通道打通（kereses 搜索 + /dokumentumok/{sha1}/megtekintes 直链）；本地与云双 vantage 实测 200"
+    note: "Batch 1R 恢复 + MODE B（2026-09-15）：?content= 内容检索（kereses?q= 不过滤已记录）+ letoltes PDF 全文（130 页/139K 字符）；HU_PLAN_V1 已冻结"

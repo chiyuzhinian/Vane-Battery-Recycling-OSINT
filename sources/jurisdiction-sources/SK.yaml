@@ -15,9 +15,10 @@ sources:
     access_method: html
     entry_url: "https://www.slov-lex.sk/"
     search_attempts:
-      - "https://www.slov-lex.sk/ezbierky/pravne-predpisy?q=bat%C3%A9ria"
-      - "https://www.slov-lex.sk/ezbierky/pravne-predpisy?q=odpad"
+      - "https://static.slov-lex.sk/static/SK/ZZ/2015/"                          # MODE B：静态年索引（分页可枚举）
+      - "https://www.slov-lex.sk/ezbierky/pravne-predpisy?q=bat%C3%A9ria"         # 原站 JS 壳（限记）
     samples_known:
-      - "https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2015/79/"
-      - "https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/2008/188/"
-    note: "Slov-Lex（官方综合法律库 + Zbierka zákonov 公报）；79/2015=废物法、188/2008=电池转化（直链样本）"
+      - "https://static.slov-lex.sk/static/SK/ZZ/2015/79/vyhlasene_znenie.html"   # 532K 字符全文
+      - "https://www.slov-lex.sk/static/pdf/2015/79/ZZ_2015_79.pdf"               # 172 页 PDF
+      - "https://www.slov-lex.sk/static/pdf/2015/373/ZZ_2015_373.pdf"             # 电池法令（batéri×90）
+    note: "MODE B（2026-09-15）：静态门户通道绕过全站 JS 壳（年索引→法案目录→全文/PDF）；SK_PLAN_V1 已冻结"
