@@ -66,7 +66,10 @@ topics:
       - "(gy[uű]jt|begy[uű]jt)[\\s\\S]{0,40}?(akkumul[aá]tor|eleme[kt])"
       - "raccolta[\\s\\S]{0,40}?(pile|accumulatori)|pile\\s+e\\s+accumulatori"
       # Phase 4B-2B：多语言"电池法令标题"直配（法名 + 电池词近邻；四辖区种子判例）
-      - "(z[aá]kon|vyhl[aá][sš]ka|na[rř][ií]zen[ií]|nariadenie|rendelet|decreto)[\\s\\S]{0,90}?(bateri|batter|bat[eé]ri|akkumul|accumul)"
+      - "(z[aá]kon|vyhl[aá][sš]ka|na[rř][ií]zen[ií]|nariadenie|rendelet|decreto|verordnung|gesetz)[\\s\\S]{0,90}?(bateri|batter|bat[eé]ri|akkumul|accumul)"
+      # Phase 4B-2B Batch 1C：德语（AT 起跑实测缺词——复合词/收集语境）
+      - "(batterien?|altbatterien?)(verordnung|gesetz|sammlung|r[uü]cknahme)"
+      - "(sammlung|r[uü]cknahme|erfassung)[\\s\\S]{0,40}?(alt)?batter"
     exclude_patterns:
       - "waste\\s+(oil|tire|tyre|glass)\\s+collection"
     related_topics: [T01, T05, T07]

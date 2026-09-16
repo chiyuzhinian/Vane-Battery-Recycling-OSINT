@@ -82,3 +82,29 @@ def test_nim_discovery_layer_capped_c():
     assert res.classification == "C"
     assert res.relevant is False
     assert "C_DISCOVERY_LAYER_NIM" in res.reason_codes
+
+
+def test_reclassify_acceptance_output_record_not_trapped():
+    """Batch 1C（2026-09-16）：本系统产出记录（meta.acceptance_class 存在）
+    的 relevant 是验收标志位（C/D → False），重分类不得早退 D。"""
+    r = _rec(title="170/2010 Sb. Vyhláška o bateriích a akumulátorech",
+             text="sběr přenosných baterií a akumulátorů",
+             relevant=False,
+             meta={"acceptance_class": "C", "jurisdiction": "CZ"})
+    res = classify_record(r)
+    assert res.classification in ("B", "C"), res.reason_codes
+
+
+def test_legacy_rejection_without_acceptance_class_still_d():
+    """旧判定器拒绝（无 acceptance_class 标记）→ 维持 D（拒绝优先）。"""
+    r = _rec(title="Some page", text="no relevant content",
+             relevant=False, meta={})
+    assert classify_record(r).classification == "D"
+
+
+def test_relevant_none_falls_through_to_content():
+    """relevant=None（字段存在但空）→ 走内容分类，不再早退。"""
+    r = _rec(title="Waste battery management",
+             text="waste battery collection and recycling obligations",
+             relevant=None, meta={})
+    assert classify_record(r).classification in ("B", "C")

@@ -57,7 +57,8 @@ ROUNDS_DIR = ROOT / "outputs" / "discovery_rounds"
 INDEX = ROOT / "outputs" / "audit" / "discovery_rounds.json"
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"}
-SUPPORTED = ("SE", "FI", "US-CA", "US-WA", "CZ", "IT", "HU", "SK")
+SUPPORTED = ("SE", "FI", "US-CA", "US-WA", "CZ", "IT", "HU", "SK",
+             "AT")
 
 
 class DocNotFound(Exception):
@@ -488,6 +489,88 @@ async def sk_fetch(client, doc: str) -> dict | None:
     raise DocNotFound(f"no_pdf_or_html({doc})")
 
 
+# ------------------------------------------------------------ AT（MODE B 批次 1C：OGD 通道）
+AT_API = ("https://data.bka.gv.at/ris/api/v2.6/Bundesrecht"
+          "?Applikation=BrKons&Suchworte={q}&Seitennummer={p}")
+_AT_NOR_RE = re.compile(r"(NOR\d+)")
+
+
+def _at_walk(obj, key):
+    out: list = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == key:
+                out.append(v)
+            out += _at_walk(v, key)
+    elif isinstance(obj, list):
+        for x in obj:
+            out += _at_walk(x, key)
+    return out
+
+
+def _at_iter_nodes(obj):
+    if isinstance(obj, dict):
+        yield obj
+        for v in obj.values():
+            yield from _at_iter_nodes(v)
+    elif isinstance(obj, list):
+        for x in obj:
+            yield from _at_iter_nodes(x)
+
+
+async def at_search(client, term: str) -> list[dict]:
+    """RIS OGD API 检索（data.bka.gv.at）：Kurztitel + DokumentUrl → NOR。"""
+    hits, seen = [], set()
+    for page in (1, 2):
+        r, _ = await _get(client, AT_API.format(q=term, p=page), headers=UA)
+        if r.status_code != 200:
+            continue
+        try:
+            data = r.json()
+        except Exception:  # noqa: BLE001
+            continue
+        kurztitel = _at_walk(data, "Kurztitel")
+        urls = [u["DokumentUrl"] for u in _at_iter_nodes(data)
+                if isinstance(u.get("DokumentUrl"), str)]
+        for i, t in enumerate(kurztitel):
+            u = urls[i] if i < len(urls) else ""
+            m = _AT_NOR_RE.search(u or "")
+            if not m:
+                continue
+            nor = m.group(1)
+            if nor in seen:
+                continue
+            seen.add(nor)
+            hits.append({"doc": nor, "title": str(t)[:120]})
+    return hits
+
+
+async def at_fetch(client, doc: str) -> dict | None:
+    """OGD 文档直取：ogd.ris.bka.gv.at/Dokumente/Bundesnormen/{NOR}.html。"""
+    m0 = _AT_NOR_RE.search(doc)
+    nor = m0.group(1) if m0 else doc
+    url = (f"https://ogd.ris.bka.gv.at/Dokumente/Bundesnormen/"
+           f"{nor}/{nor}.html")
+    r, _ = await _get(client, url, headers=UA)
+    if r.status_code != 200 or len(r.content) < 2000:
+        raise DocNotFound(f"at_ogd_http({r.status_code})")
+    text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", r.text)
+    text = re.sub(r"(?s)<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) < 1500:
+        raise DocNotFound(f"skeleton_or_empty({len(text)} chars)")
+    m = re.search(r"Kurztitel\s+(.+?)\s+Kundmachungsorgan", text)
+    ttl = re.sub(r"\s+", " ", m.group(1)).strip() if m else ""
+    title = f"{ttl}（{nor}）" if ttl else nor
+    return _mk_record(
+        evidence_id=f"at_ogd_{nor}", source_id="at_ris_ogd",
+        jurisdiction="AT", region="EU", url=url,
+        title=title[:200], doc_key=f"AT:OGD:{nor}",
+        text=text[:60000], collector="jurisdiction_round",
+        source_role="AT_NATIONAL_LEGISLATION", language="de",
+        nav_trimmed=0, route="")
+
+
 # ------------------------------------------------------------ 引用抽取（C）
 
 CITE_PATTERNS = {
@@ -531,10 +614,10 @@ def _extract_cited(jid: str, records: list[dict], existing: set[str]) -> list[st
 
 FETCHERS = {"SE": se_fetch, "FI": fi_fetch, "US-CA": ca_fetch,
             "US-WA": wa_fetch, "CZ": cz_fetch, "IT": it_fetch,
-            "HU": hu_fetch, "SK": sk_fetch}
+            "HU": hu_fetch, "SK": sk_fetch, "AT": at_fetch}
 SEARCHERS = {"SE": se_search, "FI": fi_search,
              "CZ": cz_search, "IT": it_search, "HU": hu_search,
-             "SK": sk_search}
+             "SK": sk_search, "AT": at_search}
 
 
 def _eid_for(jid: str, doc: str) -> str:
@@ -553,6 +636,8 @@ def _eid_for(jid: str, doc: str) -> str:
         return f"hu_mk_{doc}"
     if jid == "SK":
         return f"sk_slovlex_{doc.replace('/', '_')}"
+    if jid == "AT":
+        return f"at_ogd_{doc}"
     return f"{jid.lower()}_{doc}"
 
 
