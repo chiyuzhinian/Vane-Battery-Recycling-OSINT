@@ -534,6 +534,36 @@ roles:
         capabilities: {enumeration: false, metadata: true, fulltext: true}
         notes: "文档直链（eli 端点 503 → Dokumente 路径 200 已验证）；8 文档入库 sources/at-ogd/"
 
+  # ---------------------------------------------------------- Batch 1C 州级语料通道（MODE A）
+  # 州立法机关官方法典静态全文直链（route A 官方枚举种子；samples_known 核验）
+  - role: STATE_STATUTES
+    jurisdiction: US-TX
+    source_name: "Texas Legislature Online（官方法典 statutes.capitol.texas.gov）"
+    official_domain: statutes.capitol.texas.gov
+    notes: "Batch 1C MODE A：HS.361/HS.365 章页静态全文；州法典与立法机关同属 LTO 平台"
+    endpoints:
+      - id: us_tx_statutes
+        official_url: "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.361.htm"
+        official_domain: statutes.capitol.texas.gov
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "官方法典章页（HTM）；电池回收相邻主章（固体废物/废油）"
+
+  - role: STATE_STATUTES
+    jurisdiction: US-NV
+    source_name: "Nevada Legislature（NRS 官方全文 leg.state.nv.us）"
+    official_domain: leg.state.nv.us
+    notes: "Batch 1C MODE A：NRS 444A/459 章页静态全文"
+    endpoints:
+      - id: us_nv_nrs
+        official_url: "https://www.leg.state.nv.us/NRS/NRS-444A.html"
+        official_domain: leg.state.nv.us
+        content_kind: html
+        role_method: page
+        capabilities: {enumeration: false, metadata: true, fulltext: true}
+        notes: "NRS 官方法典章页；固体废物/危险物质主章"
+
   - role: SE_NATIONAL_LEGISLATION
     jurisdiction: SE
     source_name: "瑞典 SFST（Regeringskansliet 法库）"

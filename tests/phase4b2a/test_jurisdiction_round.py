@@ -19,7 +19,8 @@ import run_jurisdiction_round as rj  # noqa: E402
 PLANS = ("SE_PLAN_V1", "SE_PLAN_V2", "FI_PLAN_V1", "US_CA_PLAN_V1",
          "US_CA_PLAN_V2", "US_WA_PLAN_V1", "US_WA_PLAN_V2",
          "CZ_PLAN_V1", "IT_PLAN_V1", "HU_PLAN_V1", "SK_PLAN_V1",
-         "AT_PLAN_V1", "CZ_PLAN_V2", "SK_PLAN_V2", "HU_PLAN_V2")
+         "AT_PLAN_V1", "CZ_PLAN_V2", "SK_PLAN_V2", "HU_PLAN_V2",
+         "US_TX_PLAN_V1", "US_NV_PLAN_V1")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -88,10 +89,11 @@ def test_extract_cited_only_uses_own_rows():
 
 def test_doc_not_found_is_distinct_from_failure():
     assert issubclass(rj.DocNotFound, Exception)
-    # 路线完全体：九个管辖地均有 fetch 实现
-    # （4B-2B MODE B 批次 1：+CZ/IT/HU/SK；Batch 1C：+AT）
+    # 路线完全体：十一个管辖地均有 fetch 实现
+    # （4B-2B MODE B 批次 1：+CZ/IT/HU/SK；Batch 1C：+AT +US-TX/US-NV 州级）
     assert set(rj.FETCHERS) == {"SE", "FI", "US-CA", "US-WA",
-                                "CZ", "IT", "HU", "SK", "AT"}
+                                "CZ", "IT", "HU", "SK", "AT",
+                                "US-TX", "US-NV"}
     # 检索：SE/FI + MODE B 批次 1 四地（CA/WA 无检索端点，如实）+ AT OGD
     assert set(rj.SEARCHERS) == {"SE", "FI", "CZ", "IT", "HU", "SK", "AT"}
 

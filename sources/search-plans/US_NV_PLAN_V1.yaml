@@ -1,0 +1,44 @@
+# ============================================================
+# Search Plan —— US_NV_PLAN_V1（Batch 1C MODE A，2026-09-16）
+# ------------------------------------------------------------
+# 冻结依据：jurisdiction-sources/US-NV.yaml 已核验官方直链
+#   · 通道：Nevada Legislature（leg.state.nv.us）NRS 官方全文 HTML
+#   · NRS-444A 固体废物章；NRS-459 危险物质章（电池回收相邻主章）
+# 纪律：自冻结起不得修改；再变 → US_NV_PLAN_V2（reset）
+# ============================================================
+version: 1
+plan_id: US_NV_PLAN_V1
+jurisdiction: US-NV
+scope: US-NV
+
+source_roles:
+  - {role: STATE_STATUTES, critical: true}
+
+source_endpoints:
+  - us_nv_nrs
+
+critical_sources:
+  - us_nv_nrs
+
+query_taxonomy_version: qt-us-nv-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（yaml 实测存在）
+    - "NRS-444A"                     # NRS 444A 固体废物
+    - "NRS-459"                      # NRS 459 危险物质
+  fr_terms: []
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [en]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1C MODE A：NV 州级语料首轮——NRS 官方全文直取。
+  角色注册：STATE_STATUTES（critical）；立法机关+法典同属
+  Nevada Legislature 官方库（leg.state.nv.us）。
+created_at: "2026-09-16"

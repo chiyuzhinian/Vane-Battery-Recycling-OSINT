@@ -45,7 +45,8 @@ from app.policy.identity_jurisdiction import (               # noqa: E402
     ISSUERS, dedicated_identity_completeness)
 from app.policy.instruments import (instrument_from_metadata,  # noqa: E402
                                     instrument_from_nim_title,
-                                    instrument_from_shape)
+                                    instrument_from_shape,
+                                    detect_instrument)
 from app.policy.jurisdiction_onboarding import (             # noqa: E402
     contract_summary, load_contract)
 from app.policy.saturation_gates import evidence_gate        # noqa: E402
@@ -292,13 +293,22 @@ def final_class_of(rec: dict) -> str:
 
 
 def instrument_of(rec: dict) -> tuple[str, str, str]:
+    """文书类型/约束力（detect_instrument 为主口径——与 acceptance 同源）。"""
     meta = rec.get("meta") or {}
     title = rec.get("title") or ""
-    r = _safe(lambda: instrument_from_metadata(meta), None)
-    r = r or _safe(lambda: instrument_from_shape(title), None) \
-        or _safe(lambda: instrument_from_nim_title(title), None)
-    if r:
+    text = rec.get("text") or ""
+    r = _safe(lambda: detect_instrument(title, text), None)
+    if r and r.instrument_type and r.instrument_type != "unknown":
         return r.instrument_type, r.binding_force, r.matched
+    rm = _safe(lambda: instrument_from_metadata(meta), None)
+    if rm:
+        return rm.instrument_type, rm.binding_force, rm.matched
+    rn = _safe(lambda: instrument_from_nim_title(title), None)
+    if rn:
+        return rn.instrument_type, rn.binding_force, rn.matched
+    rs = _safe(lambda: instrument_from_shape(title), None)
+    if rs:
+        return rs.instrument_type, rs.binding_force, rs.matched
     return "unknown", "unknown", ""
 
 

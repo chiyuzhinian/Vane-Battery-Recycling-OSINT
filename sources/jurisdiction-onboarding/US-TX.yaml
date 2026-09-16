@@ -21,13 +21,18 @@ mandatory_source_roles:
 - STATE_BATTERY_EPR_OR_STEWARDSHIP
 - STATE_TRANSPORT_HAZMAT
 official_channel_map:
-  STATE_STATUTES:
+  STATE_LEGISLATURE:
   - source_id: us_tx_statutes
-    official_url: https://statutes.capitol.texas.gov/
+    official_url: https://tcss.legis.texas.gov/
     access_method: html
     status: PARTIAL
-    note: status=None；owner=Texas Legislature Online（statutes.capitol.texas.gov，官方法典）；检索页无可解析文书链接（可能
-      JS 渲染/参数错误）：https://statutes.capitol.texas.gov/Docs/HS/htm/HS.361.htm；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://capitol.texas.gov/Search/BillSearch.aspx?q=battery
+    note: '经 TCSS 代偿（Texas Legislative Council 官方系统，LTO 平台组成）；statutes.capitol.texas.gov 为 Angular 外壳（SPA），原始文件域 tcss.legis.texas.gov 实证 200；bill/立法程序通道未接入（如实备注）'
+  STATE_STATUTES:
+  - source_id: us_tx_statutes
+    official_url: https://tcss.legis.texas.gov/Docs/HS/htm/HS.361.htm
+    access_method: html
+    status: CONNECTED
+    note: 'Batch 1C MODE A：SPA 逆向定位 TCSS 原始文件域（768KB 级静态 HTML）；章列表 API 枚举 390 章→废物/回收/危物 10 章种子；US_TX_PLAN_V2 收敛 streak=2；语料 4 文档（2B+2C）'
   STATE_ENVIRONMENT_AGENCY:
   - source_id: us_tx_tceq
     official_url: https://www.tceq.texas.gov/
@@ -37,7 +42,6 @@ official_channel_map:
       JS 渲染/参数错误）：https://www.tceq.texas.gov/permitting/waste_permits；检索页无可解析文书链接（可能
       JS 渲染/参数错误）：https://www.tceq.texas.gov/permitting/waste_permits/waste_planning
 known_gaps:
-  STATE_LEGISLATURE: Batch 1：未接入（Source Proof 未覆盖该角色）
   STATE_ADMIN_CODE: Batch 1：未接入（Source Proof 未覆盖该角色）
   STATE_REGISTER: Batch 1：未接入（Source Proof 未覆盖该角色）
   STATE_WASTE_PROGRAM: Batch 1：未接入（Source Proof 未覆盖该角色）
@@ -52,4 +56,4 @@ identity_strategy:
   - title
   - publish_date
   - official_url
-notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
+notes: 'Batch 1（4B-2B）自动生成骨架；Batch 1C（2026-09-16）刷新：STATE_STATUTES / STATE_LEGISLATURE 经 TCSS 通道（MODE A 枚举 + 收敛实证）；其余角色保留如实缺口；来源 scripts/gen_jurisdiction_contract.py'

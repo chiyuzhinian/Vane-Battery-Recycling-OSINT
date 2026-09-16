@@ -58,7 +58,7 @@ INDEX = ROOT / "outputs" / "audit" / "discovery_rounds.json"
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"}
 SUPPORTED = ("SE", "FI", "US-CA", "US-WA", "CZ", "IT", "HU", "SK",
-             "AT")
+             "AT", "US-TX", "US-NV")
 
 
 class DocNotFound(Exception):
@@ -572,6 +572,96 @@ async def at_fetch(client, doc: str) -> dict | None:
         nav_trimmed=0, route="")
 
 
+# ------------------------------------------------------------ US 州级（Batch 1C MODE A）
+#
+# 通道：州立法机构官方法典静态全文直链（route A 官方枚举）。
+# 种子 = jurisdiction-sources/US-XX.yaml 已核验的官方章页（samples_known）。
+# 纪律：只收录种子清单内的官方文档；不得猜测 URL。
+
+US_STATE_DOCS: dict[str, dict] = {
+    "US-TX": {
+        "source_id": "us_tx_statutes",
+        "role": "STATE_STATUTES",
+        "owner": ("Texas Legislature Online（TCSS 原始文件域 "
+                  "tcss.legis.texas.gov；SPA 前端 statutes.capitol.texas.gov）"),
+        # 种子=HSC 章列表 API（PopulateChapterList/15/CH，390 章）关键词筛选
+        # 后人工确认的废物/回收/危物十章（Batch 1C MODE A 枚举实证）
+        "docs": {
+            "HS.361": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.361.htm",
+            "HS.362": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.362.htm",
+            "HS.363": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.363.htm",
+            "HS.364": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.364.htm",
+            "HS.365": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.365.htm",
+            "HS.368": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.368.htm",
+            "HS.371": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.371.htm",
+            "HS.376": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.376.htm",
+            "HS.501": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.501.htm",
+            "HS.502": "https://tcss.legis.texas.gov/Docs/HS/htm/HS.502.htm",
+        },
+    },
+    "US-NV": {
+        "source_id": "us_nv_nrs",
+        "role": "STATE_STATUTES",
+        "owner": "Nevada Legislature（NRS，leg.state.nv.us）",
+        # Batch 1C 实证：leg.state.nv.us 返回 Cloudflare 403 挑战页
+        # （本地出口）；保持 blocked，不伪造 corpus。
+        "docs": {
+            "NRS-444A": "https://www.leg.state.nv.us/NRS/NRS-444A.html",
+            "NRS-459": "https://www.leg.state.nv.us/NRS/NRS-459.html",
+        },
+    },
+}
+
+_US_TITLE_PATS: dict[str, list[str]] = {
+    "US-TX": [
+        r"(HEALTH\s+AND\s+SAFETY\s+CODE[\s\S]{0,160}?CHAPTER\s+[\dA-Z]+\.[^\n]{0,90})",
+        r"(CHAPTER\s+[\dA-Z]+\.[^\n]{0,90})",
+    ],
+    "US-NV": [
+        r"(CHAPTER\s+\d+A?[^\n]{0,100})",
+    ],
+}
+
+
+async def _us_state_fetch(client, jid: str, doc: str) -> dict | None:
+    cfg = US_STATE_DOCS[jid]
+    url = cfg["docs"].get(doc)
+    if not url:
+        raise DocNotFound(f"us_state_doc_unknown({doc})")
+    r, _ = await _get(client, url, headers=UA)
+    if detect_challenge(r.text):
+        raise RuntimeError("challenge_page")
+    if r.status_code != 200:
+        raise DocNotFound(f"http_{r.status_code}")
+    text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", r.text)
+    text = re.sub(r"(?s)<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) < 1500:
+        raise DocNotFound(f"skeleton_or_empty({len(text)} chars)")
+    title = doc
+    for pat in _US_TITLE_PATS.get(jid, []):
+        m = re.search(pat, text)
+        if m:
+            title = re.sub(r"\s+", " ", m.group(1)).strip()
+            break
+    st = jid.split("-")[1]
+    return _mk_record(
+        evidence_id=_eid_for(jid, doc), source_id=cfg["source_id"],
+        jurisdiction=jid, region="US", url=url,
+        title=title[:200], doc_key=f"US:{st}:{doc}",
+        text=text[:60000], collector="jurisdiction_round",
+        source_role=cfg["role"], language="en",
+        nav_trimmed=0, route="")
+
+
+async def us_tx_fetch(client, doc: str) -> dict | None:
+    return await _us_state_fetch(client, "US-TX", doc)
+
+
+async def us_nv_fetch(client, doc: str) -> dict | None:
+    return await _us_state_fetch(client, "US-NV", doc)
+
+
 # ------------------------------------------------------------ 引用抽取（C）
 
 CITE_PATTERNS = {
@@ -620,7 +710,8 @@ def _extract_cited(jid: str, records: list[dict], existing: set[str]) -> list[st
 
 FETCHERS = {"SE": se_fetch, "FI": fi_fetch, "US-CA": ca_fetch,
             "US-WA": wa_fetch, "CZ": cz_fetch, "IT": it_fetch,
-            "HU": hu_fetch, "SK": sk_fetch, "AT": at_fetch}
+            "HU": hu_fetch, "SK": sk_fetch, "AT": at_fetch,
+            "US-TX": us_tx_fetch, "US-NV": us_nv_fetch}
 SEARCHERS = {"SE": se_search, "FI": fi_search,
              "CZ": cz_search, "IT": it_search, "HU": hu_search,
              "SK": sk_search, "AT": at_search}
@@ -648,6 +739,9 @@ def _eid_for(jid: str, doc: str) -> str:
         return f"us_ca_leginfo_{doc.split(':')[-1].replace('.', '_')}"
     if jid == "US-WA":
         return f"us_wa_rcw_{doc.replace('.', '_').lower()}"
+    if jid in US_STATE_DOCS:
+        st = jid.split("-")[1].lower()
+        return f"us_{st}_{re.sub(r'[^a-z0-9]+', '_', doc.lower()).strip('_')}"
     return f"{jid.lower()}_{doc}"
 
 

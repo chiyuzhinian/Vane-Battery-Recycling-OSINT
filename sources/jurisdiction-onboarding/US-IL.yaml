@@ -25,8 +25,8 @@ official_channel_map:
   - source_id: us_il_ilga
     official_url: https://www.ilga.gov/
     access_method: html
-    status: PARTIAL
-    note: status=None；owner=Illinois General Assembly（ILGA，ILCS 官方库）；检索尝试失败（ConnectError）：https://www.ilga.gov/Legislation/ILCS；检索尝试失败（ConnectError）：https://www.ilga.gov/Legislation/ILCS/Chapters
+    status: BLOCKED
+    note: 'Batch 1C（2026-09-16）实证：ilga.gov TLS 握手超时（本出口连不上，非页面级 403）；ILCS Chapters/ilcs3/documents 三路径均 ConnectTimeout；待美区 vantage 重试'
   STATE_ENVIRONMENT_AGENCY:
   - source_id: us_il_epa
     official_url: https://epa.illinois.gov/
@@ -50,4 +50,4 @@ identity_strategy:
   - title
   - publish_date
   - official_url
-notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
+notes: 'Batch 1（4B-2B）自动生成骨架；Batch 1C（2026-09-16）刷新：STATE_LEGISLATURE → BLOCKED（TLS 超时实证）；来源 scripts/gen_jurisdiction_contract.py'

@@ -1,0 +1,56 @@
+# ============================================================
+# Search Plan —— US_TX_PLAN_V2（Batch 1C 州级语料生产，2026-09-16）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 仅 2 轮未收敛）：
+#   · A 种子 2→10：HSC 章列表 API（PopulateChapterList/15/CH，390 章）
+#     关键词筛选 + 人工确认的废物/回收/危物十章
+#   · 原始文件域 tcss.legis.texas.gov（SPA 前端后的 TCSS 真身，
+#     768KB 级静态 HTML 实证）
+# 纪律：自冻结起不得修改；再变 → US_TX_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: US_TX_PLAN_V2
+jurisdiction: US-TX
+scope: US-TX
+
+source_roles:
+  - {role: STATE_STATUTES, critical: true}
+
+source_endpoints:
+  - us_tx_statutes
+
+critical_sources:
+  - us_tx_statutes
+
+query_taxonomy_version: qt-us-tx-v1
+query_set:
+  fr_agencies:                         # A：官方章页直链种子（枚举实证）
+    - "HS.361"                         # Solid Waste Disposal Act
+    - "HS.362"                         # Solid Waste Resource Recovery Financing
+    - "HS.363"                         # Municipal Solid Waste
+    - "HS.364"                         # County Solid Waste
+    - "HS.365"                         # Litter
+    - "HS.368"                         # County Regulation of Transportation of Waste
+    - "HS.371"                         # Used Oil Collection, Management, and Recycling
+    - "HS.376"                         # Renewable Energy Component Recycling Facilities
+    - "HS.501"                         # Hazardous Substances
+    - "HS.502"                         # Hazard Communication Act
+  fr_terms: []
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [en]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1C MODE A：TX 通道经 SPA 逆向定位到 TCSS 原始文件域
+  （tcss.legis.texas.gov，Texas Legislative Council 官方系统；
+  statutes.capitol.texas.gov 为 Angular 外壳）。种子来自官方章列表
+  API 枚举（390 章）关键词筛选（waste/recycl/hazard/used oil）。
+  R1（V1 直链 2 种子）发现 0（SPA 外壳）；R2（V1 修正后）2/2 → B。
+created_at: "2026-09-16"

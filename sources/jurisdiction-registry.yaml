@@ -229,6 +229,17 @@ jurisdictions:
     name_zh: 美国州级
     level: states
     role_schema: [STATE_LEGISLATION, STATE_ADMIN_RULES, STATE_ENVIRONMENT_AGENCY, STATE_EPR_PROGRAM]
+    source_roles:
+      - role: STATE_STATUTES
+        expected: true
+        sources: [us_tx_statutes, us_nv_nrs]
+        status: PARTIAL
+        note: "Batch 1C MODE A：州级法典通道（TX=TCSS 原始域已通 + V2 收敛；NV=Cloudflare 403 受阻）；STATE_LEGISLATURE 经 TCSS 代偿（TX，PARTIAL）"
+      - role: STATE_LEGISLATURE
+        expected: true
+        sources: [us_tx_statutes]
+        status: PARTIAL
+        note: "Batch 1C：TX 经 TCSS（立法机关官方系统）代偿；bill/立法程序通道未接入（如实）"
     note: 本阶段只建 schema 与状态机；除加州外均为 NOT_ONBOARDED（用户战略待定）
     states:
       - {code: US-CA, name: 加利福尼亚, status: PARTIAL, sources: [browser_calrecycle, us_ca_leginfo], note: AB 2440 负责任电池回收 + SB 212 体系；leginfo section 专线（Step 8）}
@@ -258,7 +269,7 @@ jurisdictions:
       - {code: US-MO, name: 密苏里, status: NOT_ONBOARDED}
       - {code: US-MT, name: 蒙大拿, status: NOT_ONBOARDED}
       - {code: US-NE, name: 内布拉斯加, status: NOT_ONBOARDED}
-      - {code: US-NV, name: 内华达, status: NOT_ONBOARDED}
+      - {code: US-NV, name: 内华达, status: NOT_ONBOARDED, note: "Batch 1C：NRS 章节请求遭 Cloudflare 403 挑战页（本地出口实证，R1 fail=2）；待美区 vantage"}
       - {code: US-NH, name: 新罕布什尔, status: NOT_ONBOARDED}
       - {code: US-NJ, name: 新泽西, status: NOT_ONBOARDED}
       - {code: US-NM, name: 新墨西哥, status: NOT_ONBOARDED}
@@ -273,7 +284,7 @@ jurisdictions:
       - {code: US-SC, name: 南卡罗来纳, status: NOT_ONBOARDED}
       - {code: US-SD, name: 南达科他, status: NOT_ONBOARDED}
       - {code: US-TN, name: 田纳西, status: NOT_ONBOARDED}
-      - {code: US-TX, name: 得克萨斯, status: NOT_ONBOARDED}
+      - {code: US-TX, name: 得克萨斯, status: PARTIAL, sources: [us_tx_statutes], note: "Batch 1C MODE A：SPA 逆向→TCSS 原始域（tcss.legis.texas.gov）静态法典；章枚举 390→10 种子；V2 收敛 streak=2；语料 4 文档（2B+2C）；STATE_LEGISLATURE 经 TCSS 代偿（PARTIAL）"}
       - {code: US-UT, name: 犹他, status: NOT_ONBOARDED}
       - {code: US-VT, name: 佛蒙特, status: NOT_ONBOARDED, note: "已知存在电池 EPR 法（待采集）"}
       - {code: US-VA, name: 弗吉尼亚, status: NOT_ONBOARDED}

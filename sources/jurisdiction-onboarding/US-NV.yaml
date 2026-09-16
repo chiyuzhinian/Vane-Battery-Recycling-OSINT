@@ -25,9 +25,8 @@ official_channel_map:
   - source_id: us_nv_nrs
     official_url: https://www.leg.state.nv.us/nrs/
     access_method: html
-    status: PARTIAL
-    note: status=None；owner=Nevada Legislature（NRS 官方全文，leg.state.nv.us）；检索尝试 HTTP
-      403：https://www.leg.state.nv.us/NRS/NRS-444A.html；检索尝试 HTTP 403：https://www.leg.state.nv.us/NRS/NRS-459.html
+    status: BLOCKED
+    note: 'Batch 1C（2026-09-16）实证：NRS-444A/NRS-459 请求均遭 Cloudflare 403 挑战页（本地出口；R1 fail=2）；待美区 vantage 重试'
   STATE_ENVIRONMENT_AGENCY:
   - source_id: us_nv_ndep
     official_url: https://ndep.nv.gov/
@@ -51,4 +50,4 @@ identity_strategy:
   - title
   - publish_date
   - official_url
-notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
+notes: 'Batch 1（4B-2B）自动生成骨架；Batch 1C（2026-09-16）刷新：STATE_STATUTES → BLOCKED（Cloudflare 403 实证，不伪造 corpus）；来源 scripts/gen_jurisdiction_contract.py'
