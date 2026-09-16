@@ -1,0 +1,52 @@
+# ============================================================
+# Search Plan —— CZ_PLAN_V2（Batch 1C 语料生产，2026-09-16）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak=2 独立保留）：
+#   · discovery_routes 增加 C（法律引用扩张：语料正文 N/YYYY Sb. 引用）
+#   · 检索窗口扩窗 2001–2026（适配器 CZ_SCAN_YEARS；V2 同步记录）
+#   · A 种子 / B 词沿用 V1（复现验证）
+# 纪律：自冻结起不得修改；再变 → CZ_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: CZ_PLAN_V2
+jurisdiction: CZ
+scope: CZ
+
+source_roles:
+  - {role: CZ_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - cz_psp_sbirka_year
+  - cz_psp_sbirka_doc
+
+critical_sources:
+  - cz_psp
+
+query_taxonomy_version: qt-cz-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（V1 沿用）
+    - "170/2010"                     # Vyhláška o bateriích a akumulátorech（电池专条）
+    - "383/2001"                     # Vyhláška o podrobnostech nakládání s odpady
+    - "185/2001"                     # Zákon o odpadech（旧废物法）
+    - "541/2020"                     # Zákon o odpadech（现行废物法）
+    - "542/2020"                     # Zákon o výrobcích s ukončenou životností
+  fr_terms:                          # B：捷克语检索词（V1 沿用）
+    - baterie
+    - akumulátor
+    - odpad
+  eu_keywords: []                    # C：引用种子——运行时从语料正文抽取
+  cross_terms: []
+
+language_set: [cs]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1C 语料生产：V1 收敛后扩产——加 route C（引用扩张，
+  CITE_PATTERNS[CZ]=N/YYYY Sb.；已支持 cz_psp 直取）+ 年索引扩窗
+  2001–2026。目标：8–20 高价值文书（A1/A2/B 优先，C 背景）。
+created_at: "2026-09-16"

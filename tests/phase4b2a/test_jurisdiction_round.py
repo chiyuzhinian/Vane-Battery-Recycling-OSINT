@@ -18,7 +18,8 @@ import run_jurisdiction_round as rj  # noqa: E402
 
 PLANS = ("SE_PLAN_V1", "SE_PLAN_V2", "FI_PLAN_V1", "US_CA_PLAN_V1",
          "US_CA_PLAN_V2", "US_WA_PLAN_V1", "US_WA_PLAN_V2",
-         "CZ_PLAN_V1", "IT_PLAN_V1", "HU_PLAN_V1", "SK_PLAN_V1")
+         "CZ_PLAN_V1", "IT_PLAN_V1", "HU_PLAN_V1", "SK_PLAN_V1",
+         "AT_PLAN_V1", "CZ_PLAN_V2", "SK_PLAN_V2", "HU_PLAN_V2")
 
 
 @pytest.mark.parametrize("plan_id", PLANS)
@@ -61,6 +62,11 @@ def test_cite_patterns_extract_expected_docs():
     assert rj._cite_to_doc("US-CA", m) == "PRC:42451"
     assert rj._cite_to_doc("US-WA", rj.CITE_PATTERNS["US-WA"].search(
         "under RCW 70A.555.010")) == "70A.555.010"
+    # Batch 1C：CZ/SK 引用扩张
+    assert rj._cite_to_doc("CZ", rj.CITE_PATTERNS["CZ"].search(
+        "vyhláška č. 170/2010 Sb.")) == "170/2010"
+    assert rj._cite_to_doc("SK", rj.CITE_PATTERNS["SK"].search(
+        "podľa zákona č. 79/2015 Z. z.")) == "79/2015"
 
 
 def test_extract_cited_only_uses_own_rows():
@@ -82,11 +88,12 @@ def test_extract_cited_only_uses_own_rows():
 
 def test_doc_not_found_is_distinct_from_failure():
     assert issubclass(rj.DocNotFound, Exception)
-    # 路线完全体：八个管辖地均有 fetch 实现（4B-2B MODE B 批次 1：+CZ/IT/HU/SK）
+    # 路线完全体：九个管辖地均有 fetch 实现
+    # （4B-2B MODE B 批次 1：+CZ/IT/HU/SK；Batch 1C：+AT）
     assert set(rj.FETCHERS) == {"SE", "FI", "US-CA", "US-WA",
-                                "CZ", "IT", "HU", "SK"}
-    # 检索：SE/FI + MODE B 批次 1 四地（CA/WA 无检索端点，如实）
-    assert set(rj.SEARCHERS) == {"SE", "FI", "CZ", "IT", "HU", "SK"}
+                                "CZ", "IT", "HU", "SK", "AT"}
+    # 检索：SE/FI + MODE B 批次 1 四地（CA/WA 无检索端点，如实）+ AT OGD
+    assert set(rj.SEARCHERS) == {"SE", "FI", "CZ", "IT", "HU", "SK", "AT"}
 
 
 def test_round_records_and_persisted_corpus_exist():

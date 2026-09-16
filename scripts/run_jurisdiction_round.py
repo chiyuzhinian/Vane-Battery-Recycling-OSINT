@@ -218,7 +218,8 @@ async def wa_fetch(client, cite: str) -> dict | None:
 # ------------------------------------------------------------ CZ（MODE B 批次 1）
 
 #: B 词年索引扫描窗口（与 A 种子年代互补；2026-09-15 定）
-CZ_SCAN_YEARS = tuple(range(2016, 2027))
+#: Batch 1C V2：扩窗 2001–2026（语料生产轮；V2 plan 同步记录）
+CZ_SCAN_YEARS = tuple(range(2001, 2027))
 
 
 async def cz_search(client, term: str) -> list[dict]:
@@ -356,9 +357,9 @@ async def it_fetch(client, doc: str) -> dict | None:
 
 
 async def hu_search(client, term: str) -> list[dict]:
-    """?content= 内容检索（真过滤参数；2 页）→ 文档 sha。"""
+    """?content= 内容检索（真过滤参数；V2：3 页/词）→ 文档 sha。"""
     hits, seen = [], set()
-    for page in (1, 2):
+    for page in (1, 2, 3):
         params = {"content": term}
         if page > 1:
             params["page"] = str(page)
@@ -578,6 +579,9 @@ CITE_PATTERNS = {
     "FI": re.compile(r"(\d{1,4})/(\d{4})"),
     "US-CA": re.compile(r"Section\s+(\d{4,5}(?:\.\d+)?)\s+of\s+the\s+Public\s+Resources\s+Code", re.I),
     "US-WA": re.compile(r"RCW\s+(\d+A\.\d+\.\d+)"),
+    # Batch 1C：CZ/SK 引用扩张（N/YYYY 文号 → 官方直链文档格式）
+    "CZ": re.compile(r"(\d{1,4})/(\d{4})\s*Sb\."),
+    "SK": re.compile(r"(\d{1,4})/(\d{4})\s*Z\.\s?z\."),
 }
 
 
@@ -589,6 +593,8 @@ def _cite_to_doc(jid: str, m: re.Match) -> str:
         return f"{year}{num:04d}"
     if jid == "US-CA":
         return f"PRC:{m.group(1)}"
+    if jid in ("CZ", "SK"):
+        return f"{int(m.group(1))}/{m.group(2)}"
     return m.group(1)
 
 
@@ -638,6 +644,10 @@ def _eid_for(jid: str, doc: str) -> str:
         return f"sk_slovlex_{doc.replace('/', '_')}"
     if jid == "AT":
         return f"at_ogd_{doc}"
+    if jid == "US-CA":
+        return f"us_ca_leginfo_{doc.split(':')[-1].replace('.', '_')}"
+    if jid == "US-WA":
+        return f"us_wa_rcw_{doc.replace('.', '_').lower()}"
     return f"{jid.lower()}_{doc}"
 
 
@@ -751,11 +761,7 @@ async def _run_route_c(client, jid, plan, existing, records,
         if doc in seen:
             continue
         seen.add(doc)
-        eid = (f"se_sfst_{doc.replace(':', '_')}" if jid == "SE"
-               else f"fi_finlex_{doc}" if jid == "FI"
-               else f"us_ca_leginfo_{doc.split(':')[-1].replace('.', '_')}"
-               if jid == "US-CA"
-               else f"us_wa_rcw_{doc.replace('.', '_').lower()}")
+        eid = _eid_for(jid, doc)
         if eid in existing:
             continue
         if fetched >= max_fetch:

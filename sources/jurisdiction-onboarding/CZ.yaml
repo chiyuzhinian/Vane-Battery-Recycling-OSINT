@@ -21,14 +21,18 @@ mandatory_source_roles:
 - MS_STANDARDS_METADATA
 official_channel_map:
   MS_LEGISLATION_DATABASE:
-  - source_id: cz_esbirka
-    official_url: https://www.e-sbirka.gov.cz/
+  - source_id: cz_psp
+    official_url: https://www.psp.cz/sqw/sbirka.sqw
     access_method: html
-    status: PARTIAL
-    note: status=None；owner=Ministerstvo vnitra（e-Sbírka 官方法律库）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://www.psp.cz/sqw/sbirka.sqw?cz=297&r=2008；检索页无可解析文书链接（可能
-      JS 渲染/参数错误）：https://aplikace.mvcr.cz/sbirka-zakonu/
+    status: CONNECTED
+    note: 'MODE B 收敛（CZ_PLAN_V1 streak=2）；Batch 1C V2 扩产（R7 +4 文档；年索引 2001-2026 + 引用扩张）。通道：psp.cz sbirka.sqw 年索引枚举 + cz=号/r=年全文'
+  MS_OFFICIAL_GAZETTE:
+  - source_id: cz_psp
+    official_url: https://www.psp.cz/sqw/sbirka.sqw
+    access_method: html
+    status: CONNECTED
+    note: Sbírka zákonů（捷克法律公报）官方发布载体 psp.cz；Batch 1C 语料全文即出处
 known_gaps:
-  MS_OFFICIAL_GAZETTE: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_TRANSPORT_OR_DANGEROUS_GOODS: Batch 1：未接入（Source Proof 未覆盖该角色）
@@ -42,4 +46,4 @@ identity_strategy:
   - title
   - publish_date
   - official_url
-notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
+notes: 'Batch 1（4B-2B）自动生成骨架；Batch 1C（2026-09-16）刷新：MS_LEGISLATION_DATABASE / MS_OFFICIAL_GAZETTE → CONNECTED（MODE B 收敛 + 语料生产实证）；其余角色保留如实缺口；来源 scripts/gen_jurisdiction_contract.py'

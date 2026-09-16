@@ -25,13 +25,13 @@ official_channel_map:
     official_url: https://njt.hu/
     access_method: html
     status: PARTIAL
-    note: status=None；owner=Nemzeti Jogszabálytár（国家法律库，Igazságügyi Minisztérium）；检索尝试失败（RemoteProtocolError）：https://njt.hu/kereses?szo=akkumul%C3%A1tor；检索尝试失败（ConnectTimeout）：https://njt.hu/jogszabaly/2012-181-20-30
+    note: 'njt.hu 直接通道探测失败（RemoteProtocolError/ConnectTimeout，多轮）；法律文本经公报通道获取（Batch 1C 语料 8+ 文档）——本法源角色以公报代偿通道计分，直接通道待恢复'
   MS_OFFICIAL_GAZETTE:
   - source_id: hu_magyarkozlony
     official_url: https://magyarkozlony.hu/
     access_method: html
-    status: PARTIAL
-    note: status=None；owner=Magyar Közlöny（官方公报，Miniszterelnökség）；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses?q=akkumul%C3%A1tor；检索页提取样本未经主题核验（疑似导航/列表链接，不计检索能力）：https://magyarkozlony.hu/kereses?q=elem
+    status: CONNECTED
+    note: 'MODE B 收敛（HU_PLAN_V1 streak=2）；Batch 1C V2 扩产（B 词×6 + 翻页 3/词）。通道：?content= 内容检索 → /dokumentumok/{sha}/letoltes 官方 PDF'
 known_gaps:
   MS_ENVIRONMENT_MINISTRY_OR_AGENCY: Batch 1：未接入（Source Proof 未覆盖该角色）
   MS_WASTE_REGULATOR: Batch 1：未接入（Source Proof 未覆盖该角色）
@@ -47,4 +47,4 @@ identity_strategy:
   - title
   - publish_date
   - official_url
-notes: Batch 1（4B-2B）自动生成骨架；来源 scripts/gen_jurisdiction_contract.py
+notes: 'Batch 1（4B-2B）自动生成骨架；Batch 1C（2026-09-16）刷新：MS_OFFICIAL_GAZETTE → CONNECTED（MODE B 收敛 + 语料生产实证）；MS_LEGISLATION_DATABASE 保持 PARTIAL（公报代偿）；来源 scripts/gen_jurisdiction_contract.py'

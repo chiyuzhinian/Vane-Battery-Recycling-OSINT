@@ -14,12 +14,12 @@ instrument_types:
   - id: statute
     name_zh: 议会立法/法律
     binding_force: binding
-    detect_patterns: ["\\bact\\b.*\\bof\\b.*(parliament|congress)", "public\\s+law", "\\bU\\.?S\\.?C\\.?\\b"]
+    detect_patterns: ["\\bact\\b.*\\bof\\b.*(parliament|congress)", "public\\s+law", "\\bU\\.?S\\.?C\\.?\\b", "z[aá]kona?(?:\\s|$)", "t[oö]rv[eé]ny", "\\blegge\\b", "bundesgesetz"]
 
   - id: regulation
     name_zh: 法规（直接适用）
     binding_force: binding
-    detect_patterns: ["\\bregulation\\s*\\(EU\\)", "\\bregulation\\b\\s*\\(EC\\)", "\\bCFR\\b"]
+    detect_patterns: ["\\bregulation\\s*\\(EU\\)", "\\bregulation\\b\\s*\\(EC\\)", "\\bCFR\\b", "vyhl[aá][sš]ka", "na[rř][ií]zen[íi]", "nariadenie", "rendelet", "decreto", "verordnung"]
 
   - id: directive
     name_zh: 指令（需转化）

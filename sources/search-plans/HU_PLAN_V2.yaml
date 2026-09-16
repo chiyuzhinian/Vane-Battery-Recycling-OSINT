@@ -1,0 +1,57 @@
+# ============================================================
+# Search Plan —— HU_PLAN_V2（Batch 1C 语料生产，2026-09-16）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak=2 独立保留）：
+#   · B 词扩展（native language discovery 深化）：
+#     V1 3 词 + elem / akkumulátorok / elemek gyűjtése
+#   · 检索翻页 2→3 页/词（适配器 hu_search）
+#   · A 种子沿用 V1；C/D 未适配（法律号 → 公报期号无直映，如实记录）
+# 纪律：自冻结起不得修改；再变 → HU_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: HU_PLAN_V2
+jurisdiction: HU
+scope: HU
+
+source_roles:
+  - {role: HU_OFFICIAL_GAZETTE, critical: true}
+
+source_endpoints:
+  - hu_mk_content
+  - hu_mk_doc
+  - hu_mk_download
+
+critical_sources:
+  - hu_magyarkozlony
+
+query_taxonomy_version: qt-hu-v1
+query_set:
+  fr_agencies:                       # A：公报期刊种子（V1 沿用）
+    - "2014/188"
+    - "2014/189"
+    - "2014/190"
+    - "2023/194"
+    - "2026/131"
+  fr_terms:                          # B：匈牙利语检索词（V2 扩展）
+    - "elemekre és akkumulátorokra"
+    - akkumulátor
+    - elem és akkumulátor
+    - elem
+    - akkumulátorok
+    - elemek gyűjtése
+  eu_keywords: []
+  cross_terms: []
+
+language_set: [hu]
+time_window: {from: "2012-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1C 语料生产：V1 收敛后扩产——B 词 3→6 + 翻页 3 页/词
+  （native language discovery 深化；?content= 真过滤通道）。
+  目标：8–20 高价值文书（A1/A2/B 优先，C 背景）。
+created_at: "2026-09-16"

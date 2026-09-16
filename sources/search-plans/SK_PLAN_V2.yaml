@@ -1,0 +1,49 @@
+# ============================================================
+# Search Plan —— SK_PLAN_V2（Batch 1C 语料生产，2026-09-16）
+# ------------------------------------------------------------
+# V2 变更（相对 V1，触发 reset——V1 streak=2 独立保留）：
+#   · discovery_routes 增加 C（法律引用扩张：语料正文 N/YYYY Z. z. 引用）
+#   · A 种子 / B 词沿用 V1（复现验证）
+# 纪律：自冻结起不得修改；再变 → SK_PLAN_V3（reset）
+# ============================================================
+version: 1
+plan_id: SK_PLAN_V2
+jurisdiction: SK
+scope: SK
+
+source_roles:
+  - {role: SK_NATIONAL_LEGISLATION, critical: true}
+
+source_endpoints:
+  - sk_slovlex_index
+  - sk_slovlex_doc
+  - sk_slovlex_pdf
+
+critical_sources:
+  - sk_slovlex
+
+query_taxonomy_version: qt-sk-v1
+query_set:
+  fr_agencies:                       # A：官方直链种子（V1 沿用）
+    - "79/2015"                      # Zákon o odpadoch（废物法）
+    - "373/2015"                     # EPR 总令（batéri×90 实测）
+  fr_terms:                          # B：斯洛伐克语检索词（V1 沿用）
+    - batérie a akumulátory
+    - akumulátor
+    - odpad
+  eu_keywords: []                    # C：引用种子——运行时从语料正文抽取
+  cross_terms: []
+
+language_set: [sk]
+time_window: {from: "1990-01-01", to: "2026-12-31"}
+year_segments: []
+
+discovery_routes: [A, B, C]
+acceptance_rule_version: "1"
+dedupe_rule_version: "v1"
+
+notes: >-
+  Batch 1C 语料生产：V1 收敛后扩产——加 route C（引用扩张，
+  CITE_PATTERNS[SK]=N/YYYY Z. z.；79/2015 与 373/2015 正文引用面大，
+  经 acceptance 过滤后入语料）。目标：8–20 高价值文书。
+created_at: "2026-09-16"
